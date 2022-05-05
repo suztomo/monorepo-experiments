@@ -1,0 +1,1430 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>TablesServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-area120-tables</a> &gt; <a href="index.source.html" class="el_package">com.google.area120.tables.v1alpha</a> &gt; <span class="el_source">TablesServiceClient.java</span></div><h1>TablesServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.area120.tables.v1alpha;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.area120.tables.v1alpha.stub.TablesServiceStub;
+import com.google.area120.tables.v1alpha.stub.TablesServiceStubSettings;
+import com.google.area120.tables.v1alpha1.BatchCreateRowsRequest;
+import com.google.area120.tables.v1alpha1.BatchCreateRowsResponse;
+import com.google.area120.tables.v1alpha1.BatchDeleteRowsRequest;
+import com.google.area120.tables.v1alpha1.BatchUpdateRowsRequest;
+import com.google.area120.tables.v1alpha1.BatchUpdateRowsResponse;
+import com.google.area120.tables.v1alpha1.CreateRowRequest;
+import com.google.area120.tables.v1alpha1.DeleteRowRequest;
+import com.google.area120.tables.v1alpha1.GetRowRequest;
+import com.google.area120.tables.v1alpha1.GetTableRequest;
+import com.google.area120.tables.v1alpha1.GetWorkspaceRequest;
+import com.google.area120.tables.v1alpha1.ListRowsRequest;
+import com.google.area120.tables.v1alpha1.ListRowsResponse;
+import com.google.area120.tables.v1alpha1.ListTablesRequest;
+import com.google.area120.tables.v1alpha1.ListTablesResponse;
+import com.google.area120.tables.v1alpha1.ListWorkspacesRequest;
+import com.google.area120.tables.v1alpha1.ListWorkspacesResponse;
+import com.google.area120.tables.v1alpha1.Row;
+import com.google.area120.tables.v1alpha1.RowName;
+import com.google.area120.tables.v1alpha1.Table;
+import com.google.area120.tables.v1alpha1.TableName;
+import com.google.area120.tables.v1alpha1.UpdateRowRequest;
+import com.google.area120.tables.v1alpha1.Workspace;
+import com.google.area120.tables.v1alpha1.WorkspaceName;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: The Tables Service provides an API for reading and updating tables. It
+ * defines the following resource model:
+ *
+ * &lt;p&gt;- The API has a collection of [Table][google.area120.tables.v1alpha1.Table] resources, named
+ * `tables/&amp;#42;`
+ *
+ * &lt;p&gt;- Each Table has a collection of [Row][google.area120.tables.v1alpha1.Row] resources, named
+ * `tables/&amp;#42;/rows/&amp;#42;`
+ *
+ * &lt;p&gt;- The API has a collection of [Workspace][google.area120.tables.v1alpha1.Workspace] resources,
+ * named `workspaces/&amp;#42;`.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+ *   TableName name = TableName.of(&quot;[TABLE]&quot;);
+ *   Table response = tablesServiceClient.getTable(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the TablesServiceClient object to clean up resources such
+ * as threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of TablesServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * TablesServiceSettings tablesServiceSettings =
+ *     TablesServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * TablesServiceClient tablesServiceClient = TablesServiceClient.create(tablesServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * TablesServiceSettings tablesServiceSettings =
+ *     TablesServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * TablesServiceClient tablesServiceClient = TablesServiceClient.create(tablesServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@BetaApi
+@Generated(&quot;by gapic-generator-java&quot;)
+public class TablesServiceClient implements BackgroundResource {
+  private final TablesServiceSettings settings;
+  private final TablesServiceStub stub;
+
+  /** Constructs an instance of TablesServiceClient with default settings. */
+  public static final TablesServiceClient create() throws IOException {
+<span class="nc" id="L145">    return create(TablesServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of TablesServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final TablesServiceClient create(TablesServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L154">    return new TablesServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of TablesServiceClient, using the given stub for making calls. This is
+   * for advanced usage - prefer using create(TablesServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final TablesServiceClient create(TablesServiceStub stub) {
+<span class="nc" id="L163">    return new TablesServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of TablesServiceClient, using the given settings. This is protected so
+   * that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L171">  protected TablesServiceClient(TablesServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L172">    this.settings = settings;</span>
+<span class="fc" id="L173">    this.stub = ((TablesServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L174">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L177">  protected TablesServiceClient(TablesServiceStub stub) {</span>
+<span class="nc" id="L178">    this.settings = null;</span>
+<span class="nc" id="L179">    this.stub = stub;</span>
+<span class="nc" id="L180">  }</span>
+
+  public final TablesServiceSettings getSettings() {
+<span class="nc" id="L183">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public TablesServiceStub getStub() {
+<span class="nc" id="L188">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a table. Returns NOT_FOUND if the table does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   TableName name = TableName.of(&quot;[TABLE]&quot;);
+   *   Table response = tablesServiceClient.getTable(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the table to retrieve. Format: tables/{table}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Table getTable(TableName name) {
+    GetTableRequest request =
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">        GetTableRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L212">    return getTable(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a table. Returns NOT_FOUND if the table does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   String name = TableName.of(&quot;[TABLE]&quot;).toString();
+   *   Table response = tablesServiceClient.getTable(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the table to retrieve. Format: tables/{table}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Table getTable(String name) {
+<span class="fc" id="L234">    GetTableRequest request = GetTableRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L235">    return getTable(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a table. Returns NOT_FOUND if the table does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   GetTableRequest request =
+   *       GetTableRequest.newBuilder().setName(TableName.of(&quot;[TABLE]&quot;).toString()).build();
+   *   Table response = tablesServiceClient.getTable(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Table getTable(GetTableRequest request) {
+<span class="fc" id="L258">    return getTableCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a table. Returns NOT_FOUND if the table does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   GetTableRequest request =
+   *       GetTableRequest.newBuilder().setName(TableName.of(&quot;[TABLE]&quot;).toString()).build();
+   *   ApiFuture&lt;Table&gt; future = tablesServiceClient.getTableCallable().futureCall(request);
+   *   // Do something.
+   *   Table response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetTableRequest, Table&gt; getTableCallable() {
+<span class="fc" id="L280">    return stub.getTableCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists tables for the user.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   ListTablesRequest request =
+   *       ListTablesRequest.newBuilder()
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Table element : tablesServiceClient.listTables(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTablesPagedResponse listTables(ListTablesRequest request) {
+<span class="fc" id="L308">    return listTablesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists tables for the user.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   ListTablesRequest request =
+   *       ListTablesRequest.newBuilder()
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Table&gt; future = tablesServiceClient.listTablesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Table element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTablesRequest, ListTablesPagedResponse&gt; listTablesPagedCallable() {
+<span class="fc" id="L335">    return stub.listTablesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists tables for the user.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   ListTablesRequest request =
+   *       ListTablesRequest.newBuilder()
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListTablesResponse response = tablesServiceClient.listTablesCallable().call(request);
+   *     for (Table element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTablesRequest, ListTablesResponse&gt; listTablesCallable() {
+<span class="nc" id="L369">    return stub.listTablesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a workspace. Returns NOT_FOUND if the workspace does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   WorkspaceName name = WorkspaceName.of(&quot;[WORKSPACE]&quot;);
+   *   Workspace response = tablesServiceClient.getWorkspace(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the workspace to retrieve. Format: workspaces/{workspace}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Workspace getWorkspace(WorkspaceName name) {
+    GetWorkspaceRequest request =
+<span class="pc bpc" id="L392" title="1 of 2 branches missed.">        GetWorkspaceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L393">    return getWorkspace(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a workspace. Returns NOT_FOUND if the workspace does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   String name = WorkspaceName.of(&quot;[WORKSPACE]&quot;).toString();
+   *   Workspace response = tablesServiceClient.getWorkspace(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the workspace to retrieve. Format: workspaces/{workspace}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Workspace getWorkspace(String name) {
+<span class="fc" id="L415">    GetWorkspaceRequest request = GetWorkspaceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L416">    return getWorkspace(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a workspace. Returns NOT_FOUND if the workspace does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   GetWorkspaceRequest request =
+   *       GetWorkspaceRequest.newBuilder()
+   *           .setName(WorkspaceName.of(&quot;[WORKSPACE]&quot;).toString())
+   *           .build();
+   *   Workspace response = tablesServiceClient.getWorkspace(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Workspace getWorkspace(GetWorkspaceRequest request) {
+<span class="fc" id="L441">    return getWorkspaceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a workspace. Returns NOT_FOUND if the workspace does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   GetWorkspaceRequest request =
+   *       GetWorkspaceRequest.newBuilder()
+   *           .setName(WorkspaceName.of(&quot;[WORKSPACE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Workspace&gt; future = tablesServiceClient.getWorkspaceCallable().futureCall(request);
+   *   // Do something.
+   *   Workspace response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetWorkspaceRequest, Workspace&gt; getWorkspaceCallable() {
+<span class="fc" id="L465">    return stub.getWorkspaceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists workspaces for the user.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   ListWorkspacesRequest request =
+   *       ListWorkspacesRequest.newBuilder()
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Workspace element : tablesServiceClient.listWorkspaces(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListWorkspacesPagedResponse listWorkspaces(ListWorkspacesRequest request) {
+<span class="fc" id="L493">    return listWorkspacesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists workspaces for the user.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   ListWorkspacesRequest request =
+   *       ListWorkspacesRequest.newBuilder()
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Workspace&gt; future =
+   *       tablesServiceClient.listWorkspacesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Workspace element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListWorkspacesRequest, ListWorkspacesPagedResponse&gt;
+      listWorkspacesPagedCallable() {
+<span class="fc" id="L522">    return stub.listWorkspacesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists workspaces for the user.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   ListWorkspacesRequest request =
+   *       ListWorkspacesRequest.newBuilder()
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListWorkspacesResponse response =
+   *         tablesServiceClient.listWorkspacesCallable().call(request);
+   *     for (Workspace element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListWorkspacesRequest, ListWorkspacesResponse&gt;
+      listWorkspacesCallable() {
+<span class="nc" id="L558">    return stub.listWorkspacesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a row. Returns NOT_FOUND if the row does not exist in the table.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   RowName name = RowName.of(&quot;[TABLE]&quot;, &quot;[ROW]&quot;);
+   *   Row response = tablesServiceClient.getRow(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the row to retrieve. Format: tables/{table}/rows/{row}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Row getRow(RowName name) {
+    GetRowRequest request =
+<span class="pc bpc" id="L581" title="1 of 2 branches missed.">        GetRowRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L582">    return getRow(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a row. Returns NOT_FOUND if the row does not exist in the table.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   String name = RowName.of(&quot;[TABLE]&quot;, &quot;[ROW]&quot;).toString();
+   *   Row response = tablesServiceClient.getRow(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the row to retrieve. Format: tables/{table}/rows/{row}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Row getRow(String name) {
+<span class="fc" id="L604">    GetRowRequest request = GetRowRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L605">    return getRow(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a row. Returns NOT_FOUND if the row does not exist in the table.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   GetRowRequest request =
+   *       GetRowRequest.newBuilder()
+   *           .setName(RowName.of(&quot;[TABLE]&quot;, &quot;[ROW]&quot;).toString())
+   *           .setView(View.forNumber(0))
+   *           .build();
+   *   Row response = tablesServiceClient.getRow(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Row getRow(GetRowRequest request) {
+<span class="fc" id="L631">    return getRowCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a row. Returns NOT_FOUND if the row does not exist in the table.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   GetRowRequest request =
+   *       GetRowRequest.newBuilder()
+   *           .setName(RowName.of(&quot;[TABLE]&quot;, &quot;[ROW]&quot;).toString())
+   *           .setView(View.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;Row&gt; future = tablesServiceClient.getRowCallable().futureCall(request);
+   *   // Do something.
+   *   Row response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetRowRequest, Row&gt; getRowCallable() {
+<span class="fc" id="L656">    return stub.getRowCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists rows in a table. Returns NOT_FOUND if the table does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   String parent = &quot;parent-995424086&quot;;
+   *   for (Row element : tablesServiceClient.listRows(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent table. Format: tables/{table}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRowsPagedResponse listRows(String parent) {
+<span class="fc" id="L680">    ListRowsRequest request = ListRowsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L681">    return listRows(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists rows in a table. Returns NOT_FOUND if the table does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   ListRowsRequest request =
+   *       ListRowsRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setView(View.forNumber(0))
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   for (Row element : tablesServiceClient.listRows(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRowsPagedResponse listRows(ListRowsRequest request) {
+<span class="fc" id="L712">    return listRowsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists rows in a table. Returns NOT_FOUND if the table does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   ListRowsRequest request =
+   *       ListRowsRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setView(View.forNumber(0))
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;Row&gt; future = tablesServiceClient.listRowsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Row element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRowsRequest, ListRowsPagedResponse&gt; listRowsPagedCallable() {
+<span class="fc" id="L742">    return stub.listRowsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists rows in a table. Returns NOT_FOUND if the table does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   ListRowsRequest request =
+   *       ListRowsRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setView(View.forNumber(0))
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListRowsResponse response = tablesServiceClient.listRowsCallable().call(request);
+   *     for (Row element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRowsRequest, ListRowsResponse&gt; listRowsCallable() {
+<span class="nc" id="L779">    return stub.listRowsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a row.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   String parent = &quot;parent-995424086&quot;;
+   *   Row row = Row.newBuilder().build();
+   *   Row response = tablesServiceClient.createRow(parent, row);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent table where this row will be created. Format: tables/{table}
+   * @param row Required. The row to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Row createRow(String parent, Row row) {
+<span class="fc" id="L803">    CreateRowRequest request = CreateRowRequest.newBuilder().setParent(parent).setRow(row).build();</span>
+<span class="fc" id="L804">    return createRow(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a row.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   CreateRowRequest request =
+   *       CreateRowRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setRow(Row.newBuilder().build())
+   *           .setView(View.forNumber(0))
+   *           .build();
+   *   Row response = tablesServiceClient.createRow(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Row createRow(CreateRowRequest request) {
+<span class="fc" id="L831">    return createRowCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a row.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   CreateRowRequest request =
+   *       CreateRowRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setRow(Row.newBuilder().build())
+   *           .setView(View.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;Row&gt; future = tablesServiceClient.createRowCallable().futureCall(request);
+   *   // Do something.
+   *   Row response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateRowRequest, Row&gt; createRowCallable() {
+<span class="fc" id="L857">    return stub.createRowCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates multiple rows.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   BatchCreateRowsRequest request =
+   *       BatchCreateRowsRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .addAllRequests(new ArrayList&lt;CreateRowRequest&gt;())
+   *           .build();
+   *   BatchCreateRowsResponse response = tablesServiceClient.batchCreateRows(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BatchCreateRowsResponse batchCreateRows(BatchCreateRowsRequest request) {
+<span class="fc" id="L883">    return batchCreateRowsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates multiple rows.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   BatchCreateRowsRequest request =
+   *       BatchCreateRowsRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .addAllRequests(new ArrayList&lt;CreateRowRequest&gt;())
+   *           .build();
+   *   ApiFuture&lt;BatchCreateRowsResponse&gt; future =
+   *       tablesServiceClient.batchCreateRowsCallable().futureCall(request);
+   *   // Do something.
+   *   BatchCreateRowsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;BatchCreateRowsRequest, BatchCreateRowsResponse&gt;
+      batchCreateRowsCallable() {
+<span class="fc" id="L910">    return stub.batchCreateRowsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a row.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   Row row = Row.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Row response = tablesServiceClient.updateRow(row, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param row Required. The row to update.
+   * @param updateMask The list of fields to update.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Row updateRow(Row row, FieldMask updateMask) {
+    UpdateRowRequest request =
+<span class="fc" id="L935">        UpdateRowRequest.newBuilder().setRow(row).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L936">    return updateRow(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a row.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   UpdateRowRequest request =
+   *       UpdateRowRequest.newBuilder()
+   *           .setRow(Row.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setView(View.forNumber(0))
+   *           .build();
+   *   Row response = tablesServiceClient.updateRow(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Row updateRow(UpdateRowRequest request) {
+<span class="fc" id="L963">    return updateRowCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a row.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   UpdateRowRequest request =
+   *       UpdateRowRequest.newBuilder()
+   *           .setRow(Row.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setView(View.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;Row&gt; future = tablesServiceClient.updateRowCallable().futureCall(request);
+   *   // Do something.
+   *   Row response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateRowRequest, Row&gt; updateRowCallable() {
+<span class="fc" id="L989">    return stub.updateRowCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates multiple rows.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   BatchUpdateRowsRequest request =
+   *       BatchUpdateRowsRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .addAllRequests(new ArrayList&lt;UpdateRowRequest&gt;())
+   *           .build();
+   *   BatchUpdateRowsResponse response = tablesServiceClient.batchUpdateRows(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BatchUpdateRowsResponse batchUpdateRows(BatchUpdateRowsRequest request) {
+<span class="fc" id="L1015">    return batchUpdateRowsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates multiple rows.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   BatchUpdateRowsRequest request =
+   *       BatchUpdateRowsRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .addAllRequests(new ArrayList&lt;UpdateRowRequest&gt;())
+   *           .build();
+   *   ApiFuture&lt;BatchUpdateRowsResponse&gt; future =
+   *       tablesServiceClient.batchUpdateRowsCallable().futureCall(request);
+   *   // Do something.
+   *   BatchUpdateRowsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;BatchUpdateRowsRequest, BatchUpdateRowsResponse&gt;
+      batchUpdateRowsCallable() {
+<span class="fc" id="L1042">    return stub.batchUpdateRowsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a row.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   RowName name = RowName.of(&quot;[TABLE]&quot;, &quot;[ROW]&quot;);
+   *   tablesServiceClient.deleteRow(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the row to delete. Format: tables/{table}/rows/{row}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteRow(RowName name) {
+    DeleteRowRequest request =
+<span class="pc bpc" id="L1065" title="1 of 2 branches missed.">        DeleteRowRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1066">    deleteRow(request);</span>
+<span class="fc" id="L1067">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a row.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   String name = RowName.of(&quot;[TABLE]&quot;, &quot;[ROW]&quot;).toString();
+   *   tablesServiceClient.deleteRow(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the row to delete. Format: tables/{table}/rows/{row}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteRow(String name) {
+<span class="fc" id="L1088">    DeleteRowRequest request = DeleteRowRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1089">    deleteRow(request);</span>
+<span class="fc" id="L1090">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a row.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   DeleteRowRequest request =
+   *       DeleteRowRequest.newBuilder().setName(RowName.of(&quot;[TABLE]&quot;, &quot;[ROW]&quot;).toString()).build();
+   *   tablesServiceClient.deleteRow(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteRow(DeleteRowRequest request) {
+<span class="fc" id="L1112">    deleteRowCallable().call(request);</span>
+<span class="fc" id="L1113">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a row.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   DeleteRowRequest request =
+   *       DeleteRowRequest.newBuilder().setName(RowName.of(&quot;[TABLE]&quot;, &quot;[ROW]&quot;).toString()).build();
+   *   ApiFuture&lt;Empty&gt; future = tablesServiceClient.deleteRowCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteRowRequest, Empty&gt; deleteRowCallable() {
+<span class="fc" id="L1134">    return stub.deleteRowCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes multiple rows.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   BatchDeleteRowsRequest request =
+   *       BatchDeleteRowsRequest.newBuilder()
+   *           .setParent(TableName.of(&quot;[TABLE]&quot;).toString())
+   *           .addAllNames(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   tablesServiceClient.batchDeleteRows(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void batchDeleteRows(BatchDeleteRowsRequest request) {
+<span class="fc" id="L1160">    batchDeleteRowsCallable().call(request);</span>
+<span class="fc" id="L1161">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes multiple rows.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TablesServiceClient tablesServiceClient = TablesServiceClient.create()) {
+   *   BatchDeleteRowsRequest request =
+   *       BatchDeleteRowsRequest.newBuilder()
+   *           .setParent(TableName.of(&quot;[TABLE]&quot;).toString())
+   *           .addAllNames(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = tablesServiceClient.batchDeleteRowsCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;BatchDeleteRowsRequest, Empty&gt; batchDeleteRowsCallable() {
+<span class="fc" id="L1185">    return stub.batchDeleteRowsCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1190">    stub.close();</span>
+<span class="fc" id="L1191">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1195">    stub.shutdown();</span>
+<span class="nc" id="L1196">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1200">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1205">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1210">    stub.shutdownNow();</span>
+<span class="nc" id="L1211">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1215">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListTablesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListTablesRequest,
+          ListTablesResponse,
+          Table,
+          ListTablesPage,
+          ListTablesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListTablesPagedResponse&gt; createAsync(
+        PageContext&lt;ListTablesRequest, ListTablesResponse, Table&gt; context,
+        ApiFuture&lt;ListTablesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListTablesPage&gt; futurePage =
+<span class="fc" id="L1230">          ListTablesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1231">      return ApiFutures.transform(</span>
+<span class="fc" id="L1232">          futurePage, input -&gt; new ListTablesPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListTablesPagedResponse(ListTablesPage page) {
+<span class="fc" id="L1236">      super(page, ListTablesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1237">    }</span>
+  }
+
+  public static class ListTablesPage
+      extends AbstractPage&lt;ListTablesRequest, ListTablesResponse, Table, ListTablesPage&gt; {
+
+    private ListTablesPage(
+        PageContext&lt;ListTablesRequest, ListTablesResponse, Table&gt; context,
+        ListTablesResponse response) {
+<span class="fc" id="L1246">      super(context, response);</span>
+<span class="fc" id="L1247">    }</span>
+
+    private static ListTablesPage createEmptyPage() {
+<span class="fc" id="L1250">      return new ListTablesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListTablesPage createPage(
+        PageContext&lt;ListTablesRequest, ListTablesResponse, Table&gt; context,
+        ListTablesResponse response) {
+<span class="fc" id="L1257">      return new ListTablesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListTablesPage&gt; createPageAsync(
+        PageContext&lt;ListTablesRequest, ListTablesResponse, Table&gt; context,
+        ApiFuture&lt;ListTablesResponse&gt; futureResponse) {
+<span class="fc" id="L1264">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListTablesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListTablesRequest,
+          ListTablesResponse,
+          Table,
+          ListTablesPage,
+          ListTablesFixedSizeCollection&gt; {
+
+    private ListTablesFixedSizeCollection(List&lt;ListTablesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1277">      super(pages, collectionSize);</span>
+<span class="fc" id="L1278">    }</span>
+
+    private static ListTablesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1281">      return new ListTablesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListTablesFixedSizeCollection createCollection(
+        List&lt;ListTablesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1287">      return new ListTablesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListWorkspacesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListWorkspacesRequest,
+          ListWorkspacesResponse,
+          Workspace,
+          ListWorkspacesPage,
+          ListWorkspacesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListWorkspacesPagedResponse&gt; createAsync(
+        PageContext&lt;ListWorkspacesRequest, ListWorkspacesResponse, Workspace&gt; context,
+        ApiFuture&lt;ListWorkspacesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListWorkspacesPage&gt; futurePage =
+<span class="fc" id="L1303">          ListWorkspacesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1304">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1306">          input -&gt; new ListWorkspacesPagedResponse(input),</span>
+<span class="fc" id="L1307">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListWorkspacesPagedResponse(ListWorkspacesPage page) {
+<span class="fc" id="L1311">      super(page, ListWorkspacesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1312">    }</span>
+  }
+
+  public static class ListWorkspacesPage
+      extends AbstractPage&lt;
+          ListWorkspacesRequest, ListWorkspacesResponse, Workspace, ListWorkspacesPage&gt; {
+
+    private ListWorkspacesPage(
+        PageContext&lt;ListWorkspacesRequest, ListWorkspacesResponse, Workspace&gt; context,
+        ListWorkspacesResponse response) {
+<span class="fc" id="L1322">      super(context, response);</span>
+<span class="fc" id="L1323">    }</span>
+
+    private static ListWorkspacesPage createEmptyPage() {
+<span class="fc" id="L1326">      return new ListWorkspacesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListWorkspacesPage createPage(
+        PageContext&lt;ListWorkspacesRequest, ListWorkspacesResponse, Workspace&gt; context,
+        ListWorkspacesResponse response) {
+<span class="fc" id="L1333">      return new ListWorkspacesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListWorkspacesPage&gt; createPageAsync(
+        PageContext&lt;ListWorkspacesRequest, ListWorkspacesResponse, Workspace&gt; context,
+        ApiFuture&lt;ListWorkspacesResponse&gt; futureResponse) {
+<span class="fc" id="L1340">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListWorkspacesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListWorkspacesRequest,
+          ListWorkspacesResponse,
+          Workspace,
+          ListWorkspacesPage,
+          ListWorkspacesFixedSizeCollection&gt; {
+
+    private ListWorkspacesFixedSizeCollection(List&lt;ListWorkspacesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1353">      super(pages, collectionSize);</span>
+<span class="fc" id="L1354">    }</span>
+
+    private static ListWorkspacesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1357">      return new ListWorkspacesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListWorkspacesFixedSizeCollection createCollection(
+        List&lt;ListWorkspacesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1363">      return new ListWorkspacesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListRowsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListRowsRequest, ListRowsResponse, Row, ListRowsPage, ListRowsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListRowsPagedResponse&gt; createAsync(
+        PageContext&lt;ListRowsRequest, ListRowsResponse, Row&gt; context,
+        ApiFuture&lt;ListRowsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListRowsPage&gt; futurePage =
+<span class="fc" id="L1375">          ListRowsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1376">      return ApiFutures.transform(</span>
+<span class="fc" id="L1377">          futurePage, input -&gt; new ListRowsPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListRowsPagedResponse(ListRowsPage page) {
+<span class="fc" id="L1381">      super(page, ListRowsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1382">    }</span>
+  }
+
+  public static class ListRowsPage
+      extends AbstractPage&lt;ListRowsRequest, ListRowsResponse, Row, ListRowsPage&gt; {
+
+    private ListRowsPage(
+        PageContext&lt;ListRowsRequest, ListRowsResponse, Row&gt; context, ListRowsResponse response) {
+<span class="fc" id="L1390">      super(context, response);</span>
+<span class="fc" id="L1391">    }</span>
+
+    private static ListRowsPage createEmptyPage() {
+<span class="fc" id="L1394">      return new ListRowsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListRowsPage createPage(
+        PageContext&lt;ListRowsRequest, ListRowsResponse, Row&gt; context, ListRowsResponse response) {
+<span class="fc" id="L1400">      return new ListRowsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListRowsPage&gt; createPageAsync(
+        PageContext&lt;ListRowsRequest, ListRowsResponse, Row&gt; context,
+        ApiFuture&lt;ListRowsResponse&gt; futureResponse) {
+<span class="fc" id="L1407">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListRowsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListRowsRequest, ListRowsResponse, Row, ListRowsPage, ListRowsFixedSizeCollection&gt; {
+
+    private ListRowsFixedSizeCollection(List&lt;ListRowsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1416">      super(pages, collectionSize);</span>
+<span class="fc" id="L1417">    }</span>
+
+    private static ListRowsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1420">      return new ListRowsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListRowsFixedSizeCollection createCollection(
+        List&lt;ListRowsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1426">      return new ListRowsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

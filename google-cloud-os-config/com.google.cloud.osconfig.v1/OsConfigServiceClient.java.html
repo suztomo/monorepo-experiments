@@ -1,0 +1,1844 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>OsConfigServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-os-config</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.osconfig.v1</a> &gt; <span class="el_source">OsConfigServiceClient.java</span></div><h1>OsConfigServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.osconfig.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.osconfig.v1.stub.OsConfigServiceStub;
+import com.google.cloud.osconfig.v1.stub.OsConfigServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: OS Config API
+ *
+ * &lt;p&gt;The OS Config service is a server-side component that you can use to manage package
+ * installations and patch jobs for virtual machine instances.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+ *   PatchJobs.ExecutePatchJobRequest request =
+ *       PatchJobs.ExecutePatchJobRequest.newBuilder()
+ *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+ *           .setDescription(&quot;description-1724546052&quot;)
+ *           .setInstanceFilter(PatchJobs.PatchInstanceFilter.newBuilder().build())
+ *           .setPatchConfig(PatchJobs.PatchConfig.newBuilder().build())
+ *           .setDuration(Duration.newBuilder().build())
+ *           .setDryRun(true)
+ *           .setDisplayName(&quot;displayName1714148973&quot;)
+ *           .setRollout(PatchJobs.PatchRollout.newBuilder().build())
+ *           .build();
+ *   PatchJobs.PatchJob response = osConfigServiceClient.executePatchJob(request);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the OsConfigServiceClient object to clean up resources
+ * such as threads. In the example above, try-with-resources is used, which automatically calls
+ * close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of OsConfigServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * OsConfigServiceSettings osConfigServiceSettings =
+ *     OsConfigServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * OsConfigServiceClient osConfigServiceClient =
+ *     OsConfigServiceClient.create(osConfigServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * OsConfigServiceSettings osConfigServiceSettings =
+ *     OsConfigServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * OsConfigServiceClient osConfigServiceClient =
+ *     OsConfigServiceClient.create(osConfigServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class OsConfigServiceClient implements BackgroundResource {
+  private final OsConfigServiceSettings settings;
+  private final OsConfigServiceStub stub;
+
+  /** Constructs an instance of OsConfigServiceClient with default settings. */
+  public static final OsConfigServiceClient create() throws IOException {
+<span class="nc" id="L127">    return create(OsConfigServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of OsConfigServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final OsConfigServiceClient create(OsConfigServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L136">    return new OsConfigServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of OsConfigServiceClient, using the given stub for making calls. This is
+   * for advanced usage - prefer using create(OsConfigServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final OsConfigServiceClient create(OsConfigServiceStub stub) {
+<span class="nc" id="L145">    return new OsConfigServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of OsConfigServiceClient, using the given settings. This is protected so
+   * that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L153">  protected OsConfigServiceClient(OsConfigServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L154">    this.settings = settings;</span>
+<span class="fc" id="L155">    this.stub = ((OsConfigServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L156">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L159">  protected OsConfigServiceClient(OsConfigServiceStub stub) {</span>
+<span class="nc" id="L160">    this.settings = null;</span>
+<span class="nc" id="L161">    this.stub = stub;</span>
+<span class="nc" id="L162">  }</span>
+
+  public final OsConfigServiceSettings getSettings() {
+<span class="nc" id="L165">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public OsConfigServiceStub getStub() {
+<span class="nc" id="L170">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Patch VM instances by creating and running a patch job.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchJobs.ExecutePatchJobRequest request =
+   *       PatchJobs.ExecutePatchJobRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setDescription(&quot;description-1724546052&quot;)
+   *           .setInstanceFilter(PatchJobs.PatchInstanceFilter.newBuilder().build())
+   *           .setPatchConfig(PatchJobs.PatchConfig.newBuilder().build())
+   *           .setDuration(Duration.newBuilder().build())
+   *           .setDryRun(true)
+   *           .setDisplayName(&quot;displayName1714148973&quot;)
+   *           .setRollout(PatchJobs.PatchRollout.newBuilder().build())
+   *           .build();
+   *   PatchJobs.PatchJob response = osConfigServiceClient.executePatchJob(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchJobs.PatchJob executePatchJob(PatchJobs.ExecutePatchJobRequest request) {
+<span class="fc" id="L202">    return executePatchJobCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Patch VM instances by creating and running a patch job.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchJobs.ExecutePatchJobRequest request =
+   *       PatchJobs.ExecutePatchJobRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setDescription(&quot;description-1724546052&quot;)
+   *           .setInstanceFilter(PatchJobs.PatchInstanceFilter.newBuilder().build())
+   *           .setPatchConfig(PatchJobs.PatchConfig.newBuilder().build())
+   *           .setDuration(Duration.newBuilder().build())
+   *           .setDryRun(true)
+   *           .setDisplayName(&quot;displayName1714148973&quot;)
+   *           .setRollout(PatchJobs.PatchRollout.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;PatchJobs.PatchJob&gt; future =
+   *       osConfigServiceClient.executePatchJobCallable().futureCall(request);
+   *   // Do something.
+   *   PatchJobs.PatchJob response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;PatchJobs.ExecutePatchJobRequest, PatchJobs.PatchJob&gt;
+      executePatchJobCallable() {
+<span class="fc" id="L235">    return stub.executePatchJobCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the patch job. This can be used to track the progress of an ongoing patch job or review the
+   * details of completed jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchJobName name = PatchJobName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_JOB]&quot;);
+   *   PatchJobs.PatchJob response = osConfigServiceClient.getPatchJob(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Name of the patch in the form `projects/&amp;#42;/patchJobs/&amp;#42;`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchJobs.PatchJob getPatchJob(PatchJobName name) {
+    PatchJobs.GetPatchJobRequest request =
+<span class="fc" id="L259">        PatchJobs.GetPatchJobRequest.newBuilder()</span>
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L261">            .build();</span>
+<span class="fc" id="L262">    return getPatchJob(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the patch job. This can be used to track the progress of an ongoing patch job or review the
+   * details of completed jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   String name = PatchJobName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_JOB]&quot;).toString();
+   *   PatchJobs.PatchJob response = osConfigServiceClient.getPatchJob(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Name of the patch in the form `projects/&amp;#42;/patchJobs/&amp;#42;`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchJobs.PatchJob getPatchJob(String name) {
+    PatchJobs.GetPatchJobRequest request =
+<span class="fc" id="L286">        PatchJobs.GetPatchJobRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L287">    return getPatchJob(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the patch job. This can be used to track the progress of an ongoing patch job or review the
+   * details of completed jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchJobs.GetPatchJobRequest request =
+   *       PatchJobs.GetPatchJobRequest.newBuilder()
+   *           .setName(PatchJobName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_JOB]&quot;).toString())
+   *           .build();
+   *   PatchJobs.PatchJob response = osConfigServiceClient.getPatchJob(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchJobs.PatchJob getPatchJob(PatchJobs.GetPatchJobRequest request) {
+<span class="fc" id="L313">    return getPatchJobCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the patch job. This can be used to track the progress of an ongoing patch job or review the
+   * details of completed jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchJobs.GetPatchJobRequest request =
+   *       PatchJobs.GetPatchJobRequest.newBuilder()
+   *           .setName(PatchJobName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_JOB]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;PatchJobs.PatchJob&gt; future =
+   *       osConfigServiceClient.getPatchJobCallable().futureCall(request);
+   *   // Do something.
+   *   PatchJobs.PatchJob response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;PatchJobs.GetPatchJobRequest, PatchJobs.PatchJob&gt;
+      getPatchJobCallable() {
+<span class="fc" id="L340">    return stub.getPatchJobCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Cancel a patch job. The patch job must be active. Canceled patch jobs cannot be restarted.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchJobs.CancelPatchJobRequest request =
+   *       PatchJobs.CancelPatchJobRequest.newBuilder()
+   *           .setName(PatchJobName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_JOB]&quot;).toString())
+   *           .build();
+   *   PatchJobs.PatchJob response = osConfigServiceClient.cancelPatchJob(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchJobs.PatchJob cancelPatchJob(PatchJobs.CancelPatchJobRequest request) {
+<span class="fc" id="L365">    return cancelPatchJobCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Cancel a patch job. The patch job must be active. Canceled patch jobs cannot be restarted.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchJobs.CancelPatchJobRequest request =
+   *       PatchJobs.CancelPatchJobRequest.newBuilder()
+   *           .setName(PatchJobName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_JOB]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;PatchJobs.PatchJob&gt; future =
+   *       osConfigServiceClient.cancelPatchJobCallable().futureCall(request);
+   *   // Do something.
+   *   PatchJobs.PatchJob response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;PatchJobs.CancelPatchJobRequest, PatchJobs.PatchJob&gt;
+      cancelPatchJobCallable() {
+<span class="fc" id="L391">    return stub.cancelPatchJobCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a list of patch jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (PatchJobs.PatchJob element : osConfigServiceClient.listPatchJobs(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. In the form of `projects/&amp;#42;`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPatchJobsPagedResponse listPatchJobs(ProjectName parent) {
+    PatchJobs.ListPatchJobsRequest request =
+<span class="fc" id="L416">        PatchJobs.ListPatchJobsRequest.newBuilder()</span>
+<span class="pc bpc" id="L417" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L418">            .build();</span>
+<span class="fc" id="L419">    return listPatchJobs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a list of patch jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (PatchJobs.PatchJob element : osConfigServiceClient.listPatchJobs(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. In the form of `projects/&amp;#42;`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPatchJobsPagedResponse listPatchJobs(String parent) {
+    PatchJobs.ListPatchJobsRequest request =
+<span class="fc" id="L444">        PatchJobs.ListPatchJobsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L445">    return listPatchJobs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a list of patch jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchJobs.ListPatchJobsRequest request =
+   *       PatchJobs.ListPatchJobsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   for (PatchJobs.PatchJob element : osConfigServiceClient.listPatchJobs(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPatchJobsPagedResponse listPatchJobs(PatchJobs.ListPatchJobsRequest request) {
+<span class="fc" id="L475">    return listPatchJobsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a list of patch jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchJobs.ListPatchJobsRequest request =
+   *       PatchJobs.ListPatchJobsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;PatchJobs.PatchJob&gt; future =
+   *       osConfigServiceClient.listPatchJobsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (PatchJobs.PatchJob element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;PatchJobs.ListPatchJobsRequest, ListPatchJobsPagedResponse&gt;
+      listPatchJobsPagedCallable() {
+<span class="fc" id="L506">    return stub.listPatchJobsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a list of patch jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchJobs.ListPatchJobsRequest request =
+   *       PatchJobs.ListPatchJobsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   while (true) {
+   *     PatchJobs.ListPatchJobsResponse response =
+   *         osConfigServiceClient.listPatchJobsCallable().call(request);
+   *     for (PatchJobs.PatchJob element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;PatchJobs.ListPatchJobsRequest, PatchJobs.ListPatchJobsResponse&gt;
+      listPatchJobsCallable() {
+<span class="nc" id="L544">    return stub.listPatchJobsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a list of instance details for a given patch job.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchJobName parent = PatchJobName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_JOB]&quot;);
+   *   for (PatchJobs.PatchJobInstanceDetails element :
+   *       osConfigServiceClient.listPatchJobInstanceDetails(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent for the instances are in the form of
+   *     `projects/&amp;#42;/patchJobs/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPatchJobInstanceDetailsPagedResponse listPatchJobInstanceDetails(
+      PatchJobName parent) {
+    PatchJobs.ListPatchJobInstanceDetailsRequest request =
+<span class="fc" id="L572">        PatchJobs.ListPatchJobInstanceDetailsRequest.newBuilder()</span>
+<span class="pc bpc" id="L573" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L574">            .build();</span>
+<span class="fc" id="L575">    return listPatchJobInstanceDetails(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a list of instance details for a given patch job.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   String parent = PatchJobName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_JOB]&quot;).toString();
+   *   for (PatchJobs.PatchJobInstanceDetails element :
+   *       osConfigServiceClient.listPatchJobInstanceDetails(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent for the instances are in the form of
+   *     `projects/&amp;#42;/patchJobs/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPatchJobInstanceDetailsPagedResponse listPatchJobInstanceDetails(String parent) {
+    PatchJobs.ListPatchJobInstanceDetailsRequest request =
+<span class="fc" id="L602">        PatchJobs.ListPatchJobInstanceDetailsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L603">    return listPatchJobInstanceDetails(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a list of instance details for a given patch job.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchJobs.ListPatchJobInstanceDetailsRequest request =
+   *       PatchJobs.ListPatchJobInstanceDetailsRequest.newBuilder()
+   *           .setParent(PatchJobName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_JOB]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   for (PatchJobs.PatchJobInstanceDetails element :
+   *       osConfigServiceClient.listPatchJobInstanceDetails(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPatchJobInstanceDetailsPagedResponse listPatchJobInstanceDetails(
+      PatchJobs.ListPatchJobInstanceDetailsRequest request) {
+<span class="fc" id="L635">    return listPatchJobInstanceDetailsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a list of instance details for a given patch job.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchJobs.ListPatchJobInstanceDetailsRequest request =
+   *       PatchJobs.ListPatchJobInstanceDetailsRequest.newBuilder()
+   *           .setParent(PatchJobName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_JOB]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;PatchJobs.PatchJobInstanceDetails&gt; future =
+   *       osConfigServiceClient.listPatchJobInstanceDetailsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (PatchJobs.PatchJobInstanceDetails element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          PatchJobs.ListPatchJobInstanceDetailsRequest, ListPatchJobInstanceDetailsPagedResponse&gt;
+      listPatchJobInstanceDetailsPagedCallable() {
+<span class="fc" id="L667">    return stub.listPatchJobInstanceDetailsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a list of instance details for a given patch job.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchJobs.ListPatchJobInstanceDetailsRequest request =
+   *       PatchJobs.ListPatchJobInstanceDetailsRequest.newBuilder()
+   *           .setParent(PatchJobName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_JOB]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   while (true) {
+   *     PatchJobs.ListPatchJobInstanceDetailsResponse response =
+   *         osConfigServiceClient.listPatchJobInstanceDetailsCallable().call(request);
+   *     for (PatchJobs.PatchJobInstanceDetails element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          PatchJobs.ListPatchJobInstanceDetailsRequest,
+          PatchJobs.ListPatchJobInstanceDetailsResponse&gt;
+      listPatchJobInstanceDetailsCallable() {
+<span class="nc" id="L707">    return stub.listPatchJobInstanceDetailsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   PatchDeployments.PatchDeployment patchDeployment =
+   *       PatchDeployments.PatchDeployment.newBuilder().build();
+   *   String patchDeploymentId = &quot;patchDeploymentId-1180405976&quot;;
+   *   PatchDeployments.PatchDeployment response =
+   *       osConfigServiceClient.createPatchDeployment(parent, patchDeployment, patchDeploymentId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The project to apply this patch deployment to in the form
+   *     `projects/&amp;#42;`.
+   * @param patchDeployment Required. The patch deployment to create.
+   * @param patchDeploymentId Required. A name for the patch deployment in the project. When
+   *     creating a name the following rules apply:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;Must contain only lowercase letters, numbers, and hyphens.
+   *       &lt;li&gt;Must start with a letter.
+   *       &lt;li&gt;Must be between 1-63 characters.
+   *       &lt;li&gt;Must end with a number or a letter.
+   *       &lt;li&gt;Must be unique within the project.
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchDeployments.PatchDeployment createPatchDeployment(
+      ProjectName parent,
+      PatchDeployments.PatchDeployment patchDeployment,
+      String patchDeploymentId) {
+    PatchDeployments.CreatePatchDeploymentRequest request =
+<span class="fc" id="L749">        PatchDeployments.CreatePatchDeploymentRequest.newBuilder()</span>
+<span class="pc bpc" id="L750" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L751">            .setPatchDeployment(patchDeployment)</span>
+<span class="fc" id="L752">            .setPatchDeploymentId(patchDeploymentId)</span>
+<span class="fc" id="L753">            .build();</span>
+<span class="fc" id="L754">    return createPatchDeployment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   PatchDeployments.PatchDeployment patchDeployment =
+   *       PatchDeployments.PatchDeployment.newBuilder().build();
+   *   String patchDeploymentId = &quot;patchDeploymentId-1180405976&quot;;
+   *   PatchDeployments.PatchDeployment response =
+   *       osConfigServiceClient.createPatchDeployment(parent, patchDeployment, patchDeploymentId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The project to apply this patch deployment to in the form
+   *     `projects/&amp;#42;`.
+   * @param patchDeployment Required. The patch deployment to create.
+   * @param patchDeploymentId Required. A name for the patch deployment in the project. When
+   *     creating a name the following rules apply:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;Must contain only lowercase letters, numbers, and hyphens.
+   *       &lt;li&gt;Must start with a letter.
+   *       &lt;li&gt;Must be between 1-63 characters.
+   *       &lt;li&gt;Must end with a number or a letter.
+   *       &lt;li&gt;Must be unique within the project.
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchDeployments.PatchDeployment createPatchDeployment(
+      String parent, PatchDeployments.PatchDeployment patchDeployment, String patchDeploymentId) {
+    PatchDeployments.CreatePatchDeploymentRequest request =
+<span class="fc" id="L794">        PatchDeployments.CreatePatchDeploymentRequest.newBuilder()</span>
+<span class="fc" id="L795">            .setParent(parent)</span>
+<span class="fc" id="L796">            .setPatchDeployment(patchDeployment)</span>
+<span class="fc" id="L797">            .setPatchDeploymentId(patchDeploymentId)</span>
+<span class="fc" id="L798">            .build();</span>
+<span class="fc" id="L799">    return createPatchDeployment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.CreatePatchDeploymentRequest request =
+   *       PatchDeployments.CreatePatchDeploymentRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPatchDeploymentId(&quot;patchDeploymentId-1180405976&quot;)
+   *           .setPatchDeployment(PatchDeployments.PatchDeployment.newBuilder().build())
+   *           .build();
+   *   PatchDeployments.PatchDeployment response =
+   *       osConfigServiceClient.createPatchDeployment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchDeployments.PatchDeployment createPatchDeployment(
+      PatchDeployments.CreatePatchDeploymentRequest request) {
+<span class="fc" id="L828">    return createPatchDeploymentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.CreatePatchDeploymentRequest request =
+   *       PatchDeployments.CreatePatchDeploymentRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPatchDeploymentId(&quot;patchDeploymentId-1180405976&quot;)
+   *           .setPatchDeployment(PatchDeployments.PatchDeployment.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;PatchDeployments.PatchDeployment&gt; future =
+   *       osConfigServiceClient.createPatchDeploymentCallable().futureCall(request);
+   *   // Do something.
+   *   PatchDeployments.PatchDeployment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          PatchDeployments.CreatePatchDeploymentRequest, PatchDeployments.PatchDeployment&gt;
+      createPatchDeploymentCallable() {
+<span class="fc" id="L857">    return stub.createPatchDeploymentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeploymentName name = PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;);
+   *   PatchDeployments.PatchDeployment response = osConfigServiceClient.getPatchDeployment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the patch deployment in the form
+   *     `projects/&amp;#42;/patchDeployments/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchDeployments.PatchDeployment getPatchDeployment(PatchDeploymentName name) {
+    PatchDeployments.GetPatchDeploymentRequest request =
+<span class="fc" id="L881">        PatchDeployments.GetPatchDeploymentRequest.newBuilder()</span>
+<span class="pc bpc" id="L882" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L883">            .build();</span>
+<span class="fc" id="L884">    return getPatchDeployment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   String name = PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;).toString();
+   *   PatchDeployments.PatchDeployment response = osConfigServiceClient.getPatchDeployment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the patch deployment in the form
+   *     `projects/&amp;#42;/patchDeployments/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchDeployments.PatchDeployment getPatchDeployment(String name) {
+    PatchDeployments.GetPatchDeploymentRequest request =
+<span class="fc" id="L908">        PatchDeployments.GetPatchDeploymentRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L909">    return getPatchDeployment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.GetPatchDeploymentRequest request =
+   *       PatchDeployments.GetPatchDeploymentRequest.newBuilder()
+   *           .setName(PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;).toString())
+   *           .build();
+   *   PatchDeployments.PatchDeployment response = osConfigServiceClient.getPatchDeployment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchDeployments.PatchDeployment getPatchDeployment(
+      PatchDeployments.GetPatchDeploymentRequest request) {
+<span class="fc" id="L935">    return getPatchDeploymentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.GetPatchDeploymentRequest request =
+   *       PatchDeployments.GetPatchDeploymentRequest.newBuilder()
+   *           .setName(PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;PatchDeployments.PatchDeployment&gt; future =
+   *       osConfigServiceClient.getPatchDeploymentCallable().futureCall(request);
+   *   // Do something.
+   *   PatchDeployments.PatchDeployment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          PatchDeployments.GetPatchDeploymentRequest, PatchDeployments.PatchDeployment&gt;
+      getPatchDeploymentCallable() {
+<span class="fc" id="L962">    return stub.getPatchDeploymentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a page of OS Config patch deployments.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (PatchDeployments.PatchDeployment element :
+   *       osConfigServiceClient.listPatchDeployments(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the parent in the form `projects/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPatchDeploymentsPagedResponse listPatchDeployments(ProjectName parent) {
+    PatchDeployments.ListPatchDeploymentsRequest request =
+<span class="fc" id="L988">        PatchDeployments.ListPatchDeploymentsRequest.newBuilder()</span>
+<span class="pc bpc" id="L989" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L990">            .build();</span>
+<span class="fc" id="L991">    return listPatchDeployments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a page of OS Config patch deployments.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (PatchDeployments.PatchDeployment element :
+   *       osConfigServiceClient.listPatchDeployments(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the parent in the form `projects/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPatchDeploymentsPagedResponse listPatchDeployments(String parent) {
+    PatchDeployments.ListPatchDeploymentsRequest request =
+<span class="fc" id="L1017">        PatchDeployments.ListPatchDeploymentsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1018">    return listPatchDeployments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a page of OS Config patch deployments.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.ListPatchDeploymentsRequest request =
+   *       PatchDeployments.ListPatchDeploymentsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (PatchDeployments.PatchDeployment element :
+   *       osConfigServiceClient.listPatchDeployments(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPatchDeploymentsPagedResponse listPatchDeployments(
+      PatchDeployments.ListPatchDeploymentsRequest request) {
+<span class="fc" id="L1049">    return listPatchDeploymentsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a page of OS Config patch deployments.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.ListPatchDeploymentsRequest request =
+   *       PatchDeployments.ListPatchDeploymentsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;PatchDeployments.PatchDeployment&gt; future =
+   *       osConfigServiceClient.listPatchDeploymentsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (PatchDeployments.PatchDeployment element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          PatchDeployments.ListPatchDeploymentsRequest, ListPatchDeploymentsPagedResponse&gt;
+      listPatchDeploymentsPagedCallable() {
+<span class="fc" id="L1080">    return stub.listPatchDeploymentsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a page of OS Config patch deployments.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.ListPatchDeploymentsRequest request =
+   *       PatchDeployments.ListPatchDeploymentsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     PatchDeployments.ListPatchDeploymentsResponse response =
+   *         osConfigServiceClient.listPatchDeploymentsCallable().call(request);
+   *     for (PatchDeployments.PatchDeployment element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          PatchDeployments.ListPatchDeploymentsRequest,
+          PatchDeployments.ListPatchDeploymentsResponse&gt;
+      listPatchDeploymentsCallable() {
+<span class="nc" id="L1119">    return stub.listPatchDeploymentsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeploymentName name = PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;);
+   *   osConfigServiceClient.deletePatchDeployment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the patch deployment in the form
+   *     `projects/&amp;#42;/patchDeployments/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deletePatchDeployment(PatchDeploymentName name) {
+    PatchDeployments.DeletePatchDeploymentRequest request =
+<span class="fc" id="L1143">        PatchDeployments.DeletePatchDeploymentRequest.newBuilder()</span>
+<span class="pc bpc" id="L1144" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1145">            .build();</span>
+<span class="fc" id="L1146">    deletePatchDeployment(request);</span>
+<span class="fc" id="L1147">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   String name = PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;).toString();
+   *   osConfigServiceClient.deletePatchDeployment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the patch deployment in the form
+   *     `projects/&amp;#42;/patchDeployments/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deletePatchDeployment(String name) {
+    PatchDeployments.DeletePatchDeploymentRequest request =
+<span class="fc" id="L1170">        PatchDeployments.DeletePatchDeploymentRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1171">    deletePatchDeployment(request);</span>
+<span class="fc" id="L1172">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.DeletePatchDeploymentRequest request =
+   *       PatchDeployments.DeletePatchDeploymentRequest.newBuilder()
+   *           .setName(PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;).toString())
+   *           .build();
+   *   osConfigServiceClient.deletePatchDeployment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deletePatchDeployment(PatchDeployments.DeletePatchDeploymentRequest request) {
+<span class="fc" id="L1196">    deletePatchDeploymentCallable().call(request);</span>
+<span class="fc" id="L1197">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.DeletePatchDeploymentRequest request =
+   *       PatchDeployments.DeletePatchDeploymentRequest.newBuilder()
+   *           .setName(PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       osConfigServiceClient.deletePatchDeploymentCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;PatchDeployments.DeletePatchDeploymentRequest, Empty&gt;
+      deletePatchDeploymentCallable() {
+<span class="fc" id="L1222">    return stub.deletePatchDeploymentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.PatchDeployment patchDeployment =
+   *       PatchDeployments.PatchDeployment.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   PatchDeployments.PatchDeployment response =
+   *       osConfigServiceClient.updatePatchDeployment(patchDeployment, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param patchDeployment Required. The patch deployment to Update.
+   * @param updateMask Optional. Field mask that controls which fields of the patch deployment
+   *     should be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchDeployments.PatchDeployment updatePatchDeployment(
+      PatchDeployments.PatchDeployment patchDeployment, FieldMask updateMask) {
+    PatchDeployments.UpdatePatchDeploymentRequest request =
+<span class="fc" id="L1251">        PatchDeployments.UpdatePatchDeploymentRequest.newBuilder()</span>
+<span class="fc" id="L1252">            .setPatchDeployment(patchDeployment)</span>
+<span class="fc" id="L1253">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L1254">            .build();</span>
+<span class="fc" id="L1255">    return updatePatchDeployment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.UpdatePatchDeploymentRequest request =
+   *       PatchDeployments.UpdatePatchDeploymentRequest.newBuilder()
+   *           .setPatchDeployment(PatchDeployments.PatchDeployment.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   PatchDeployments.PatchDeployment response =
+   *       osConfigServiceClient.updatePatchDeployment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchDeployments.PatchDeployment updatePatchDeployment(
+      PatchDeployments.UpdatePatchDeploymentRequest request) {
+<span class="fc" id="L1283">    return updatePatchDeploymentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update an OS Config patch deployment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.UpdatePatchDeploymentRequest request =
+   *       PatchDeployments.UpdatePatchDeploymentRequest.newBuilder()
+   *           .setPatchDeployment(PatchDeployments.PatchDeployment.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;PatchDeployments.PatchDeployment&gt; future =
+   *       osConfigServiceClient.updatePatchDeploymentCallable().futureCall(request);
+   *   // Do something.
+   *   PatchDeployments.PatchDeployment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          PatchDeployments.UpdatePatchDeploymentRequest, PatchDeployments.PatchDeployment&gt;
+      updatePatchDeploymentCallable() {
+<span class="fc" id="L1311">    return stub.updatePatchDeploymentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Change state of patch deployment to &quot;PAUSED&quot;. Patch deployment in paused state doesn't generate
+   * patch jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeploymentName name = PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;);
+   *   PatchDeployments.PatchDeployment response = osConfigServiceClient.pausePatchDeployment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the patch deployment in the form
+   *     `projects/&amp;#42;/patchDeployments/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchDeployments.PatchDeployment pausePatchDeployment(PatchDeploymentName name) {
+    PatchDeployments.PausePatchDeploymentRequest request =
+<span class="fc" id="L1336">        PatchDeployments.PausePatchDeploymentRequest.newBuilder()</span>
+<span class="pc bpc" id="L1337" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1338">            .build();</span>
+<span class="fc" id="L1339">    return pausePatchDeployment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Change state of patch deployment to &quot;PAUSED&quot;. Patch deployment in paused state doesn't generate
+   * patch jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   String name = PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;).toString();
+   *   PatchDeployments.PatchDeployment response = osConfigServiceClient.pausePatchDeployment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the patch deployment in the form
+   *     `projects/&amp;#42;/patchDeployments/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchDeployments.PatchDeployment pausePatchDeployment(String name) {
+    PatchDeployments.PausePatchDeploymentRequest request =
+<span class="fc" id="L1364">        PatchDeployments.PausePatchDeploymentRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1365">    return pausePatchDeployment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Change state of patch deployment to &quot;PAUSED&quot;. Patch deployment in paused state doesn't generate
+   * patch jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.PausePatchDeploymentRequest request =
+   *       PatchDeployments.PausePatchDeploymentRequest.newBuilder()
+   *           .setName(PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;).toString())
+   *           .build();
+   *   PatchDeployments.PatchDeployment response =
+   *       osConfigServiceClient.pausePatchDeployment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchDeployments.PatchDeployment pausePatchDeployment(
+      PatchDeployments.PausePatchDeploymentRequest request) {
+<span class="fc" id="L1393">    return pausePatchDeploymentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Change state of patch deployment to &quot;PAUSED&quot;. Patch deployment in paused state doesn't generate
+   * patch jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.PausePatchDeploymentRequest request =
+   *       PatchDeployments.PausePatchDeploymentRequest.newBuilder()
+   *           .setName(PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;PatchDeployments.PatchDeployment&gt; future =
+   *       osConfigServiceClient.pausePatchDeploymentCallable().futureCall(request);
+   *   // Do something.
+   *   PatchDeployments.PatchDeployment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          PatchDeployments.PausePatchDeploymentRequest, PatchDeployments.PatchDeployment&gt;
+      pausePatchDeploymentCallable() {
+<span class="fc" id="L1421">    return stub.pausePatchDeploymentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Change state of patch deployment back to &quot;ACTIVE&quot;. Patch deployment in active state continues
+   * to generate patch jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeploymentName name = PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;);
+   *   PatchDeployments.PatchDeployment response = osConfigServiceClient.resumePatchDeployment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the patch deployment in the form
+   *     `projects/&amp;#42;/patchDeployments/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchDeployments.PatchDeployment resumePatchDeployment(PatchDeploymentName name) {
+    PatchDeployments.ResumePatchDeploymentRequest request =
+<span class="fc" id="L1446">        PatchDeployments.ResumePatchDeploymentRequest.newBuilder()</span>
+<span class="pc bpc" id="L1447" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1448">            .build();</span>
+<span class="fc" id="L1449">    return resumePatchDeployment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Change state of patch deployment back to &quot;ACTIVE&quot;. Patch deployment in active state continues
+   * to generate patch jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   String name = PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;).toString();
+   *   PatchDeployments.PatchDeployment response = osConfigServiceClient.resumePatchDeployment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the patch deployment in the form
+   *     `projects/&amp;#42;/patchDeployments/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchDeployments.PatchDeployment resumePatchDeployment(String name) {
+    PatchDeployments.ResumePatchDeploymentRequest request =
+<span class="fc" id="L1474">        PatchDeployments.ResumePatchDeploymentRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1475">    return resumePatchDeployment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Change state of patch deployment back to &quot;ACTIVE&quot;. Patch deployment in active state continues
+   * to generate patch jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.ResumePatchDeploymentRequest request =
+   *       PatchDeployments.ResumePatchDeploymentRequest.newBuilder()
+   *           .setName(PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;).toString())
+   *           .build();
+   *   PatchDeployments.PatchDeployment response =
+   *       osConfigServiceClient.resumePatchDeployment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PatchDeployments.PatchDeployment resumePatchDeployment(
+      PatchDeployments.ResumePatchDeploymentRequest request) {
+<span class="fc" id="L1503">    return resumePatchDeploymentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Change state of patch deployment back to &quot;ACTIVE&quot;. Patch deployment in active state continues
+   * to generate patch jobs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigServiceClient osConfigServiceClient = OsConfigServiceClient.create()) {
+   *   PatchDeployments.ResumePatchDeploymentRequest request =
+   *       PatchDeployments.ResumePatchDeploymentRequest.newBuilder()
+   *           .setName(PatchDeploymentName.of(&quot;[PROJECT]&quot;, &quot;[PATCH_DEPLOYMENT]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;PatchDeployments.PatchDeployment&gt; future =
+   *       osConfigServiceClient.resumePatchDeploymentCallable().futureCall(request);
+   *   // Do something.
+   *   PatchDeployments.PatchDeployment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          PatchDeployments.ResumePatchDeploymentRequest, PatchDeployments.PatchDeployment&gt;
+      resumePatchDeploymentCallable() {
+<span class="fc" id="L1531">    return stub.resumePatchDeploymentCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1536">    stub.close();</span>
+<span class="fc" id="L1537">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1541">    stub.shutdown();</span>
+<span class="nc" id="L1542">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1546">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1551">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1556">    stub.shutdownNow();</span>
+<span class="nc" id="L1557">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1561">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListPatchJobsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          PatchJobs.ListPatchJobsRequest,
+          PatchJobs.ListPatchJobsResponse,
+          PatchJobs.PatchJob,
+          ListPatchJobsPage,
+          ListPatchJobsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListPatchJobsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                PatchJobs.ListPatchJobsRequest, PatchJobs.ListPatchJobsResponse, PatchJobs.PatchJob&gt;
+            context,
+        ApiFuture&lt;PatchJobs.ListPatchJobsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListPatchJobsPage&gt; futurePage =
+<span class="fc" id="L1578">          ListPatchJobsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1579">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1581">          input -&gt; new ListPatchJobsPagedResponse(input),</span>
+<span class="fc" id="L1582">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListPatchJobsPagedResponse(ListPatchJobsPage page) {
+<span class="fc" id="L1586">      super(page, ListPatchJobsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1587">    }</span>
+  }
+
+  public static class ListPatchJobsPage
+      extends AbstractPage&lt;
+          PatchJobs.ListPatchJobsRequest,
+          PatchJobs.ListPatchJobsResponse,
+          PatchJobs.PatchJob,
+          ListPatchJobsPage&gt; {
+
+    private ListPatchJobsPage(
+        PageContext&lt;
+                PatchJobs.ListPatchJobsRequest, PatchJobs.ListPatchJobsResponse, PatchJobs.PatchJob&gt;
+            context,
+        PatchJobs.ListPatchJobsResponse response) {
+<span class="fc" id="L1602">      super(context, response);</span>
+<span class="fc" id="L1603">    }</span>
+
+    private static ListPatchJobsPage createEmptyPage() {
+<span class="fc" id="L1606">      return new ListPatchJobsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListPatchJobsPage createPage(
+        PageContext&lt;
+                PatchJobs.ListPatchJobsRequest, PatchJobs.ListPatchJobsResponse, PatchJobs.PatchJob&gt;
+            context,
+        PatchJobs.ListPatchJobsResponse response) {
+<span class="fc" id="L1615">      return new ListPatchJobsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListPatchJobsPage&gt; createPageAsync(
+        PageContext&lt;
+                PatchJobs.ListPatchJobsRequest, PatchJobs.ListPatchJobsResponse, PatchJobs.PatchJob&gt;
+            context,
+        ApiFuture&lt;PatchJobs.ListPatchJobsResponse&gt; futureResponse) {
+<span class="fc" id="L1624">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListPatchJobsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          PatchJobs.ListPatchJobsRequest,
+          PatchJobs.ListPatchJobsResponse,
+          PatchJobs.PatchJob,
+          ListPatchJobsPage,
+          ListPatchJobsFixedSizeCollection&gt; {
+
+    private ListPatchJobsFixedSizeCollection(List&lt;ListPatchJobsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1637">      super(pages, collectionSize);</span>
+<span class="fc" id="L1638">    }</span>
+
+    private static ListPatchJobsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1641">      return new ListPatchJobsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListPatchJobsFixedSizeCollection createCollection(
+        List&lt;ListPatchJobsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1647">      return new ListPatchJobsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListPatchJobInstanceDetailsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          PatchJobs.ListPatchJobInstanceDetailsRequest,
+          PatchJobs.ListPatchJobInstanceDetailsResponse,
+          PatchJobs.PatchJobInstanceDetails,
+          ListPatchJobInstanceDetailsPage,
+          ListPatchJobInstanceDetailsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListPatchJobInstanceDetailsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                PatchJobs.ListPatchJobInstanceDetailsRequest,
+                PatchJobs.ListPatchJobInstanceDetailsResponse,
+                PatchJobs.PatchJobInstanceDetails&gt;
+            context,
+        ApiFuture&lt;PatchJobs.ListPatchJobInstanceDetailsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListPatchJobInstanceDetailsPage&gt; futurePage =
+<span class="fc" id="L1667">          ListPatchJobInstanceDetailsPage.createEmptyPage()</span>
+<span class="fc" id="L1668">              .createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1669">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1671">          input -&gt; new ListPatchJobInstanceDetailsPagedResponse(input),</span>
+<span class="fc" id="L1672">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListPatchJobInstanceDetailsPagedResponse(ListPatchJobInstanceDetailsPage page) {
+<span class="fc" id="L1676">      super(page, ListPatchJobInstanceDetailsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1677">    }</span>
+  }
+
+  public static class ListPatchJobInstanceDetailsPage
+      extends AbstractPage&lt;
+          PatchJobs.ListPatchJobInstanceDetailsRequest,
+          PatchJobs.ListPatchJobInstanceDetailsResponse,
+          PatchJobs.PatchJobInstanceDetails,
+          ListPatchJobInstanceDetailsPage&gt; {
+
+    private ListPatchJobInstanceDetailsPage(
+        PageContext&lt;
+                PatchJobs.ListPatchJobInstanceDetailsRequest,
+                PatchJobs.ListPatchJobInstanceDetailsResponse,
+                PatchJobs.PatchJobInstanceDetails&gt;
+            context,
+        PatchJobs.ListPatchJobInstanceDetailsResponse response) {
+<span class="fc" id="L1694">      super(context, response);</span>
+<span class="fc" id="L1695">    }</span>
+
+    private static ListPatchJobInstanceDetailsPage createEmptyPage() {
+<span class="fc" id="L1698">      return new ListPatchJobInstanceDetailsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListPatchJobInstanceDetailsPage createPage(
+        PageContext&lt;
+                PatchJobs.ListPatchJobInstanceDetailsRequest,
+                PatchJobs.ListPatchJobInstanceDetailsResponse,
+                PatchJobs.PatchJobInstanceDetails&gt;
+            context,
+        PatchJobs.ListPatchJobInstanceDetailsResponse response) {
+<span class="fc" id="L1709">      return new ListPatchJobInstanceDetailsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListPatchJobInstanceDetailsPage&gt; createPageAsync(
+        PageContext&lt;
+                PatchJobs.ListPatchJobInstanceDetailsRequest,
+                PatchJobs.ListPatchJobInstanceDetailsResponse,
+                PatchJobs.PatchJobInstanceDetails&gt;
+            context,
+        ApiFuture&lt;PatchJobs.ListPatchJobInstanceDetailsResponse&gt; futureResponse) {
+<span class="fc" id="L1720">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListPatchJobInstanceDetailsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          PatchJobs.ListPatchJobInstanceDetailsRequest,
+          PatchJobs.ListPatchJobInstanceDetailsResponse,
+          PatchJobs.PatchJobInstanceDetails,
+          ListPatchJobInstanceDetailsPage,
+          ListPatchJobInstanceDetailsFixedSizeCollection&gt; {
+
+    private ListPatchJobInstanceDetailsFixedSizeCollection(
+        List&lt;ListPatchJobInstanceDetailsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1734">      super(pages, collectionSize);</span>
+<span class="fc" id="L1735">    }</span>
+
+    private static ListPatchJobInstanceDetailsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1738">      return new ListPatchJobInstanceDetailsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListPatchJobInstanceDetailsFixedSizeCollection createCollection(
+        List&lt;ListPatchJobInstanceDetailsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1744">      return new ListPatchJobInstanceDetailsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListPatchDeploymentsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          PatchDeployments.ListPatchDeploymentsRequest,
+          PatchDeployments.ListPatchDeploymentsResponse,
+          PatchDeployments.PatchDeployment,
+          ListPatchDeploymentsPage,
+          ListPatchDeploymentsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListPatchDeploymentsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                PatchDeployments.ListPatchDeploymentsRequest,
+                PatchDeployments.ListPatchDeploymentsResponse,
+                PatchDeployments.PatchDeployment&gt;
+            context,
+        ApiFuture&lt;PatchDeployments.ListPatchDeploymentsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListPatchDeploymentsPage&gt; futurePage =
+<span class="fc" id="L1764">          ListPatchDeploymentsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1765">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1767">          input -&gt; new ListPatchDeploymentsPagedResponse(input),</span>
+<span class="fc" id="L1768">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListPatchDeploymentsPagedResponse(ListPatchDeploymentsPage page) {
+<span class="fc" id="L1772">      super(page, ListPatchDeploymentsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1773">    }</span>
+  }
+
+  public static class ListPatchDeploymentsPage
+      extends AbstractPage&lt;
+          PatchDeployments.ListPatchDeploymentsRequest,
+          PatchDeployments.ListPatchDeploymentsResponse,
+          PatchDeployments.PatchDeployment,
+          ListPatchDeploymentsPage&gt; {
+
+    private ListPatchDeploymentsPage(
+        PageContext&lt;
+                PatchDeployments.ListPatchDeploymentsRequest,
+                PatchDeployments.ListPatchDeploymentsResponse,
+                PatchDeployments.PatchDeployment&gt;
+            context,
+        PatchDeployments.ListPatchDeploymentsResponse response) {
+<span class="fc" id="L1790">      super(context, response);</span>
+<span class="fc" id="L1791">    }</span>
+
+    private static ListPatchDeploymentsPage createEmptyPage() {
+<span class="fc" id="L1794">      return new ListPatchDeploymentsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListPatchDeploymentsPage createPage(
+        PageContext&lt;
+                PatchDeployments.ListPatchDeploymentsRequest,
+                PatchDeployments.ListPatchDeploymentsResponse,
+                PatchDeployments.PatchDeployment&gt;
+            context,
+        PatchDeployments.ListPatchDeploymentsResponse response) {
+<span class="fc" id="L1805">      return new ListPatchDeploymentsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListPatchDeploymentsPage&gt; createPageAsync(
+        PageContext&lt;
+                PatchDeployments.ListPatchDeploymentsRequest,
+                PatchDeployments.ListPatchDeploymentsResponse,
+                PatchDeployments.PatchDeployment&gt;
+            context,
+        ApiFuture&lt;PatchDeployments.ListPatchDeploymentsResponse&gt; futureResponse) {
+<span class="fc" id="L1816">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListPatchDeploymentsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          PatchDeployments.ListPatchDeploymentsRequest,
+          PatchDeployments.ListPatchDeploymentsResponse,
+          PatchDeployments.PatchDeployment,
+          ListPatchDeploymentsPage,
+          ListPatchDeploymentsFixedSizeCollection&gt; {
+
+    private ListPatchDeploymentsFixedSizeCollection(
+        List&lt;ListPatchDeploymentsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1830">      super(pages, collectionSize);</span>
+<span class="fc" id="L1831">    }</span>
+
+    private static ListPatchDeploymentsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1834">      return new ListPatchDeploymentsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListPatchDeploymentsFixedSizeCollection createCollection(
+        List&lt;ListPatchDeploymentsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1840">      return new ListPatchDeploymentsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

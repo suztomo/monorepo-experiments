@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AuthorizedCertificatesClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-appengine-admin</a> &gt; <a href="index.source.html" class="el_package">com.google.appengine.v1</a> &gt; <span class="el_source">AuthorizedCertificatesClient.java</span></div><h1>AuthorizedCertificatesClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.appengine.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.appengine.v1.stub.AuthorizedCertificatesStub;
+import com.google.appengine.v1.stub.AuthorizedCertificatesStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Empty;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Manages SSL certificates a user is authorized to administer. A user can
+ * administer any SSL certificates applicable to their authorized domains.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * try (AuthorizedCertificatesClient authorizedCertificatesClient =
+ *     AuthorizedCertificatesClient.create()) {
+ *   GetAuthorizedCertificateRequest request =
+ *       GetAuthorizedCertificateRequest.newBuilder()
+ *           .setName(&quot;name3373707&quot;)
+ *           .setView(AuthorizedCertificateView.forNumber(0))
+ *           .build();
+ *   AuthorizedCertificate response =
+ *       authorizedCertificatesClient.getAuthorizedCertificate(request);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the AuthorizedCertificatesClient object to clean up
+ * resources such as threads. In the example above, try-with-resources is used, which automatically
+ * calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of AuthorizedCertificatesSettings
+ * to create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * AuthorizedCertificatesSettings authorizedCertificatesSettings =
+ *     AuthorizedCertificatesSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * AuthorizedCertificatesClient authorizedCertificatesClient =
+ *     AuthorizedCertificatesClient.create(authorizedCertificatesSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * AuthorizedCertificatesSettings authorizedCertificatesSettings =
+ *     AuthorizedCertificatesSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * AuthorizedCertificatesClient authorizedCertificatesClient =
+ *     AuthorizedCertificatesClient.create(authorizedCertificatesSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class AuthorizedCertificatesClient implements BackgroundResource {
+  private final AuthorizedCertificatesSettings settings;
+  private final AuthorizedCertificatesStub stub;
+
+  /** Constructs an instance of AuthorizedCertificatesClient with default settings. */
+  public static final AuthorizedCertificatesClient create() throws IOException {
+<span class="nc" id="L114">    return create(AuthorizedCertificatesSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of AuthorizedCertificatesClient, using the given settings. The channels
+   * are created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final AuthorizedCertificatesClient create(AuthorizedCertificatesSettings settings)
+      throws IOException {
+<span class="fc" id="L123">    return new AuthorizedCertificatesClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of AuthorizedCertificatesClient, using the given stub for making calls.
+   * This is for advanced usage - prefer using create(AuthorizedCertificatesSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final AuthorizedCertificatesClient create(AuthorizedCertificatesStub stub) {
+<span class="nc" id="L132">    return new AuthorizedCertificatesClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of AuthorizedCertificatesClient, using the given settings. This is
+   * protected so that it is easy to make a subclass, but otherwise, the static factory methods
+   * should be preferred.
+   */
+  protected AuthorizedCertificatesClient(AuthorizedCertificatesSettings settings)
+<span class="fc" id="L141">      throws IOException {</span>
+<span class="fc" id="L142">    this.settings = settings;</span>
+<span class="fc" id="L143">    this.stub = ((AuthorizedCertificatesStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L144">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L147">  protected AuthorizedCertificatesClient(AuthorizedCertificatesStub stub) {</span>
+<span class="nc" id="L148">    this.settings = null;</span>
+<span class="nc" id="L149">    this.stub = stub;</span>
+<span class="nc" id="L150">  }</span>
+
+  public final AuthorizedCertificatesSettings getSettings() {
+<span class="nc" id="L153">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public AuthorizedCertificatesStub getStub() {
+<span class="nc" id="L158">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all SSL certificates the user is authorized to administer.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (AuthorizedCertificatesClient authorizedCertificatesClient =
+   *     AuthorizedCertificatesClient.create()) {
+   *   ListAuthorizedCertificatesRequest request =
+   *       ListAuthorizedCertificatesRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setView(AuthorizedCertificateView.forNumber(0))
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (AuthorizedCertificate element :
+   *       authorizedCertificatesClient.listAuthorizedCertificates(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAuthorizedCertificatesPagedResponse listAuthorizedCertificates(
+      ListAuthorizedCertificatesRequest request) {
+<span class="fc" id="L189">    return listAuthorizedCertificatesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all SSL certificates the user is authorized to administer.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (AuthorizedCertificatesClient authorizedCertificatesClient =
+   *     AuthorizedCertificatesClient.create()) {
+   *   ListAuthorizedCertificatesRequest request =
+   *       ListAuthorizedCertificatesRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setView(AuthorizedCertificateView.forNumber(0))
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;AuthorizedCertificate&gt; future =
+   *       authorizedCertificatesClient
+   *           .listAuthorizedCertificatesPagedCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   for (AuthorizedCertificate element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          ListAuthorizedCertificatesRequest, ListAuthorizedCertificatesPagedResponse&gt;
+      listAuthorizedCertificatesPagedCallable() {
+<span class="fc" id="L222">    return stub.listAuthorizedCertificatesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all SSL certificates the user is authorized to administer.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (AuthorizedCertificatesClient authorizedCertificatesClient =
+   *     AuthorizedCertificatesClient.create()) {
+   *   ListAuthorizedCertificatesRequest request =
+   *       ListAuthorizedCertificatesRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setView(AuthorizedCertificateView.forNumber(0))
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListAuthorizedCertificatesResponse response =
+   *         authorizedCertificatesClient.listAuthorizedCertificatesCallable().call(request);
+   *     for (AuthorizedCertificate element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAuthorizedCertificatesRequest, ListAuthorizedCertificatesResponse&gt;
+      listAuthorizedCertificatesCallable() {
+<span class="nc" id="L259">    return stub.listAuthorizedCertificatesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the specified SSL certificate.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (AuthorizedCertificatesClient authorizedCertificatesClient =
+   *     AuthorizedCertificatesClient.create()) {
+   *   GetAuthorizedCertificateRequest request =
+   *       GetAuthorizedCertificateRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setView(AuthorizedCertificateView.forNumber(0))
+   *           .build();
+   *   AuthorizedCertificate response =
+   *       authorizedCertificatesClient.getAuthorizedCertificate(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AuthorizedCertificate getAuthorizedCertificate(
+      GetAuthorizedCertificateRequest request) {
+<span class="fc" id="L286">    return getAuthorizedCertificateCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the specified SSL certificate.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (AuthorizedCertificatesClient authorizedCertificatesClient =
+   *     AuthorizedCertificatesClient.create()) {
+   *   GetAuthorizedCertificateRequest request =
+   *       GetAuthorizedCertificateRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setView(AuthorizedCertificateView.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;AuthorizedCertificate&gt; future =
+   *       authorizedCertificatesClient.getAuthorizedCertificateCallable().futureCall(request);
+   *   // Do something.
+   *   AuthorizedCertificate response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetAuthorizedCertificateRequest, AuthorizedCertificate&gt;
+      getAuthorizedCertificateCallable() {
+<span class="fc" id="L312">    return stub.getAuthorizedCertificateCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Uploads the specified SSL certificate.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (AuthorizedCertificatesClient authorizedCertificatesClient =
+   *     AuthorizedCertificatesClient.create()) {
+   *   CreateAuthorizedCertificateRequest request =
+   *       CreateAuthorizedCertificateRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setCertificate(AuthorizedCertificate.newBuilder().build())
+   *           .build();
+   *   AuthorizedCertificate response =
+   *       authorizedCertificatesClient.createAuthorizedCertificate(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AuthorizedCertificate createAuthorizedCertificate(
+      CreateAuthorizedCertificateRequest request) {
+<span class="fc" id="L339">    return createAuthorizedCertificateCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Uploads the specified SSL certificate.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (AuthorizedCertificatesClient authorizedCertificatesClient =
+   *     AuthorizedCertificatesClient.create()) {
+   *   CreateAuthorizedCertificateRequest request =
+   *       CreateAuthorizedCertificateRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setCertificate(AuthorizedCertificate.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;AuthorizedCertificate&gt; future =
+   *       authorizedCertificatesClient.createAuthorizedCertificateCallable().futureCall(request);
+   *   // Do something.
+   *   AuthorizedCertificate response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateAuthorizedCertificateRequest, AuthorizedCertificate&gt;
+      createAuthorizedCertificateCallable() {
+<span class="fc" id="L365">    return stub.createAuthorizedCertificateCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the specified SSL certificate. To renew a certificate and maintain its existing domain
+   * mappings, update `certificate_data` with a new certificate. The new certificate must be
+   * applicable to the same domains as the original certificate. The certificate `display_name` may
+   * also be updated.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (AuthorizedCertificatesClient authorizedCertificatesClient =
+   *     AuthorizedCertificatesClient.create()) {
+   *   UpdateAuthorizedCertificateRequest request =
+   *       UpdateAuthorizedCertificateRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setCertificate(AuthorizedCertificate.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   AuthorizedCertificate response =
+   *       authorizedCertificatesClient.updateAuthorizedCertificate(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AuthorizedCertificate updateAuthorizedCertificate(
+      UpdateAuthorizedCertificateRequest request) {
+<span class="fc" id="L396">    return updateAuthorizedCertificateCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the specified SSL certificate. To renew a certificate and maintain its existing domain
+   * mappings, update `certificate_data` with a new certificate. The new certificate must be
+   * applicable to the same domains as the original certificate. The certificate `display_name` may
+   * also be updated.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (AuthorizedCertificatesClient authorizedCertificatesClient =
+   *     AuthorizedCertificatesClient.create()) {
+   *   UpdateAuthorizedCertificateRequest request =
+   *       UpdateAuthorizedCertificateRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setCertificate(AuthorizedCertificate.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;AuthorizedCertificate&gt; future =
+   *       authorizedCertificatesClient.updateAuthorizedCertificateCallable().futureCall(request);
+   *   // Do something.
+   *   AuthorizedCertificate response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateAuthorizedCertificateRequest, AuthorizedCertificate&gt;
+      updateAuthorizedCertificateCallable() {
+<span class="fc" id="L426">    return stub.updateAuthorizedCertificateCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified SSL certificate.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (AuthorizedCertificatesClient authorizedCertificatesClient =
+   *     AuthorizedCertificatesClient.create()) {
+   *   DeleteAuthorizedCertificateRequest request =
+   *       DeleteAuthorizedCertificateRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   authorizedCertificatesClient.deleteAuthorizedCertificate(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteAuthorizedCertificate(DeleteAuthorizedCertificateRequest request) {
+<span class="fc" id="L448">    deleteAuthorizedCertificateCallable().call(request);</span>
+<span class="fc" id="L449">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified SSL certificate.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (AuthorizedCertificatesClient authorizedCertificatesClient =
+   *     AuthorizedCertificatesClient.create()) {
+   *   DeleteAuthorizedCertificateRequest request =
+   *       DeleteAuthorizedCertificateRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       authorizedCertificatesClient.deleteAuthorizedCertificateCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteAuthorizedCertificateRequest, Empty&gt;
+      deleteAuthorizedCertificateCallable() {
+<span class="fc" id="L471">    return stub.deleteAuthorizedCertificateCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L476">    stub.close();</span>
+<span class="fc" id="L477">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L481">    stub.shutdown();</span>
+<span class="nc" id="L482">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L486">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L491">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L496">    stub.shutdownNow();</span>
+<span class="nc" id="L497">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L501">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListAuthorizedCertificatesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListAuthorizedCertificatesRequest,
+          ListAuthorizedCertificatesResponse,
+          AuthorizedCertificate,
+          ListAuthorizedCertificatesPage,
+          ListAuthorizedCertificatesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListAuthorizedCertificatesPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListAuthorizedCertificatesRequest,
+                ListAuthorizedCertificatesResponse,
+                AuthorizedCertificate&gt;
+            context,
+        ApiFuture&lt;ListAuthorizedCertificatesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListAuthorizedCertificatesPage&gt; futurePage =
+<span class="fc" id="L520">          ListAuthorizedCertificatesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L521">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L523">          input -&gt; new ListAuthorizedCertificatesPagedResponse(input),</span>
+<span class="fc" id="L524">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListAuthorizedCertificatesPagedResponse(ListAuthorizedCertificatesPage page) {
+<span class="fc" id="L528">      super(page, ListAuthorizedCertificatesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L529">    }</span>
+  }
+
+  public static class ListAuthorizedCertificatesPage
+      extends AbstractPage&lt;
+          ListAuthorizedCertificatesRequest,
+          ListAuthorizedCertificatesResponse,
+          AuthorizedCertificate,
+          ListAuthorizedCertificatesPage&gt; {
+
+    private ListAuthorizedCertificatesPage(
+        PageContext&lt;
+                ListAuthorizedCertificatesRequest,
+                ListAuthorizedCertificatesResponse,
+                AuthorizedCertificate&gt;
+            context,
+        ListAuthorizedCertificatesResponse response) {
+<span class="fc" id="L546">      super(context, response);</span>
+<span class="fc" id="L547">    }</span>
+
+    private static ListAuthorizedCertificatesPage createEmptyPage() {
+<span class="fc" id="L550">      return new ListAuthorizedCertificatesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListAuthorizedCertificatesPage createPage(
+        PageContext&lt;
+                ListAuthorizedCertificatesRequest,
+                ListAuthorizedCertificatesResponse,
+                AuthorizedCertificate&gt;
+            context,
+        ListAuthorizedCertificatesResponse response) {
+<span class="fc" id="L561">      return new ListAuthorizedCertificatesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListAuthorizedCertificatesPage&gt; createPageAsync(
+        PageContext&lt;
+                ListAuthorizedCertificatesRequest,
+                ListAuthorizedCertificatesResponse,
+                AuthorizedCertificate&gt;
+            context,
+        ApiFuture&lt;ListAuthorizedCertificatesResponse&gt; futureResponse) {
+<span class="fc" id="L572">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListAuthorizedCertificatesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListAuthorizedCertificatesRequest,
+          ListAuthorizedCertificatesResponse,
+          AuthorizedCertificate,
+          ListAuthorizedCertificatesPage,
+          ListAuthorizedCertificatesFixedSizeCollection&gt; {
+
+    private ListAuthorizedCertificatesFixedSizeCollection(
+        List&lt;ListAuthorizedCertificatesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L586">      super(pages, collectionSize);</span>
+<span class="fc" id="L587">    }</span>
+
+    private static ListAuthorizedCertificatesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L590">      return new ListAuthorizedCertificatesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListAuthorizedCertificatesFixedSizeCollection createCollection(
+        List&lt;ListAuthorizedCertificatesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L596">      return new ListAuthorizedCertificatesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

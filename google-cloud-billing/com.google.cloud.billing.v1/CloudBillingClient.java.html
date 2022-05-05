@@ -1,0 +1,1591 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>CloudBillingClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-billing</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.billing.v1</a> &gt; <span class="el_source">CloudBillingClient.java</span></div><h1>CloudBillingClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.billing.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.api.resourcenames.ResourceName;
+import com.google.cloud.billing.v1.stub.CloudBillingStub;
+import com.google.cloud.billing.v1.stub.CloudBillingStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.iam.v1.GetIamPolicyRequest;
+import com.google.iam.v1.Policy;
+import com.google.iam.v1.SetIamPolicyRequest;
+import com.google.iam.v1.TestIamPermissionsRequest;
+import com.google.iam.v1.TestIamPermissionsResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Retrieves GCP Console billing accounts and associates them with projects.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+ *   BillingAccountName name = BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;);
+ *   BillingAccount response = cloudBillingClient.getBillingAccount(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the CloudBillingClient object to clean up resources such
+ * as threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of CloudBillingSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * CloudBillingSettings cloudBillingSettings =
+ *     CloudBillingSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * CloudBillingClient cloudBillingClient = CloudBillingClient.create(cloudBillingSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * CloudBillingSettings cloudBillingSettings =
+ *     CloudBillingSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * CloudBillingClient cloudBillingClient = CloudBillingClient.create(cloudBillingSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class CloudBillingClient implements BackgroundResource {
+  private final CloudBillingSettings settings;
+  private final CloudBillingStub stub;
+
+  /** Constructs an instance of CloudBillingClient with default settings. */
+  public static final CloudBillingClient create() throws IOException {
+<span class="nc" id="L115">    return create(CloudBillingSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of CloudBillingClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final CloudBillingClient create(CloudBillingSettings settings) throws IOException {
+<span class="fc" id="L123">    return new CloudBillingClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of CloudBillingClient, using the given stub for making calls. This is
+   * for advanced usage - prefer using create(CloudBillingSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final CloudBillingClient create(CloudBillingStub stub) {
+<span class="nc" id="L132">    return new CloudBillingClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of CloudBillingClient, using the given settings. This is protected so
+   * that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L140">  protected CloudBillingClient(CloudBillingSettings settings) throws IOException {</span>
+<span class="fc" id="L141">    this.settings = settings;</span>
+<span class="fc" id="L142">    this.stub = ((CloudBillingStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L143">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L146">  protected CloudBillingClient(CloudBillingStub stub) {</span>
+<span class="nc" id="L147">    this.settings = null;</span>
+<span class="nc" id="L148">    this.stub = stub;</span>
+<span class="nc" id="L149">  }</span>
+
+  public final CloudBillingSettings getSettings() {
+<span class="nc" id="L152">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public CloudBillingStub getStub() {
+<span class="nc" id="L157">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a billing account. The current authenticated user must be a [viewer of
+   * the billing account](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   BillingAccountName name = BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;);
+   *   BillingAccount response = cloudBillingClient.getBillingAccount(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the billing account to retrieve. For example,
+   *     `billingAccounts/012345-567890-ABCDEF`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BillingAccount getBillingAccount(BillingAccountName name) {
+    GetBillingAccountRequest request =
+<span class="fc" id="L182">        GetBillingAccountRequest.newBuilder()</span>
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L184">            .build();</span>
+<span class="fc" id="L185">    return getBillingAccount(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a billing account. The current authenticated user must be a [viewer of
+   * the billing account](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   String name = BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString();
+   *   BillingAccount response = cloudBillingClient.getBillingAccount(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the billing account to retrieve. For example,
+   *     `billingAccounts/012345-567890-ABCDEF`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BillingAccount getBillingAccount(String name) {
+<span class="fc" id="L209">    GetBillingAccountRequest request = GetBillingAccountRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L210">    return getBillingAccount(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a billing account. The current authenticated user must be a [viewer of
+   * the billing account](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   GetBillingAccountRequest request =
+   *       GetBillingAccountRequest.newBuilder()
+   *           .setName(BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString())
+   *           .build();
+   *   BillingAccount response = cloudBillingClient.getBillingAccount(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BillingAccount getBillingAccount(GetBillingAccountRequest request) {
+<span class="fc" id="L236">    return getBillingAccountCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a billing account. The current authenticated user must be a [viewer of
+   * the billing account](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   GetBillingAccountRequest request =
+   *       GetBillingAccountRequest.newBuilder()
+   *           .setName(BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;BillingAccount&gt; future =
+   *       cloudBillingClient.getBillingAccountCallable().futureCall(request);
+   *   // Do something.
+   *   BillingAccount response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetBillingAccountRequest, BillingAccount&gt; getBillingAccountCallable() {
+<span class="fc" id="L262">    return stub.getBillingAccountCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the billing accounts that the current authenticated user has permission to
+   * [view](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   for (BillingAccount element : cloudBillingClient.listBillingAccounts().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBillingAccountsPagedResponse listBillingAccounts() {
+<span class="fc" id="L286">    ListBillingAccountsRequest request = ListBillingAccountsRequest.newBuilder().build();</span>
+<span class="fc" id="L287">    return listBillingAccounts(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the billing accounts that the current authenticated user has permission to
+   * [view](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   ListBillingAccountsRequest request =
+   *       ListBillingAccountsRequest.newBuilder()
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   for (BillingAccount element : cloudBillingClient.listBillingAccounts(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBillingAccountsPagedResponse listBillingAccounts(
+      ListBillingAccountsRequest request) {
+<span class="fc" id="L318">    return listBillingAccountsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the billing accounts that the current authenticated user has permission to
+   * [view](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   ListBillingAccountsRequest request =
+   *       ListBillingAccountsRequest.newBuilder()
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;BillingAccount&gt; future =
+   *       cloudBillingClient.listBillingAccountsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (BillingAccount element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListBillingAccountsRequest, ListBillingAccountsPagedResponse&gt;
+      listBillingAccountsPagedCallable() {
+<span class="fc" id="L349">    return stub.listBillingAccountsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the billing accounts that the current authenticated user has permission to
+   * [view](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   ListBillingAccountsRequest request =
+   *       ListBillingAccountsRequest.newBuilder()
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListBillingAccountsResponse response =
+   *         cloudBillingClient.listBillingAccountsCallable().call(request);
+   *     for (BillingAccount element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListBillingAccountsRequest, ListBillingAccountsResponse&gt;
+      listBillingAccountsCallable() {
+<span class="nc" id="L387">    return stub.listBillingAccountsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a billing account's fields. Currently the only field that can be edited is
+   * `display_name`. The current authenticated user must have the `billing.accounts.update` IAM
+   * permission, which is typically given to the
+   * [administrator](https://cloud.google.com/billing/docs/how-to/billing-access) of the billing
+   * account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   BillingAccountName name = BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;);
+   *   BillingAccount account = BillingAccount.newBuilder().build();
+   *   BillingAccount response = cloudBillingClient.updateBillingAccount(name, account);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the billing account resource to be updated.
+   * @param account Required. The billing account resource to replace the resource on the server.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BillingAccount updateBillingAccount(
+      BillingAccountName name, BillingAccount account) {
+    UpdateBillingAccountRequest request =
+<span class="fc" id="L417">        UpdateBillingAccountRequest.newBuilder()</span>
+<span class="pc bpc" id="L418" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L419">            .setAccount(account)</span>
+<span class="fc" id="L420">            .build();</span>
+<span class="fc" id="L421">    return updateBillingAccount(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a billing account's fields. Currently the only field that can be edited is
+   * `display_name`. The current authenticated user must have the `billing.accounts.update` IAM
+   * permission, which is typically given to the
+   * [administrator](https://cloud.google.com/billing/docs/how-to/billing-access) of the billing
+   * account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   String name = BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString();
+   *   BillingAccount account = BillingAccount.newBuilder().build();
+   *   BillingAccount response = cloudBillingClient.updateBillingAccount(name, account);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the billing account resource to be updated.
+   * @param account Required. The billing account resource to replace the resource on the server.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BillingAccount updateBillingAccount(String name, BillingAccount account) {
+    UpdateBillingAccountRequest request =
+<span class="fc" id="L450">        UpdateBillingAccountRequest.newBuilder().setName(name).setAccount(account).build();</span>
+<span class="fc" id="L451">    return updateBillingAccount(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a billing account's fields. Currently the only field that can be edited is
+   * `display_name`. The current authenticated user must have the `billing.accounts.update` IAM
+   * permission, which is typically given to the
+   * [administrator](https://cloud.google.com/billing/docs/how-to/billing-access) of the billing
+   * account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   UpdateBillingAccountRequest request =
+   *       UpdateBillingAccountRequest.newBuilder()
+   *           .setName(BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString())
+   *           .setAccount(BillingAccount.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   BillingAccount response = cloudBillingClient.updateBillingAccount(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BillingAccount updateBillingAccount(UpdateBillingAccountRequest request) {
+<span class="fc" id="L482">    return updateBillingAccountCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a billing account's fields. Currently the only field that can be edited is
+   * `display_name`. The current authenticated user must have the `billing.accounts.update` IAM
+   * permission, which is typically given to the
+   * [administrator](https://cloud.google.com/billing/docs/how-to/billing-access) of the billing
+   * account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   UpdateBillingAccountRequest request =
+   *       UpdateBillingAccountRequest.newBuilder()
+   *           .setName(BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString())
+   *           .setAccount(BillingAccount.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;BillingAccount&gt; future =
+   *       cloudBillingClient.updateBillingAccountCallable().futureCall(request);
+   *   // Do something.
+   *   BillingAccount response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateBillingAccountRequest, BillingAccount&gt;
+      updateBillingAccountCallable() {
+<span class="fc" id="L514">    return stub.updateBillingAccountCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a billing account. This method can only be used to create [billing
+   * subaccounts](https://cloud.google.com/billing/docs/concepts) by GCP resellers. When creating a
+   * subaccount, the current authenticated user must have the `billing.accounts.update` IAM
+   * permission on the master account, which is typically given to billing account
+   * [administrators](https://cloud.google.com/billing/docs/how-to/billing-access). This method will
+   * return an error if the master account has not been provisioned as a reseller account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   BillingAccount billingAccount = BillingAccount.newBuilder().build();
+   *   BillingAccount response = cloudBillingClient.createBillingAccount(billingAccount);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param billingAccount Required. The billing account resource to create. Currently
+   *     CreateBillingAccount only supports subaccount creation, so any created billing accounts
+   *     must be under a provided master billing account.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BillingAccount createBillingAccount(BillingAccount billingAccount) {
+    CreateBillingAccountRequest request =
+<span class="fc" id="L544">        CreateBillingAccountRequest.newBuilder().setBillingAccount(billingAccount).build();</span>
+<span class="fc" id="L545">    return createBillingAccount(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a billing account. This method can only be used to create [billing
+   * subaccounts](https://cloud.google.com/billing/docs/concepts) by GCP resellers. When creating a
+   * subaccount, the current authenticated user must have the `billing.accounts.update` IAM
+   * permission on the master account, which is typically given to billing account
+   * [administrators](https://cloud.google.com/billing/docs/how-to/billing-access). This method will
+   * return an error if the master account has not been provisioned as a reseller account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   CreateBillingAccountRequest request =
+   *       CreateBillingAccountRequest.newBuilder()
+   *           .setBillingAccount(BillingAccount.newBuilder().build())
+   *           .build();
+   *   BillingAccount response = cloudBillingClient.createBillingAccount(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BillingAccount createBillingAccount(CreateBillingAccountRequest request) {
+<span class="fc" id="L575">    return createBillingAccountCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a billing account. This method can only be used to create [billing
+   * subaccounts](https://cloud.google.com/billing/docs/concepts) by GCP resellers. When creating a
+   * subaccount, the current authenticated user must have the `billing.accounts.update` IAM
+   * permission on the master account, which is typically given to billing account
+   * [administrators](https://cloud.google.com/billing/docs/how-to/billing-access). This method will
+   * return an error if the master account has not been provisioned as a reseller account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   CreateBillingAccountRequest request =
+   *       CreateBillingAccountRequest.newBuilder()
+   *           .setBillingAccount(BillingAccount.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;BillingAccount&gt; future =
+   *       cloudBillingClient.createBillingAccountCallable().futureCall(request);
+   *   // Do something.
+   *   BillingAccount response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateBillingAccountRequest, BillingAccount&gt;
+      createBillingAccountCallable() {
+<span class="fc" id="L606">    return stub.createBillingAccountCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the projects associated with a billing account. The current authenticated user must have
+   * the `billing.resourceAssociations.list` IAM permission, which is often given to billing account
+   * [viewers](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   BillingAccountName name = BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;);
+   *   for (ProjectBillingInfo element :
+   *       cloudBillingClient.listProjectBillingInfo(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the billing account associated with the projects
+   *     that you want to list. For example, `billingAccounts/012345-567890-ABCDEF`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListProjectBillingInfoPagedResponse listProjectBillingInfo(BillingAccountName name) {
+    ListProjectBillingInfoRequest request =
+<span class="fc" id="L635">        ListProjectBillingInfoRequest.newBuilder()</span>
+<span class="pc bpc" id="L636" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L637">            .build();</span>
+<span class="fc" id="L638">    return listProjectBillingInfo(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the projects associated with a billing account. The current authenticated user must have
+   * the `billing.resourceAssociations.list` IAM permission, which is often given to billing account
+   * [viewers](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   String name = BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString();
+   *   for (ProjectBillingInfo element :
+   *       cloudBillingClient.listProjectBillingInfo(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the billing account associated with the projects
+   *     that you want to list. For example, `billingAccounts/012345-567890-ABCDEF`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListProjectBillingInfoPagedResponse listProjectBillingInfo(String name) {
+    ListProjectBillingInfoRequest request =
+<span class="fc" id="L667">        ListProjectBillingInfoRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L668">    return listProjectBillingInfo(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the projects associated with a billing account. The current authenticated user must have
+   * the `billing.resourceAssociations.list` IAM permission, which is often given to billing account
+   * [viewers](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   ListProjectBillingInfoRequest request =
+   *       ListProjectBillingInfoRequest.newBuilder()
+   *           .setName(BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (ProjectBillingInfo element :
+   *       cloudBillingClient.listProjectBillingInfo(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListProjectBillingInfoPagedResponse listProjectBillingInfo(
+      ListProjectBillingInfoRequest request) {
+<span class="fc" id="L701">    return listProjectBillingInfoPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the projects associated with a billing account. The current authenticated user must have
+   * the `billing.resourceAssociations.list` IAM permission, which is often given to billing account
+   * [viewers](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   ListProjectBillingInfoRequest request =
+   *       ListProjectBillingInfoRequest.newBuilder()
+   *           .setName(BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;ProjectBillingInfo&gt; future =
+   *       cloudBillingClient.listProjectBillingInfoPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (ProjectBillingInfo element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListProjectBillingInfoRequest, ListProjectBillingInfoPagedResponse&gt;
+      listProjectBillingInfoPagedCallable() {
+<span class="fc" id="L733">    return stub.listProjectBillingInfoPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the projects associated with a billing account. The current authenticated user must have
+   * the `billing.resourceAssociations.list` IAM permission, which is often given to billing account
+   * [viewers](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   ListProjectBillingInfoRequest request =
+   *       ListProjectBillingInfoRequest.newBuilder()
+   *           .setName(BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListProjectBillingInfoResponse response =
+   *         cloudBillingClient.listProjectBillingInfoCallable().call(request);
+   *     for (ProjectBillingInfo element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListProjectBillingInfoRequest, ListProjectBillingInfoResponse&gt;
+      listProjectBillingInfoCallable() {
+<span class="nc" id="L772">    return stub.listProjectBillingInfoCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the billing information for a project. The current authenticated user must have
+   * [permission to view the
+   * project](https://cloud.google.com/docs/permissions-overview#h.bgs0oxofvnoo ).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   ProjectBillingInfo response = cloudBillingClient.getProjectBillingInfo(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the project for which billing information is
+   *     retrieved. For example, `projects/tokyo-rain-123`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ProjectBillingInfo getProjectBillingInfo(String name) {
+    GetProjectBillingInfoRequest request =
+<span class="fc" id="L798">        GetProjectBillingInfoRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L799">    return getProjectBillingInfo(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the billing information for a project. The current authenticated user must have
+   * [permission to view the
+   * project](https://cloud.google.com/docs/permissions-overview#h.bgs0oxofvnoo ).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   GetProjectBillingInfoRequest request =
+   *       GetProjectBillingInfoRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ProjectBillingInfo response = cloudBillingClient.getProjectBillingInfo(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ProjectBillingInfo getProjectBillingInfo(GetProjectBillingInfoRequest request) {
+<span class="fc" id="L824">    return getProjectBillingInfoCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the billing information for a project. The current authenticated user must have
+   * [permission to view the
+   * project](https://cloud.google.com/docs/permissions-overview#h.bgs0oxofvnoo ).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   GetProjectBillingInfoRequest request =
+   *       GetProjectBillingInfoRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;ProjectBillingInfo&gt; future =
+   *       cloudBillingClient.getProjectBillingInfoCallable().futureCall(request);
+   *   // Do something.
+   *   ProjectBillingInfo response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetProjectBillingInfoRequest, ProjectBillingInfo&gt;
+      getProjectBillingInfoCallable() {
+<span class="fc" id="L850">    return stub.getProjectBillingInfoCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets or updates the billing account associated with a project. You specify the new billing
+   * account by setting the `billing_account_name` in the `ProjectBillingInfo` resource to the
+   * resource name of a billing account. Associating a project with an open billing account enables
+   * billing on the project and allows charges for resource usage. If the project already had a
+   * billing account, this method changes the billing account used for resource usage charges.
+   *
+   * &lt;p&gt;&amp;#42;Note:&amp;#42; Incurred charges that have not yet been reported in the transaction history
+   * of the GCP Console might be billed to the new billing account, even if the charge occurred
+   * before the new billing account was assigned to the project.
+   *
+   * &lt;p&gt;The current authenticated user must have ownership privileges for both the
+   * [project](https://cloud.google.com/docs/permissions-overview#h.bgs0oxofvnoo ) and the [billing
+   * account](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;You can disable billing on the project by setting the `billing_account_name` field to empty.
+   * This action disassociates the current billing account from the project. Any billable activity
+   * of your in-use services will stop, and your application could stop functioning as expected. Any
+   * unbilled charges to date will be billed to the previously associated account. The current
+   * authenticated user must be either an owner of the project or an owner of the billing account
+   * for the project.
+   *
+   * &lt;p&gt;Note that associating a project with a &amp;#42;closed&amp;#42; billing account will have much the
+   * same effect as disabling billing on the project: any paid resources used by the project will be
+   * shut down. Thus, unless you wish to disable billing, you should always call this method with
+   * the name of an
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;open&amp;#42; billing account.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   ProjectBillingInfo projectBillingInfo = ProjectBillingInfo.newBuilder().build();
+   *   ProjectBillingInfo response =
+   *       cloudBillingClient.updateProjectBillingInfo(name, projectBillingInfo);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the project associated with the billing information
+   *     that you want to update. For example, `projects/tokyo-rain-123`.
+   * @param projectBillingInfo The new billing information for the project. Read-only fields are
+   *     ignored; thus, you can leave empty all fields except `billing_account_name`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ProjectBillingInfo updateProjectBillingInfo(
+      String name, ProjectBillingInfo projectBillingInfo) {
+    UpdateProjectBillingInfoRequest request =
+<span class="fc" id="L907">        UpdateProjectBillingInfoRequest.newBuilder()</span>
+<span class="fc" id="L908">            .setName(name)</span>
+<span class="fc" id="L909">            .setProjectBillingInfo(projectBillingInfo)</span>
+<span class="fc" id="L910">            .build();</span>
+<span class="fc" id="L911">    return updateProjectBillingInfo(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets or updates the billing account associated with a project. You specify the new billing
+   * account by setting the `billing_account_name` in the `ProjectBillingInfo` resource to the
+   * resource name of a billing account. Associating a project with an open billing account enables
+   * billing on the project and allows charges for resource usage. If the project already had a
+   * billing account, this method changes the billing account used for resource usage charges.
+   *
+   * &lt;p&gt;&amp;#42;Note:&amp;#42; Incurred charges that have not yet been reported in the transaction history
+   * of the GCP Console might be billed to the new billing account, even if the charge occurred
+   * before the new billing account was assigned to the project.
+   *
+   * &lt;p&gt;The current authenticated user must have ownership privileges for both the
+   * [project](https://cloud.google.com/docs/permissions-overview#h.bgs0oxofvnoo ) and the [billing
+   * account](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;You can disable billing on the project by setting the `billing_account_name` field to empty.
+   * This action disassociates the current billing account from the project. Any billable activity
+   * of your in-use services will stop, and your application could stop functioning as expected. Any
+   * unbilled charges to date will be billed to the previously associated account. The current
+   * authenticated user must be either an owner of the project or an owner of the billing account
+   * for the project.
+   *
+   * &lt;p&gt;Note that associating a project with a &amp;#42;closed&amp;#42; billing account will have much the
+   * same effect as disabling billing on the project: any paid resources used by the project will be
+   * shut down. Thus, unless you wish to disable billing, you should always call this method with
+   * the name of an
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;open&amp;#42; billing account.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   UpdateProjectBillingInfoRequest request =
+   *       UpdateProjectBillingInfoRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setProjectBillingInfo(ProjectBillingInfo.newBuilder().build())
+   *           .build();
+   *   ProjectBillingInfo response = cloudBillingClient.updateProjectBillingInfo(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ProjectBillingInfo updateProjectBillingInfo(
+      UpdateProjectBillingInfoRequest request) {
+<span class="fc" id="L966">    return updateProjectBillingInfoCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets or updates the billing account associated with a project. You specify the new billing
+   * account by setting the `billing_account_name` in the `ProjectBillingInfo` resource to the
+   * resource name of a billing account. Associating a project with an open billing account enables
+   * billing on the project and allows charges for resource usage. If the project already had a
+   * billing account, this method changes the billing account used for resource usage charges.
+   *
+   * &lt;p&gt;&amp;#42;Note:&amp;#42; Incurred charges that have not yet been reported in the transaction history
+   * of the GCP Console might be billed to the new billing account, even if the charge occurred
+   * before the new billing account was assigned to the project.
+   *
+   * &lt;p&gt;The current authenticated user must have ownership privileges for both the
+   * [project](https://cloud.google.com/docs/permissions-overview#h.bgs0oxofvnoo ) and the [billing
+   * account](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;You can disable billing on the project by setting the `billing_account_name` field to empty.
+   * This action disassociates the current billing account from the project. Any billable activity
+   * of your in-use services will stop, and your application could stop functioning as expected. Any
+   * unbilled charges to date will be billed to the previously associated account. The current
+   * authenticated user must be either an owner of the project or an owner of the billing account
+   * for the project.
+   *
+   * &lt;p&gt;Note that associating a project with a &amp;#42;closed&amp;#42; billing account will have much the
+   * same effect as disabling billing on the project: any paid resources used by the project will be
+   * shut down. Thus, unless you wish to disable billing, you should always call this method with
+   * the name of an
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;open&amp;#42; billing account.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   UpdateProjectBillingInfoRequest request =
+   *       UpdateProjectBillingInfoRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setProjectBillingInfo(ProjectBillingInfo.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;ProjectBillingInfo&gt; future =
+   *       cloudBillingClient.updateProjectBillingInfoCallable().futureCall(request);
+   *   // Do something.
+   *   ProjectBillingInfo response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateProjectBillingInfoRequest, ProjectBillingInfo&gt;
+      updateProjectBillingInfoCallable() {
+<span class="fc" id="L1021">    return stub.updateProjectBillingInfoCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy for a billing account. The caller must have the
+   * `billing.accounts.getIamPolicy` permission on the account, which is often given to billing
+   * account [viewers](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   ResourceName resource = BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;);
+   *   Policy response = cloudBillingClient.getIamPolicy(resource);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(ResourceName resource) {
+    GetIamPolicyRequest request =
+<span class="fc" id="L1047">        GetIamPolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L1048" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L1049">            .build();</span>
+<span class="fc" id="L1050">    return getIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy for a billing account. The caller must have the
+   * `billing.accounts.getIamPolicy` permission on the account, which is often given to billing
+   * account [viewers](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   String resource = BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString();
+   *   Policy response = cloudBillingClient.getIamPolicy(resource);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(String resource) {
+<span class="fc" id="L1075">    GetIamPolicyRequest request = GetIamPolicyRequest.newBuilder().setResource(resource).build();</span>
+<span class="fc" id="L1076">    return getIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy for a billing account. The caller must have the
+   * `billing.accounts.getIamPolicy` permission on the account, which is often given to billing
+   * account [viewers](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   Policy response = cloudBillingClient.getIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(GetIamPolicyRequest request) {
+<span class="fc" id="L1104">    return getIamPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy for a billing account. The caller must have the
+   * `billing.accounts.getIamPolicy` permission on the account, which is often given to billing
+   * account [viewers](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = cloudBillingClient.getIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetIamPolicyRequest, Policy&gt; getIamPolicyCallable() {
+<span class="fc" id="L1131">    return stub.getIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy for a billing account. Replaces any existing policy. The caller
+   * must have the `billing.accounts.setIamPolicy` permission on the account, which is often given
+   * to billing account
+   * [administrators](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   ResourceName resource = BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;);
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = cloudBillingClient.setIamPolicy(resource, policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being specified. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param policy REQUIRED: The complete policy to be applied to the `resource`. The size of the
+   *     policy is limited to a few 10s of KB. An empty policy is a valid policy but certain Cloud
+   *     Platform services (such as Projects) might reject them.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(ResourceName resource, Policy policy) {
+    SetIamPolicyRequest request =
+<span class="fc" id="L1162">        SetIamPolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L1163" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L1164">            .setPolicy(policy)</span>
+<span class="fc" id="L1165">            .build();</span>
+<span class="fc" id="L1166">    return setIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy for a billing account. Replaces any existing policy. The caller
+   * must have the `billing.accounts.setIamPolicy` permission on the account, which is often given
+   * to billing account
+   * [administrators](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   String resource = BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString();
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = cloudBillingClient.setIamPolicy(resource, policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being specified. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param policy REQUIRED: The complete policy to be applied to the `resource`. The size of the
+   *     policy is limited to a few 10s of KB. An empty policy is a valid policy but certain Cloud
+   *     Platform services (such as Projects) might reject them.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(String resource, Policy policy) {
+    SetIamPolicyRequest request =
+<span class="fc" id="L1197">        SetIamPolicyRequest.newBuilder().setResource(resource).setPolicy(policy).build();</span>
+<span class="fc" id="L1198">    return setIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy for a billing account. Replaces any existing policy. The caller
+   * must have the `billing.accounts.setIamPolicy` permission on the account, which is often given
+   * to billing account
+   * [administrators](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Policy response = cloudBillingClient.setIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(SetIamPolicyRequest request) {
+<span class="fc" id="L1228">    return setIamPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy for a billing account. Replaces any existing policy. The caller
+   * must have the `billing.accounts.setIamPolicy` permission on the account, which is often given
+   * to billing account
+   * [administrators](https://cloud.google.com/billing/docs/how-to/billing-access).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = cloudBillingClient.setIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetIamPolicyRequest, Policy&gt; setIamPolicyCallable() {
+<span class="fc" id="L1257">    return stub.setIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Tests the access control policy for a billing account. This method takes the resource and a set
+   * of permissions as input and returns the subset of the input permissions that the caller is
+   * allowed for that resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   ResourceName resource = BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;);
+   *   List&lt;String&gt; permissions = new ArrayList&lt;&gt;();
+   *   TestIamPermissionsResponse response =
+   *       cloudBillingClient.testIamPermissions(resource, permissions);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy detail is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param permissions The set of permissions to check for the `resource`. Permissions with
+   *     wildcards (such as '&amp;#42;' or 'storage.&amp;#42;') are not allowed. For more information see
+   *     [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(
+      ResourceName resource, List&lt;String&gt; permissions) {
+    TestIamPermissionsRequest request =
+<span class="fc" id="L1289">        TestIamPermissionsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1290" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L1291">            .addAllPermissions(permissions)</span>
+<span class="fc" id="L1292">            .build();</span>
+<span class="fc" id="L1293">    return testIamPermissions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Tests the access control policy for a billing account. This method takes the resource and a set
+   * of permissions as input and returns the subset of the input permissions that the caller is
+   * allowed for that resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   String resource = BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString();
+   *   List&lt;String&gt; permissions = new ArrayList&lt;&gt;();
+   *   TestIamPermissionsResponse response =
+   *       cloudBillingClient.testIamPermissions(resource, permissions);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy detail is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param permissions The set of permissions to check for the `resource`. Permissions with
+   *     wildcards (such as '&amp;#42;' or 'storage.&amp;#42;') are not allowed. For more information see
+   *     [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(
+      String resource, List&lt;String&gt; permissions) {
+    TestIamPermissionsRequest request =
+<span class="fc" id="L1325">        TestIamPermissionsRequest.newBuilder()</span>
+<span class="fc" id="L1326">            .setResource(resource)</span>
+<span class="fc" id="L1327">            .addAllPermissions(permissions)</span>
+<span class="fc" id="L1328">            .build();</span>
+<span class="fc" id="L1329">    return testIamPermissions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Tests the access control policy for a billing account. This method takes the resource and a set
+   * of permissions as input and returns the subset of the input permissions that the caller is
+   * allowed for that resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   TestIamPermissionsResponse response = cloudBillingClient.testIamPermissions(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(TestIamPermissionsRequest request) {
+<span class="fc" id="L1357">    return testIamPermissionsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Tests the access control policy for a billing account. This method takes the resource and a set
+   * of permissions as input and returns the subset of the input permissions that the caller is
+   * allowed for that resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudBillingClient cloudBillingClient = CloudBillingClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(BillingAccountName.of(&quot;[BILLING_ACCOUNT]&quot;).toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   ApiFuture&lt;TestIamPermissionsResponse&gt; future =
+   *       cloudBillingClient.testIamPermissionsCallable().futureCall(request);
+   *   // Do something.
+   *   TestIamPermissionsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+      testIamPermissionsCallable() {
+<span class="fc" id="L1386">    return stub.testIamPermissionsCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1391">    stub.close();</span>
+<span class="fc" id="L1392">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1396">    stub.shutdown();</span>
+<span class="nc" id="L1397">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1401">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1406">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1411">    stub.shutdownNow();</span>
+<span class="nc" id="L1412">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1416">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListBillingAccountsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListBillingAccountsRequest,
+          ListBillingAccountsResponse,
+          BillingAccount,
+          ListBillingAccountsPage,
+          ListBillingAccountsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListBillingAccountsPagedResponse&gt; createAsync(
+        PageContext&lt;ListBillingAccountsRequest, ListBillingAccountsResponse, BillingAccount&gt;
+            context,
+        ApiFuture&lt;ListBillingAccountsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListBillingAccountsPage&gt; futurePage =
+<span class="fc" id="L1432">          ListBillingAccountsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1433">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1435">          input -&gt; new ListBillingAccountsPagedResponse(input),</span>
+<span class="fc" id="L1436">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListBillingAccountsPagedResponse(ListBillingAccountsPage page) {
+<span class="fc" id="L1440">      super(page, ListBillingAccountsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1441">    }</span>
+  }
+
+  public static class ListBillingAccountsPage
+      extends AbstractPage&lt;
+          ListBillingAccountsRequest,
+          ListBillingAccountsResponse,
+          BillingAccount,
+          ListBillingAccountsPage&gt; {
+
+    private ListBillingAccountsPage(
+        PageContext&lt;ListBillingAccountsRequest, ListBillingAccountsResponse, BillingAccount&gt;
+            context,
+        ListBillingAccountsResponse response) {
+<span class="fc" id="L1455">      super(context, response);</span>
+<span class="fc" id="L1456">    }</span>
+
+    private static ListBillingAccountsPage createEmptyPage() {
+<span class="fc" id="L1459">      return new ListBillingAccountsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListBillingAccountsPage createPage(
+        PageContext&lt;ListBillingAccountsRequest, ListBillingAccountsResponse, BillingAccount&gt;
+            context,
+        ListBillingAccountsResponse response) {
+<span class="fc" id="L1467">      return new ListBillingAccountsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListBillingAccountsPage&gt; createPageAsync(
+        PageContext&lt;ListBillingAccountsRequest, ListBillingAccountsResponse, BillingAccount&gt;
+            context,
+        ApiFuture&lt;ListBillingAccountsResponse&gt; futureResponse) {
+<span class="fc" id="L1475">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListBillingAccountsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListBillingAccountsRequest,
+          ListBillingAccountsResponse,
+          BillingAccount,
+          ListBillingAccountsPage,
+          ListBillingAccountsFixedSizeCollection&gt; {
+
+    private ListBillingAccountsFixedSizeCollection(
+        List&lt;ListBillingAccountsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1489">      super(pages, collectionSize);</span>
+<span class="fc" id="L1490">    }</span>
+
+    private static ListBillingAccountsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1493">      return new ListBillingAccountsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListBillingAccountsFixedSizeCollection createCollection(
+        List&lt;ListBillingAccountsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1499">      return new ListBillingAccountsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListProjectBillingInfoPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListProjectBillingInfoRequest,
+          ListProjectBillingInfoResponse,
+          ProjectBillingInfo,
+          ListProjectBillingInfoPage,
+          ListProjectBillingInfoFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListProjectBillingInfoPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListProjectBillingInfoRequest, ListProjectBillingInfoResponse, ProjectBillingInfo&gt;
+            context,
+        ApiFuture&lt;ListProjectBillingInfoResponse&gt; futureResponse) {
+      ApiFuture&lt;ListProjectBillingInfoPage&gt; futurePage =
+<span class="fc" id="L1517">          ListProjectBillingInfoPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1518">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1520">          input -&gt; new ListProjectBillingInfoPagedResponse(input),</span>
+<span class="fc" id="L1521">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListProjectBillingInfoPagedResponse(ListProjectBillingInfoPage page) {
+<span class="fc" id="L1525">      super(page, ListProjectBillingInfoFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1526">    }</span>
+  }
+
+  public static class ListProjectBillingInfoPage
+      extends AbstractPage&lt;
+          ListProjectBillingInfoRequest,
+          ListProjectBillingInfoResponse,
+          ProjectBillingInfo,
+          ListProjectBillingInfoPage&gt; {
+
+    private ListProjectBillingInfoPage(
+        PageContext&lt;
+                ListProjectBillingInfoRequest, ListProjectBillingInfoResponse, ProjectBillingInfo&gt;
+            context,
+        ListProjectBillingInfoResponse response) {
+<span class="fc" id="L1541">      super(context, response);</span>
+<span class="fc" id="L1542">    }</span>
+
+    private static ListProjectBillingInfoPage createEmptyPage() {
+<span class="fc" id="L1545">      return new ListProjectBillingInfoPage(null, null);</span>
+    }
+
+    @Override
+    protected ListProjectBillingInfoPage createPage(
+        PageContext&lt;
+                ListProjectBillingInfoRequest, ListProjectBillingInfoResponse, ProjectBillingInfo&gt;
+            context,
+        ListProjectBillingInfoResponse response) {
+<span class="fc" id="L1554">      return new ListProjectBillingInfoPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListProjectBillingInfoPage&gt; createPageAsync(
+        PageContext&lt;
+                ListProjectBillingInfoRequest, ListProjectBillingInfoResponse, ProjectBillingInfo&gt;
+            context,
+        ApiFuture&lt;ListProjectBillingInfoResponse&gt; futureResponse) {
+<span class="fc" id="L1563">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListProjectBillingInfoFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListProjectBillingInfoRequest,
+          ListProjectBillingInfoResponse,
+          ProjectBillingInfo,
+          ListProjectBillingInfoPage,
+          ListProjectBillingInfoFixedSizeCollection&gt; {
+
+    private ListProjectBillingInfoFixedSizeCollection(
+        List&lt;ListProjectBillingInfoPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1577">      super(pages, collectionSize);</span>
+<span class="fc" id="L1578">    }</span>
+
+    private static ListProjectBillingInfoFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1581">      return new ListProjectBillingInfoFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListProjectBillingInfoFixedSizeCollection createCollection(
+        List&lt;ListProjectBillingInfoPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1587">      return new ListProjectBillingInfoFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,3665 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ClusterManagerClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-container</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.container.v1</a> &gt; <span class="el_source">ClusterManagerClient.java</span></div><h1>ClusterManagerClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.container.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.container.v1.stub.ClusterManagerStub;
+import com.google.cloud.container.v1.stub.ClusterManagerStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.container.v1.AddonsConfig;
+import com.google.container.v1.CancelOperationRequest;
+import com.google.container.v1.Cluster;
+import com.google.container.v1.ClusterUpdate;
+import com.google.container.v1.CompleteIPRotationRequest;
+import com.google.container.v1.CreateClusterRequest;
+import com.google.container.v1.CreateNodePoolRequest;
+import com.google.container.v1.DeleteClusterRequest;
+import com.google.container.v1.DeleteNodePoolRequest;
+import com.google.container.v1.GetClusterRequest;
+import com.google.container.v1.GetJSONWebKeysRequest;
+import com.google.container.v1.GetJSONWebKeysResponse;
+import com.google.container.v1.GetNodePoolRequest;
+import com.google.container.v1.GetOperationRequest;
+import com.google.container.v1.GetServerConfigRequest;
+import com.google.container.v1.ListClustersRequest;
+import com.google.container.v1.ListClustersResponse;
+import com.google.container.v1.ListNodePoolsRequest;
+import com.google.container.v1.ListNodePoolsResponse;
+import com.google.container.v1.ListOperationsRequest;
+import com.google.container.v1.ListOperationsResponse;
+import com.google.container.v1.ListUsableSubnetworksRequest;
+import com.google.container.v1.ListUsableSubnetworksResponse;
+import com.google.container.v1.MaintenancePolicy;
+import com.google.container.v1.NetworkPolicy;
+import com.google.container.v1.NodePool;
+import com.google.container.v1.Operation;
+import com.google.container.v1.RollbackNodePoolUpgradeRequest;
+import com.google.container.v1.ServerConfig;
+import com.google.container.v1.SetAddonsConfigRequest;
+import com.google.container.v1.SetLabelsRequest;
+import com.google.container.v1.SetLegacyAbacRequest;
+import com.google.container.v1.SetLocationsRequest;
+import com.google.container.v1.SetLoggingServiceRequest;
+import com.google.container.v1.SetMaintenancePolicyRequest;
+import com.google.container.v1.SetMasterAuthRequest;
+import com.google.container.v1.SetMonitoringServiceRequest;
+import com.google.container.v1.SetNetworkPolicyRequest;
+import com.google.container.v1.SetNodePoolAutoscalingRequest;
+import com.google.container.v1.SetNodePoolManagementRequest;
+import com.google.container.v1.SetNodePoolSizeRequest;
+import com.google.container.v1.StartIPRotationRequest;
+import com.google.container.v1.UpdateClusterRequest;
+import com.google.container.v1.UpdateMasterRequest;
+import com.google.container.v1.UpdateNodePoolRequest;
+import com.google.container.v1.UsableSubnetwork;
+import com.google.protobuf.Empty;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Google Kubernetes Engine Cluster Manager v1
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+ *   String parent = &quot;parent-995424086&quot;;
+ *   ListClustersResponse response = clusterManagerClient.listClusters(parent);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the ClusterManagerClient object to clean up resources such
+ * as threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of ClusterManagerSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * ClusterManagerSettings clusterManagerSettings =
+ *     ClusterManagerSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * ClusterManagerClient clusterManagerClient = ClusterManagerClient.create(clusterManagerSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * ClusterManagerSettings clusterManagerSettings =
+ *     ClusterManagerSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * ClusterManagerClient clusterManagerClient = ClusterManagerClient.create(clusterManagerSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class ClusterManagerClient implements BackgroundResource {
+  private final ClusterManagerSettings settings;
+  private final ClusterManagerStub stub;
+
+  /** Constructs an instance of ClusterManagerClient with default settings. */
+  public static final ClusterManagerClient create() throws IOException {
+<span class="nc" id="L150">    return create(ClusterManagerSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of ClusterManagerClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final ClusterManagerClient create(ClusterManagerSettings settings)
+      throws IOException {
+<span class="fc" id="L159">    return new ClusterManagerClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of ClusterManagerClient, using the given stub for making calls. This is
+   * for advanced usage - prefer using create(ClusterManagerSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final ClusterManagerClient create(ClusterManagerStub stub) {
+<span class="nc" id="L168">    return new ClusterManagerClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of ClusterManagerClient, using the given settings. This is protected so
+   * that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L176">  protected ClusterManagerClient(ClusterManagerSettings settings) throws IOException {</span>
+<span class="fc" id="L177">    this.settings = settings;</span>
+<span class="fc" id="L178">    this.stub = ((ClusterManagerStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L179">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L182">  protected ClusterManagerClient(ClusterManagerStub stub) {</span>
+<span class="nc" id="L183">    this.settings = null;</span>
+<span class="nc" id="L184">    this.stub = stub;</span>
+<span class="nc" id="L185">  }</span>
+
+  public final ClusterManagerSettings getSettings() {
+<span class="nc" id="L188">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public ClusterManagerStub getStub() {
+<span class="nc" id="L193">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all clusters owned by a project in either the specified zone or all zones.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String parent = &quot;parent-995424086&quot;;
+   *   ListClustersResponse response = clusterManagerClient.listClusters(parent);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent The parent (project and location) where the clusters will be listed. Specified in
+   *     the format `projects/&amp;#42;/locations/&amp;#42;`. Location &quot;-&quot; matches all zones and all
+   *     regions.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListClustersResponse listClusters(String parent) {
+<span class="fc" id="L215">    ListClustersRequest request = ListClustersRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L216">    return listClusters(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all clusters owned by a project in either the specified zone or all zones.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   ListClustersResponse response = clusterManagerClient.listClusters(projectId, zone);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the parent field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides,
+   *     or &quot;-&quot; for all zones. This field has been deprecated and replaced by the parent field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListClustersResponse listClusters(String projectId, String zone) {
+    ListClustersRequest request =
+<span class="fc" id="L243">        ListClustersRequest.newBuilder().setProjectId(projectId).setZone(zone).build();</span>
+<span class="fc" id="L244">    return listClusters(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all clusters owned by a project in either the specified zone or all zones.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   ListClustersRequest request =
+   *       ListClustersRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .build();
+   *   ListClustersResponse response = clusterManagerClient.listClusters(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListClustersResponse listClusters(ListClustersRequest request) {
+<span class="fc" id="L269">    return listClustersCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all clusters owned by a project in either the specified zone or all zones.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   ListClustersRequest request =
+   *       ListClustersRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .build();
+   *   ApiFuture&lt;ListClustersResponse&gt; future =
+   *       clusterManagerClient.listClustersCallable().futureCall(request);
+   *   // Do something.
+   *   ListClustersResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListClustersRequest, ListClustersResponse&gt; listClustersCallable() {
+<span class="fc" id="L294">    return stub.listClustersCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   Cluster response = clusterManagerClient.getCluster(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster) of the cluster to retrieve. Specified in the
+   *     format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Cluster getCluster(String name) {
+<span class="fc" id="L315">    GetClusterRequest request = GetClusterRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L316">    return getCluster(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   Cluster response = clusterManagerClient.getCluster(projectId, zone, clusterId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster to retrieve. This field has been
+   *     deprecated and replaced by the name field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Cluster getCluster(String projectId, String zone, String clusterId) {
+    GetClusterRequest request =
+<span class="fc" id="L346">        GetClusterRequest.newBuilder()</span>
+<span class="fc" id="L347">            .setProjectId(projectId)</span>
+<span class="fc" id="L348">            .setZone(zone)</span>
+<span class="fc" id="L349">            .setClusterId(clusterId)</span>
+<span class="fc" id="L350">            .build();</span>
+<span class="fc" id="L351">    return getCluster(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   GetClusterRequest request =
+   *       GetClusterRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Cluster response = clusterManagerClient.getCluster(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Cluster getCluster(GetClusterRequest request) {
+<span class="fc" id="L377">    return getClusterCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   GetClusterRequest request =
+   *       GetClusterRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Cluster&gt; future = clusterManagerClient.getClusterCallable().futureCall(request);
+   *   // Do something.
+   *   Cluster response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetClusterRequest, Cluster&gt; getClusterCallable() {
+<span class="fc" id="L402">    return stub.getClusterCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a cluster, consisting of the specified number and type of Google Compute Engine
+   * instances.
+   *
+   * &lt;p&gt;By default, the cluster is created in the project's [default
+   * network](https://cloud.google.com/compute/docs/networks-and-firewalls#networks).
+   *
+   * &lt;p&gt;One firewall is added for the cluster. After cluster creation, the Kubelet creates routes
+   * for each node to allow the containers on that node to communicate with all other instances in
+   * the cluster.
+   *
+   * &lt;p&gt;Finally, an entry is added to the project's global metadata indicating which CIDR range the
+   * cluster is using.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String parent = &quot;parent-995424086&quot;;
+   *   Cluster cluster = Cluster.newBuilder().build();
+   *   Operation response = clusterManagerClient.createCluster(parent, cluster);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent The parent (project and location) where the cluster will be created. Specified in
+   *     the format `projects/&amp;#42;/locations/&amp;#42;`.
+   * @param cluster Required. A [cluster
+   *     resource](https://cloud.google.com/container-engine/reference/rest/v1/projects.locations.clusters)
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation createCluster(String parent, Cluster cluster) {
+    CreateClusterRequest request =
+<span class="fc" id="L438">        CreateClusterRequest.newBuilder().setParent(parent).setCluster(cluster).build();</span>
+<span class="fc" id="L439">    return createCluster(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a cluster, consisting of the specified number and type of Google Compute Engine
+   * instances.
+   *
+   * &lt;p&gt;By default, the cluster is created in the project's [default
+   * network](https://cloud.google.com/compute/docs/networks-and-firewalls#networks).
+   *
+   * &lt;p&gt;One firewall is added for the cluster. After cluster creation, the Kubelet creates routes
+   * for each node to allow the containers on that node to communicate with all other instances in
+   * the cluster.
+   *
+   * &lt;p&gt;Finally, an entry is added to the project's global metadata indicating which CIDR range the
+   * cluster is using.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   Cluster cluster = Cluster.newBuilder().build();
+   *   Operation response = clusterManagerClient.createCluster(projectId, zone, cluster);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the parent field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the parent field.
+   * @param cluster Required. A [cluster
+   *     resource](https://cloud.google.com/container-engine/reference/rest/v1/projects.locations.clusters)
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation createCluster(String projectId, String zone, Cluster cluster) {
+    CreateClusterRequest request =
+<span class="fc" id="L480">        CreateClusterRequest.newBuilder()</span>
+<span class="fc" id="L481">            .setProjectId(projectId)</span>
+<span class="fc" id="L482">            .setZone(zone)</span>
+<span class="fc" id="L483">            .setCluster(cluster)</span>
+<span class="fc" id="L484">            .build();</span>
+<span class="fc" id="L485">    return createCluster(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a cluster, consisting of the specified number and type of Google Compute Engine
+   * instances.
+   *
+   * &lt;p&gt;By default, the cluster is created in the project's [default
+   * network](https://cloud.google.com/compute/docs/networks-and-firewalls#networks).
+   *
+   * &lt;p&gt;One firewall is added for the cluster. After cluster creation, the Kubelet creates routes
+   * for each node to allow the containers on that node to communicate with all other instances in
+   * the cluster.
+   *
+   * &lt;p&gt;Finally, an entry is added to the project's global metadata indicating which CIDR range the
+   * cluster is using.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   CreateClusterRequest request =
+   *       CreateClusterRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setCluster(Cluster.newBuilder().build())
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.createCluster(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation createCluster(CreateClusterRequest request) {
+<span class="fc" id="L522">    return createClusterCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a cluster, consisting of the specified number and type of Google Compute Engine
+   * instances.
+   *
+   * &lt;p&gt;By default, the cluster is created in the project's [default
+   * network](https://cloud.google.com/compute/docs/networks-and-firewalls#networks).
+   *
+   * &lt;p&gt;One firewall is added for the cluster. After cluster creation, the Kubelet creates routes
+   * for each node to allow the containers on that node to communicate with all other instances in
+   * the cluster.
+   *
+   * &lt;p&gt;Finally, an entry is added to the project's global metadata indicating which CIDR range the
+   * cluster is using.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   CreateClusterRequest request =
+   *       CreateClusterRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setCluster(Cluster.newBuilder().build())
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.createClusterCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateClusterRequest, Operation&gt; createClusterCallable() {
+<span class="fc" id="L559">    return stub.createClusterCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the settings of a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   ClusterUpdate update = ClusterUpdate.newBuilder().build();
+   *   Operation response = clusterManagerClient.updateCluster(name, update);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster) of the cluster to update. Specified in the
+   *     format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @param update Required. A description of the update.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation updateCluster(String name, ClusterUpdate update) {
+    UpdateClusterRequest request =
+<span class="fc" id="L583">        UpdateClusterRequest.newBuilder().setName(name).setUpdate(update).build();</span>
+<span class="fc" id="L584">    return updateCluster(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the settings of a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   ClusterUpdate update = ClusterUpdate.newBuilder().build();
+   *   Operation response = clusterManagerClient.updateCluster(projectId, zone, clusterId, update);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster to upgrade. This field has been deprecated
+   *     and replaced by the name field.
+   * @param update Required. A description of the update.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation updateCluster(
+      String projectId, String zone, String clusterId, ClusterUpdate update) {
+    UpdateClusterRequest request =
+<span class="fc" id="L617">        UpdateClusterRequest.newBuilder()</span>
+<span class="fc" id="L618">            .setProjectId(projectId)</span>
+<span class="fc" id="L619">            .setZone(zone)</span>
+<span class="fc" id="L620">            .setClusterId(clusterId)</span>
+<span class="fc" id="L621">            .setUpdate(update)</span>
+<span class="fc" id="L622">            .build();</span>
+<span class="fc" id="L623">    return updateCluster(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the settings of a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   UpdateClusterRequest request =
+   *       UpdateClusterRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setUpdate(ClusterUpdate.newBuilder().build())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.updateCluster(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation updateCluster(UpdateClusterRequest request) {
+<span class="fc" id="L650">    return updateClusterCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the settings of a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   UpdateClusterRequest request =
+   *       UpdateClusterRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setUpdate(ClusterUpdate.newBuilder().build())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.updateClusterCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateClusterRequest, Operation&gt; updateClusterCallable() {
+<span class="fc" id="L677">    return stub.updateClusterCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the version and/or image type for the specified node pool.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   UpdateNodePoolRequest request =
+   *       UpdateNodePoolRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePoolId(&quot;nodePoolId1121557241&quot;)
+   *           .setNodeVersion(&quot;nodeVersion1155309686&quot;)
+   *           .setImageType(&quot;imageType-878147787&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .addAllLocations(new ArrayList&lt;String&gt;())
+   *           .setWorkloadMetadataConfig(WorkloadMetadataConfig.newBuilder().build())
+   *           .setUpgradeSettings(NodePool.UpgradeSettings.newBuilder().build())
+   *           .setLinuxNodeConfig(LinuxNodeConfig.newBuilder().build())
+   *           .setKubeletConfig(NodeKubeletConfig.newBuilder().build())
+   *           .setGcfsConfig(GcfsConfig.newBuilder().build())
+   *           .setGvnic(VirtualNIC.newBuilder().build())
+   *           .build();
+   *   Operation response = clusterManagerClient.updateNodePool(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation updateNodePool(UpdateNodePoolRequest request) {
+<span class="fc" id="L713">    return updateNodePoolCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the version and/or image type for the specified node pool.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   UpdateNodePoolRequest request =
+   *       UpdateNodePoolRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePoolId(&quot;nodePoolId1121557241&quot;)
+   *           .setNodeVersion(&quot;nodeVersion1155309686&quot;)
+   *           .setImageType(&quot;imageType-878147787&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .addAllLocations(new ArrayList&lt;String&gt;())
+   *           .setWorkloadMetadataConfig(WorkloadMetadataConfig.newBuilder().build())
+   *           .setUpgradeSettings(NodePool.UpgradeSettings.newBuilder().build())
+   *           .setLinuxNodeConfig(LinuxNodeConfig.newBuilder().build())
+   *           .setKubeletConfig(NodeKubeletConfig.newBuilder().build())
+   *           .setGcfsConfig(GcfsConfig.newBuilder().build())
+   *           .setGvnic(VirtualNIC.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.updateNodePoolCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateNodePoolRequest, Operation&gt; updateNodePoolCallable() {
+<span class="fc" id="L749">    return stub.updateNodePoolCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the autoscaling settings for the specified node pool.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetNodePoolAutoscalingRequest request =
+   *       SetNodePoolAutoscalingRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePoolId(&quot;nodePoolId1121557241&quot;)
+   *           .setAutoscaling(NodePoolAutoscaling.newBuilder().build())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.setNodePoolAutoscaling(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setNodePoolAutoscaling(SetNodePoolAutoscalingRequest request) {
+<span class="fc" id="L777">    return setNodePoolAutoscalingCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the autoscaling settings for the specified node pool.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetNodePoolAutoscalingRequest request =
+   *       SetNodePoolAutoscalingRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePoolId(&quot;nodePoolId1121557241&quot;)
+   *           .setAutoscaling(NodePoolAutoscaling.newBuilder().build())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.setNodePoolAutoscalingCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetNodePoolAutoscalingRequest, Operation&gt;
+      setNodePoolAutoscalingCallable() {
+<span class="fc" id="L806">    return stub.setNodePoolAutoscalingCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the logging service for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   String loggingService = &quot;loggingService1098570326&quot;;
+   *   Operation response = clusterManagerClient.setLoggingService(name, loggingService);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster) of the cluster to set logging. Specified in
+   *     the format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @param loggingService Required. The logging service the cluster should use to write logs.
+   *     Currently available options:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`logging.googleapis.com/kubernetes` - The Cloud Logging service with a
+   *           Kubernetes-native resource model
+   *       &lt;li&gt;`logging.googleapis.com` - The legacy Cloud Logging service (no longer available as
+   *           of GKE 1.15).
+   *       &lt;li&gt;`none` - no logs will be exported from the cluster.
+   *     &lt;/ul&gt;
+   *     &lt;p&gt;If left as an empty string,`logging.googleapis.com/kubernetes` will be used for GKE
+   *     1.14+ or `logging.googleapis.com` for earlier versions.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setLoggingService(String name, String loggingService) {
+    SetLoggingServiceRequest request =
+<span class="fc" id="L840">        SetLoggingServiceRequest.newBuilder()</span>
+<span class="fc" id="L841">            .setName(name)</span>
+<span class="fc" id="L842">            .setLoggingService(loggingService)</span>
+<span class="fc" id="L843">            .build();</span>
+<span class="fc" id="L844">    return setLoggingService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the logging service for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   String loggingService = &quot;loggingService1098570326&quot;;
+   *   Operation response =
+   *       clusterManagerClient.setLoggingService(projectId, zone, clusterId, loggingService);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster to upgrade. This field has been deprecated
+   *     and replaced by the name field.
+   * @param loggingService Required. The logging service the cluster should use to write logs.
+   *     Currently available options:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`logging.googleapis.com/kubernetes` - The Cloud Logging service with a
+   *           Kubernetes-native resource model
+   *       &lt;li&gt;`logging.googleapis.com` - The legacy Cloud Logging service (no longer available as
+   *           of GKE 1.15).
+   *       &lt;li&gt;`none` - no logs will be exported from the cluster.
+   *     &lt;/ul&gt;
+   *     &lt;p&gt;If left as an empty string,`logging.googleapis.com/kubernetes` will be used for GKE
+   *     1.14+ or `logging.googleapis.com` for earlier versions.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setLoggingService(
+      String projectId, String zone, String clusterId, String loggingService) {
+    SetLoggingServiceRequest request =
+<span class="fc" id="L888">        SetLoggingServiceRequest.newBuilder()</span>
+<span class="fc" id="L889">            .setProjectId(projectId)</span>
+<span class="fc" id="L890">            .setZone(zone)</span>
+<span class="fc" id="L891">            .setClusterId(clusterId)</span>
+<span class="fc" id="L892">            .setLoggingService(loggingService)</span>
+<span class="fc" id="L893">            .build();</span>
+<span class="fc" id="L894">    return setLoggingService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the logging service for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetLoggingServiceRequest request =
+   *       SetLoggingServiceRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setLoggingService(&quot;loggingService1098570326&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.setLoggingService(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setLoggingService(SetLoggingServiceRequest request) {
+<span class="fc" id="L921">    return setLoggingServiceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the logging service for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetLoggingServiceRequest request =
+   *       SetLoggingServiceRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setLoggingService(&quot;loggingService1098570326&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.setLoggingServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetLoggingServiceRequest, Operation&gt; setLoggingServiceCallable() {
+<span class="fc" id="L948">    return stub.setLoggingServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the monitoring service for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   String monitoringService = &quot;monitoringService-1431578291&quot;;
+   *   Operation response = clusterManagerClient.setMonitoringService(name, monitoringService);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster) of the cluster to set monitoring. Specified
+   *     in the format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @param monitoringService Required. The monitoring service the cluster should use to write
+   *     metrics. Currently available options:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;&quot;monitoring.googleapis.com/kubernetes&quot; - The Cloud Monitoring service with a
+   *           Kubernetes-native resource model
+   *       &lt;li&gt;`monitoring.googleapis.com` - The legacy Cloud Monitoring service (no longer
+   *           available as of GKE 1.15).
+   *       &lt;li&gt;`none` - No metrics will be exported from the cluster.
+   *     &lt;/ul&gt;
+   *     &lt;p&gt;If left as an empty string,`monitoring.googleapis.com/kubernetes` will be used for GKE
+   *     1.14+ or `monitoring.googleapis.com` for earlier versions.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setMonitoringService(String name, String monitoringService) {
+    SetMonitoringServiceRequest request =
+<span class="fc" id="L982">        SetMonitoringServiceRequest.newBuilder()</span>
+<span class="fc" id="L983">            .setName(name)</span>
+<span class="fc" id="L984">            .setMonitoringService(monitoringService)</span>
+<span class="fc" id="L985">            .build();</span>
+<span class="fc" id="L986">    return setMonitoringService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the monitoring service for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   String monitoringService = &quot;monitoringService-1431578291&quot;;
+   *   Operation response =
+   *       clusterManagerClient.setMonitoringService(projectId, zone, clusterId, monitoringService);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster to upgrade. This field has been deprecated
+   *     and replaced by the name field.
+   * @param monitoringService Required. The monitoring service the cluster should use to write
+   *     metrics. Currently available options:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;&quot;monitoring.googleapis.com/kubernetes&quot; - The Cloud Monitoring service with a
+   *           Kubernetes-native resource model
+   *       &lt;li&gt;`monitoring.googleapis.com` - The legacy Cloud Monitoring service (no longer
+   *           available as of GKE 1.15).
+   *       &lt;li&gt;`none` - No metrics will be exported from the cluster.
+   *     &lt;/ul&gt;
+   *     &lt;p&gt;If left as an empty string,`monitoring.googleapis.com/kubernetes` will be used for GKE
+   *     1.14+ or `monitoring.googleapis.com` for earlier versions.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setMonitoringService(
+      String projectId, String zone, String clusterId, String monitoringService) {
+    SetMonitoringServiceRequest request =
+<span class="fc" id="L1030">        SetMonitoringServiceRequest.newBuilder()</span>
+<span class="fc" id="L1031">            .setProjectId(projectId)</span>
+<span class="fc" id="L1032">            .setZone(zone)</span>
+<span class="fc" id="L1033">            .setClusterId(clusterId)</span>
+<span class="fc" id="L1034">            .setMonitoringService(monitoringService)</span>
+<span class="fc" id="L1035">            .build();</span>
+<span class="fc" id="L1036">    return setMonitoringService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the monitoring service for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetMonitoringServiceRequest request =
+   *       SetMonitoringServiceRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setMonitoringService(&quot;monitoringService-1431578291&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.setMonitoringService(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setMonitoringService(SetMonitoringServiceRequest request) {
+<span class="fc" id="L1063">    return setMonitoringServiceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the monitoring service for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetMonitoringServiceRequest request =
+   *       SetMonitoringServiceRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setMonitoringService(&quot;monitoringService-1431578291&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.setMonitoringServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetMonitoringServiceRequest, Operation&gt;
+      setMonitoringServiceCallable() {
+<span class="fc" id="L1091">    return stub.setMonitoringServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the addons for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   AddonsConfig addonsConfig = AddonsConfig.newBuilder().build();
+   *   Operation response = clusterManagerClient.setAddonsConfig(name, addonsConfig);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster) of the cluster to set addons. Specified in
+   *     the format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @param addonsConfig Required. The desired configurations for the various addons available to
+   *     run in the cluster.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setAddonsConfig(String name, AddonsConfig addonsConfig) {
+    SetAddonsConfigRequest request =
+<span class="fc" id="L1116">        SetAddonsConfigRequest.newBuilder().setName(name).setAddonsConfig(addonsConfig).build();</span>
+<span class="fc" id="L1117">    return setAddonsConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the addons for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   AddonsConfig addonsConfig = AddonsConfig.newBuilder().build();
+   *   Operation response =
+   *       clusterManagerClient.setAddonsConfig(projectId, zone, clusterId, addonsConfig);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster to upgrade. This field has been deprecated
+   *     and replaced by the name field.
+   * @param addonsConfig Required. The desired configurations for the various addons available to
+   *     run in the cluster.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setAddonsConfig(
+      String projectId, String zone, String clusterId, AddonsConfig addonsConfig) {
+    SetAddonsConfigRequest request =
+<span class="fc" id="L1152">        SetAddonsConfigRequest.newBuilder()</span>
+<span class="fc" id="L1153">            .setProjectId(projectId)</span>
+<span class="fc" id="L1154">            .setZone(zone)</span>
+<span class="fc" id="L1155">            .setClusterId(clusterId)</span>
+<span class="fc" id="L1156">            .setAddonsConfig(addonsConfig)</span>
+<span class="fc" id="L1157">            .build();</span>
+<span class="fc" id="L1158">    return setAddonsConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the addons for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetAddonsConfigRequest request =
+   *       SetAddonsConfigRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setAddonsConfig(AddonsConfig.newBuilder().build())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.setAddonsConfig(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setAddonsConfig(SetAddonsConfigRequest request) {
+<span class="fc" id="L1185">    return setAddonsConfigCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the addons for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetAddonsConfigRequest request =
+   *       SetAddonsConfigRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setAddonsConfig(AddonsConfig.newBuilder().build())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.setAddonsConfigCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetAddonsConfigRequest, Operation&gt; setAddonsConfigCallable() {
+<span class="fc" id="L1212">    return stub.setAddonsConfigCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the locations for a specific cluster. Deprecated. Use
+   * [projects.locations.clusters.update](https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1/projects.locations.clusters/update)
+   * instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   List&lt;String&gt; locations = new ArrayList&lt;&gt;();
+   *   Operation response = clusterManagerClient.setLocations(name, locations);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster) of the cluster to set locations. Specified in
+   *     the format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @param locations Required. The desired list of Google Compute Engine
+   *     [zones](https://cloud.google.com/compute/docs/zones#available) in which the cluster's nodes
+   *     should be located. Changing the locations a cluster is in will result in nodes being either
+   *     created or removed from the cluster, depending on whether locations are being added or
+   *     removed.
+   *     &lt;p&gt;This list must always include the cluster's primary zone.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final Operation setLocations(String name, List&lt;String&gt; locations) {
+    SetLocationsRequest request =
+<span class="fc" id="L1245">        SetLocationsRequest.newBuilder().setName(name).addAllLocations(locations).build();</span>
+<span class="fc" id="L1246">    return setLocations(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the locations for a specific cluster. Deprecated. Use
+   * [projects.locations.clusters.update](https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1/projects.locations.clusters/update)
+   * instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   List&lt;String&gt; locations = new ArrayList&lt;&gt;();
+   *   Operation response = clusterManagerClient.setLocations(projectId, zone, clusterId, locations);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster to upgrade. This field has been deprecated
+   *     and replaced by the name field.
+   * @param locations Required. The desired list of Google Compute Engine
+   *     [zones](https://cloud.google.com/compute/docs/zones#available) in which the cluster's nodes
+   *     should be located. Changing the locations a cluster is in will result in nodes being either
+   *     created or removed from the cluster, depending on whether locations are being added or
+   *     removed.
+   *     &lt;p&gt;This list must always include the cluster's primary zone.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final Operation setLocations(
+      String projectId, String zone, String clusterId, List&lt;String&gt; locations) {
+    SetLocationsRequest request =
+<span class="fc" id="L1288">        SetLocationsRequest.newBuilder()</span>
+<span class="fc" id="L1289">            .setProjectId(projectId)</span>
+<span class="fc" id="L1290">            .setZone(zone)</span>
+<span class="fc" id="L1291">            .setClusterId(clusterId)</span>
+<span class="fc" id="L1292">            .addAllLocations(locations)</span>
+<span class="fc" id="L1293">            .build();</span>
+<span class="fc" id="L1294">    return setLocations(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the locations for a specific cluster. Deprecated. Use
+   * [projects.locations.clusters.update](https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1/projects.locations.clusters/update)
+   * instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetLocationsRequest request =
+   *       SetLocationsRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .addAllLocations(new ArrayList&lt;String&gt;())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.setLocations(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final Operation setLocations(SetLocationsRequest request) {
+<span class="fc" id="L1325">    return setLocationsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the locations for a specific cluster. Deprecated. Use
+   * [projects.locations.clusters.update](https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1/projects.locations.clusters/update)
+   * instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetLocationsRequest request =
+   *       SetLocationsRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .addAllLocations(new ArrayList&lt;String&gt;())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = clusterManagerClient.setLocationsCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final UnaryCallable&lt;SetLocationsRequest, Operation&gt; setLocationsCallable() {
+<span class="fc" id="L1356">    return stub.setLocationsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the master for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   String masterVersion = &quot;masterVersion1167095830&quot;;
+   *   Operation response = clusterManagerClient.updateMaster(name, masterVersion);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster) of the cluster to update. Specified in the
+   *     format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @param masterVersion Required. The Kubernetes version to change the master to.
+   *     &lt;p&gt;Users may specify either explicit versions offered by Kubernetes Engine or version
+   *     aliases, which have the following behavior:
+   *     &lt;p&gt;- &quot;latest&quot;: picks the highest valid Kubernetes version - &quot;1.X&quot;: picks the highest valid
+   *     patch+gke.N patch in the 1.X version - &quot;1.X.Y&quot;: picks the highest valid gke.N patch in the
+   *     1.X.Y version - &quot;1.X.Y-gke.N&quot;: picks an explicit Kubernetes version - &quot;-&quot;: picks the
+   *     default Kubernetes version
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation updateMaster(String name, String masterVersion) {
+    UpdateMasterRequest request =
+<span class="fc" id="L1386">        UpdateMasterRequest.newBuilder().setName(name).setMasterVersion(masterVersion).build();</span>
+<span class="fc" id="L1387">    return updateMaster(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the master for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   String masterVersion = &quot;masterVersion1167095830&quot;;
+   *   Operation response =
+   *       clusterManagerClient.updateMaster(projectId, zone, clusterId, masterVersion);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster to upgrade. This field has been deprecated
+   *     and replaced by the name field.
+   * @param masterVersion Required. The Kubernetes version to change the master to.
+   *     &lt;p&gt;Users may specify either explicit versions offered by Kubernetes Engine or version
+   *     aliases, which have the following behavior:
+   *     &lt;p&gt;- &quot;latest&quot;: picks the highest valid Kubernetes version - &quot;1.X&quot;: picks the highest valid
+   *     patch+gke.N patch in the 1.X version - &quot;1.X.Y&quot;: picks the highest valid gke.N patch in the
+   *     1.X.Y version - &quot;1.X.Y-gke.N&quot;: picks an explicit Kubernetes version - &quot;-&quot;: picks the
+   *     default Kubernetes version
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation updateMaster(
+      String projectId, String zone, String clusterId, String masterVersion) {
+    UpdateMasterRequest request =
+<span class="fc" id="L1427">        UpdateMasterRequest.newBuilder()</span>
+<span class="fc" id="L1428">            .setProjectId(projectId)</span>
+<span class="fc" id="L1429">            .setZone(zone)</span>
+<span class="fc" id="L1430">            .setClusterId(clusterId)</span>
+<span class="fc" id="L1431">            .setMasterVersion(masterVersion)</span>
+<span class="fc" id="L1432">            .build();</span>
+<span class="fc" id="L1433">    return updateMaster(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the master for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   UpdateMasterRequest request =
+   *       UpdateMasterRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setMasterVersion(&quot;masterVersion1167095830&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.updateMaster(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation updateMaster(UpdateMasterRequest request) {
+<span class="fc" id="L1460">    return updateMasterCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the master for a specific cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   UpdateMasterRequest request =
+   *       UpdateMasterRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setMasterVersion(&quot;masterVersion1167095830&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = clusterManagerClient.updateMasterCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateMasterRequest, Operation&gt; updateMasterCallable() {
+<span class="fc" id="L1486">    return stub.updateMasterCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets master auth materials. Currently supports changing the admin password or a specific
+   * cluster, either via password generation or explicitly setting the password.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetMasterAuthRequest request =
+   *       SetMasterAuthRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setUpdate(MasterAuth.newBuilder().build())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.setMasterAuth(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setMasterAuth(SetMasterAuthRequest request) {
+<span class="fc" id="L1514">    return setMasterAuthCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets master auth materials. Currently supports changing the admin password or a specific
+   * cluster, either via password generation or explicitly setting the password.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetMasterAuthRequest request =
+   *       SetMasterAuthRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setUpdate(MasterAuth.newBuilder().build())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.setMasterAuthCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetMasterAuthRequest, Operation&gt; setMasterAuthCallable() {
+<span class="fc" id="L1542">    return stub.setMasterAuthCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the cluster, including the Kubernetes endpoint and all worker nodes.
+   *
+   * &lt;p&gt;Firewalls and routes that were configured during cluster creation are also deleted.
+   *
+   * &lt;p&gt;Other Google Compute Engine resources that might be in use by the cluster, such as load
+   * balancer resources, are not deleted if they weren't present when the cluster was initially
+   * created.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   Operation response = clusterManagerClient.deleteCluster(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster) of the cluster to delete. Specified in the
+   *     format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation deleteCluster(String name) {
+<span class="fc" id="L1569">    DeleteClusterRequest request = DeleteClusterRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1570">    return deleteCluster(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the cluster, including the Kubernetes endpoint and all worker nodes.
+   *
+   * &lt;p&gt;Firewalls and routes that were configured during cluster creation are also deleted.
+   *
+   * &lt;p&gt;Other Google Compute Engine resources that might be in use by the cluster, such as load
+   * balancer resources, are not deleted if they weren't present when the cluster was initially
+   * created.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   Operation response = clusterManagerClient.deleteCluster(projectId, zone, clusterId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster to delete. This field has been deprecated
+   *     and replaced by the name field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation deleteCluster(String projectId, String zone, String clusterId) {
+    DeleteClusterRequest request =
+<span class="fc" id="L1606">        DeleteClusterRequest.newBuilder()</span>
+<span class="fc" id="L1607">            .setProjectId(projectId)</span>
+<span class="fc" id="L1608">            .setZone(zone)</span>
+<span class="fc" id="L1609">            .setClusterId(clusterId)</span>
+<span class="fc" id="L1610">            .build();</span>
+<span class="fc" id="L1611">    return deleteCluster(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the cluster, including the Kubernetes endpoint and all worker nodes.
+   *
+   * &lt;p&gt;Firewalls and routes that were configured during cluster creation are also deleted.
+   *
+   * &lt;p&gt;Other Google Compute Engine resources that might be in use by the cluster, such as load
+   * balancer resources, are not deleted if they weren't present when the cluster was initially
+   * created.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   DeleteClusterRequest request =
+   *       DeleteClusterRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.deleteCluster(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation deleteCluster(DeleteClusterRequest request) {
+<span class="fc" id="L1643">    return deleteClusterCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the cluster, including the Kubernetes endpoint and all worker nodes.
+   *
+   * &lt;p&gt;Firewalls and routes that were configured during cluster creation are also deleted.
+   *
+   * &lt;p&gt;Other Google Compute Engine resources that might be in use by the cluster, such as load
+   * balancer resources, are not deleted if they weren't present when the cluster was initially
+   * created.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   DeleteClusterRequest request =
+   *       DeleteClusterRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.deleteClusterCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteClusterRequest, Operation&gt; deleteClusterCallable() {
+<span class="fc" id="L1675">    return stub.deleteClusterCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all operations in a project in a specific zone or all zones.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   ListOperationsResponse response = clusterManagerClient.listOperations(projectId, zone);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the parent field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) to return operations for, or
+   *     `-` for all zones. This field has been deprecated and replaced by the parent field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListOperationsResponse listOperations(String projectId, String zone) {
+    ListOperationsRequest request =
+<span class="fc" id="L1702">        ListOperationsRequest.newBuilder().setProjectId(projectId).setZone(zone).build();</span>
+<span class="fc" id="L1703">    return listOperations(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all operations in a project in a specific zone or all zones.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   ListOperationsRequest request =
+   *       ListOperationsRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .build();
+   *   ListOperationsResponse response = clusterManagerClient.listOperations(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListOperationsResponse listOperations(ListOperationsRequest request) {
+<span class="fc" id="L1728">    return listOperationsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all operations in a project in a specific zone or all zones.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   ListOperationsRequest request =
+   *       ListOperationsRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .build();
+   *   ApiFuture&lt;ListOperationsResponse&gt; future =
+   *       clusterManagerClient.listOperationsCallable().futureCall(request);
+   *   // Do something.
+   *   ListOperationsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListOperationsRequest, ListOperationsResponse&gt;
+      listOperationsCallable() {
+<span class="fc" id="L1754">    return stub.listOperationsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the specified operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   Operation response = clusterManagerClient.getOperation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, operation id) of the operation to get. Specified in
+   *     the format `projects/&amp;#42;/locations/&amp;#42;/operations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation getOperation(String name) {
+<span class="fc" id="L1775">    GetOperationRequest request = GetOperationRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1776">    return getOperation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the specified operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String operationId = &quot;operationId129704162&quot;;
+   *   Operation response = clusterManagerClient.getOperation(projectId, zone, operationId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param operationId Deprecated. The server-assigned `name` of the operation. This field has been
+   *     deprecated and replaced by the name field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation getOperation(String projectId, String zone, String operationId) {
+    GetOperationRequest request =
+<span class="fc" id="L1806">        GetOperationRequest.newBuilder()</span>
+<span class="fc" id="L1807">            .setProjectId(projectId)</span>
+<span class="fc" id="L1808">            .setZone(zone)</span>
+<span class="fc" id="L1809">            .setOperationId(operationId)</span>
+<span class="fc" id="L1810">            .build();</span>
+<span class="fc" id="L1811">    return getOperation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the specified operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   GetOperationRequest request =
+   *       GetOperationRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setOperationId(&quot;operationId129704162&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.getOperation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation getOperation(GetOperationRequest request) {
+<span class="fc" id="L1837">    return getOperationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the specified operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   GetOperationRequest request =
+   *       GetOperationRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setOperationId(&quot;operationId129704162&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = clusterManagerClient.getOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetOperationRequest, Operation&gt; getOperationCallable() {
+<span class="fc" id="L1862">    return stub.getOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Cancels the specified operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   clusterManagerClient.cancelOperation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, operation id) of the operation to cancel. Specified in
+   *     the format `projects/&amp;#42;/locations/&amp;#42;/operations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void cancelOperation(String name) {
+<span class="fc" id="L1883">    CancelOperationRequest request = CancelOperationRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1884">    cancelOperation(request);</span>
+<span class="fc" id="L1885">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Cancels the specified operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String operationId = &quot;operationId129704162&quot;;
+   *   clusterManagerClient.cancelOperation(projectId, zone, operationId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation
+   *     resides. This field has been deprecated and replaced by the name field.
+   * @param operationId Deprecated. The server-assigned `name` of the operation. This field has been
+   *     deprecated and replaced by the name field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void cancelOperation(String projectId, String zone, String operationId) {
+    CancelOperationRequest request =
+<span class="fc" id="L1914">        CancelOperationRequest.newBuilder()</span>
+<span class="fc" id="L1915">            .setProjectId(projectId)</span>
+<span class="fc" id="L1916">            .setZone(zone)</span>
+<span class="fc" id="L1917">            .setOperationId(operationId)</span>
+<span class="fc" id="L1918">            .build();</span>
+<span class="fc" id="L1919">    cancelOperation(request);</span>
+<span class="fc" id="L1920">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Cancels the specified operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   CancelOperationRequest request =
+   *       CancelOperationRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setOperationId(&quot;operationId129704162&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   clusterManagerClient.cancelOperation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void cancelOperation(CancelOperationRequest request) {
+<span class="fc" id="L1945">    cancelOperationCallable().call(request);</span>
+<span class="fc" id="L1946">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Cancels the specified operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   CancelOperationRequest request =
+   *       CancelOperationRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setOperationId(&quot;operationId129704162&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = clusterManagerClient.cancelOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CancelOperationRequest, Empty&gt; cancelOperationCallable() {
+<span class="fc" id="L1970">    return stub.cancelOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns configuration info about the Google Kubernetes Engine service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   ServerConfig response = clusterManagerClient.getServerConfig(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project and location) of the server config to get, specified in the
+   *     format `projects/&amp;#42;/locations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServerConfig getServerConfig(String name) {
+<span class="fc" id="L1991">    GetServerConfigRequest request = GetServerConfigRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1992">    return getServerConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns configuration info about the Google Kubernetes Engine service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   ServerConfig response = clusterManagerClient.getServerConfig(projectId, zone);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) to return operations for.
+   *     This field has been deprecated and replaced by the name field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServerConfig getServerConfig(String projectId, String zone) {
+    GetServerConfigRequest request =
+<span class="fc" id="L2019">        GetServerConfigRequest.newBuilder().setProjectId(projectId).setZone(zone).build();</span>
+<span class="fc" id="L2020">    return getServerConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns configuration info about the Google Kubernetes Engine service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   GetServerConfigRequest request =
+   *       GetServerConfigRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ServerConfig response = clusterManagerClient.getServerConfig(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServerConfig getServerConfig(GetServerConfigRequest request) {
+<span class="fc" id="L2045">    return getServerConfigCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns configuration info about the Google Kubernetes Engine service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   GetServerConfigRequest request =
+   *       GetServerConfigRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;ServerConfig&gt; future =
+   *       clusterManagerClient.getServerConfigCallable().futureCall(request);
+   *   // Do something.
+   *   ServerConfig response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetServerConfigRequest, ServerConfig&gt; getServerConfigCallable() {
+<span class="fc" id="L2070">    return stub.getServerConfigCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the public component of the cluster signing keys in JSON Web Key format. This API is not
+   * yet intended for general use, and is not available for all clusters.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   GetJSONWebKeysRequest request =
+   *       GetJSONWebKeysRequest.newBuilder().setParent(&quot;parent-995424086&quot;).build();
+   *   GetJSONWebKeysResponse response = clusterManagerClient.getJSONWebKeys(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GetJSONWebKeysResponse getJSONWebKeys(GetJSONWebKeysRequest request) {
+<span class="fc" id="L2092">    return getJSONWebKeysCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the public component of the cluster signing keys in JSON Web Key format. This API is not
+   * yet intended for general use, and is not available for all clusters.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   GetJSONWebKeysRequest request =
+   *       GetJSONWebKeysRequest.newBuilder().setParent(&quot;parent-995424086&quot;).build();
+   *   ApiFuture&lt;GetJSONWebKeysResponse&gt; future =
+   *       clusterManagerClient.getJSONWebKeysCallable().futureCall(request);
+   *   // Do something.
+   *   GetJSONWebKeysResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetJSONWebKeysRequest, GetJSONWebKeysResponse&gt;
+      getJSONWebKeysCallable() {
+<span class="fc" id="L2115">    return stub.getJSONWebKeysCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the node pools for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String parent = &quot;parent-995424086&quot;;
+   *   ListNodePoolsResponse response = clusterManagerClient.listNodePools(parent);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent The parent (project, location, cluster id) where the node pools will be listed.
+   *     Specified in the format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNodePoolsResponse listNodePools(String parent) {
+<span class="fc" id="L2136">    ListNodePoolsRequest request = ListNodePoolsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L2137">    return listNodePools(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the node pools for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   ListNodePoolsResponse response =
+   *       clusterManagerClient.listNodePools(projectId, zone, clusterId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://developers.google.com/console/help/new/#projectnumber). This field has been
+   *     deprecated and replaced by the parent field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the parent field.
+   * @param clusterId Deprecated. The name of the cluster. This field has been deprecated and
+   *     replaced by the parent field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNodePoolsResponse listNodePools(
+      String projectId, String zone, String clusterId) {
+    ListNodePoolsRequest request =
+<span class="fc" id="L2169">        ListNodePoolsRequest.newBuilder()</span>
+<span class="fc" id="L2170">            .setProjectId(projectId)</span>
+<span class="fc" id="L2171">            .setZone(zone)</span>
+<span class="fc" id="L2172">            .setClusterId(clusterId)</span>
+<span class="fc" id="L2173">            .build();</span>
+<span class="fc" id="L2174">    return listNodePools(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the node pools for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   ListNodePoolsRequest request =
+   *       ListNodePoolsRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .build();
+   *   ListNodePoolsResponse response = clusterManagerClient.listNodePools(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNodePoolsResponse listNodePools(ListNodePoolsRequest request) {
+<span class="fc" id="L2200">    return listNodePoolsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the node pools for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   ListNodePoolsRequest request =
+   *       ListNodePoolsRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .build();
+   *   ApiFuture&lt;ListNodePoolsResponse&gt; future =
+   *       clusterManagerClient.listNodePoolsCallable().futureCall(request);
+   *   // Do something.
+   *   ListNodePoolsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListNodePoolsRequest, ListNodePoolsResponse&gt; listNodePoolsCallable() {
+<span class="fc" id="L2226">    return stub.listNodePoolsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves the requested node pool.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   NodePool response = clusterManagerClient.getNodePool(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster, node pool id) of the node pool to get.
+   *     Specified in the format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;/nodePools/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NodePool getNodePool(String name) {
+<span class="fc" id="L2247">    GetNodePoolRequest request = GetNodePoolRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2248">    return getNodePool(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves the requested node pool.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   String nodePoolId = &quot;nodePoolId1121557241&quot;;
+   *   NodePool response = clusterManagerClient.getNodePool(projectId, zone, clusterId, nodePoolId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://developers.google.com/console/help/new/#projectnumber). This field has been
+   *     deprecated and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster. This field has been deprecated and
+   *     replaced by the name field.
+   * @param nodePoolId Deprecated. The name of the node pool. This field has been deprecated and
+   *     replaced by the name field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NodePool getNodePool(
+      String projectId, String zone, String clusterId, String nodePoolId) {
+    GetNodePoolRequest request =
+<span class="fc" id="L2282">        GetNodePoolRequest.newBuilder()</span>
+<span class="fc" id="L2283">            .setProjectId(projectId)</span>
+<span class="fc" id="L2284">            .setZone(zone)</span>
+<span class="fc" id="L2285">            .setClusterId(clusterId)</span>
+<span class="fc" id="L2286">            .setNodePoolId(nodePoolId)</span>
+<span class="fc" id="L2287">            .build();</span>
+<span class="fc" id="L2288">    return getNodePool(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves the requested node pool.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   GetNodePoolRequest request =
+   *       GetNodePoolRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePoolId(&quot;nodePoolId1121557241&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   NodePool response = clusterManagerClient.getNodePool(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NodePool getNodePool(GetNodePoolRequest request) {
+<span class="fc" id="L2315">    return getNodePoolCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves the requested node pool.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   GetNodePoolRequest request =
+   *       GetNodePoolRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePoolId(&quot;nodePoolId1121557241&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;NodePool&gt; future = clusterManagerClient.getNodePoolCallable().futureCall(request);
+   *   // Do something.
+   *   NodePool response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetNodePoolRequest, NodePool&gt; getNodePoolCallable() {
+<span class="fc" id="L2341">    return stub.getNodePoolCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a node pool for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String parent = &quot;parent-995424086&quot;;
+   *   NodePool nodePool = NodePool.newBuilder().build();
+   *   Operation response = clusterManagerClient.createNodePool(parent, nodePool);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent The parent (project, location, cluster id) where the node pool will be created.
+   *     Specified in the format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @param nodePool Required. The node pool to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation createNodePool(String parent, NodePool nodePool) {
+    CreateNodePoolRequest request =
+<span class="fc" id="L2365">        CreateNodePoolRequest.newBuilder().setParent(parent).setNodePool(nodePool).build();</span>
+<span class="fc" id="L2366">    return createNodePool(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a node pool for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   NodePool nodePool = NodePool.newBuilder().build();
+   *   Operation response =
+   *       clusterManagerClient.createNodePool(projectId, zone, clusterId, nodePool);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://developers.google.com/console/help/new/#projectnumber). This field has been
+   *     deprecated and replaced by the parent field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the parent field.
+   * @param clusterId Deprecated. The name of the cluster. This field has been deprecated and
+   *     replaced by the parent field.
+   * @param nodePool Required. The node pool to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation createNodePool(
+      String projectId, String zone, String clusterId, NodePool nodePool) {
+    CreateNodePoolRequest request =
+<span class="fc" id="L2400">        CreateNodePoolRequest.newBuilder()</span>
+<span class="fc" id="L2401">            .setProjectId(projectId)</span>
+<span class="fc" id="L2402">            .setZone(zone)</span>
+<span class="fc" id="L2403">            .setClusterId(clusterId)</span>
+<span class="fc" id="L2404">            .setNodePool(nodePool)</span>
+<span class="fc" id="L2405">            .build();</span>
+<span class="fc" id="L2406">    return createNodePool(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a node pool for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   CreateNodePoolRequest request =
+   *       CreateNodePoolRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePool(NodePool.newBuilder().build())
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.createNodePool(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation createNodePool(CreateNodePoolRequest request) {
+<span class="fc" id="L2433">    return createNodePoolCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a node pool for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   CreateNodePoolRequest request =
+   *       CreateNodePoolRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePool(NodePool.newBuilder().build())
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.createNodePoolCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateNodePoolRequest, Operation&gt; createNodePoolCallable() {
+<span class="fc" id="L2460">    return stub.createNodePoolCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a node pool from a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   Operation response = clusterManagerClient.deleteNodePool(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster, node pool id) of the node pool to delete.
+   *     Specified in the format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;/nodePools/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation deleteNodePool(String name) {
+<span class="fc" id="L2481">    DeleteNodePoolRequest request = DeleteNodePoolRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2482">    return deleteNodePool(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a node pool from a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   String nodePoolId = &quot;nodePoolId1121557241&quot;;
+   *   Operation response =
+   *       clusterManagerClient.deleteNodePool(projectId, zone, clusterId, nodePoolId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://developers.google.com/console/help/new/#projectnumber). This field has been
+   *     deprecated and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster. This field has been deprecated and
+   *     replaced by the name field.
+   * @param nodePoolId Deprecated. The name of the node pool to delete. This field has been
+   *     deprecated and replaced by the name field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation deleteNodePool(
+      String projectId, String zone, String clusterId, String nodePoolId) {
+    DeleteNodePoolRequest request =
+<span class="fc" id="L2517">        DeleteNodePoolRequest.newBuilder()</span>
+<span class="fc" id="L2518">            .setProjectId(projectId)</span>
+<span class="fc" id="L2519">            .setZone(zone)</span>
+<span class="fc" id="L2520">            .setClusterId(clusterId)</span>
+<span class="fc" id="L2521">            .setNodePoolId(nodePoolId)</span>
+<span class="fc" id="L2522">            .build();</span>
+<span class="fc" id="L2523">    return deleteNodePool(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a node pool from a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   DeleteNodePoolRequest request =
+   *       DeleteNodePoolRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePoolId(&quot;nodePoolId1121557241&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.deleteNodePool(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation deleteNodePool(DeleteNodePoolRequest request) {
+<span class="fc" id="L2550">    return deleteNodePoolCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a node pool from a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   DeleteNodePoolRequest request =
+   *       DeleteNodePoolRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePoolId(&quot;nodePoolId1121557241&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.deleteNodePoolCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteNodePoolRequest, Operation&gt; deleteNodePoolCallable() {
+<span class="fc" id="L2577">    return stub.deleteNodePoolCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Rolls back a previously Aborted or Failed NodePool upgrade. This makes no changes if the last
+   * upgrade successfully completed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   Operation response = clusterManagerClient.rollbackNodePoolUpgrade(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster, node pool id) of the node poll to rollback
+   *     upgrade. Specified in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;/nodePools/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation rollbackNodePoolUpgrade(String name) {
+    RollbackNodePoolUpgradeRequest request =
+<span class="fc" id="L2601">        RollbackNodePoolUpgradeRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2602">    return rollbackNodePoolUpgrade(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Rolls back a previously Aborted or Failed NodePool upgrade. This makes no changes if the last
+   * upgrade successfully completed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   String nodePoolId = &quot;nodePoolId1121557241&quot;;
+   *   Operation response =
+   *       clusterManagerClient.rollbackNodePoolUpgrade(projectId, zone, clusterId, nodePoolId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster to rollback. This field has been
+   *     deprecated and replaced by the name field.
+   * @param nodePoolId Deprecated. The name of the node pool to rollback. This field has been
+   *     deprecated and replaced by the name field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation rollbackNodePoolUpgrade(
+      String projectId, String zone, String clusterId, String nodePoolId) {
+    RollbackNodePoolUpgradeRequest request =
+<span class="fc" id="L2638">        RollbackNodePoolUpgradeRequest.newBuilder()</span>
+<span class="fc" id="L2639">            .setProjectId(projectId)</span>
+<span class="fc" id="L2640">            .setZone(zone)</span>
+<span class="fc" id="L2641">            .setClusterId(clusterId)</span>
+<span class="fc" id="L2642">            .setNodePoolId(nodePoolId)</span>
+<span class="fc" id="L2643">            .build();</span>
+<span class="fc" id="L2644">    return rollbackNodePoolUpgrade(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Rolls back a previously Aborted or Failed NodePool upgrade. This makes no changes if the last
+   * upgrade successfully completed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   RollbackNodePoolUpgradeRequest request =
+   *       RollbackNodePoolUpgradeRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePoolId(&quot;nodePoolId1121557241&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.rollbackNodePoolUpgrade(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation rollbackNodePoolUpgrade(RollbackNodePoolUpgradeRequest request) {
+<span class="fc" id="L2672">    return rollbackNodePoolUpgradeCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Rolls back a previously Aborted or Failed NodePool upgrade. This makes no changes if the last
+   * upgrade successfully completed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   RollbackNodePoolUpgradeRequest request =
+   *       RollbackNodePoolUpgradeRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePoolId(&quot;nodePoolId1121557241&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.rollbackNodePoolUpgradeCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RollbackNodePoolUpgradeRequest, Operation&gt;
+      rollbackNodePoolUpgradeCallable() {
+<span class="fc" id="L2701">    return stub.rollbackNodePoolUpgradeCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the NodeManagement options for a node pool.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetNodePoolManagementRequest request =
+   *       SetNodePoolManagementRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePoolId(&quot;nodePoolId1121557241&quot;)
+   *           .setManagement(NodeManagement.newBuilder().build())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.setNodePoolManagement(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setNodePoolManagement(SetNodePoolManagementRequest request) {
+<span class="fc" id="L2729">    return setNodePoolManagementCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the NodeManagement options for a node pool.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetNodePoolManagementRequest request =
+   *       SetNodePoolManagementRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePoolId(&quot;nodePoolId1121557241&quot;)
+   *           .setManagement(NodeManagement.newBuilder().build())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.setNodePoolManagementCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetNodePoolManagementRequest, Operation&gt;
+      setNodePoolManagementCallable() {
+<span class="fc" id="L2758">    return stub.setNodePoolManagementCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets labels on a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetLabelsRequest request =
+   *       SetLabelsRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .putAllResourceLabels(new HashMap&lt;String, String&gt;())
+   *           .setLabelFingerprint(&quot;labelFingerprint379449680&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.setLabels(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setLabels(SetLabelsRequest request) {
+<span class="fc" id="L2786">    return setLabelsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets labels on a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetLabelsRequest request =
+   *       SetLabelsRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .putAllResourceLabels(new HashMap&lt;String, String&gt;())
+   *           .setLabelFingerprint(&quot;labelFingerprint379449680&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = clusterManagerClient.setLabelsCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetLabelsRequest, Operation&gt; setLabelsCallable() {
+<span class="fc" id="L2813">    return stub.setLabelsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enables or disables the ABAC authorization mechanism on a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   boolean enabled = true;
+   *   Operation response = clusterManagerClient.setLegacyAbac(name, enabled);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster id) of the cluster to set legacy abac.
+   *     Specified in the format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @param enabled Required. Whether ABAC authorization will be enabled in the cluster.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setLegacyAbac(String name, boolean enabled) {
+    SetLegacyAbacRequest request =
+<span class="fc" id="L2837">        SetLegacyAbacRequest.newBuilder().setName(name).setEnabled(enabled).build();</span>
+<span class="fc" id="L2838">    return setLegacyAbac(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enables or disables the ABAC authorization mechanism on a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   boolean enabled = true;
+   *   Operation response = clusterManagerClient.setLegacyAbac(projectId, zone, clusterId, enabled);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840). This field has been deprecated
+   *     and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster to update. This field has been deprecated
+   *     and replaced by the name field.
+   * @param enabled Required. Whether ABAC authorization will be enabled in the cluster.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setLegacyAbac(
+      String projectId, String zone, String clusterId, boolean enabled) {
+    SetLegacyAbacRequest request =
+<span class="fc" id="L2871">        SetLegacyAbacRequest.newBuilder()</span>
+<span class="fc" id="L2872">            .setProjectId(projectId)</span>
+<span class="fc" id="L2873">            .setZone(zone)</span>
+<span class="fc" id="L2874">            .setClusterId(clusterId)</span>
+<span class="fc" id="L2875">            .setEnabled(enabled)</span>
+<span class="fc" id="L2876">            .build();</span>
+<span class="fc" id="L2877">    return setLegacyAbac(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enables or disables the ABAC authorization mechanism on a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetLegacyAbacRequest request =
+   *       SetLegacyAbacRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setEnabled(true)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.setLegacyAbac(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setLegacyAbac(SetLegacyAbacRequest request) {
+<span class="fc" id="L2904">    return setLegacyAbacCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enables or disables the ABAC authorization mechanism on a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetLegacyAbacRequest request =
+   *       SetLegacyAbacRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setEnabled(true)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.setLegacyAbacCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetLegacyAbacRequest, Operation&gt; setLegacyAbacCallable() {
+<span class="fc" id="L2931">    return stub.setLegacyAbacCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts master IP rotation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   Operation response = clusterManagerClient.startIPRotation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster id) of the cluster to start IP rotation.
+   *     Specified in the format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation startIPRotation(String name) {
+<span class="fc" id="L2952">    StartIPRotationRequest request = StartIPRotationRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2953">    return startIPRotation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts master IP rotation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   Operation response = clusterManagerClient.startIPRotation(projectId, zone, clusterId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://developers.google.com/console/help/new/#projectnumber). This field has been
+   *     deprecated and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster. This field has been deprecated and
+   *     replaced by the name field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation startIPRotation(String projectId, String zone, String clusterId) {
+    StartIPRotationRequest request =
+<span class="fc" id="L2983">        StartIPRotationRequest.newBuilder()</span>
+<span class="fc" id="L2984">            .setProjectId(projectId)</span>
+<span class="fc" id="L2985">            .setZone(zone)</span>
+<span class="fc" id="L2986">            .setClusterId(clusterId)</span>
+<span class="fc" id="L2987">            .build();</span>
+<span class="fc" id="L2988">    return startIPRotation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts master IP rotation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   StartIPRotationRequest request =
+   *       StartIPRotationRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .setRotateCredentials(true)
+   *           .build();
+   *   Operation response = clusterManagerClient.startIPRotation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation startIPRotation(StartIPRotationRequest request) {
+<span class="fc" id="L3015">    return startIPRotationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts master IP rotation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   StartIPRotationRequest request =
+   *       StartIPRotationRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .setRotateCredentials(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.startIPRotationCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;StartIPRotationRequest, Operation&gt; startIPRotationCallable() {
+<span class="fc" id="L3042">    return stub.startIPRotationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Completes master IP rotation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   Operation response = clusterManagerClient.completeIPRotation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster id) of the cluster to complete IP rotation.
+   *     Specified in the format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation completeIPRotation(String name) {
+    CompleteIPRotationRequest request =
+<span class="fc" id="L3064">        CompleteIPRotationRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L3065">    return completeIPRotation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Completes master IP rotation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   Operation response = clusterManagerClient.completeIPRotation(projectId, zone, clusterId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://developers.google.com/console/help/new/#projectnumber). This field has been
+   *     deprecated and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster. This field has been deprecated and
+   *     replaced by the name field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation completeIPRotation(String projectId, String zone, String clusterId) {
+    CompleteIPRotationRequest request =
+<span class="fc" id="L3095">        CompleteIPRotationRequest.newBuilder()</span>
+<span class="fc" id="L3096">            .setProjectId(projectId)</span>
+<span class="fc" id="L3097">            .setZone(zone)</span>
+<span class="fc" id="L3098">            .setClusterId(clusterId)</span>
+<span class="fc" id="L3099">            .build();</span>
+<span class="fc" id="L3100">    return completeIPRotation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Completes master IP rotation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   CompleteIPRotationRequest request =
+   *       CompleteIPRotationRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.completeIPRotation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation completeIPRotation(CompleteIPRotationRequest request) {
+<span class="fc" id="L3126">    return completeIPRotationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Completes master IP rotation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   CompleteIPRotationRequest request =
+   *       CompleteIPRotationRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.completeIPRotationCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CompleteIPRotationRequest, Operation&gt; completeIPRotationCallable() {
+<span class="fc" id="L3152">    return stub.completeIPRotationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the size for a specific node pool. The new size will be used for all replicas, including
+   * future replicas created by modifying
+   * [NodePool.locations][google.container.v1.NodePool.locations].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetNodePoolSizeRequest request =
+   *       SetNodePoolSizeRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePoolId(&quot;nodePoolId1121557241&quot;)
+   *           .setNodeCount(1539922066)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.setNodePoolSize(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setNodePoolSize(SetNodePoolSizeRequest request) {
+<span class="fc" id="L3182">    return setNodePoolSizeCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the size for a specific node pool. The new size will be used for all replicas, including
+   * future replicas created by modifying
+   * [NodePool.locations][google.container.v1.NodePool.locations].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetNodePoolSizeRequest request =
+   *       SetNodePoolSizeRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNodePoolId(&quot;nodePoolId1121557241&quot;)
+   *           .setNodeCount(1539922066)
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.setNodePoolSizeCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetNodePoolSizeRequest, Operation&gt; setNodePoolSizeCallable() {
+<span class="fc" id="L3212">    return stub.setNodePoolSizeCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enables or disables Network Policy for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   NetworkPolicy networkPolicy = NetworkPolicy.newBuilder().build();
+   *   Operation response = clusterManagerClient.setNetworkPolicy(name, networkPolicy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster id) of the cluster to set networking policy.
+   *     Specified in the format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @param networkPolicy Required. Configuration options for the NetworkPolicy feature.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setNetworkPolicy(String name, NetworkPolicy networkPolicy) {
+    SetNetworkPolicyRequest request =
+<span class="fc" id="L3236">        SetNetworkPolicyRequest.newBuilder().setName(name).setNetworkPolicy(networkPolicy).build();</span>
+<span class="fc" id="L3237">    return setNetworkPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enables or disables Network Policy for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   NetworkPolicy networkPolicy = NetworkPolicy.newBuilder().build();
+   *   Operation response =
+   *       clusterManagerClient.setNetworkPolicy(projectId, zone, clusterId, networkPolicy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Deprecated. The Google Developers Console [project ID or project
+   *     number](https://developers.google.com/console/help/new/#projectnumber). This field has been
+   *     deprecated and replaced by the name field.
+   * @param zone Deprecated. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   *     This field has been deprecated and replaced by the name field.
+   * @param clusterId Deprecated. The name of the cluster. This field has been deprecated and
+   *     replaced by the name field.
+   * @param networkPolicy Required. Configuration options for the NetworkPolicy feature.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setNetworkPolicy(
+      String projectId, String zone, String clusterId, NetworkPolicy networkPolicy) {
+    SetNetworkPolicyRequest request =
+<span class="fc" id="L3271">        SetNetworkPolicyRequest.newBuilder()</span>
+<span class="fc" id="L3272">            .setProjectId(projectId)</span>
+<span class="fc" id="L3273">            .setZone(zone)</span>
+<span class="fc" id="L3274">            .setClusterId(clusterId)</span>
+<span class="fc" id="L3275">            .setNetworkPolicy(networkPolicy)</span>
+<span class="fc" id="L3276">            .build();</span>
+<span class="fc" id="L3277">    return setNetworkPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enables or disables Network Policy for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetNetworkPolicyRequest request =
+   *       SetNetworkPolicyRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNetworkPolicy(NetworkPolicy.newBuilder().build())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.setNetworkPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setNetworkPolicy(SetNetworkPolicyRequest request) {
+<span class="fc" id="L3304">    return setNetworkPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enables or disables Network Policy for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetNetworkPolicyRequest request =
+   *       SetNetworkPolicyRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setNetworkPolicy(NetworkPolicy.newBuilder().build())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.setNetworkPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetNetworkPolicyRequest, Operation&gt; setNetworkPolicyCallable() {
+<span class="fc" id="L3331">    return stub.setNetworkPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the maintenance policy for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   MaintenancePolicy maintenancePolicy = MaintenancePolicy.newBuilder().build();
+   *   Operation response = clusterManagerClient.setMaintenancePolicy(name, maintenancePolicy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name The name (project, location, cluster id) of the cluster to set maintenance policy.
+   *     Specified in the format `projects/&amp;#42;/locations/&amp;#42;/clusters/&amp;#42;`.
+   * @param maintenancePolicy Required. The maintenance policy to be set for the cluster. An empty
+   *     field clears the existing maintenance policy.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setMaintenancePolicy(String name, MaintenancePolicy maintenancePolicy) {
+    SetMaintenancePolicyRequest request =
+<span class="fc" id="L3356">        SetMaintenancePolicyRequest.newBuilder()</span>
+<span class="fc" id="L3357">            .setName(name)</span>
+<span class="fc" id="L3358">            .setMaintenancePolicy(maintenancePolicy)</span>
+<span class="fc" id="L3359">            .build();</span>
+<span class="fc" id="L3360">    return setMaintenancePolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the maintenance policy for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String zone = &quot;zone3744684&quot;;
+   *   String clusterId = &quot;clusterId561939637&quot;;
+   *   MaintenancePolicy maintenancePolicy = MaintenancePolicy.newBuilder().build();
+   *   Operation response =
+   *       clusterManagerClient.setMaintenancePolicy(projectId, zone, clusterId, maintenancePolicy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. The Google Developers Console [project ID or project
+   *     number](https://support.google.com/cloud/answer/6158840).
+   * @param zone Required. The name of the Google Compute Engine
+   *     [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides.
+   * @param clusterId Required. The name of the cluster to update.
+   * @param maintenancePolicy Required. The maintenance policy to be set for the cluster. An empty
+   *     field clears the existing maintenance policy.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setMaintenancePolicy(
+      String projectId, String zone, String clusterId, MaintenancePolicy maintenancePolicy) {
+    SetMaintenancePolicyRequest request =
+<span class="fc" id="L3392">        SetMaintenancePolicyRequest.newBuilder()</span>
+<span class="fc" id="L3393">            .setProjectId(projectId)</span>
+<span class="fc" id="L3394">            .setZone(zone)</span>
+<span class="fc" id="L3395">            .setClusterId(clusterId)</span>
+<span class="fc" id="L3396">            .setMaintenancePolicy(maintenancePolicy)</span>
+<span class="fc" id="L3397">            .build();</span>
+<span class="fc" id="L3398">    return setMaintenancePolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the maintenance policy for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetMaintenancePolicyRequest request =
+   *       SetMaintenancePolicyRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setMaintenancePolicy(MaintenancePolicy.newBuilder().build())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   Operation response = clusterManagerClient.setMaintenancePolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Operation setMaintenancePolicy(SetMaintenancePolicyRequest request) {
+<span class="fc" id="L3425">    return setMaintenancePolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the maintenance policy for a cluster.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   SetMaintenancePolicyRequest request =
+   *       SetMaintenancePolicyRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setZone(&quot;zone3744684&quot;)
+   *           .setClusterId(&quot;clusterId561939637&quot;)
+   *           .setMaintenancePolicy(MaintenancePolicy.newBuilder().build())
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       clusterManagerClient.setMaintenancePolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetMaintenancePolicyRequest, Operation&gt;
+      setMaintenancePolicyCallable() {
+<span class="fc" id="L3453">    return stub.setMaintenancePolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists subnetworks that are usable for creating clusters in a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   ListUsableSubnetworksRequest request =
+   *       ListUsableSubnetworksRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (UsableSubnetwork element :
+   *       clusterManagerClient.listUsableSubnetworks(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListUsableSubnetworksPagedResponse listUsableSubnetworks(
+      ListUsableSubnetworksRequest request) {
+<span class="fc" id="L3483">    return listUsableSubnetworksPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists subnetworks that are usable for creating clusters in a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   ListUsableSubnetworksRequest request =
+   *       ListUsableSubnetworksRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;UsableSubnetwork&gt; future =
+   *       clusterManagerClient.listUsableSubnetworksPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (UsableSubnetwork element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListUsableSubnetworksRequest, ListUsableSubnetworksPagedResponse&gt;
+      listUsableSubnetworksPagedCallable() {
+<span class="fc" id="L3512">    return stub.listUsableSubnetworksPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists subnetworks that are usable for creating clusters in a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ClusterManagerClient clusterManagerClient = ClusterManagerClient.create()) {
+   *   ListUsableSubnetworksRequest request =
+   *       ListUsableSubnetworksRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListUsableSubnetworksResponse response =
+   *         clusterManagerClient.listUsableSubnetworksCallable().call(request);
+   *     for (UsableSubnetwork element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListUsableSubnetworksRequest, ListUsableSubnetworksResponse&gt;
+      listUsableSubnetworksCallable() {
+<span class="nc" id="L3548">    return stub.listUsableSubnetworksCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L3553">    stub.close();</span>
+<span class="fc" id="L3554">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L3558">    stub.shutdown();</span>
+<span class="nc" id="L3559">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L3563">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L3568">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L3573">    stub.shutdownNow();</span>
+<span class="nc" id="L3574">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L3578">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListUsableSubnetworksPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListUsableSubnetworksRequest,
+          ListUsableSubnetworksResponse,
+          UsableSubnetwork,
+          ListUsableSubnetworksPage,
+          ListUsableSubnetworksFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListUsableSubnetworksPagedResponse&gt; createAsync(
+        PageContext&lt;ListUsableSubnetworksRequest, ListUsableSubnetworksResponse, UsableSubnetwork&gt;
+            context,
+        ApiFuture&lt;ListUsableSubnetworksResponse&gt; futureResponse) {
+      ApiFuture&lt;ListUsableSubnetworksPage&gt; futurePage =
+<span class="fc" id="L3594">          ListUsableSubnetworksPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3595">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3597">          input -&gt; new ListUsableSubnetworksPagedResponse(input),</span>
+<span class="fc" id="L3598">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListUsableSubnetworksPagedResponse(ListUsableSubnetworksPage page) {
+<span class="fc" id="L3602">      super(page, ListUsableSubnetworksFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3603">    }</span>
+  }
+
+  public static class ListUsableSubnetworksPage
+      extends AbstractPage&lt;
+          ListUsableSubnetworksRequest,
+          ListUsableSubnetworksResponse,
+          UsableSubnetwork,
+          ListUsableSubnetworksPage&gt; {
+
+    private ListUsableSubnetworksPage(
+        PageContext&lt;ListUsableSubnetworksRequest, ListUsableSubnetworksResponse, UsableSubnetwork&gt;
+            context,
+        ListUsableSubnetworksResponse response) {
+<span class="fc" id="L3617">      super(context, response);</span>
+<span class="fc" id="L3618">    }</span>
+
+    private static ListUsableSubnetworksPage createEmptyPage() {
+<span class="fc" id="L3621">      return new ListUsableSubnetworksPage(null, null);</span>
+    }
+
+    @Override
+    protected ListUsableSubnetworksPage createPage(
+        PageContext&lt;ListUsableSubnetworksRequest, ListUsableSubnetworksResponse, UsableSubnetwork&gt;
+            context,
+        ListUsableSubnetworksResponse response) {
+<span class="fc" id="L3629">      return new ListUsableSubnetworksPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListUsableSubnetworksPage&gt; createPageAsync(
+        PageContext&lt;ListUsableSubnetworksRequest, ListUsableSubnetworksResponse, UsableSubnetwork&gt;
+            context,
+        ApiFuture&lt;ListUsableSubnetworksResponse&gt; futureResponse) {
+<span class="fc" id="L3637">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListUsableSubnetworksFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListUsableSubnetworksRequest,
+          ListUsableSubnetworksResponse,
+          UsableSubnetwork,
+          ListUsableSubnetworksPage,
+          ListUsableSubnetworksFixedSizeCollection&gt; {
+
+    private ListUsableSubnetworksFixedSizeCollection(
+        List&lt;ListUsableSubnetworksPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3651">      super(pages, collectionSize);</span>
+<span class="fc" id="L3652">    }</span>
+
+    private static ListUsableSubnetworksFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3655">      return new ListUsableSubnetworksFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListUsableSubnetworksFixedSizeCollection createCollection(
+        List&lt;ListUsableSubnetworksPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3661">      return new ListUsableSubnetworksFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

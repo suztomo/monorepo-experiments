@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>CloudShellServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-shell</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.shell.v1</a> &gt; <span class="el_source">CloudShellServiceClient.java</span></div><h1>CloudShellServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.shell.v1;
+
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.shell.v1.stub.CloudShellServiceStub;
+import com.google.cloud.shell.v1.stub.CloudShellServiceStubSettings;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: API for interacting with Google Cloud Shell. Each user of Cloud Shell has at
+ * least one environment, which has the ID &quot;default&quot;. Environment consists of a Docker image
+ * defining what is installed on the environment and a home directory containing the user's data
+ * that will remain across sessions. Clients use this API to start and fetch information about their
+ * environment, which can then be used to connect to that environment via a separate SSH client.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+ *   EnvironmentName name = EnvironmentName.of(&quot;[USER]&quot;, &quot;[ENVIRONMENT]&quot;);
+ *   Environment response = cloudShellServiceClient.getEnvironment(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the CloudShellServiceClient object to clean up resources
+ * such as threads. In the example above, try-with-resources is used, which automatically calls
+ * close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of CloudShellServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * CloudShellServiceSettings cloudShellServiceSettings =
+ *     CloudShellServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * CloudShellServiceClient cloudShellServiceClient =
+ *     CloudShellServiceClient.create(cloudShellServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * CloudShellServiceSettings cloudShellServiceSettings =
+ *     CloudShellServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * CloudShellServiceClient cloudShellServiceClient =
+ *     CloudShellServiceClient.create(cloudShellServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class CloudShellServiceClient implements BackgroundResource {
+  private final CloudShellServiceSettings settings;
+  private final CloudShellServiceStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of CloudShellServiceClient with default settings. */
+  public static final CloudShellServiceClient create() throws IOException {
+<span class="nc" id="L107">    return create(CloudShellServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of CloudShellServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final CloudShellServiceClient create(CloudShellServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L116">    return new CloudShellServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of CloudShellServiceClient, using the given stub for making calls. This
+   * is for advanced usage - prefer using create(CloudShellServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final CloudShellServiceClient create(CloudShellServiceStub stub) {
+<span class="nc" id="L125">    return new CloudShellServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of CloudShellServiceClient, using the given settings. This is protected
+   * so that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L133">  protected CloudShellServiceClient(CloudShellServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L134">    this.settings = settings;</span>
+<span class="fc" id="L135">    this.stub = ((CloudShellServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L136">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L137">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L140">  protected CloudShellServiceClient(CloudShellServiceStub stub) {</span>
+<span class="nc" id="L141">    this.settings = null;</span>
+<span class="nc" id="L142">    this.stub = stub;</span>
+<span class="nc" id="L143">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L144">  }</span>
+
+  public final CloudShellServiceSettings getSettings() {
+<span class="nc" id="L147">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public CloudShellServiceStub getStub() {
+<span class="nc" id="L152">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L160">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an environment. Returns NOT_FOUND if the environment does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   EnvironmentName name = EnvironmentName.of(&quot;[USER]&quot;, &quot;[ENVIRONMENT]&quot;);
+   *   Environment response = cloudShellServiceClient.getEnvironment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Name of the requested resource, for example
+   *     `users/me/environments/default` or
+   *     `users/someone{@literal @}example.com/environments/default`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Environment getEnvironment(EnvironmentName name) {
+    GetEnvironmentRequest request =
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">        GetEnvironmentRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L184">    return getEnvironment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an environment. Returns NOT_FOUND if the environment does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   String name = EnvironmentName.of(&quot;[USER]&quot;, &quot;[ENVIRONMENT]&quot;).toString();
+   *   Environment response = cloudShellServiceClient.getEnvironment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Name of the requested resource, for example
+   *     `users/me/environments/default` or
+   *     `users/someone{@literal @}example.com/environments/default`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Environment getEnvironment(String name) {
+<span class="fc" id="L206">    GetEnvironmentRequest request = GetEnvironmentRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L207">    return getEnvironment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an environment. Returns NOT_FOUND if the environment does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   GetEnvironmentRequest request =
+   *       GetEnvironmentRequest.newBuilder()
+   *           .setName(EnvironmentName.of(&quot;[USER]&quot;, &quot;[ENVIRONMENT]&quot;).toString())
+   *           .build();
+   *   Environment response = cloudShellServiceClient.getEnvironment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Environment getEnvironment(GetEnvironmentRequest request) {
+<span class="fc" id="L230">    return getEnvironmentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an environment. Returns NOT_FOUND if the environment does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   GetEnvironmentRequest request =
+   *       GetEnvironmentRequest.newBuilder()
+   *           .setName(EnvironmentName.of(&quot;[USER]&quot;, &quot;[ENVIRONMENT]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Environment&gt; future =
+   *       cloudShellServiceClient.getEnvironmentCallable().futureCall(request);
+   *   // Do something.
+   *   Environment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetEnvironmentRequest, Environment&gt; getEnvironmentCallable() {
+<span class="fc" id="L253">    return stub.getEnvironmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts an existing environment, allowing clients to connect to it. The returned operation will
+   * contain an instance of StartEnvironmentMetadata in its metadata field. Users can wait for the
+   * environment to start by polling this operation via GetOperation. Once the environment has
+   * finished starting and is ready to accept connections, the operation will contain a
+   * StartEnvironmentResponse in its response field.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   StartEnvironmentRequest request =
+   *       StartEnvironmentRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setAccessToken(&quot;accessToken-1042689291&quot;)
+   *           .addAllPublicKeys(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   StartEnvironmentResponse response =
+   *       cloudShellServiceClient.startEnvironmentAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;StartEnvironmentResponse, StartEnvironmentMetadata&gt;
+      startEnvironmentAsync(StartEnvironmentRequest request) {
+<span class="fc" id="L284">    return startEnvironmentOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts an existing environment, allowing clients to connect to it. The returned operation will
+   * contain an instance of StartEnvironmentMetadata in its metadata field. Users can wait for the
+   * environment to start by polling this operation via GetOperation. Once the environment has
+   * finished starting and is ready to accept connections, the operation will contain a
+   * StartEnvironmentResponse in its response field.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   StartEnvironmentRequest request =
+   *       StartEnvironmentRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setAccessToken(&quot;accessToken-1042689291&quot;)
+   *           .addAllPublicKeys(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   OperationFuture&lt;StartEnvironmentResponse, StartEnvironmentMetadata&gt; future =
+   *       cloudShellServiceClient.startEnvironmentOperationCallable().futureCall(request);
+   *   // Do something.
+   *   StartEnvironmentResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          StartEnvironmentRequest, StartEnvironmentResponse, StartEnvironmentMetadata&gt;
+      startEnvironmentOperationCallable() {
+<span class="fc" id="L315">    return stub.startEnvironmentOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts an existing environment, allowing clients to connect to it. The returned operation will
+   * contain an instance of StartEnvironmentMetadata in its metadata field. Users can wait for the
+   * environment to start by polling this operation via GetOperation. Once the environment has
+   * finished starting and is ready to accept connections, the operation will contain a
+   * StartEnvironmentResponse in its response field.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   StartEnvironmentRequest request =
+   *       StartEnvironmentRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setAccessToken(&quot;accessToken-1042689291&quot;)
+   *           .addAllPublicKeys(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       cloudShellServiceClient.startEnvironmentCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;StartEnvironmentRequest, Operation&gt; startEnvironmentCallable() {
+<span class="nc" id="L344">    return stub.startEnvironmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sends OAuth credentials to a running environment on behalf of a user. When this completes, the
+   * environment will be authorized to run various Google Cloud command line tools without requiring
+   * the user to manually authenticate.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   AuthorizeEnvironmentRequest request =
+   *       AuthorizeEnvironmentRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setAccessToken(&quot;accessToken-1042689291&quot;)
+   *           .setIdToken(&quot;idToken1642509726&quot;)
+   *           .setExpireTime(Timestamp.newBuilder().build())
+   *           .build();
+   *   AuthorizeEnvironmentResponse response =
+   *       cloudShellServiceClient.authorizeEnvironmentAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;AuthorizeEnvironmentResponse, AuthorizeEnvironmentMetadata&gt;
+      authorizeEnvironmentAsync(AuthorizeEnvironmentRequest request) {
+<span class="fc" id="L374">    return authorizeEnvironmentOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sends OAuth credentials to a running environment on behalf of a user. When this completes, the
+   * environment will be authorized to run various Google Cloud command line tools without requiring
+   * the user to manually authenticate.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   AuthorizeEnvironmentRequest request =
+   *       AuthorizeEnvironmentRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setAccessToken(&quot;accessToken-1042689291&quot;)
+   *           .setIdToken(&quot;idToken1642509726&quot;)
+   *           .setExpireTime(Timestamp.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;AuthorizeEnvironmentResponse, AuthorizeEnvironmentMetadata&gt; future =
+   *       cloudShellServiceClient.authorizeEnvironmentOperationCallable().futureCall(request);
+   *   // Do something.
+   *   AuthorizeEnvironmentResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          AuthorizeEnvironmentRequest, AuthorizeEnvironmentResponse, AuthorizeEnvironmentMetadata&gt;
+      authorizeEnvironmentOperationCallable() {
+<span class="fc" id="L404">    return stub.authorizeEnvironmentOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sends OAuth credentials to a running environment on behalf of a user. When this completes, the
+   * environment will be authorized to run various Google Cloud command line tools without requiring
+   * the user to manually authenticate.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   AuthorizeEnvironmentRequest request =
+   *       AuthorizeEnvironmentRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setAccessToken(&quot;accessToken-1042689291&quot;)
+   *           .setIdToken(&quot;idToken1642509726&quot;)
+   *           .setExpireTime(Timestamp.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       cloudShellServiceClient.authorizeEnvironmentCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;AuthorizeEnvironmentRequest, Operation&gt;
+      authorizeEnvironmentCallable() {
+<span class="nc" id="L433">    return stub.authorizeEnvironmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Adds a public SSH key to an environment, allowing clients with the corresponding private key to
+   * connect to that environment via SSH. If a key with the same content already exists, this will
+   * error with ALREADY_EXISTS.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   AddPublicKeyRequest request =
+   *       AddPublicKeyRequest.newBuilder()
+   *           .setEnvironment(&quot;environment-85904877&quot;)
+   *           .setKey(&quot;key106079&quot;)
+   *           .build();
+   *   AddPublicKeyResponse response = cloudShellServiceClient.addPublicKeyAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;AddPublicKeyResponse, AddPublicKeyMetadata&gt; addPublicKeyAsync(
+      AddPublicKeyRequest request) {
+<span class="fc" id="L460">    return addPublicKeyOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Adds a public SSH key to an environment, allowing clients with the corresponding private key to
+   * connect to that environment via SSH. If a key with the same content already exists, this will
+   * error with ALREADY_EXISTS.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   AddPublicKeyRequest request =
+   *       AddPublicKeyRequest.newBuilder()
+   *           .setEnvironment(&quot;environment-85904877&quot;)
+   *           .setKey(&quot;key106079&quot;)
+   *           .build();
+   *   OperationFuture&lt;AddPublicKeyResponse, AddPublicKeyMetadata&gt; future =
+   *       cloudShellServiceClient.addPublicKeyOperationCallable().futureCall(request);
+   *   // Do something.
+   *   AddPublicKeyResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;AddPublicKeyRequest, AddPublicKeyResponse, AddPublicKeyMetadata&gt;
+      addPublicKeyOperationCallable() {
+<span class="fc" id="L487">    return stub.addPublicKeyOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Adds a public SSH key to an environment, allowing clients with the corresponding private key to
+   * connect to that environment via SSH. If a key with the same content already exists, this will
+   * error with ALREADY_EXISTS.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   AddPublicKeyRequest request =
+   *       AddPublicKeyRequest.newBuilder()
+   *           .setEnvironment(&quot;environment-85904877&quot;)
+   *           .setKey(&quot;key106079&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       cloudShellServiceClient.addPublicKeyCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;AddPublicKeyRequest, Operation&gt; addPublicKeyCallable() {
+<span class="nc" id="L513">    return stub.addPublicKeyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Removes a public SSH key from an environment. Clients will no longer be able to connect to the
+   * environment using the corresponding private key. If a key with the same content is not present,
+   * this will error with NOT_FOUND.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   RemovePublicKeyRequest request =
+   *       RemovePublicKeyRequest.newBuilder()
+   *           .setEnvironment(&quot;environment-85904877&quot;)
+   *           .setKey(&quot;key106079&quot;)
+   *           .build();
+   *   RemovePublicKeyResponse response =
+   *       cloudShellServiceClient.removePublicKeyAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;RemovePublicKeyResponse, RemovePublicKeyMetadata&gt;
+      removePublicKeyAsync(RemovePublicKeyRequest request) {
+<span class="fc" id="L541">    return removePublicKeyOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Removes a public SSH key from an environment. Clients will no longer be able to connect to the
+   * environment using the corresponding private key. If a key with the same content is not present,
+   * this will error with NOT_FOUND.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   RemovePublicKeyRequest request =
+   *       RemovePublicKeyRequest.newBuilder()
+   *           .setEnvironment(&quot;environment-85904877&quot;)
+   *           .setKey(&quot;key106079&quot;)
+   *           .build();
+   *   OperationFuture&lt;RemovePublicKeyResponse, RemovePublicKeyMetadata&gt; future =
+   *       cloudShellServiceClient.removePublicKeyOperationCallable().futureCall(request);
+   *   // Do something.
+   *   RemovePublicKeyResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          RemovePublicKeyRequest, RemovePublicKeyResponse, RemovePublicKeyMetadata&gt;
+      removePublicKeyOperationCallable() {
+<span class="fc" id="L569">    return stub.removePublicKeyOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Removes a public SSH key from an environment. Clients will no longer be able to connect to the
+   * environment using the corresponding private key. If a key with the same content is not present,
+   * this will error with NOT_FOUND.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudShellServiceClient cloudShellServiceClient = CloudShellServiceClient.create()) {
+   *   RemovePublicKeyRequest request =
+   *       RemovePublicKeyRequest.newBuilder()
+   *           .setEnvironment(&quot;environment-85904877&quot;)
+   *           .setKey(&quot;key106079&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       cloudShellServiceClient.removePublicKeyCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RemovePublicKeyRequest, Operation&gt; removePublicKeyCallable() {
+<span class="nc" id="L595">    return stub.removePublicKeyCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L600">    stub.close();</span>
+<span class="fc" id="L601">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L605">    stub.shutdown();</span>
+<span class="nc" id="L606">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L610">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L615">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L620">    stub.shutdownNow();</span>
+<span class="nc" id="L621">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L625">    return stub.awaitTermination(duration, unit);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

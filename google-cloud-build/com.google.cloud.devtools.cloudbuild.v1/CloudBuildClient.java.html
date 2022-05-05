@@ -1,0 +1,2433 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>CloudBuildClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-build</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.devtools.cloudbuild.v1</a> &gt; <span class="el_source">CloudBuildClient.java</span></div><h1>CloudBuildClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.devtools.cloudbuild.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.devtools.cloudbuild.v1.stub.CloudBuildStub;
+import com.google.cloud.devtools.cloudbuild.v1.stub.CloudBuildStubSettings;
+import com.google.cloudbuild.v1.ApprovalResult;
+import com.google.cloudbuild.v1.ApproveBuildRequest;
+import com.google.cloudbuild.v1.Build;
+import com.google.cloudbuild.v1.BuildOperationMetadata;
+import com.google.cloudbuild.v1.BuildTrigger;
+import com.google.cloudbuild.v1.CancelBuildRequest;
+import com.google.cloudbuild.v1.CreateBuildRequest;
+import com.google.cloudbuild.v1.CreateBuildTriggerRequest;
+import com.google.cloudbuild.v1.CreateWorkerPoolOperationMetadata;
+import com.google.cloudbuild.v1.CreateWorkerPoolRequest;
+import com.google.cloudbuild.v1.DeleteBuildTriggerRequest;
+import com.google.cloudbuild.v1.DeleteWorkerPoolOperationMetadata;
+import com.google.cloudbuild.v1.DeleteWorkerPoolRequest;
+import com.google.cloudbuild.v1.GetBuildRequest;
+import com.google.cloudbuild.v1.GetBuildTriggerRequest;
+import com.google.cloudbuild.v1.GetWorkerPoolRequest;
+import com.google.cloudbuild.v1.ListBuildTriggersRequest;
+import com.google.cloudbuild.v1.ListBuildTriggersResponse;
+import com.google.cloudbuild.v1.ListBuildsRequest;
+import com.google.cloudbuild.v1.ListBuildsResponse;
+import com.google.cloudbuild.v1.ListWorkerPoolsRequest;
+import com.google.cloudbuild.v1.ListWorkerPoolsResponse;
+import com.google.cloudbuild.v1.LocationName;
+import com.google.cloudbuild.v1.ReceiveTriggerWebhookRequest;
+import com.google.cloudbuild.v1.ReceiveTriggerWebhookResponse;
+import com.google.cloudbuild.v1.RepoSource;
+import com.google.cloudbuild.v1.RetryBuildRequest;
+import com.google.cloudbuild.v1.RunBuildTriggerRequest;
+import com.google.cloudbuild.v1.UpdateBuildTriggerRequest;
+import com.google.cloudbuild.v1.UpdateWorkerPoolOperationMetadata;
+import com.google.cloudbuild.v1.UpdateWorkerPoolRequest;
+import com.google.cloudbuild.v1.WorkerPool;
+import com.google.cloudbuild.v1.WorkerPoolName;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Creates and manages builds on Google Cloud Platform.
+ *
+ * &lt;p&gt;The main concept used by this API is a `Build`, which describes the location of the source to
+ * build, how to build the source, and where to store the built artifacts, if any.
+ *
+ * &lt;p&gt;A user can list previously-requested builds or get builds by their ID to determine the status
+ * of the build.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+ *   String projectId = &quot;projectId-894832108&quot;;
+ *   String id = &quot;id3355&quot;;
+ *   Build response = cloudBuildClient.getBuild(projectId, id);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the CloudBuildClient object to clean up resources such as
+ * threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of CloudBuildSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * CloudBuildSettings cloudBuildSettings =
+ *     CloudBuildSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * CloudBuildClient cloudBuildClient = CloudBuildClient.create(cloudBuildSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * CloudBuildSettings cloudBuildSettings =
+ *     CloudBuildSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * CloudBuildClient cloudBuildClient = CloudBuildClient.create(cloudBuildSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class CloudBuildClient implements BackgroundResource {
+  private final CloudBuildSettings settings;
+  private final CloudBuildStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of CloudBuildClient with default settings. */
+  public static final CloudBuildClient create() throws IOException {
+<span class="nc" id="L150">    return create(CloudBuildSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of CloudBuildClient, using the given settings. The channels are created
+   * based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final CloudBuildClient create(CloudBuildSettings settings) throws IOException {
+<span class="fc" id="L158">    return new CloudBuildClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of CloudBuildClient, using the given stub for making calls. This is for
+   * advanced usage - prefer using create(CloudBuildSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final CloudBuildClient create(CloudBuildStub stub) {
+<span class="nc" id="L167">    return new CloudBuildClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of CloudBuildClient, using the given settings. This is protected so that
+   * it is easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   */
+<span class="fc" id="L174">  protected CloudBuildClient(CloudBuildSettings settings) throws IOException {</span>
+<span class="fc" id="L175">    this.settings = settings;</span>
+<span class="fc" id="L176">    this.stub = ((CloudBuildStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L177">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L178">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L181">  protected CloudBuildClient(CloudBuildStub stub) {</span>
+<span class="nc" id="L182">    this.settings = null;</span>
+<span class="nc" id="L183">    this.stub = stub;</span>
+<span class="nc" id="L184">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L185">  }</span>
+
+  public final CloudBuildSettings getSettings() {
+<span class="nc" id="L188">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public CloudBuildStub getStub() {
+<span class="nc" id="L193">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L201">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts a build with the specified configuration.
+   *
+   * &lt;p&gt;This method returns a long-running `Operation`, which includes the build ID. Pass the build
+   * ID to `GetBuild` to determine the build status (such as `SUCCESS` or `FAILURE`).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   Build build = Build.newBuilder().build();
+   *   Build response = cloudBuildClient.createBuildAsync(projectId, build).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. ID of the project.
+   * @param build Required. Build resource to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Build, BuildOperationMetadata&gt; createBuildAsync(
+      String projectId, Build build) {
+    CreateBuildRequest request =
+<span class="fc" id="L228">        CreateBuildRequest.newBuilder().setProjectId(projectId).setBuild(build).build();</span>
+<span class="fc" id="L229">    return createBuildAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts a build with the specified configuration.
+   *
+   * &lt;p&gt;This method returns a long-running `Operation`, which includes the build ID. Pass the build
+   * ID to `GetBuild` to determine the build status (such as `SUCCESS` or `FAILURE`).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   CreateBuildRequest request =
+   *       CreateBuildRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setBuild(Build.newBuilder().build())
+   *           .build();
+   *   Build response = cloudBuildClient.createBuildAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Build, BuildOperationMetadata&gt; createBuildAsync(
+      CreateBuildRequest request) {
+<span class="fc" id="L258">    return createBuildOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts a build with the specified configuration.
+   *
+   * &lt;p&gt;This method returns a long-running `Operation`, which includes the build ID. Pass the build
+   * ID to `GetBuild` to determine the build status (such as `SUCCESS` or `FAILURE`).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   CreateBuildRequest request =
+   *       CreateBuildRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setBuild(Build.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Build, BuildOperationMetadata&gt; future =
+   *       cloudBuildClient.createBuildOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Build response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateBuildRequest, Build, BuildOperationMetadata&gt;
+      createBuildOperationCallable() {
+<span class="fc" id="L287">    return stub.createBuildOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts a build with the specified configuration.
+   *
+   * &lt;p&gt;This method returns a long-running `Operation`, which includes the build ID. Pass the build
+   * ID to `GetBuild` to determine the build status (such as `SUCCESS` or `FAILURE`).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   CreateBuildRequest request =
+   *       CreateBuildRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setBuild(Build.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = cloudBuildClient.createBuildCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateBuildRequest, Operation&gt; createBuildCallable() {
+<span class="nc" id="L314">    return stub.createBuildCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about a previously requested build.
+   *
+   * &lt;p&gt;The `Build` that is returned includes its status (such as `SUCCESS`, `FAILURE`, or
+   * `WORKING`), and timing information.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String id = &quot;id3355&quot;;
+   *   Build response = cloudBuildClient.getBuild(projectId, id);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. ID of the project.
+   * @param id Required. ID of the build.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Build getBuild(String projectId, String id) {
+    GetBuildRequest request =
+<span class="fc" id="L340">        GetBuildRequest.newBuilder().setProjectId(projectId).setId(id).build();</span>
+<span class="fc" id="L341">    return getBuild(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about a previously requested build.
+   *
+   * &lt;p&gt;The `Build` that is returned includes its status (such as `SUCCESS`, `FAILURE`, or
+   * `WORKING`), and timing information.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   GetBuildRequest request =
+   *       GetBuildRequest.newBuilder()
+   *           .setName(BuildName.ofProjectBuildName(&quot;[PROJECT]&quot;, &quot;[BUILD]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setId(&quot;id3355&quot;)
+   *           .build();
+   *   Build response = cloudBuildClient.getBuild(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Build getBuild(GetBuildRequest request) {
+<span class="fc" id="L369">    return getBuildCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about a previously requested build.
+   *
+   * &lt;p&gt;The `Build` that is returned includes its status (such as `SUCCESS`, `FAILURE`, or
+   * `WORKING`), and timing information.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   GetBuildRequest request =
+   *       GetBuildRequest.newBuilder()
+   *           .setName(BuildName.ofProjectBuildName(&quot;[PROJECT]&quot;, &quot;[BUILD]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setId(&quot;id3355&quot;)
+   *           .build();
+   *   ApiFuture&lt;Build&gt; future = cloudBuildClient.getBuildCallable().futureCall(request);
+   *   // Do something.
+   *   Build response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetBuildRequest, Build&gt; getBuildCallable() {
+<span class="fc" id="L396">    return stub.getBuildCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists previously requested builds.
+   *
+   * &lt;p&gt;Previously requested builds may still be in-progress, or may have finished successfully or
+   * unsuccessfully.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String filter = &quot;filter-1274492040&quot;;
+   *   for (Build element : cloudBuildClient.listBuilds(projectId, filter).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. ID of the project.
+   * @param filter The raw filter text to constrain the results.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBuildsPagedResponse listBuilds(String projectId, String filter) {
+    ListBuildsRequest request =
+<span class="fc" id="L424">        ListBuildsRequest.newBuilder().setProjectId(projectId).setFilter(filter).build();</span>
+<span class="fc" id="L425">    return listBuilds(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists previously requested builds.
+   *
+   * &lt;p&gt;Previously requested builds may still be in-progress, or may have finished successfully or
+   * unsuccessfully.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   ListBuildsRequest request =
+   *       ListBuildsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   for (Build element : cloudBuildClient.listBuilds(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBuildsPagedResponse listBuilds(ListBuildsRequest request) {
+<span class="fc" id="L457">    return listBuildsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists previously requested builds.
+   *
+   * &lt;p&gt;Previously requested builds may still be in-progress, or may have finished successfully or
+   * unsuccessfully.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   ListBuildsRequest request =
+   *       ListBuildsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;Build&gt; future = cloudBuildClient.listBuildsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Build element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListBuildsRequest, ListBuildsPagedResponse&gt; listBuildsPagedCallable() {
+<span class="fc" id="L488">    return stub.listBuildsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists previously requested builds.
+   *
+   * &lt;p&gt;Previously requested builds may still be in-progress, or may have finished successfully or
+   * unsuccessfully.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   ListBuildsRequest request =
+   *       ListBuildsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListBuildsResponse response = cloudBuildClient.listBuildsCallable().call(request);
+   *     for (Build element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListBuildsRequest, ListBuildsResponse&gt; listBuildsCallable() {
+<span class="nc" id="L526">    return stub.listBuildsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Cancels a build in progress.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String id = &quot;id3355&quot;;
+   *   Build response = cloudBuildClient.cancelBuild(projectId, id);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. ID of the project.
+   * @param id Required. ID of the build.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Build cancelBuild(String projectId, String id) {
+    CancelBuildRequest request =
+<span class="fc" id="L549">        CancelBuildRequest.newBuilder().setProjectId(projectId).setId(id).build();</span>
+<span class="fc" id="L550">    return cancelBuild(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Cancels a build in progress.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   CancelBuildRequest request =
+   *       CancelBuildRequest.newBuilder()
+   *           .setName(BuildName.ofProjectBuildName(&quot;[PROJECT]&quot;, &quot;[BUILD]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setId(&quot;id3355&quot;)
+   *           .build();
+   *   Build response = cloudBuildClient.cancelBuild(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Build cancelBuild(CancelBuildRequest request) {
+<span class="fc" id="L575">    return cancelBuildCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Cancels a build in progress.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   CancelBuildRequest request =
+   *       CancelBuildRequest.newBuilder()
+   *           .setName(BuildName.ofProjectBuildName(&quot;[PROJECT]&quot;, &quot;[BUILD]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setId(&quot;id3355&quot;)
+   *           .build();
+   *   ApiFuture&lt;Build&gt; future = cloudBuildClient.cancelBuildCallable().futureCall(request);
+   *   // Do something.
+   *   Build response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CancelBuildRequest, Build&gt; cancelBuildCallable() {
+<span class="fc" id="L599">    return stub.cancelBuildCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new build based on the specified build.
+   *
+   * &lt;p&gt;This method creates a new build using the original build request, which may or may not
+   * result in an identical build.
+   *
+   * &lt;p&gt;For triggered builds:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;Triggered builds resolve to a precise revision; therefore a retry of a triggered build
+   *       will result in a build that uses the same revision.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;For non-triggered builds that specify `RepoSource`:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;If the original build built from the tip of a branch, the retried build will build from
+   *       the tip of that branch, which may not be the same revision as the original build.
+   *   &lt;li&gt;If the original build specified a commit sha or revision ID, the retried build will use
+   *       the identical source.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;For builds that specify `StorageSource`:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;If the original build pulled source from Google Cloud Storage without specifying the
+   *       generation of the object, the new build will use the current object, which may be
+   *       different from the original build source.
+   *   &lt;li&gt;If the original build pulled source from Cloud Storage and specified the generation of
+   *       the object, the new build will attempt to use the same object, which may or may not be
+   *       available depending on the bucket's lifecycle management settings.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String id = &quot;id3355&quot;;
+   *   Build response = cloudBuildClient.retryBuildAsync(projectId, id).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. ID of the project.
+   * @param id Required. Build ID of the original build.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Build, BuildOperationMetadata&gt; retryBuildAsync(
+      String projectId, String id) {
+    RetryBuildRequest request =
+<span class="fc" id="L653">        RetryBuildRequest.newBuilder().setProjectId(projectId).setId(id).build();</span>
+<span class="fc" id="L654">    return retryBuildAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new build based on the specified build.
+   *
+   * &lt;p&gt;This method creates a new build using the original build request, which may or may not
+   * result in an identical build.
+   *
+   * &lt;p&gt;For triggered builds:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;Triggered builds resolve to a precise revision; therefore a retry of a triggered build
+   *       will result in a build that uses the same revision.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;For non-triggered builds that specify `RepoSource`:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;If the original build built from the tip of a branch, the retried build will build from
+   *       the tip of that branch, which may not be the same revision as the original build.
+   *   &lt;li&gt;If the original build specified a commit sha or revision ID, the retried build will use
+   *       the identical source.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;For builds that specify `StorageSource`:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;If the original build pulled source from Google Cloud Storage without specifying the
+   *       generation of the object, the new build will use the current object, which may be
+   *       different from the original build source.
+   *   &lt;li&gt;If the original build pulled source from Cloud Storage and specified the generation of
+   *       the object, the new build will attempt to use the same object, which may or may not be
+   *       available depending on the bucket's lifecycle management settings.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   RetryBuildRequest request =
+   *       RetryBuildRequest.newBuilder()
+   *           .setName(BuildName.ofProjectBuildName(&quot;[PROJECT]&quot;, &quot;[BUILD]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setId(&quot;id3355&quot;)
+   *           .build();
+   *   Build response = cloudBuildClient.retryBuildAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Build, BuildOperationMetadata&gt; retryBuildAsync(
+      RetryBuildRequest request) {
+<span class="fc" id="L710">    return retryBuildOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new build based on the specified build.
+   *
+   * &lt;p&gt;This method creates a new build using the original build request, which may or may not
+   * result in an identical build.
+   *
+   * &lt;p&gt;For triggered builds:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;Triggered builds resolve to a precise revision; therefore a retry of a triggered build
+   *       will result in a build that uses the same revision.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;For non-triggered builds that specify `RepoSource`:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;If the original build built from the tip of a branch, the retried build will build from
+   *       the tip of that branch, which may not be the same revision as the original build.
+   *   &lt;li&gt;If the original build specified a commit sha or revision ID, the retried build will use
+   *       the identical source.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;For builds that specify `StorageSource`:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;If the original build pulled source from Google Cloud Storage without specifying the
+   *       generation of the object, the new build will use the current object, which may be
+   *       different from the original build source.
+   *   &lt;li&gt;If the original build pulled source from Cloud Storage and specified the generation of
+   *       the object, the new build will attempt to use the same object, which may or may not be
+   *       available depending on the bucket's lifecycle management settings.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   RetryBuildRequest request =
+   *       RetryBuildRequest.newBuilder()
+   *           .setName(BuildName.ofProjectBuildName(&quot;[PROJECT]&quot;, &quot;[BUILD]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setId(&quot;id3355&quot;)
+   *           .build();
+   *   OperationFuture&lt;Build, BuildOperationMetadata&gt; future =
+   *       cloudBuildClient.retryBuildOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Build response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;RetryBuildRequest, Build, BuildOperationMetadata&gt;
+      retryBuildOperationCallable() {
+<span class="fc" id="L766">    return stub.retryBuildOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new build based on the specified build.
+   *
+   * &lt;p&gt;This method creates a new build using the original build request, which may or may not
+   * result in an identical build.
+   *
+   * &lt;p&gt;For triggered builds:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;Triggered builds resolve to a precise revision; therefore a retry of a triggered build
+   *       will result in a build that uses the same revision.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;For non-triggered builds that specify `RepoSource`:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;If the original build built from the tip of a branch, the retried build will build from
+   *       the tip of that branch, which may not be the same revision as the original build.
+   *   &lt;li&gt;If the original build specified a commit sha or revision ID, the retried build will use
+   *       the identical source.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;For builds that specify `StorageSource`:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;If the original build pulled source from Google Cloud Storage without specifying the
+   *       generation of the object, the new build will use the current object, which may be
+   *       different from the original build source.
+   *   &lt;li&gt;If the original build pulled source from Cloud Storage and specified the generation of
+   *       the object, the new build will attempt to use the same object, which may or may not be
+   *       available depending on the bucket's lifecycle management settings.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   RetryBuildRequest request =
+   *       RetryBuildRequest.newBuilder()
+   *           .setName(BuildName.ofProjectBuildName(&quot;[PROJECT]&quot;, &quot;[BUILD]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setId(&quot;id3355&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = cloudBuildClient.retryBuildCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RetryBuildRequest, Operation&gt; retryBuildCallable() {
+<span class="nc" id="L820">    return stub.retryBuildCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Approves or rejects a pending build.
+   *
+   * &lt;p&gt;If approved, the returned LRO will be analogous to the LRO returned from a CreateBuild call.
+   *
+   * &lt;p&gt;If rejected, the returned LRO will be immediately done.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   ApprovalResult approvalResult = ApprovalResult.newBuilder().build();
+   *   Build response = cloudBuildClient.approveBuildAsync(name, approvalResult).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Name of the target build. For example:
+   *     &quot;projects/{$project_id}/builds/{$build_id}&quot;
+   * @param approvalResult Approval decision and metadata.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Build, BuildOperationMetadata&gt; approveBuildAsync(
+      String name, ApprovalResult approvalResult) {
+    ApproveBuildRequest request =
+<span class="fc" id="L849">        ApproveBuildRequest.newBuilder().setName(name).setApprovalResult(approvalResult).build();</span>
+<span class="fc" id="L850">    return approveBuildAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Approves or rejects a pending build.
+   *
+   * &lt;p&gt;If approved, the returned LRO will be analogous to the LRO returned from a CreateBuild call.
+   *
+   * &lt;p&gt;If rejected, the returned LRO will be immediately done.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   ApproveBuildRequest request =
+   *       ApproveBuildRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setApprovalResult(ApprovalResult.newBuilder().build())
+   *           .build();
+   *   Build response = cloudBuildClient.approveBuildAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Build, BuildOperationMetadata&gt; approveBuildAsync(
+      ApproveBuildRequest request) {
+<span class="fc" id="L879">    return approveBuildOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Approves or rejects a pending build.
+   *
+   * &lt;p&gt;If approved, the returned LRO will be analogous to the LRO returned from a CreateBuild call.
+   *
+   * &lt;p&gt;If rejected, the returned LRO will be immediately done.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   ApproveBuildRequest request =
+   *       ApproveBuildRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setApprovalResult(ApprovalResult.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Build, BuildOperationMetadata&gt; future =
+   *       cloudBuildClient.approveBuildOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Build response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;ApproveBuildRequest, Build, BuildOperationMetadata&gt;
+      approveBuildOperationCallable() {
+<span class="fc" id="L908">    return stub.approveBuildOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Approves or rejects a pending build.
+   *
+   * &lt;p&gt;If approved, the returned LRO will be analogous to the LRO returned from a CreateBuild call.
+   *
+   * &lt;p&gt;If rejected, the returned LRO will be immediately done.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   ApproveBuildRequest request =
+   *       ApproveBuildRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setApprovalResult(ApprovalResult.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = cloudBuildClient.approveBuildCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ApproveBuildRequest, Operation&gt; approveBuildCallable() {
+<span class="nc" id="L935">    return stub.approveBuildCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new `BuildTrigger`.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   BuildTrigger trigger = BuildTrigger.newBuilder().build();
+   *   BuildTrigger response = cloudBuildClient.createBuildTrigger(projectId, trigger);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. ID of the project for which to configure automatic builds.
+   * @param trigger Required. `BuildTrigger` to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BuildTrigger createBuildTrigger(String projectId, BuildTrigger trigger) {
+    CreateBuildTriggerRequest request =
+<span class="fc" id="L960">        CreateBuildTriggerRequest.newBuilder().setProjectId(projectId).setTrigger(trigger).build();</span>
+<span class="fc" id="L961">    return createBuildTrigger(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new `BuildTrigger`.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   CreateBuildTriggerRequest request =
+   *       CreateBuildTriggerRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTrigger(BuildTrigger.newBuilder().build())
+   *           .build();
+   *   BuildTrigger response = cloudBuildClient.createBuildTrigger(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BuildTrigger createBuildTrigger(CreateBuildTriggerRequest request) {
+<span class="fc" id="L988">    return createBuildTriggerCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new `BuildTrigger`.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   CreateBuildTriggerRequest request =
+   *       CreateBuildTriggerRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTrigger(BuildTrigger.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;BuildTrigger&gt; future =
+   *       cloudBuildClient.createBuildTriggerCallable().futureCall(request);
+   *   // Do something.
+   *   BuildTrigger response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateBuildTriggerRequest, BuildTrigger&gt; createBuildTriggerCallable() {
+<span class="fc" id="L1015">    return stub.createBuildTriggerCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about a `BuildTrigger`.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String triggerId = &quot;triggerId-648752909&quot;;
+   *   BuildTrigger response = cloudBuildClient.getBuildTrigger(projectId, triggerId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. ID of the project that owns the trigger.
+   * @param triggerId Required. Identifier (`id` or `name`) of the `BuildTrigger` to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BuildTrigger getBuildTrigger(String projectId, String triggerId) {
+    GetBuildTriggerRequest request =
+<span class="fc" id="L1040">        GetBuildTriggerRequest.newBuilder().setProjectId(projectId).setTriggerId(triggerId).build();</span>
+<span class="fc" id="L1041">    return getBuildTrigger(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about a `BuildTrigger`.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   GetBuildTriggerRequest request =
+   *       GetBuildTriggerRequest.newBuilder()
+   *           .setName(BuildTriggerName.ofProjectTriggerName(&quot;[PROJECT]&quot;, &quot;[TRIGGER]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTriggerId(&quot;triggerId-648752909&quot;)
+   *           .build();
+   *   BuildTrigger response = cloudBuildClient.getBuildTrigger(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BuildTrigger getBuildTrigger(GetBuildTriggerRequest request) {
+<span class="fc" id="L1068">    return getBuildTriggerCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about a `BuildTrigger`.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   GetBuildTriggerRequest request =
+   *       GetBuildTriggerRequest.newBuilder()
+   *           .setName(BuildTriggerName.ofProjectTriggerName(&quot;[PROJECT]&quot;, &quot;[TRIGGER]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTriggerId(&quot;triggerId-648752909&quot;)
+   *           .build();
+   *   ApiFuture&lt;BuildTrigger&gt; future =
+   *       cloudBuildClient.getBuildTriggerCallable().futureCall(request);
+   *   // Do something.
+   *   BuildTrigger response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetBuildTriggerRequest, BuildTrigger&gt; getBuildTriggerCallable() {
+<span class="fc" id="L1095">    return stub.getBuildTriggerCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists existing `BuildTrigger`s.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   for (BuildTrigger element : cloudBuildClient.listBuildTriggers(projectId).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. ID of the project for which to list BuildTriggers.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBuildTriggersPagedResponse listBuildTriggers(String projectId) {
+    ListBuildTriggersRequest request =
+<span class="fc" id="L1120">        ListBuildTriggersRequest.newBuilder().setProjectId(projectId).build();</span>
+<span class="fc" id="L1121">    return listBuildTriggers(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists existing `BuildTrigger`s.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   ListBuildTriggersRequest request =
+   *       ListBuildTriggersRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (BuildTrigger element : cloudBuildClient.listBuildTriggers(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBuildTriggersPagedResponse listBuildTriggers(ListBuildTriggersRequest request) {
+<span class="fc" id="L1151">    return listBuildTriggersPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists existing `BuildTrigger`s.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   ListBuildTriggersRequest request =
+   *       ListBuildTriggersRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;BuildTrigger&gt; future =
+   *       cloudBuildClient.listBuildTriggersPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (BuildTrigger element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListBuildTriggersRequest, ListBuildTriggersPagedResponse&gt;
+      listBuildTriggersPagedCallable() {
+<span class="fc" id="L1182">    return stub.listBuildTriggersPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists existing `BuildTrigger`s.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   ListBuildTriggersRequest request =
+   *       ListBuildTriggersRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListBuildTriggersResponse response =
+   *         cloudBuildClient.listBuildTriggersCallable().call(request);
+   *     for (BuildTrigger element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListBuildTriggersRequest, ListBuildTriggersResponse&gt;
+      listBuildTriggersCallable() {
+<span class="nc" id="L1220">    return stub.listBuildTriggersCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a `BuildTrigger` by its project ID and trigger ID.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String triggerId = &quot;triggerId-648752909&quot;;
+   *   cloudBuildClient.deleteBuildTrigger(projectId, triggerId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. ID of the project that owns the trigger.
+   * @param triggerId Required. ID of the `BuildTrigger` to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteBuildTrigger(String projectId, String triggerId) {
+    DeleteBuildTriggerRequest request =
+<span class="fc" id="L1245">        DeleteBuildTriggerRequest.newBuilder()</span>
+<span class="fc" id="L1246">            .setProjectId(projectId)</span>
+<span class="fc" id="L1247">            .setTriggerId(triggerId)</span>
+<span class="fc" id="L1248">            .build();</span>
+<span class="fc" id="L1249">    deleteBuildTrigger(request);</span>
+<span class="fc" id="L1250">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a `BuildTrigger` by its project ID and trigger ID.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   DeleteBuildTriggerRequest request =
+   *       DeleteBuildTriggerRequest.newBuilder()
+   *           .setName(BuildTriggerName.ofProjectTriggerName(&quot;[PROJECT]&quot;, &quot;[TRIGGER]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTriggerId(&quot;triggerId-648752909&quot;)
+   *           .build();
+   *   cloudBuildClient.deleteBuildTrigger(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteBuildTrigger(DeleteBuildTriggerRequest request) {
+<span class="fc" id="L1276">    deleteBuildTriggerCallable().call(request);</span>
+<span class="fc" id="L1277">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a `BuildTrigger` by its project ID and trigger ID.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   DeleteBuildTriggerRequest request =
+   *       DeleteBuildTriggerRequest.newBuilder()
+   *           .setName(BuildTriggerName.ofProjectTriggerName(&quot;[PROJECT]&quot;, &quot;[TRIGGER]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTriggerId(&quot;triggerId-648752909&quot;)
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = cloudBuildClient.deleteBuildTriggerCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteBuildTriggerRequest, Empty&gt; deleteBuildTriggerCallable() {
+<span class="fc" id="L1302">    return stub.deleteBuildTriggerCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `BuildTrigger` by its project ID and trigger ID.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String triggerId = &quot;triggerId-648752909&quot;;
+   *   BuildTrigger trigger = BuildTrigger.newBuilder().build();
+   *   BuildTrigger response = cloudBuildClient.updateBuildTrigger(projectId, triggerId, trigger);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. ID of the project that owns the trigger.
+   * @param triggerId Required. ID of the `BuildTrigger` to update.
+   * @param trigger Required. `BuildTrigger` to update.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BuildTrigger updateBuildTrigger(
+      String projectId, String triggerId, BuildTrigger trigger) {
+    UpdateBuildTriggerRequest request =
+<span class="fc" id="L1330">        UpdateBuildTriggerRequest.newBuilder()</span>
+<span class="fc" id="L1331">            .setProjectId(projectId)</span>
+<span class="fc" id="L1332">            .setTriggerId(triggerId)</span>
+<span class="fc" id="L1333">            .setTrigger(trigger)</span>
+<span class="fc" id="L1334">            .build();</span>
+<span class="fc" id="L1335">    return updateBuildTrigger(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `BuildTrigger` by its project ID and trigger ID.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   UpdateBuildTriggerRequest request =
+   *       UpdateBuildTriggerRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTriggerId(&quot;triggerId-648752909&quot;)
+   *           .setTrigger(BuildTrigger.newBuilder().build())
+   *           .build();
+   *   BuildTrigger response = cloudBuildClient.updateBuildTrigger(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BuildTrigger updateBuildTrigger(UpdateBuildTriggerRequest request) {
+<span class="fc" id="L1362">    return updateBuildTriggerCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `BuildTrigger` by its project ID and trigger ID.
+   *
+   * &lt;p&gt;This API is experimental.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   UpdateBuildTriggerRequest request =
+   *       UpdateBuildTriggerRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTriggerId(&quot;triggerId-648752909&quot;)
+   *           .setTrigger(BuildTrigger.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;BuildTrigger&gt; future =
+   *       cloudBuildClient.updateBuildTriggerCallable().futureCall(request);
+   *   // Do something.
+   *   BuildTrigger response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateBuildTriggerRequest, BuildTrigger&gt; updateBuildTriggerCallable() {
+<span class="fc" id="L1389">    return stub.updateBuildTriggerCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Runs a `BuildTrigger` at a particular source revision.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String triggerId = &quot;triggerId-648752909&quot;;
+   *   RepoSource source = RepoSource.newBuilder().build();
+   *   Build response = cloudBuildClient.runBuildTriggerAsync(projectId, triggerId, source).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. ID of the project.
+   * @param triggerId Required. ID of the trigger.
+   * @param source Source to build against this trigger.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Build, BuildOperationMetadata&gt; runBuildTriggerAsync(
+      String projectId, String triggerId, RepoSource source) {
+    RunBuildTriggerRequest request =
+<span class="fc" id="L1415">        RunBuildTriggerRequest.newBuilder()</span>
+<span class="fc" id="L1416">            .setProjectId(projectId)</span>
+<span class="fc" id="L1417">            .setTriggerId(triggerId)</span>
+<span class="fc" id="L1418">            .setSource(source)</span>
+<span class="fc" id="L1419">            .build();</span>
+<span class="fc" id="L1420">    return runBuildTriggerAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Runs a `BuildTrigger` at a particular source revision.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   RunBuildTriggerRequest request =
+   *       RunBuildTriggerRequest.newBuilder()
+   *           .setName(BuildTriggerName.ofProjectTriggerName(&quot;[PROJECT]&quot;, &quot;[TRIGGER]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTriggerId(&quot;triggerId-648752909&quot;)
+   *           .setSource(RepoSource.newBuilder().build())
+   *           .build();
+   *   Build response = cloudBuildClient.runBuildTriggerAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Build, BuildOperationMetadata&gt; runBuildTriggerAsync(
+      RunBuildTriggerRequest request) {
+<span class="fc" id="L1447">    return runBuildTriggerOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Runs a `BuildTrigger` at a particular source revision.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   RunBuildTriggerRequest request =
+   *       RunBuildTriggerRequest.newBuilder()
+   *           .setName(BuildTriggerName.ofProjectTriggerName(&quot;[PROJECT]&quot;, &quot;[TRIGGER]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTriggerId(&quot;triggerId-648752909&quot;)
+   *           .setSource(RepoSource.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Build, BuildOperationMetadata&gt; future =
+   *       cloudBuildClient.runBuildTriggerOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Build response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;RunBuildTriggerRequest, Build, BuildOperationMetadata&gt;
+      runBuildTriggerOperationCallable() {
+<span class="fc" id="L1474">    return stub.runBuildTriggerOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Runs a `BuildTrigger` at a particular source revision.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   RunBuildTriggerRequest request =
+   *       RunBuildTriggerRequest.newBuilder()
+   *           .setName(BuildTriggerName.ofProjectTriggerName(&quot;[PROJECT]&quot;, &quot;[TRIGGER]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTriggerId(&quot;triggerId-648752909&quot;)
+   *           .setSource(RepoSource.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = cloudBuildClient.runBuildTriggerCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RunBuildTriggerRequest, Operation&gt; runBuildTriggerCallable() {
+<span class="nc" id="L1499">    return stub.runBuildTriggerCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * ReceiveTriggerWebhook [Experimental] is called when the API receives a webhook request targeted
+   * at a specific trigger.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   ReceiveTriggerWebhookRequest request =
+   *       ReceiveTriggerWebhookRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setBody(HttpBody.newBuilder().build())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTrigger(&quot;trigger-1059891784&quot;)
+   *           .setSecret(&quot;secret-906277200&quot;)
+   *           .build();
+   *   ReceiveTriggerWebhookResponse response = cloudBuildClient.receiveTriggerWebhook(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ReceiveTriggerWebhookResponse receiveTriggerWebhook(
+      ReceiveTriggerWebhookRequest request) {
+<span class="fc" id="L1528">    return receiveTriggerWebhookCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * ReceiveTriggerWebhook [Experimental] is called when the API receives a webhook request targeted
+   * at a specific trigger.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   ReceiveTriggerWebhookRequest request =
+   *       ReceiveTriggerWebhookRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setBody(HttpBody.newBuilder().build())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTrigger(&quot;trigger-1059891784&quot;)
+   *           .setSecret(&quot;secret-906277200&quot;)
+   *           .build();
+   *   ApiFuture&lt;ReceiveTriggerWebhookResponse&gt; future =
+   *       cloudBuildClient.receiveTriggerWebhookCallable().futureCall(request);
+   *   // Do something.
+   *   ReceiveTriggerWebhookResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ReceiveTriggerWebhookRequest, ReceiveTriggerWebhookResponse&gt;
+      receiveTriggerWebhookCallable() {
+<span class="fc" id="L1557">    return stub.receiveTriggerWebhookCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   WorkerPool workerPool = WorkerPool.newBuilder().build();
+   *   String workerPoolId = &quot;workerPoolId-46320779&quot;;
+   *   WorkerPool response =
+   *       cloudBuildClient.createWorkerPoolAsync(parent, workerPool, workerPoolId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource where this worker pool will be created. Format:
+   *     `projects/{project}/locations/{location}`.
+   * @param workerPool Required. `WorkerPool` resource to create.
+   * @param workerPoolId Required. Immutable. The ID to use for the `WorkerPool`, which will become
+   *     the final component of the resource name.
+   *     &lt;p&gt;This value should be 1-63 characters, and valid characters are /[a-z][0-9]-/.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;WorkerPool, CreateWorkerPoolOperationMetadata&gt; createWorkerPoolAsync(
+      LocationName parent, WorkerPool workerPool, String workerPoolId) {
+    CreateWorkerPoolRequest request =
+<span class="fc" id="L1587">        CreateWorkerPoolRequest.newBuilder()</span>
+<span class="pc bpc" id="L1588" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1589">            .setWorkerPool(workerPool)</span>
+<span class="fc" id="L1590">            .setWorkerPoolId(workerPoolId)</span>
+<span class="fc" id="L1591">            .build();</span>
+<span class="fc" id="L1592">    return createWorkerPoolAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   WorkerPool workerPool = WorkerPool.newBuilder().build();
+   *   String workerPoolId = &quot;workerPoolId-46320779&quot;;
+   *   WorkerPool response =
+   *       cloudBuildClient.createWorkerPoolAsync(parent, workerPool, workerPoolId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource where this worker pool will be created. Format:
+   *     `projects/{project}/locations/{location}`.
+   * @param workerPool Required. `WorkerPool` resource to create.
+   * @param workerPoolId Required. Immutable. The ID to use for the `WorkerPool`, which will become
+   *     the final component of the resource name.
+   *     &lt;p&gt;This value should be 1-63 characters, and valid characters are /[a-z][0-9]-/.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;WorkerPool, CreateWorkerPoolOperationMetadata&gt; createWorkerPoolAsync(
+      String parent, WorkerPool workerPool, String workerPoolId) {
+    CreateWorkerPoolRequest request =
+<span class="fc" id="L1622">        CreateWorkerPoolRequest.newBuilder()</span>
+<span class="fc" id="L1623">            .setParent(parent)</span>
+<span class="fc" id="L1624">            .setWorkerPool(workerPool)</span>
+<span class="fc" id="L1625">            .setWorkerPoolId(workerPoolId)</span>
+<span class="fc" id="L1626">            .build();</span>
+<span class="fc" id="L1627">    return createWorkerPoolAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   CreateWorkerPoolRequest request =
+   *       CreateWorkerPoolRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setWorkerPool(WorkerPool.newBuilder().build())
+   *           .setWorkerPoolId(&quot;workerPoolId-46320779&quot;)
+   *           .setValidateOnly(true)
+   *           .build();
+   *   WorkerPool response = cloudBuildClient.createWorkerPoolAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;WorkerPool, CreateWorkerPoolOperationMetadata&gt; createWorkerPoolAsync(
+      CreateWorkerPoolRequest request) {
+<span class="fc" id="L1654">    return createWorkerPoolOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   CreateWorkerPoolRequest request =
+   *       CreateWorkerPoolRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setWorkerPool(WorkerPool.newBuilder().build())
+   *           .setWorkerPoolId(&quot;workerPoolId-46320779&quot;)
+   *           .setValidateOnly(true)
+   *           .build();
+   *   OperationFuture&lt;WorkerPool, CreateWorkerPoolOperationMetadata&gt; future =
+   *       cloudBuildClient.createWorkerPoolOperationCallable().futureCall(request);
+   *   // Do something.
+   *   WorkerPool response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          CreateWorkerPoolRequest, WorkerPool, CreateWorkerPoolOperationMetadata&gt;
+      createWorkerPoolOperationCallable() {
+<span class="fc" id="L1682">    return stub.createWorkerPoolOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   CreateWorkerPoolRequest request =
+   *       CreateWorkerPoolRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setWorkerPool(WorkerPool.newBuilder().build())
+   *           .setWorkerPoolId(&quot;workerPoolId-46320779&quot;)
+   *           .setValidateOnly(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = cloudBuildClient.createWorkerPoolCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateWorkerPoolRequest, Operation&gt; createWorkerPoolCallable() {
+<span class="nc" id="L1707">    return stub.createWorkerPoolCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns details of a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   WorkerPoolName name = WorkerPoolName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[WORKER_POOL]&quot;);
+   *   WorkerPool response = cloudBuildClient.getWorkerPool(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the `WorkerPool` to retrieve. Format:
+   *     `projects/{project}/locations/{location}/workerPools/{workerPool}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final WorkerPool getWorkerPool(WorkerPoolName name) {
+    GetWorkerPoolRequest request =
+<span class="pc bpc" id="L1729" title="1 of 2 branches missed.">        GetWorkerPoolRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1730">    return getWorkerPool(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns details of a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String name = WorkerPoolName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[WORKER_POOL]&quot;).toString();
+   *   WorkerPool response = cloudBuildClient.getWorkerPool(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the `WorkerPool` to retrieve. Format:
+   *     `projects/{project}/locations/{location}/workerPools/{workerPool}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final WorkerPool getWorkerPool(String name) {
+<span class="fc" id="L1751">    GetWorkerPoolRequest request = GetWorkerPoolRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1752">    return getWorkerPool(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns details of a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   GetWorkerPoolRequest request =
+   *       GetWorkerPoolRequest.newBuilder()
+   *           .setName(WorkerPoolName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[WORKER_POOL]&quot;).toString())
+   *           .build();
+   *   WorkerPool response = cloudBuildClient.getWorkerPool(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final WorkerPool getWorkerPool(GetWorkerPoolRequest request) {
+<span class="fc" id="L1775">    return getWorkerPoolCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns details of a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   GetWorkerPoolRequest request =
+   *       GetWorkerPoolRequest.newBuilder()
+   *           .setName(WorkerPoolName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[WORKER_POOL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;WorkerPool&gt; future = cloudBuildClient.getWorkerPoolCallable().futureCall(request);
+   *   // Do something.
+   *   WorkerPool response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetWorkerPoolRequest, WorkerPool&gt; getWorkerPoolCallable() {
+<span class="fc" id="L1797">    return stub.getWorkerPoolCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   WorkerPoolName name = WorkerPoolName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[WORKER_POOL]&quot;);
+   *   cloudBuildClient.deleteWorkerPoolAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the `WorkerPool` to delete. Format:
+   *     `projects/{project}/locations/{workerPool}/workerPools/{workerPool}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteWorkerPoolOperationMetadata&gt; deleteWorkerPoolAsync(
+      WorkerPoolName name) {
+    DeleteWorkerPoolRequest request =
+<span class="pc bpc" id="L1820" title="1 of 2 branches missed.">        DeleteWorkerPoolRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1821">    return deleteWorkerPoolAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String name = WorkerPoolName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[WORKER_POOL]&quot;).toString();
+   *   cloudBuildClient.deleteWorkerPoolAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the `WorkerPool` to delete. Format:
+   *     `projects/{project}/locations/{workerPool}/workerPools/{workerPool}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteWorkerPoolOperationMetadata&gt; deleteWorkerPoolAsync(
+      String name) {
+<span class="fc" id="L1843">    DeleteWorkerPoolRequest request = DeleteWorkerPoolRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1844">    return deleteWorkerPoolAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   DeleteWorkerPoolRequest request =
+   *       DeleteWorkerPoolRequest.newBuilder()
+   *           .setName(WorkerPoolName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[WORKER_POOL]&quot;).toString())
+   *           .setEtag(&quot;etag3123477&quot;)
+   *           .setAllowMissing(true)
+   *           .setValidateOnly(true)
+   *           .build();
+   *   cloudBuildClient.deleteWorkerPoolAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteWorkerPoolOperationMetadata&gt; deleteWorkerPoolAsync(
+      DeleteWorkerPoolRequest request) {
+<span class="fc" id="L1871">    return deleteWorkerPoolOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   DeleteWorkerPoolRequest request =
+   *       DeleteWorkerPoolRequest.newBuilder()
+   *           .setName(WorkerPoolName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[WORKER_POOL]&quot;).toString())
+   *           .setEtag(&quot;etag3123477&quot;)
+   *           .setAllowMissing(true)
+   *           .setValidateOnly(true)
+   *           .build();
+   *   OperationFuture&lt;Empty, DeleteWorkerPoolOperationMetadata&gt; future =
+   *       cloudBuildClient.deleteWorkerPoolOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteWorkerPoolRequest, Empty, DeleteWorkerPoolOperationMetadata&gt;
+      deleteWorkerPoolOperationCallable() {
+<span class="fc" id="L1898">    return stub.deleteWorkerPoolOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   DeleteWorkerPoolRequest request =
+   *       DeleteWorkerPoolRequest.newBuilder()
+   *           .setName(WorkerPoolName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[WORKER_POOL]&quot;).toString())
+   *           .setEtag(&quot;etag3123477&quot;)
+   *           .setAllowMissing(true)
+   *           .setValidateOnly(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = cloudBuildClient.deleteWorkerPoolCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteWorkerPoolRequest, Operation&gt; deleteWorkerPoolCallable() {
+<span class="nc" id="L1923">    return stub.deleteWorkerPoolCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   WorkerPool workerPool = WorkerPool.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   WorkerPool response = cloudBuildClient.updateWorkerPoolAsync(workerPool, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param workerPool Required. The `WorkerPool` to update.
+   *     &lt;p&gt;The `name` field is used to identify the `WorkerPool` to update. Format:
+   *     `projects/{project}/locations/{location}/workerPools/{workerPool}`.
+   * @param updateMask A mask specifying which fields in `worker_pool` to update.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;WorkerPool, UpdateWorkerPoolOperationMetadata&gt; updateWorkerPoolAsync(
+      WorkerPool workerPool, FieldMask updateMask) {
+    UpdateWorkerPoolRequest request =
+<span class="fc" id="L1949">        UpdateWorkerPoolRequest.newBuilder()</span>
+<span class="fc" id="L1950">            .setWorkerPool(workerPool)</span>
+<span class="fc" id="L1951">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L1952">            .build();</span>
+<span class="fc" id="L1953">    return updateWorkerPoolAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   UpdateWorkerPoolRequest request =
+   *       UpdateWorkerPoolRequest.newBuilder()
+   *           .setWorkerPool(WorkerPool.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   WorkerPool response = cloudBuildClient.updateWorkerPoolAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;WorkerPool, UpdateWorkerPoolOperationMetadata&gt; updateWorkerPoolAsync(
+      UpdateWorkerPoolRequest request) {
+<span class="fc" id="L1979">    return updateWorkerPoolOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   UpdateWorkerPoolRequest request =
+   *       UpdateWorkerPoolRequest.newBuilder()
+   *           .setWorkerPool(WorkerPool.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   OperationFuture&lt;WorkerPool, UpdateWorkerPoolOperationMetadata&gt; future =
+   *       cloudBuildClient.updateWorkerPoolOperationCallable().futureCall(request);
+   *   // Do something.
+   *   WorkerPool response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          UpdateWorkerPoolRequest, WorkerPool, UpdateWorkerPoolOperationMetadata&gt;
+      updateWorkerPoolOperationCallable() {
+<span class="fc" id="L2006">    return stub.updateWorkerPoolOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `WorkerPool`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   UpdateWorkerPoolRequest request =
+   *       UpdateWorkerPoolRequest.newBuilder()
+   *           .setWorkerPool(WorkerPool.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = cloudBuildClient.updateWorkerPoolCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateWorkerPoolRequest, Operation&gt; updateWorkerPoolCallable() {
+<span class="nc" id="L2030">    return stub.updateWorkerPoolCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists `WorkerPool`s.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (WorkerPool element : cloudBuildClient.listWorkerPools(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent of the collection of `WorkerPools`. Format:
+   *     `projects/{project}/locations/{location}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListWorkerPoolsPagedResponse listWorkerPools(LocationName parent) {
+    ListWorkerPoolsRequest request =
+<span class="fc" id="L2054">        ListWorkerPoolsRequest.newBuilder()</span>
+<span class="pc bpc" id="L2055" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L2056">            .build();</span>
+<span class="fc" id="L2057">    return listWorkerPools(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists `WorkerPool`s.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (WorkerPool element : cloudBuildClient.listWorkerPools(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent of the collection of `WorkerPools`. Format:
+   *     `projects/{project}/locations/{location}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListWorkerPoolsPagedResponse listWorkerPools(String parent) {
+<span class="fc" id="L2080">    ListWorkerPoolsRequest request = ListWorkerPoolsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L2081">    return listWorkerPools(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists `WorkerPool`s.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   ListWorkerPoolsRequest request =
+   *       ListWorkerPoolsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (WorkerPool element : cloudBuildClient.listWorkerPools(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListWorkerPoolsPagedResponse listWorkerPools(ListWorkerPoolsRequest request) {
+<span class="fc" id="L2108">    return listWorkerPoolsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists `WorkerPool`s.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   ListWorkerPoolsRequest request =
+   *       ListWorkerPoolsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;WorkerPool&gt; future =
+   *       cloudBuildClient.listWorkerPoolsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (WorkerPool element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListWorkerPoolsRequest, ListWorkerPoolsPagedResponse&gt;
+      listWorkerPoolsPagedCallable() {
+<span class="fc" id="L2136">    return stub.listWorkerPoolsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists `WorkerPool`s.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudBuildClient cloudBuildClient = CloudBuildClient.create()) {
+   *   ListWorkerPoolsRequest request =
+   *       ListWorkerPoolsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListWorkerPoolsResponse response = cloudBuildClient.listWorkerPoolsCallable().call(request);
+   *     for (WorkerPool element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListWorkerPoolsRequest, ListWorkerPoolsResponse&gt;
+      listWorkerPoolsCallable() {
+<span class="nc" id="L2170">    return stub.listWorkerPoolsCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L2175">    stub.close();</span>
+<span class="fc" id="L2176">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L2180">    stub.shutdown();</span>
+<span class="nc" id="L2181">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L2185">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L2190">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L2195">    stub.shutdownNow();</span>
+<span class="nc" id="L2196">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L2200">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListBuildsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListBuildsRequest,
+          ListBuildsResponse,
+          Build,
+          ListBuildsPage,
+          ListBuildsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListBuildsPagedResponse&gt; createAsync(
+        PageContext&lt;ListBuildsRequest, ListBuildsResponse, Build&gt; context,
+        ApiFuture&lt;ListBuildsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListBuildsPage&gt; futurePage =
+<span class="fc" id="L2215">          ListBuildsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2216">      return ApiFutures.transform(</span>
+<span class="fc" id="L2217">          futurePage, input -&gt; new ListBuildsPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListBuildsPagedResponse(ListBuildsPage page) {
+<span class="fc" id="L2221">      super(page, ListBuildsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2222">    }</span>
+  }
+
+  public static class ListBuildsPage
+      extends AbstractPage&lt;ListBuildsRequest, ListBuildsResponse, Build, ListBuildsPage&gt; {
+
+    private ListBuildsPage(
+        PageContext&lt;ListBuildsRequest, ListBuildsResponse, Build&gt; context,
+        ListBuildsResponse response) {
+<span class="fc" id="L2231">      super(context, response);</span>
+<span class="fc" id="L2232">    }</span>
+
+    private static ListBuildsPage createEmptyPage() {
+<span class="fc" id="L2235">      return new ListBuildsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListBuildsPage createPage(
+        PageContext&lt;ListBuildsRequest, ListBuildsResponse, Build&gt; context,
+        ListBuildsResponse response) {
+<span class="fc" id="L2242">      return new ListBuildsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListBuildsPage&gt; createPageAsync(
+        PageContext&lt;ListBuildsRequest, ListBuildsResponse, Build&gt; context,
+        ApiFuture&lt;ListBuildsResponse&gt; futureResponse) {
+<span class="fc" id="L2249">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListBuildsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListBuildsRequest,
+          ListBuildsResponse,
+          Build,
+          ListBuildsPage,
+          ListBuildsFixedSizeCollection&gt; {
+
+    private ListBuildsFixedSizeCollection(List&lt;ListBuildsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2262">      super(pages, collectionSize);</span>
+<span class="fc" id="L2263">    }</span>
+
+    private static ListBuildsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2266">      return new ListBuildsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListBuildsFixedSizeCollection createCollection(
+        List&lt;ListBuildsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2272">      return new ListBuildsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListBuildTriggersPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListBuildTriggersRequest,
+          ListBuildTriggersResponse,
+          BuildTrigger,
+          ListBuildTriggersPage,
+          ListBuildTriggersFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListBuildTriggersPagedResponse&gt; createAsync(
+        PageContext&lt;ListBuildTriggersRequest, ListBuildTriggersResponse, BuildTrigger&gt; context,
+        ApiFuture&lt;ListBuildTriggersResponse&gt; futureResponse) {
+      ApiFuture&lt;ListBuildTriggersPage&gt; futurePage =
+<span class="fc" id="L2288">          ListBuildTriggersPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2289">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2291">          input -&gt; new ListBuildTriggersPagedResponse(input),</span>
+<span class="fc" id="L2292">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListBuildTriggersPagedResponse(ListBuildTriggersPage page) {
+<span class="fc" id="L2296">      super(page, ListBuildTriggersFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2297">    }</span>
+  }
+
+  public static class ListBuildTriggersPage
+      extends AbstractPage&lt;
+          ListBuildTriggersRequest,
+          ListBuildTriggersResponse,
+          BuildTrigger,
+          ListBuildTriggersPage&gt; {
+
+    private ListBuildTriggersPage(
+        PageContext&lt;ListBuildTriggersRequest, ListBuildTriggersResponse, BuildTrigger&gt; context,
+        ListBuildTriggersResponse response) {
+<span class="fc" id="L2310">      super(context, response);</span>
+<span class="fc" id="L2311">    }</span>
+
+    private static ListBuildTriggersPage createEmptyPage() {
+<span class="fc" id="L2314">      return new ListBuildTriggersPage(null, null);</span>
+    }
+
+    @Override
+    protected ListBuildTriggersPage createPage(
+        PageContext&lt;ListBuildTriggersRequest, ListBuildTriggersResponse, BuildTrigger&gt; context,
+        ListBuildTriggersResponse response) {
+<span class="fc" id="L2321">      return new ListBuildTriggersPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListBuildTriggersPage&gt; createPageAsync(
+        PageContext&lt;ListBuildTriggersRequest, ListBuildTriggersResponse, BuildTrigger&gt; context,
+        ApiFuture&lt;ListBuildTriggersResponse&gt; futureResponse) {
+<span class="fc" id="L2328">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListBuildTriggersFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListBuildTriggersRequest,
+          ListBuildTriggersResponse,
+          BuildTrigger,
+          ListBuildTriggersPage,
+          ListBuildTriggersFixedSizeCollection&gt; {
+
+    private ListBuildTriggersFixedSizeCollection(
+        List&lt;ListBuildTriggersPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2342">      super(pages, collectionSize);</span>
+<span class="fc" id="L2343">    }</span>
+
+    private static ListBuildTriggersFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2346">      return new ListBuildTriggersFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListBuildTriggersFixedSizeCollection createCollection(
+        List&lt;ListBuildTriggersPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2352">      return new ListBuildTriggersFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListWorkerPoolsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListWorkerPoolsRequest,
+          ListWorkerPoolsResponse,
+          WorkerPool,
+          ListWorkerPoolsPage,
+          ListWorkerPoolsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListWorkerPoolsPagedResponse&gt; createAsync(
+        PageContext&lt;ListWorkerPoolsRequest, ListWorkerPoolsResponse, WorkerPool&gt; context,
+        ApiFuture&lt;ListWorkerPoolsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListWorkerPoolsPage&gt; futurePage =
+<span class="fc" id="L2368">          ListWorkerPoolsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2369">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2371">          input -&gt; new ListWorkerPoolsPagedResponse(input),</span>
+<span class="fc" id="L2372">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListWorkerPoolsPagedResponse(ListWorkerPoolsPage page) {
+<span class="fc" id="L2376">      super(page, ListWorkerPoolsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2377">    }</span>
+  }
+
+  public static class ListWorkerPoolsPage
+      extends AbstractPage&lt;
+          ListWorkerPoolsRequest, ListWorkerPoolsResponse, WorkerPool, ListWorkerPoolsPage&gt; {
+
+    private ListWorkerPoolsPage(
+        PageContext&lt;ListWorkerPoolsRequest, ListWorkerPoolsResponse, WorkerPool&gt; context,
+        ListWorkerPoolsResponse response) {
+<span class="fc" id="L2387">      super(context, response);</span>
+<span class="fc" id="L2388">    }</span>
+
+    private static ListWorkerPoolsPage createEmptyPage() {
+<span class="fc" id="L2391">      return new ListWorkerPoolsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListWorkerPoolsPage createPage(
+        PageContext&lt;ListWorkerPoolsRequest, ListWorkerPoolsResponse, WorkerPool&gt; context,
+        ListWorkerPoolsResponse response) {
+<span class="fc" id="L2398">      return new ListWorkerPoolsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListWorkerPoolsPage&gt; createPageAsync(
+        PageContext&lt;ListWorkerPoolsRequest, ListWorkerPoolsResponse, WorkerPool&gt; context,
+        ApiFuture&lt;ListWorkerPoolsResponse&gt; futureResponse) {
+<span class="fc" id="L2405">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListWorkerPoolsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListWorkerPoolsRequest,
+          ListWorkerPoolsResponse,
+          WorkerPool,
+          ListWorkerPoolsPage,
+          ListWorkerPoolsFixedSizeCollection&gt; {
+
+    private ListWorkerPoolsFixedSizeCollection(
+        List&lt;ListWorkerPoolsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2419">      super(pages, collectionSize);</span>
+<span class="fc" id="L2420">    }</span>
+
+    private static ListWorkerPoolsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2423">      return new ListWorkerPoolsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListWorkerPoolsFixedSizeCollection createCollection(
+        List&lt;ListWorkerPoolsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2429">      return new ListWorkerPoolsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

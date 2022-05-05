@@ -1,0 +1,3467 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>IAMClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-iam-admin</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.iam.admin.v1</a> &gt; <span class="el_source">IAMClient.java</span></div><h1>IAMClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.iam.admin.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.api.resourcenames.ResourceName;
+import com.google.cloud.iam.admin.v1.stub.IAMStub;
+import com.google.cloud.iam.admin.v1.stub.IAMStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.iam.admin.v1.CreateRoleRequest;
+import com.google.iam.admin.v1.CreateServiceAccountKeyRequest;
+import com.google.iam.admin.v1.CreateServiceAccountRequest;
+import com.google.iam.admin.v1.DeleteRoleRequest;
+import com.google.iam.admin.v1.DeleteServiceAccountKeyRequest;
+import com.google.iam.admin.v1.DeleteServiceAccountRequest;
+import com.google.iam.admin.v1.DisableServiceAccountRequest;
+import com.google.iam.admin.v1.EnableServiceAccountRequest;
+import com.google.iam.admin.v1.GetRoleRequest;
+import com.google.iam.admin.v1.GetServiceAccountKeyRequest;
+import com.google.iam.admin.v1.GetServiceAccountRequest;
+import com.google.iam.admin.v1.KeyName;
+import com.google.iam.admin.v1.LintPolicyRequest;
+import com.google.iam.admin.v1.LintPolicyResponse;
+import com.google.iam.admin.v1.ListRolesRequest;
+import com.google.iam.admin.v1.ListRolesResponse;
+import com.google.iam.admin.v1.ListServiceAccountKeysRequest;
+import com.google.iam.admin.v1.ListServiceAccountKeysResponse;
+import com.google.iam.admin.v1.ListServiceAccountsRequest;
+import com.google.iam.admin.v1.ListServiceAccountsResponse;
+import com.google.iam.admin.v1.PatchServiceAccountRequest;
+import com.google.iam.admin.v1.Permission;
+import com.google.iam.admin.v1.ProjectName;
+import com.google.iam.admin.v1.QueryAuditableServicesRequest;
+import com.google.iam.admin.v1.QueryAuditableServicesResponse;
+import com.google.iam.admin.v1.QueryGrantableRolesRequest;
+import com.google.iam.admin.v1.QueryGrantableRolesResponse;
+import com.google.iam.admin.v1.QueryTestablePermissionsRequest;
+import com.google.iam.admin.v1.QueryTestablePermissionsResponse;
+import com.google.iam.admin.v1.Role;
+import com.google.iam.admin.v1.ServiceAccount;
+import com.google.iam.admin.v1.ServiceAccountKey;
+import com.google.iam.admin.v1.ServiceAccountKeyAlgorithm;
+import com.google.iam.admin.v1.ServiceAccountName;
+import com.google.iam.admin.v1.ServiceAccountPrivateKeyType;
+import com.google.iam.admin.v1.ServiceAccountPublicKeyType;
+import com.google.iam.admin.v1.SignBlobRequest;
+import com.google.iam.admin.v1.SignBlobResponse;
+import com.google.iam.admin.v1.SignJwtRequest;
+import com.google.iam.admin.v1.SignJwtResponse;
+import com.google.iam.admin.v1.UndeleteRoleRequest;
+import com.google.iam.admin.v1.UndeleteServiceAccountRequest;
+import com.google.iam.admin.v1.UndeleteServiceAccountResponse;
+import com.google.iam.admin.v1.UpdateRoleRequest;
+import com.google.iam.admin.v1.UploadServiceAccountKeyRequest;
+import com.google.iam.v1.GetIamPolicyRequest;
+import com.google.iam.v1.Policy;
+import com.google.iam.v1.SetIamPolicyRequest;
+import com.google.iam.v1.TestIamPermissionsRequest;
+import com.google.iam.v1.TestIamPermissionsResponse;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.Empty;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Creates and manages Identity and Access Management (IAM) resources.
+ *
+ * &lt;p&gt;You can use this service to work with all of the following resources:
+ *
+ * &lt;ul&gt;
+ *   &lt;li&gt;&amp;#42;&amp;#42;Service accounts&amp;#42;&amp;#42;, which identify an application or a virtual machine
+ *       (VM) instance rather than a person
+ *   &lt;li&gt;&amp;#42;&amp;#42;Service account keys&amp;#42;&amp;#42;, which service accounts use to authenticate with
+ *       Google APIs
+ *   &lt;li&gt;&amp;#42;&amp;#42;IAM policies for service accounts&amp;#42;&amp;#42;, which specify the roles that a
+ *       member has for the service account
+ *   &lt;li&gt;&amp;#42;&amp;#42;IAM custom roles&amp;#42;&amp;#42;, which help you limit the number of permissions that
+ *       you grant to members
+ * &lt;/ul&gt;
+ *
+ * &lt;p&gt;In addition, you can use this service to complete the following tasks, among others:
+ *
+ * &lt;ul&gt;
+ *   &lt;li&gt;Test whether a service account can use specific permissions
+ *   &lt;li&gt;Check which roles you can grant for a specific resource
+ *   &lt;li&gt;Lint, or validate, condition expressions in an IAM policy
+ * &lt;/ul&gt;
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (IAMClient iAMClient = IAMClient.create()) {
+ *   ServiceAccountName name = ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;);
+ *   ServiceAccount response = iAMClient.getServiceAccount(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the IAMClient object to clean up resources such as
+ * threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of IAMSettings to create(). For
+ * example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * IAMSettings iAMSettings =
+ *     IAMSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * IAMClient iAMClient = IAMClient.create(iAMSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * IAMSettings iAMSettings = IAMSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * IAMClient iAMClient = IAMClient.create(iAMSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class IAMClient implements BackgroundResource {
+  private final IAMSettings settings;
+  private final IAMStub stub;
+
+  /** Constructs an instance of IAMClient with default settings. */
+  public static final IAMClient create() throws IOException {
+<span class="nc" id="L182">    return create(IAMSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of IAMClient, using the given settings. The channels are created based
+   * on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final IAMClient create(IAMSettings settings) throws IOException {
+<span class="fc" id="L190">    return new IAMClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of IAMClient, using the given stub for making calls. This is for
+   * advanced usage - prefer using create(IAMSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final IAMClient create(IAMStub stub) {
+<span class="nc" id="L199">    return new IAMClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of IAMClient, using the given settings. This is protected so that it is
+   * easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   */
+<span class="fc" id="L206">  protected IAMClient(IAMSettings settings) throws IOException {</span>
+<span class="fc" id="L207">    this.settings = settings;</span>
+<span class="fc" id="L208">    this.stub = ((IAMStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L209">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L212">  protected IAMClient(IAMStub stub) {</span>
+<span class="nc" id="L213">    this.settings = null;</span>
+<span class="nc" id="L214">    this.stub = stub;</span>
+<span class="nc" id="L215">  }</span>
+
+  public final IAMSettings getSettings() {
+<span class="nc" id="L218">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public IAMStub getStub() {
+<span class="nc" id="L223">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every [ServiceAccount][google.iam.admin.v1.ServiceAccount] that belongs to a specific
+   * project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ProjectName name = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (ServiceAccount element : iAMClient.listServiceAccounts(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the project associated with the service accounts,
+   *     such as `projects/my-project-123`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServiceAccountsPagedResponse listServiceAccounts(ProjectName name) {
+    ListServiceAccountsRequest request =
+<span class="fc" id="L250">        ListServiceAccountsRequest.newBuilder()</span>
+<span class="pc bpc" id="L251" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L252">            .build();</span>
+<span class="fc" id="L253">    return listServiceAccounts(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every [ServiceAccount][google.iam.admin.v1.ServiceAccount] that belongs to a specific
+   * project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   String name = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (ServiceAccount element : iAMClient.listServiceAccounts(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the project associated with the service accounts,
+   *     such as `projects/my-project-123`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServiceAccountsPagedResponse listServiceAccounts(String name) {
+    ListServiceAccountsRequest request =
+<span class="fc" id="L280">        ListServiceAccountsRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L281">    return listServiceAccounts(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every [ServiceAccount][google.iam.admin.v1.ServiceAccount] that belongs to a specific
+   * project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ListServiceAccountsRequest request =
+   *       ListServiceAccountsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (ServiceAccount element : iAMClient.listServiceAccounts(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServiceAccountsPagedResponse listServiceAccounts(
+      ListServiceAccountsRequest request) {
+<span class="fc" id="L312">    return listServiceAccountsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every [ServiceAccount][google.iam.admin.v1.ServiceAccount] that belongs to a specific
+   * project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ListServiceAccountsRequest request =
+   *       ListServiceAccountsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;ServiceAccount&gt; future =
+   *       iAMClient.listServiceAccountsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (ServiceAccount element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListServiceAccountsRequest, ListServiceAccountsPagedResponse&gt;
+      listServiceAccountsPagedCallable() {
+<span class="fc" id="L343">    return stub.listServiceAccountsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every [ServiceAccount][google.iam.admin.v1.ServiceAccount] that belongs to a specific
+   * project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ListServiceAccountsRequest request =
+   *       ListServiceAccountsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListServiceAccountsResponse response =
+   *         iAMClient.listServiceAccountsCallable().call(request);
+   *     for (ServiceAccount element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListServiceAccountsRequest, ListServiceAccountsResponse&gt;
+      listServiceAccountsCallable() {
+<span class="nc" id="L381">    return stub.listServiceAccountsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ServiceAccountName name = ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;);
+   *   ServiceAccount response = iAMClient.getServiceAccount(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the service account in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using `-` as a wildcard for the
+   *     `PROJECT_ID` will infer the project from the account. The `ACCOUNT` value can be the
+   *     `email` address or the `unique_id` of the service account.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccount getServiceAccount(ServiceAccountName name) {
+    GetServiceAccountRequest request =
+<span class="fc" id="L407">        GetServiceAccountRequest.newBuilder()</span>
+<span class="pc bpc" id="L408" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L409">            .build();</span>
+<span class="fc" id="L410">    return getServiceAccount(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   String name = ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString();
+   *   ServiceAccount response = iAMClient.getServiceAccount(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the service account in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using `-` as a wildcard for the
+   *     `PROJECT_ID` will infer the project from the account. The `ACCOUNT` value can be the
+   *     `email` address or the `unique_id` of the service account.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccount getServiceAccount(String name) {
+<span class="fc" id="L435">    GetServiceAccountRequest request = GetServiceAccountRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L436">    return getServiceAccount(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   GetServiceAccountRequest request =
+   *       GetServiceAccountRequest.newBuilder()
+   *           .setName(ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString())
+   *           .build();
+   *   ServiceAccount response = iAMClient.getServiceAccount(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccount getServiceAccount(GetServiceAccountRequest request) {
+<span class="fc" id="L461">    return getServiceAccountCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   GetServiceAccountRequest request =
+   *       GetServiceAccountRequest.newBuilder()
+   *           .setName(ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;ServiceAccount&gt; future = iAMClient.getServiceAccountCallable().futureCall(request);
+   *   // Do something.
+   *   ServiceAccount response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetServiceAccountRequest, ServiceAccount&gt; getServiceAccountCallable() {
+<span class="fc" id="L485">    return stub.getServiceAccountCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ProjectName name = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   String accountId = &quot;accountId-1827029976&quot;;
+   *   ServiceAccount serviceAccount = ServiceAccount.newBuilder().build();
+   *   ServiceAccount response = iAMClient.createServiceAccount(name, accountId, serviceAccount);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the project associated with the service accounts,
+   *     such as `projects/my-project-123`.
+   * @param accountId Required. The account id that is used to generate the service account email
+   *     address and a stable unique id. It is unique within a project, must be 6-30 characters
+   *     long, and match the regular expression `[a-z]([-a-z0-9]&amp;#42;[a-z0-9])` to comply with
+   *     RFC1035.
+   * @param serviceAccount The [ServiceAccount][google.iam.admin.v1.ServiceAccount] resource to
+   *     create. Currently, only the following values are user assignable: `display_name` and
+   *     `description`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccount createServiceAccount(
+      ProjectName name, String accountId, ServiceAccount serviceAccount) {
+    CreateServiceAccountRequest request =
+<span class="fc" id="L519">        CreateServiceAccountRequest.newBuilder()</span>
+<span class="pc bpc" id="L520" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L521">            .setAccountId(accountId)</span>
+<span class="fc" id="L522">            .setServiceAccount(serviceAccount)</span>
+<span class="fc" id="L523">            .build();</span>
+<span class="fc" id="L524">    return createServiceAccount(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   String name = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   String accountId = &quot;accountId-1827029976&quot;;
+   *   ServiceAccount serviceAccount = ServiceAccount.newBuilder().build();
+   *   ServiceAccount response = iAMClient.createServiceAccount(name, accountId, serviceAccount);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the project associated with the service accounts,
+   *     such as `projects/my-project-123`.
+   * @param accountId Required. The account id that is used to generate the service account email
+   *     address and a stable unique id. It is unique within a project, must be 6-30 characters
+   *     long, and match the regular expression `[a-z]([-a-z0-9]&amp;#42;[a-z0-9])` to comply with
+   *     RFC1035.
+   * @param serviceAccount The [ServiceAccount][google.iam.admin.v1.ServiceAccount] resource to
+   *     create. Currently, only the following values are user assignable: `display_name` and
+   *     `description`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccount createServiceAccount(
+      String name, String accountId, ServiceAccount serviceAccount) {
+    CreateServiceAccountRequest request =
+<span class="fc" id="L558">        CreateServiceAccountRequest.newBuilder()</span>
+<span class="fc" id="L559">            .setName(name)</span>
+<span class="fc" id="L560">            .setAccountId(accountId)</span>
+<span class="fc" id="L561">            .setServiceAccount(serviceAccount)</span>
+<span class="fc" id="L562">            .build();</span>
+<span class="fc" id="L563">    return createServiceAccount(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   CreateServiceAccountRequest request =
+   *       CreateServiceAccountRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setAccountId(&quot;accountId-1827029976&quot;)
+   *           .setServiceAccount(ServiceAccount.newBuilder().build())
+   *           .build();
+   *   ServiceAccount response = iAMClient.createServiceAccount(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccount createServiceAccount(CreateServiceAccountRequest request) {
+<span class="fc" id="L590">    return createServiceAccountCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   CreateServiceAccountRequest request =
+   *       CreateServiceAccountRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setAccountId(&quot;accountId-1827029976&quot;)
+   *           .setServiceAccount(ServiceAccount.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;ServiceAccount&gt; future =
+   *       iAMClient.createServiceAccountCallable().futureCall(request);
+   *   // Do something.
+   *   ServiceAccount response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateServiceAccountRequest, ServiceAccount&gt;
+      createServiceAccountCallable() {
+<span class="fc" id="L618">    return stub.createServiceAccountCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * &amp;#42;&amp;#42;Note:&amp;#42;&amp;#42; We are in the process of deprecating this method. Use
+   * [PatchServiceAccount][google.iam.admin.v1.IAM.PatchServiceAccount] instead.
+   *
+   * &lt;p&gt;Updates a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;You can update only the `display_name` and `description` fields.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ServiceAccount request =
+   *       ServiceAccount.newBuilder()
+   *           .setName(ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setUniqueId(&quot;uniqueId-294460212&quot;)
+   *           .setEmail(&quot;email96619420&quot;)
+   *           .setDisplayName(&quot;displayName1714148973&quot;)
+   *           .setEtag(ByteString.EMPTY)
+   *           .setDescription(&quot;description-1724546052&quot;)
+   *           .setOauth2ClientId(&quot;oauth2ClientId-1210797087&quot;)
+   *           .setDisabled(true)
+   *           .build();
+   *   ServiceAccount response = iAMClient.updateServiceAccount(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccount updateServiceAccount(ServiceAccount request) {
+<span class="fc" id="L656">    return updateServiceAccountCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * &amp;#42;&amp;#42;Note:&amp;#42;&amp;#42; We are in the process of deprecating this method. Use
+   * [PatchServiceAccount][google.iam.admin.v1.IAM.PatchServiceAccount] instead.
+   *
+   * &lt;p&gt;Updates a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;You can update only the `display_name` and `description` fields.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ServiceAccount request =
+   *       ServiceAccount.newBuilder()
+   *           .setName(ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString())
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setUniqueId(&quot;uniqueId-294460212&quot;)
+   *           .setEmail(&quot;email96619420&quot;)
+   *           .setDisplayName(&quot;displayName1714148973&quot;)
+   *           .setEtag(ByteString.EMPTY)
+   *           .setDescription(&quot;description-1724546052&quot;)
+   *           .setOauth2ClientId(&quot;oauth2ClientId-1210797087&quot;)
+   *           .setDisabled(true)
+   *           .build();
+   *   ApiFuture&lt;ServiceAccount&gt; future =
+   *       iAMClient.updateServiceAccountCallable().futureCall(request);
+   *   // Do something.
+   *   ServiceAccount response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ServiceAccount, ServiceAccount&gt; updateServiceAccountCallable() {
+<span class="fc" id="L694">    return stub.updateServiceAccountCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Patches a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   PatchServiceAccountRequest request =
+   *       PatchServiceAccountRequest.newBuilder()
+   *           .setServiceAccount(ServiceAccount.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ServiceAccount response = iAMClient.patchServiceAccount(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccount patchServiceAccount(PatchServiceAccountRequest request) {
+<span class="fc" id="L720">    return patchServiceAccountCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Patches a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   PatchServiceAccountRequest request =
+   *       PatchServiceAccountRequest.newBuilder()
+   *           .setServiceAccount(ServiceAccount.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;ServiceAccount&gt; future =
+   *       iAMClient.patchServiceAccountCallable().futureCall(request);
+   *   // Do something.
+   *   ServiceAccount response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;PatchServiceAccountRequest, ServiceAccount&gt;
+      patchServiceAccountCallable() {
+<span class="fc" id="L747">    return stub.patchServiceAccountCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Warning:&amp;#42;&amp;#42; After you delete a service account, you might not be able to
+   * undelete it. If you know that you need to re-enable the service account in the future, use
+   * [DisableServiceAccount][google.iam.admin.v1.IAM.DisableServiceAccount] instead.
+   *
+   * &lt;p&gt;If you delete a service account, IAM permanently removes the service account 30 days later.
+   * Google Cloud cannot recover the service account after it is permanently removed, even if you
+   * file a support request.
+   *
+   * &lt;p&gt;To help avoid unplanned outages, we recommend that you disable the service account before
+   * you delete it. Use [DisableServiceAccount][google.iam.admin.v1.IAM.DisableServiceAccount] to
+   * disable the service account, then wait at least 24 hours and watch for unintended consequences.
+   * If there are no unintended consequences, you can delete the service account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ServiceAccountName name = ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;);
+   *   iAMClient.deleteServiceAccount(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the service account in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using `-` as a wildcard for the
+   *     `PROJECT_ID` will infer the project from the account. The `ACCOUNT` value can be the
+   *     `email` address or the `unique_id` of the service account.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteServiceAccount(ServiceAccountName name) {
+    DeleteServiceAccountRequest request =
+<span class="fc" id="L786">        DeleteServiceAccountRequest.newBuilder()</span>
+<span class="pc bpc" id="L787" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L788">            .build();</span>
+<span class="fc" id="L789">    deleteServiceAccount(request);</span>
+<span class="fc" id="L790">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Warning:&amp;#42;&amp;#42; After you delete a service account, you might not be able to
+   * undelete it. If you know that you need to re-enable the service account in the future, use
+   * [DisableServiceAccount][google.iam.admin.v1.IAM.DisableServiceAccount] instead.
+   *
+   * &lt;p&gt;If you delete a service account, IAM permanently removes the service account 30 days later.
+   * Google Cloud cannot recover the service account after it is permanently removed, even if you
+   * file a support request.
+   *
+   * &lt;p&gt;To help avoid unplanned outages, we recommend that you disable the service account before
+   * you delete it. Use [DisableServiceAccount][google.iam.admin.v1.IAM.DisableServiceAccount] to
+   * disable the service account, then wait at least 24 hours and watch for unintended consequences.
+   * If there are no unintended consequences, you can delete the service account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   String name = ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString();
+   *   iAMClient.deleteServiceAccount(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the service account in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using `-` as a wildcard for the
+   *     `PROJECT_ID` will infer the project from the account. The `ACCOUNT` value can be the
+   *     `email` address or the `unique_id` of the service account.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteServiceAccount(String name) {
+    DeleteServiceAccountRequest request =
+<span class="fc" id="L828">        DeleteServiceAccountRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L829">    deleteServiceAccount(request);</span>
+<span class="fc" id="L830">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Warning:&amp;#42;&amp;#42; After you delete a service account, you might not be able to
+   * undelete it. If you know that you need to re-enable the service account in the future, use
+   * [DisableServiceAccount][google.iam.admin.v1.IAM.DisableServiceAccount] instead.
+   *
+   * &lt;p&gt;If you delete a service account, IAM permanently removes the service account 30 days later.
+   * Google Cloud cannot recover the service account after it is permanently removed, even if you
+   * file a support request.
+   *
+   * &lt;p&gt;To help avoid unplanned outages, we recommend that you disable the service account before
+   * you delete it. Use [DisableServiceAccount][google.iam.admin.v1.IAM.DisableServiceAccount] to
+   * disable the service account, then wait at least 24 hours and watch for unintended consequences.
+   * If there are no unintended consequences, you can delete the service account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   DeleteServiceAccountRequest request =
+   *       DeleteServiceAccountRequest.newBuilder()
+   *           .setName(ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString())
+   *           .build();
+   *   iAMClient.deleteServiceAccount(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteServiceAccount(DeleteServiceAccountRequest request) {
+<span class="fc" id="L867">    deleteServiceAccountCallable().call(request);</span>
+<span class="fc" id="L868">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Warning:&amp;#42;&amp;#42; After you delete a service account, you might not be able to
+   * undelete it. If you know that you need to re-enable the service account in the future, use
+   * [DisableServiceAccount][google.iam.admin.v1.IAM.DisableServiceAccount] instead.
+   *
+   * &lt;p&gt;If you delete a service account, IAM permanently removes the service account 30 days later.
+   * Google Cloud cannot recover the service account after it is permanently removed, even if you
+   * file a support request.
+   *
+   * &lt;p&gt;To help avoid unplanned outages, we recommend that you disable the service account before
+   * you delete it. Use [DisableServiceAccount][google.iam.admin.v1.IAM.DisableServiceAccount] to
+   * disable the service account, then wait at least 24 hours and watch for unintended consequences.
+   * If there are no unintended consequences, you can delete the service account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   DeleteServiceAccountRequest request =
+   *       DeleteServiceAccountRequest.newBuilder()
+   *           .setName(ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = iAMClient.deleteServiceAccountCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteServiceAccountRequest, Empty&gt; deleteServiceAccountCallable() {
+<span class="fc" id="L904">    return stub.deleteServiceAccountCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restores a deleted [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Important:&amp;#42;&amp;#42; It is not always possible to restore a deleted service
+   * account. Use this method only as a last resort.
+   *
+   * &lt;p&gt;After you delete a service account, IAM permanently removes the service account 30 days
+   * later. There is no way to restore a deleted service account that has been permanently removed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   UndeleteServiceAccountRequest request =
+   *       UndeleteServiceAccountRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   UndeleteServiceAccountResponse response = iAMClient.undeleteServiceAccount(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UndeleteServiceAccountResponse undeleteServiceAccount(
+      UndeleteServiceAccountRequest request) {
+<span class="fc" id="L934">    return undeleteServiceAccountCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restores a deleted [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Important:&amp;#42;&amp;#42; It is not always possible to restore a deleted service
+   * account. Use this method only as a last resort.
+   *
+   * &lt;p&gt;After you delete a service account, IAM permanently removes the service account 30 days
+   * later. There is no way to restore a deleted service account that has been permanently removed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   UndeleteServiceAccountRequest request =
+   *       UndeleteServiceAccountRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;UndeleteServiceAccountResponse&gt; future =
+   *       iAMClient.undeleteServiceAccountCallable().futureCall(request);
+   *   // Do something.
+   *   UndeleteServiceAccountResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UndeleteServiceAccountRequest, UndeleteServiceAccountResponse&gt;
+      undeleteServiceAccountCallable() {
+<span class="fc" id="L964">    return stub.undeleteServiceAccountCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enables a [ServiceAccount][google.iam.admin.v1.ServiceAccount] that was disabled by
+   * [DisableServiceAccount][google.iam.admin.v1.IAM.DisableServiceAccount].
+   *
+   * &lt;p&gt;If the service account is already enabled, then this method has no effect.
+   *
+   * &lt;p&gt;If the service account was disabled by other means—for example, if Google disabled the
+   * service account because it was compromised—you cannot use this method to enable the service
+   * account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   EnableServiceAccountRequest request =
+   *       EnableServiceAccountRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   iAMClient.enableServiceAccount(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void enableServiceAccount(EnableServiceAccountRequest request) {
+<span class="fc" id="L994">    enableServiceAccountCallable().call(request);</span>
+<span class="fc" id="L995">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enables a [ServiceAccount][google.iam.admin.v1.ServiceAccount] that was disabled by
+   * [DisableServiceAccount][google.iam.admin.v1.IAM.DisableServiceAccount].
+   *
+   * &lt;p&gt;If the service account is already enabled, then this method has no effect.
+   *
+   * &lt;p&gt;If the service account was disabled by other means—for example, if Google disabled the
+   * service account because it was compromised—you cannot use this method to enable the service
+   * account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   EnableServiceAccountRequest request =
+   *       EnableServiceAccountRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;Empty&gt; future = iAMClient.enableServiceAccountCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;EnableServiceAccountRequest, Empty&gt; enableServiceAccountCallable() {
+<span class="fc" id="L1023">    return stub.enableServiceAccountCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Disables a [ServiceAccount][google.iam.admin.v1.ServiceAccount] immediately.
+   *
+   * &lt;p&gt;If an application uses the service account to authenticate, that application can no longer
+   * call Google APIs or access Google Cloud resources. Existing access tokens for the service
+   * account are rejected, and requests for new access tokens will fail.
+   *
+   * &lt;p&gt;To re-enable the service account, use
+   * [EnableServiceAccount][google.iam.admin.v1.IAM.EnableServiceAccount]. After you re-enable the
+   * service account, its existing access tokens will be accepted, and you can request new access
+   * tokens.
+   *
+   * &lt;p&gt;To help avoid unplanned outages, we recommend that you disable the service account before
+   * you delete it. Use this method to disable the service account, then wait at least 24 hours and
+   * watch for unintended consequences. If there are no unintended consequences, you can delete the
+   * service account with [DeleteServiceAccount][google.iam.admin.v1.IAM.DeleteServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   DisableServiceAccountRequest request =
+   *       DisableServiceAccountRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   iAMClient.disableServiceAccount(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void disableServiceAccount(DisableServiceAccountRequest request) {
+<span class="fc" id="L1060">    disableServiceAccountCallable().call(request);</span>
+<span class="fc" id="L1061">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Disables a [ServiceAccount][google.iam.admin.v1.ServiceAccount] immediately.
+   *
+   * &lt;p&gt;If an application uses the service account to authenticate, that application can no longer
+   * call Google APIs or access Google Cloud resources. Existing access tokens for the service
+   * account are rejected, and requests for new access tokens will fail.
+   *
+   * &lt;p&gt;To re-enable the service account, use
+   * [EnableServiceAccount][google.iam.admin.v1.IAM.EnableServiceAccount]. After you re-enable the
+   * service account, its existing access tokens will be accepted, and you can request new access
+   * tokens.
+   *
+   * &lt;p&gt;To help avoid unplanned outages, we recommend that you disable the service account before
+   * you delete it. Use this method to disable the service account, then wait at least 24 hours and
+   * watch for unintended consequences. If there are no unintended consequences, you can delete the
+   * service account with [DeleteServiceAccount][google.iam.admin.v1.IAM.DeleteServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   DisableServiceAccountRequest request =
+   *       DisableServiceAccountRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;Empty&gt; future = iAMClient.disableServiceAccountCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DisableServiceAccountRequest, Empty&gt; disableServiceAccountCallable() {
+<span class="fc" id="L1096">    return stub.disableServiceAccountCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey] for a service account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ServiceAccountName name = ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;);
+   *   List&lt;ListServiceAccountKeysRequest.KeyType&gt; keyTypes = new ArrayList&lt;&gt;();
+   *   ListServiceAccountKeysResponse response = iAMClient.listServiceAccountKeys(name, keyTypes);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the service account in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`.
+   *     &lt;p&gt;Using `-` as a wildcard for the `PROJECT_ID`, will infer the project from the account.
+   *     The `ACCOUNT` value can be the `email` address or the `unique_id` of the service account.
+   * @param keyTypes Filters the types of keys the user wants to include in the list response.
+   *     Duplicate key types are not allowed. If no key type is provided, all keys are returned.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServiceAccountKeysResponse listServiceAccountKeys(
+      ServiceAccountName name, List&lt;ListServiceAccountKeysRequest.KeyType&gt; keyTypes) {
+    ListServiceAccountKeysRequest request =
+<span class="fc" id="L1126">        ListServiceAccountKeysRequest.newBuilder()</span>
+<span class="pc bpc" id="L1127" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1128">            .addAllKeyTypes(keyTypes)</span>
+<span class="fc" id="L1129">            .build();</span>
+<span class="fc" id="L1130">    return listServiceAccountKeys(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey] for a service account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   String name = ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString();
+   *   List&lt;ListServiceAccountKeysRequest.KeyType&gt; keyTypes = new ArrayList&lt;&gt;();
+   *   ListServiceAccountKeysResponse response = iAMClient.listServiceAccountKeys(name, keyTypes);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the service account in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`.
+   *     &lt;p&gt;Using `-` as a wildcard for the `PROJECT_ID`, will infer the project from the account.
+   *     The `ACCOUNT` value can be the `email` address or the `unique_id` of the service account.
+   * @param keyTypes Filters the types of keys the user wants to include in the list response.
+   *     Duplicate key types are not allowed. If no key type is provided, all keys are returned.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServiceAccountKeysResponse listServiceAccountKeys(
+      String name, List&lt;ListServiceAccountKeysRequest.KeyType&gt; keyTypes) {
+    ListServiceAccountKeysRequest request =
+<span class="fc" id="L1160">        ListServiceAccountKeysRequest.newBuilder().setName(name).addAllKeyTypes(keyTypes).build();</span>
+<span class="fc" id="L1161">    return listServiceAccountKeys(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey] for a service account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ListServiceAccountKeysRequest request =
+   *       ListServiceAccountKeysRequest.newBuilder()
+   *           .setName(ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString())
+   *           .addAllKeyTypes(new ArrayList&lt;ListServiceAccountKeysRequest.KeyType&gt;())
+   *           .build();
+   *   ListServiceAccountKeysResponse response = iAMClient.listServiceAccountKeys(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServiceAccountKeysResponse listServiceAccountKeys(
+      ListServiceAccountKeysRequest request) {
+<span class="fc" id="L1188">    return listServiceAccountKeysCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey] for a service account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ListServiceAccountKeysRequest request =
+   *       ListServiceAccountKeysRequest.newBuilder()
+   *           .setName(ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString())
+   *           .addAllKeyTypes(new ArrayList&lt;ListServiceAccountKeysRequest.KeyType&gt;())
+   *           .build();
+   *   ApiFuture&lt;ListServiceAccountKeysResponse&gt; future =
+   *       iAMClient.listServiceAccountKeysCallable().futureCall(request);
+   *   // Do something.
+   *   ListServiceAccountKeysResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListServiceAccountKeysRequest, ListServiceAccountKeysResponse&gt;
+      listServiceAccountKeysCallable() {
+<span class="fc" id="L1215">    return stub.listServiceAccountKeysCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   KeyName name = KeyName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;, &quot;[KEY]&quot;);
+   *   ServiceAccountPublicKeyType publicKeyType = ServiceAccountPublicKeyType.forNumber(0);
+   *   ServiceAccountKey response = iAMClient.getServiceAccountKey(name, publicKeyType);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the service account key in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}/keys/{key}`.
+   *     &lt;p&gt;Using `-` as a wildcard for the `PROJECT_ID` will infer the project from the account.
+   *     The `ACCOUNT` value can be the `email` address or the `unique_id` of the service account.
+   * @param publicKeyType The output format of the public key requested. X509_PEM is the default
+   *     output format.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccountKey getServiceAccountKey(
+      KeyName name, ServiceAccountPublicKeyType publicKeyType) {
+    GetServiceAccountKeyRequest request =
+<span class="fc" id="L1245">        GetServiceAccountKeyRequest.newBuilder()</span>
+<span class="pc bpc" id="L1246" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1247">            .setPublicKeyType(publicKeyType)</span>
+<span class="fc" id="L1248">            .build();</span>
+<span class="fc" id="L1249">    return getServiceAccountKey(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   String name = KeyName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;, &quot;[KEY]&quot;).toString();
+   *   ServiceAccountPublicKeyType publicKeyType = ServiceAccountPublicKeyType.forNumber(0);
+   *   ServiceAccountKey response = iAMClient.getServiceAccountKey(name, publicKeyType);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the service account key in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}/keys/{key}`.
+   *     &lt;p&gt;Using `-` as a wildcard for the `PROJECT_ID` will infer the project from the account.
+   *     The `ACCOUNT` value can be the `email` address or the `unique_id` of the service account.
+   * @param publicKeyType The output format of the public key requested. X509_PEM is the default
+   *     output format.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccountKey getServiceAccountKey(
+      String name, ServiceAccountPublicKeyType publicKeyType) {
+    GetServiceAccountKeyRequest request =
+<span class="fc" id="L1279">        GetServiceAccountKeyRequest.newBuilder()</span>
+<span class="fc" id="L1280">            .setName(name)</span>
+<span class="fc" id="L1281">            .setPublicKeyType(publicKeyType)</span>
+<span class="fc" id="L1282">            .build();</span>
+<span class="fc" id="L1283">    return getServiceAccountKey(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   GetServiceAccountKeyRequest request =
+   *       GetServiceAccountKeyRequest.newBuilder()
+   *           .setName(KeyName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;, &quot;[KEY]&quot;).toString())
+   *           .setPublicKeyType(ServiceAccountPublicKeyType.forNumber(0))
+   *           .build();
+   *   ServiceAccountKey response = iAMClient.getServiceAccountKey(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccountKey getServiceAccountKey(GetServiceAccountKeyRequest request) {
+<span class="fc" id="L1309">    return getServiceAccountKeyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   GetServiceAccountKeyRequest request =
+   *       GetServiceAccountKeyRequest.newBuilder()
+   *           .setName(KeyName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;, &quot;[KEY]&quot;).toString())
+   *           .setPublicKeyType(ServiceAccountPublicKeyType.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;ServiceAccountKey&gt; future =
+   *       iAMClient.getServiceAccountKeyCallable().futureCall(request);
+   *   // Do something.
+   *   ServiceAccountKey response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetServiceAccountKeyRequest, ServiceAccountKey&gt;
+      getServiceAccountKeyCallable() {
+<span class="fc" id="L1336">    return stub.getServiceAccountKeyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ServiceAccountName name = ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;);
+   *   ServiceAccountPrivateKeyType privateKeyType = ServiceAccountPrivateKeyType.forNumber(0);
+   *   ServiceAccountKeyAlgorithm keyAlgorithm = ServiceAccountKeyAlgorithm.forNumber(0);
+   *   ServiceAccountKey response =
+   *       iAMClient.createServiceAccountKey(name, privateKeyType, keyAlgorithm);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the service account in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using `-` as a wildcard for the
+   *     `PROJECT_ID` will infer the project from the account. The `ACCOUNT` value can be the
+   *     `email` address or the `unique_id` of the service account.
+   * @param privateKeyType The output format of the private key. The default value is
+   *     `TYPE_GOOGLE_CREDENTIALS_FILE`, which is the Google Credentials File format.
+   * @param keyAlgorithm Which type of key and algorithm to use for the key. The default is
+   *     currently a 2K RSA key. However this may change in the future.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccountKey createServiceAccountKey(
+      ServiceAccountName name,
+      ServiceAccountPrivateKeyType privateKeyType,
+      ServiceAccountKeyAlgorithm keyAlgorithm) {
+    CreateServiceAccountKeyRequest request =
+<span class="fc" id="L1372">        CreateServiceAccountKeyRequest.newBuilder()</span>
+<span class="pc bpc" id="L1373" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1374">            .setPrivateKeyType(privateKeyType)</span>
+<span class="fc" id="L1375">            .setKeyAlgorithm(keyAlgorithm)</span>
+<span class="fc" id="L1376">            .build();</span>
+<span class="fc" id="L1377">    return createServiceAccountKey(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   String name = ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString();
+   *   ServiceAccountPrivateKeyType privateKeyType = ServiceAccountPrivateKeyType.forNumber(0);
+   *   ServiceAccountKeyAlgorithm keyAlgorithm = ServiceAccountKeyAlgorithm.forNumber(0);
+   *   ServiceAccountKey response =
+   *       iAMClient.createServiceAccountKey(name, privateKeyType, keyAlgorithm);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the service account in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using `-` as a wildcard for the
+   *     `PROJECT_ID` will infer the project from the account. The `ACCOUNT` value can be the
+   *     `email` address or the `unique_id` of the service account.
+   * @param privateKeyType The output format of the private key. The default value is
+   *     `TYPE_GOOGLE_CREDENTIALS_FILE`, which is the Google Credentials File format.
+   * @param keyAlgorithm Which type of key and algorithm to use for the key. The default is
+   *     currently a 2K RSA key. However this may change in the future.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccountKey createServiceAccountKey(
+      String name,
+      ServiceAccountPrivateKeyType privateKeyType,
+      ServiceAccountKeyAlgorithm keyAlgorithm) {
+    CreateServiceAccountKeyRequest request =
+<span class="fc" id="L1413">        CreateServiceAccountKeyRequest.newBuilder()</span>
+<span class="fc" id="L1414">            .setName(name)</span>
+<span class="fc" id="L1415">            .setPrivateKeyType(privateKeyType)</span>
+<span class="fc" id="L1416">            .setKeyAlgorithm(keyAlgorithm)</span>
+<span class="fc" id="L1417">            .build();</span>
+<span class="fc" id="L1418">    return createServiceAccountKey(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   CreateServiceAccountKeyRequest request =
+   *       CreateServiceAccountKeyRequest.newBuilder()
+   *           .setName(ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString())
+   *           .setPrivateKeyType(ServiceAccountPrivateKeyType.forNumber(0))
+   *           .setKeyAlgorithm(ServiceAccountKeyAlgorithm.forNumber(0))
+   *           .build();
+   *   ServiceAccountKey response = iAMClient.createServiceAccountKey(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccountKey createServiceAccountKey(CreateServiceAccountKeyRequest request) {
+<span class="fc" id="L1445">    return createServiceAccountKeyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   CreateServiceAccountKeyRequest request =
+   *       CreateServiceAccountKeyRequest.newBuilder()
+   *           .setName(ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString())
+   *           .setPrivateKeyType(ServiceAccountPrivateKeyType.forNumber(0))
+   *           .setKeyAlgorithm(ServiceAccountKeyAlgorithm.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;ServiceAccountKey&gt; future =
+   *       iAMClient.createServiceAccountKeyCallable().futureCall(request);
+   *   // Do something.
+   *   ServiceAccountKey response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateServiceAccountKeyRequest, ServiceAccountKey&gt;
+      createServiceAccountKeyCallable() {
+<span class="fc" id="L1473">    return stub.createServiceAccountKeyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey], using a public key that
+   * you provide.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   UploadServiceAccountKeyRequest request =
+   *       UploadServiceAccountKeyRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setPublicKeyData(ByteString.EMPTY)
+   *           .build();
+   *   ServiceAccountKey response = iAMClient.uploadServiceAccountKey(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceAccountKey uploadServiceAccountKey(UploadServiceAccountKeyRequest request) {
+<span class="fc" id="L1500">    return uploadServiceAccountKeyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey], using a public key that
+   * you provide.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   UploadServiceAccountKeyRequest request =
+   *       UploadServiceAccountKeyRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setPublicKeyData(ByteString.EMPTY)
+   *           .build();
+   *   ApiFuture&lt;ServiceAccountKey&gt; future =
+   *       iAMClient.uploadServiceAccountKeyCallable().futureCall(request);
+   *   // Do something.
+   *   ServiceAccountKey response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UploadServiceAccountKeyRequest, ServiceAccountKey&gt;
+      uploadServiceAccountKeyCallable() {
+<span class="fc" id="L1528">    return stub.uploadServiceAccountKeyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey]. Deleting a service
+   * account key does not revoke short-lived credentials that have been issued based on the service
+   * account key.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   KeyName name = KeyName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;, &quot;[KEY]&quot;);
+   *   iAMClient.deleteServiceAccountKey(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the service account key in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}/keys/{key}`. Using `-` as a wildcard for
+   *     the `PROJECT_ID` will infer the project from the account. The `ACCOUNT` value can be the
+   *     `email` address or the `unique_id` of the service account.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteServiceAccountKey(KeyName name) {
+    DeleteServiceAccountKeyRequest request =
+<span class="fc" id="L1556">        DeleteServiceAccountKeyRequest.newBuilder()</span>
+<span class="pc bpc" id="L1557" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1558">            .build();</span>
+<span class="fc" id="L1559">    deleteServiceAccountKey(request);</span>
+<span class="fc" id="L1560">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey]. Deleting a service
+   * account key does not revoke short-lived credentials that have been issued based on the service
+   * account key.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   String name = KeyName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;, &quot;[KEY]&quot;).toString();
+   *   iAMClient.deleteServiceAccountKey(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the service account key in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}/keys/{key}`. Using `-` as a wildcard for
+   *     the `PROJECT_ID` will infer the project from the account. The `ACCOUNT` value can be the
+   *     `email` address or the `unique_id` of the service account.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteServiceAccountKey(String name) {
+    DeleteServiceAccountKeyRequest request =
+<span class="fc" id="L1587">        DeleteServiceAccountKeyRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1588">    deleteServiceAccountKey(request);</span>
+<span class="fc" id="L1589">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey]. Deleting a service
+   * account key does not revoke short-lived credentials that have been issued based on the service
+   * account key.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   DeleteServiceAccountKeyRequest request =
+   *       DeleteServiceAccountKeyRequest.newBuilder()
+   *           .setName(KeyName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;, &quot;[KEY]&quot;).toString())
+   *           .build();
+   *   iAMClient.deleteServiceAccountKey(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteServiceAccountKey(DeleteServiceAccountKeyRequest request) {
+<span class="fc" id="L1615">    deleteServiceAccountKeyCallable().call(request);</span>
+<span class="fc" id="L1616">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a [ServiceAccountKey][google.iam.admin.v1.ServiceAccountKey]. Deleting a service
+   * account key does not revoke short-lived credentials that have been issued based on the service
+   * account key.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   DeleteServiceAccountKeyRequest request =
+   *       DeleteServiceAccountKeyRequest.newBuilder()
+   *           .setName(KeyName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;, &quot;[KEY]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = iAMClient.deleteServiceAccountKeyCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteServiceAccountKeyRequest, Empty&gt;
+      deleteServiceAccountKeyCallable() {
+<span class="fc" id="L1642">    return stub.deleteServiceAccountKeyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * &amp;#42;&amp;#42;Note:&amp;#42;&amp;#42; This method is deprecated. Use the
+   * [`signBlob`](https://cloud.google.com/iam/help/rest-credentials/v1/projects.serviceAccounts/signBlob)
+   * method in the IAM Service Account Credentials API instead. If you currently use this method,
+   * see the [migration guide](https://cloud.google.com/iam/help/credentials/migrate-api) for
+   * instructions.
+   *
+   * &lt;p&gt;Signs a blob using the system-managed private key for a
+   * [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ServiceAccountName name = ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;);
+   *   ByteString bytesToSign = ByteString.EMPTY;
+   *   SignBlobResponse response = iAMClient.signBlob(name, bytesToSign);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Deprecated. [Migrate to Service Account Credentials
+   *     API](https://cloud.google.com/iam/help/credentials/migrate-api).
+   *     &lt;p&gt;The resource name of the service account in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using `-` as a wildcard for the
+   *     `PROJECT_ID` will infer the project from the account. The `ACCOUNT` value can be the
+   *     `email` address or the `unique_id` of the service account.
+   * @param bytesToSign Required. Deprecated. [Migrate to Service Account Credentials
+   *     API](https://cloud.google.com/iam/help/credentials/migrate-api).
+   *     &lt;p&gt;The bytes to sign.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final SignBlobResponse signBlob(ServiceAccountName name, ByteString bytesToSign) {
+    SignBlobRequest request =
+<span class="fc" id="L1683">        SignBlobRequest.newBuilder()</span>
+<span class="pc bpc" id="L1684" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1685">            .setBytesToSign(bytesToSign)</span>
+<span class="fc" id="L1686">            .build();</span>
+<span class="fc" id="L1687">    return signBlob(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * &amp;#42;&amp;#42;Note:&amp;#42;&amp;#42; This method is deprecated. Use the
+   * [`signBlob`](https://cloud.google.com/iam/help/rest-credentials/v1/projects.serviceAccounts/signBlob)
+   * method in the IAM Service Account Credentials API instead. If you currently use this method,
+   * see the [migration guide](https://cloud.google.com/iam/help/credentials/migrate-api) for
+   * instructions.
+   *
+   * &lt;p&gt;Signs a blob using the system-managed private key for a
+   * [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   String name = ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString();
+   *   ByteString bytesToSign = ByteString.EMPTY;
+   *   SignBlobResponse response = iAMClient.signBlob(name, bytesToSign);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Deprecated. [Migrate to Service Account Credentials
+   *     API](https://cloud.google.com/iam/help/credentials/migrate-api).
+   *     &lt;p&gt;The resource name of the service account in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using `-` as a wildcard for the
+   *     `PROJECT_ID` will infer the project from the account. The `ACCOUNT` value can be the
+   *     `email` address or the `unique_id` of the service account.
+   * @param bytesToSign Required. Deprecated. [Migrate to Service Account Credentials
+   *     API](https://cloud.google.com/iam/help/credentials/migrate-api).
+   *     &lt;p&gt;The bytes to sign.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final SignBlobResponse signBlob(String name, ByteString bytesToSign) {
+    SignBlobRequest request =
+<span class="fc" id="L1728">        SignBlobRequest.newBuilder().setName(name).setBytesToSign(bytesToSign).build();</span>
+<span class="fc" id="L1729">    return signBlob(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * &amp;#42;&amp;#42;Note:&amp;#42;&amp;#42; This method is deprecated. Use the
+   * [`signBlob`](https://cloud.google.com/iam/help/rest-credentials/v1/projects.serviceAccounts/signBlob)
+   * method in the IAM Service Account Credentials API instead. If you currently use this method,
+   * see the [migration guide](https://cloud.google.com/iam/help/credentials/migrate-api) for
+   * instructions.
+   *
+   * &lt;p&gt;Signs a blob using the system-managed private key for a
+   * [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   SignBlobRequest request =
+   *       SignBlobRequest.newBuilder()
+   *           .setName(ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString())
+   *           .setBytesToSign(ByteString.EMPTY)
+   *           .build();
+   *   SignBlobResponse response = iAMClient.signBlob(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final SignBlobResponse signBlob(SignBlobRequest request) {
+<span class="fc" id="L1764">    return signBlobCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * &amp;#42;&amp;#42;Note:&amp;#42;&amp;#42; This method is deprecated. Use the
+   * [`signBlob`](https://cloud.google.com/iam/help/rest-credentials/v1/projects.serviceAccounts/signBlob)
+   * method in the IAM Service Account Credentials API instead. If you currently use this method,
+   * see the [migration guide](https://cloud.google.com/iam/help/credentials/migrate-api) for
+   * instructions.
+   *
+   * &lt;p&gt;Signs a blob using the system-managed private key for a
+   * [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   SignBlobRequest request =
+   *       SignBlobRequest.newBuilder()
+   *           .setName(ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString())
+   *           .setBytesToSign(ByteString.EMPTY)
+   *           .build();
+   *   ApiFuture&lt;SignBlobResponse&gt; future = iAMClient.signBlobCallable().futureCall(request);
+   *   // Do something.
+   *   SignBlobResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final UnaryCallable&lt;SignBlobRequest, SignBlobResponse&gt; signBlobCallable() {
+<span class="fc" id="L1799">    return stub.signBlobCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * &amp;#42;&amp;#42;Note:&amp;#42;&amp;#42; This method is deprecated. Use the
+   * [`signJwt`](https://cloud.google.com/iam/help/rest-credentials/v1/projects.serviceAccounts/signJwt)
+   * method in the IAM Service Account Credentials API instead. If you currently use this method,
+   * see the [migration guide](https://cloud.google.com/iam/help/credentials/migrate-api) for
+   * instructions.
+   *
+   * &lt;p&gt;Signs a JSON Web Token (JWT) using the system-managed private key for a
+   * [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ServiceAccountName name = ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;);
+   *   String payload = &quot;payload-786701938&quot;;
+   *   SignJwtResponse response = iAMClient.signJwt(name, payload);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Deprecated. [Migrate to Service Account Credentials
+   *     API](https://cloud.google.com/iam/help/credentials/migrate-api).
+   *     &lt;p&gt;The resource name of the service account in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using `-` as a wildcard for the
+   *     `PROJECT_ID` will infer the project from the account. The `ACCOUNT` value can be the
+   *     `email` address or the `unique_id` of the service account.
+   * @param payload Required. Deprecated. [Migrate to Service Account Credentials
+   *     API](https://cloud.google.com/iam/help/credentials/migrate-api).
+   *     &lt;p&gt;The JWT payload to sign. Must be a serialized JSON object that contains a JWT Claims
+   *     Set. For example: `{&quot;sub&quot;: &quot;user{@literal @}example.com&quot;, &quot;iat&quot;: 313435}`
+   *     &lt;p&gt;If the JWT Claims Set contains an expiration time (`exp`) claim, it must be an integer
+   *     timestamp that is not in the past and no more than 1 hour in the future.
+   *     &lt;p&gt;If the JWT Claims Set does not contain an expiration time (`exp`) claim, this claim is
+   *     added automatically, with a timestamp that is 1 hour in the future.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final SignJwtResponse signJwt(ServiceAccountName name, String payload) {
+    SignJwtRequest request =
+<span class="fc" id="L1845">        SignJwtRequest.newBuilder()</span>
+<span class="pc bpc" id="L1846" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1847">            .setPayload(payload)</span>
+<span class="fc" id="L1848">            .build();</span>
+<span class="fc" id="L1849">    return signJwt(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * &amp;#42;&amp;#42;Note:&amp;#42;&amp;#42; This method is deprecated. Use the
+   * [`signJwt`](https://cloud.google.com/iam/help/rest-credentials/v1/projects.serviceAccounts/signJwt)
+   * method in the IAM Service Account Credentials API instead. If you currently use this method,
+   * see the [migration guide](https://cloud.google.com/iam/help/credentials/migrate-api) for
+   * instructions.
+   *
+   * &lt;p&gt;Signs a JSON Web Token (JWT) using the system-managed private key for a
+   * [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   String name = ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString();
+   *   String payload = &quot;payload-786701938&quot;;
+   *   SignJwtResponse response = iAMClient.signJwt(name, payload);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Deprecated. [Migrate to Service Account Credentials
+   *     API](https://cloud.google.com/iam/help/credentials/migrate-api).
+   *     &lt;p&gt;The resource name of the service account in the following format:
+   *     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using `-` as a wildcard for the
+   *     `PROJECT_ID` will infer the project from the account. The `ACCOUNT` value can be the
+   *     `email` address or the `unique_id` of the service account.
+   * @param payload Required. Deprecated. [Migrate to Service Account Credentials
+   *     API](https://cloud.google.com/iam/help/credentials/migrate-api).
+   *     &lt;p&gt;The JWT payload to sign. Must be a serialized JSON object that contains a JWT Claims
+   *     Set. For example: `{&quot;sub&quot;: &quot;user{@literal @}example.com&quot;, &quot;iat&quot;: 313435}`
+   *     &lt;p&gt;If the JWT Claims Set contains an expiration time (`exp`) claim, it must be an integer
+   *     timestamp that is not in the past and no more than 1 hour in the future.
+   *     &lt;p&gt;If the JWT Claims Set does not contain an expiration time (`exp`) claim, this claim is
+   *     added automatically, with a timestamp that is 1 hour in the future.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final SignJwtResponse signJwt(String name, String payload) {
+<span class="fc" id="L1894">    SignJwtRequest request = SignJwtRequest.newBuilder().setName(name).setPayload(payload).build();</span>
+<span class="fc" id="L1895">    return signJwt(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * &amp;#42;&amp;#42;Note:&amp;#42;&amp;#42; This method is deprecated. Use the
+   * [`signJwt`](https://cloud.google.com/iam/help/rest-credentials/v1/projects.serviceAccounts/signJwt)
+   * method in the IAM Service Account Credentials API instead. If you currently use this method,
+   * see the [migration guide](https://cloud.google.com/iam/help/credentials/migrate-api) for
+   * instructions.
+   *
+   * &lt;p&gt;Signs a JSON Web Token (JWT) using the system-managed private key for a
+   * [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   SignJwtRequest request =
+   *       SignJwtRequest.newBuilder()
+   *           .setName(ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString())
+   *           .setPayload(&quot;payload-786701938&quot;)
+   *           .build();
+   *   SignJwtResponse response = iAMClient.signJwt(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final SignJwtResponse signJwt(SignJwtRequest request) {
+<span class="fc" id="L1930">    return signJwtCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * &amp;#42;&amp;#42;Note:&amp;#42;&amp;#42; This method is deprecated. Use the
+   * [`signJwt`](https://cloud.google.com/iam/help/rest-credentials/v1/projects.serviceAccounts/signJwt)
+   * method in the IAM Service Account Credentials API instead. If you currently use this method,
+   * see the [migration guide](https://cloud.google.com/iam/help/credentials/migrate-api) for
+   * instructions.
+   *
+   * &lt;p&gt;Signs a JSON Web Token (JWT) using the system-managed private key for a
+   * [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   SignJwtRequest request =
+   *       SignJwtRequest.newBuilder()
+   *           .setName(ServiceAccountName.of(&quot;[PROJECT]&quot;, &quot;[SERVICE_ACCOUNT]&quot;).toString())
+   *           .setPayload(&quot;payload-786701938&quot;)
+   *           .build();
+   *   ApiFuture&lt;SignJwtResponse&gt; future = iAMClient.signJwtCallable().futureCall(request);
+   *   // Do something.
+   *   SignJwtResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final UnaryCallable&lt;SignJwtRequest, SignJwtResponse&gt; signJwtCallable() {
+<span class="fc" id="L1965">    return stub.signJwtCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the IAM policy that is attached to a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   * This IAM policy specifies which members have access to the service account.
+   *
+   * &lt;p&gt;This method does not tell you whether the service account has been granted any roles on
+   * other resources. To check whether a service account has role grants on a resource, use the
+   * `getIamPolicy` method for that resource. For example, to view the role grants for a project,
+   * call the Resource Manager API's
+   * [`projects.getIamPolicy`](https://cloud.google.com/resource-manager/reference/rest/v1/projects/getIamPolicy)
+   * method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ResourceName resource = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   Policy response = iAMClient.getIamPolicy(resource);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(ResourceName resource) {
+    GetIamPolicyRequest request =
+<span class="fc" id="L1997">        GetIamPolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L1998" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L1999">            .build();</span>
+<span class="fc" id="L2000">    return getIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the IAM policy that is attached to a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   * This IAM policy specifies which members have access to the service account.
+   *
+   * &lt;p&gt;This method does not tell you whether the service account has been granted any roles on
+   * other resources. To check whether a service account has role grants on a resource, use the
+   * `getIamPolicy` method for that resource. For example, to view the role grants for a project,
+   * call the Resource Manager API's
+   * [`projects.getIamPolicy`](https://cloud.google.com/resource-manager/reference/rest/v1/projects/getIamPolicy)
+   * method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   String resource = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   Policy response = iAMClient.getIamPolicy(resource);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(String resource) {
+<span class="fc" id="L2031">    GetIamPolicyRequest request = GetIamPolicyRequest.newBuilder().setResource(resource).build();</span>
+<span class="fc" id="L2032">    return getIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the IAM policy that is attached to a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   * This IAM policy specifies which members have access to the service account.
+   *
+   * &lt;p&gt;This method does not tell you whether the service account has been granted any roles on
+   * other resources. To check whether a service account has role grants on a resource, use the
+   * `getIamPolicy` method for that resource. For example, to view the role grants for a project,
+   * call the Resource Manager API's
+   * [`projects.getIamPolicy`](https://cloud.google.com/resource-manager/reference/rest/v1/projects/getIamPolicy)
+   * method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   Policy response = iAMClient.getIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(GetIamPolicyRequest request) {
+<span class="fc" id="L2066">    return getIamPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the IAM policy that is attached to a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   * This IAM policy specifies which members have access to the service account.
+   *
+   * &lt;p&gt;This method does not tell you whether the service account has been granted any roles on
+   * other resources. To check whether a service account has role grants on a resource, use the
+   * `getIamPolicy` method for that resource. For example, to view the role grants for a project,
+   * call the Resource Manager API's
+   * [`projects.getIamPolicy`](https://cloud.google.com/resource-manager/reference/rest/v1/projects/getIamPolicy)
+   * method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = iAMClient.getIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetIamPolicyRequest, Policy&gt; getIamPolicyCallable() {
+<span class="fc" id="L2099">    return stub.getIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the IAM policy that is attached to a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Use this method to grant or revoke access to the service account. For example, you could
+   * grant a member the ability to impersonate the service account.
+   *
+   * &lt;p&gt;This method does not enable the service account to access other resources. To grant roles to
+   * a service account on a resource, follow these steps:
+   *
+   * &lt;p&gt;1. Call the resource's `getIamPolicy` method to get its current IAM policy. 2. Edit the
+   * policy so that it binds the service account to an IAM role for the resource. 3. Call the
+   * resource's `setIamPolicy` method to update its IAM policy.
+   *
+   * &lt;p&gt;For detailed instructions, see [Granting roles to a service account for specific
+   * resources](https://cloud.google.com/iam/help/service-accounts/granting-access-to-service-accounts).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ResourceName resource = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = iAMClient.setIamPolicy(resource, policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being specified. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param policy REQUIRED: The complete policy to be applied to the `resource`. The size of the
+   *     policy is limited to a few 10s of KB. An empty policy is a valid policy but certain Cloud
+   *     Platform services (such as Projects) might reject them.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(ResourceName resource, Policy policy) {
+    SetIamPolicyRequest request =
+<span class="fc" id="L2140">        SetIamPolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L2141" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L2142">            .setPolicy(policy)</span>
+<span class="fc" id="L2143">            .build();</span>
+<span class="fc" id="L2144">    return setIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the IAM policy that is attached to a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Use this method to grant or revoke access to the service account. For example, you could
+   * grant a member the ability to impersonate the service account.
+   *
+   * &lt;p&gt;This method does not enable the service account to access other resources. To grant roles to
+   * a service account on a resource, follow these steps:
+   *
+   * &lt;p&gt;1. Call the resource's `getIamPolicy` method to get its current IAM policy. 2. Edit the
+   * policy so that it binds the service account to an IAM role for the resource. 3. Call the
+   * resource's `setIamPolicy` method to update its IAM policy.
+   *
+   * &lt;p&gt;For detailed instructions, see [Granting roles to a service account for specific
+   * resources](https://cloud.google.com/iam/help/service-accounts/granting-access-to-service-accounts).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   String resource = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = iAMClient.setIamPolicy(resource, policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being specified. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param policy REQUIRED: The complete policy to be applied to the `resource`. The size of the
+   *     policy is limited to a few 10s of KB. An empty policy is a valid policy but certain Cloud
+   *     Platform services (such as Projects) might reject them.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(String resource, Policy policy) {
+    SetIamPolicyRequest request =
+<span class="fc" id="L2185">        SetIamPolicyRequest.newBuilder().setResource(resource).setPolicy(policy).build();</span>
+<span class="fc" id="L2186">    return setIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the IAM policy that is attached to a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Use this method to grant or revoke access to the service account. For example, you could
+   * grant a member the ability to impersonate the service account.
+   *
+   * &lt;p&gt;This method does not enable the service account to access other resources. To grant roles to
+   * a service account on a resource, follow these steps:
+   *
+   * &lt;p&gt;1. Call the resource's `getIamPolicy` method to get its current IAM policy. 2. Edit the
+   * policy so that it binds the service account to an IAM role for the resource. 3. Call the
+   * resource's `setIamPolicy` method to update its IAM policy.
+   *
+   * &lt;p&gt;For detailed instructions, see [Granting roles to a service account for specific
+   * resources](https://cloud.google.com/iam/help/service-accounts/granting-access-to-service-accounts).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Policy response = iAMClient.setIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(SetIamPolicyRequest request) {
+<span class="fc" id="L2226">    return setIamPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the IAM policy that is attached to a [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Use this method to grant or revoke access to the service account. For example, you could
+   * grant a member the ability to impersonate the service account.
+   *
+   * &lt;p&gt;This method does not enable the service account to access other resources. To grant roles to
+   * a service account on a resource, follow these steps:
+   *
+   * &lt;p&gt;1. Call the resource's `getIamPolicy` method to get its current IAM policy. 2. Edit the
+   * policy so that it binds the service account to an IAM role for the resource. 3. Call the
+   * resource's `setIamPolicy` method to update its IAM policy.
+   *
+   * &lt;p&gt;For detailed instructions, see [Granting roles to a service account for specific
+   * resources](https://cloud.google.com/iam/help/service-accounts/granting-access-to-service-accounts).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = iAMClient.setIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetIamPolicyRequest, Policy&gt; setIamPolicyCallable() {
+<span class="fc" id="L2265">    return stub.setIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Tests whether the caller has the specified permissions on a
+   * [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ResourceName resource = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   List&lt;String&gt; permissions = new ArrayList&lt;&gt;();
+   *   TestIamPermissionsResponse response = iAMClient.testIamPermissions(resource, permissions);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy detail is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param permissions The set of permissions to check for the `resource`. Permissions with
+   *     wildcards (such as '&amp;#42;' or 'storage.&amp;#42;') are not allowed. For more information see
+   *     [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(
+      ResourceName resource, List&lt;String&gt; permissions) {
+    TestIamPermissionsRequest request =
+<span class="fc" id="L2295">        TestIamPermissionsRequest.newBuilder()</span>
+<span class="pc bpc" id="L2296" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L2297">            .addAllPermissions(permissions)</span>
+<span class="fc" id="L2298">            .build();</span>
+<span class="fc" id="L2299">    return testIamPermissions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Tests whether the caller has the specified permissions on a
+   * [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   String resource = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   List&lt;String&gt; permissions = new ArrayList&lt;&gt;();
+   *   TestIamPermissionsResponse response = iAMClient.testIamPermissions(resource, permissions);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy detail is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param permissions The set of permissions to check for the `resource`. Permissions with
+   *     wildcards (such as '&amp;#42;' or 'storage.&amp;#42;') are not allowed. For more information see
+   *     [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(
+      String resource, List&lt;String&gt; permissions) {
+    TestIamPermissionsRequest request =
+<span class="fc" id="L2329">        TestIamPermissionsRequest.newBuilder()</span>
+<span class="fc" id="L2330">            .setResource(resource)</span>
+<span class="fc" id="L2331">            .addAllPermissions(permissions)</span>
+<span class="fc" id="L2332">            .build();</span>
+<span class="fc" id="L2333">    return testIamPermissions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Tests whether the caller has the specified permissions on a
+   * [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   TestIamPermissionsResponse response = iAMClient.testIamPermissions(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(TestIamPermissionsRequest request) {
+<span class="fc" id="L2360">    return testIamPermissionsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Tests whether the caller has the specified permissions on a
+   * [ServiceAccount][google.iam.admin.v1.ServiceAccount].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   ApiFuture&lt;TestIamPermissionsResponse&gt; future =
+   *       iAMClient.testIamPermissionsCallable().futureCall(request);
+   *   // Do something.
+   *   TestIamPermissionsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+      testIamPermissionsCallable() {
+<span class="fc" id="L2388">    return stub.testIamPermissionsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists roles that can be granted on a Google Cloud resource. A role is grantable if the IAM
+   * policy for the resource can contain bindings to the role.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   String fullResourceName = &quot;fullResourceName-853732376&quot;;
+   *   for (Role element : iAMClient.queryGrantableRoles(fullResourceName).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param fullResourceName Required. The full resource name to query from the list of grantable
+   *     roles.
+   *     &lt;p&gt;The name follows the Google Cloud Platform resource format. For example, a Cloud
+   *     Platform project with id `my-project` will be named
+   *     `//cloudresourcemanager.googleapis.com/projects/my-project`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final QueryGrantableRolesPagedResponse queryGrantableRoles(String fullResourceName) {
+    QueryGrantableRolesRequest request =
+<span class="fc" id="L2418">        QueryGrantableRolesRequest.newBuilder().setFullResourceName(fullResourceName).build();</span>
+<span class="fc" id="L2419">    return queryGrantableRoles(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists roles that can be granted on a Google Cloud resource. A role is grantable if the IAM
+   * policy for the resource can contain bindings to the role.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   QueryGrantableRolesRequest request =
+   *       QueryGrantableRolesRequest.newBuilder()
+   *           .setFullResourceName(&quot;fullResourceName-853732376&quot;)
+   *           .setView(RoleView.forNumber(0))
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Role element : iAMClient.queryGrantableRoles(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final QueryGrantableRolesPagedResponse queryGrantableRoles(
+      QueryGrantableRolesRequest request) {
+<span class="fc" id="L2451">    return queryGrantableRolesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists roles that can be granted on a Google Cloud resource. A role is grantable if the IAM
+   * policy for the resource can contain bindings to the role.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   QueryGrantableRolesRequest request =
+   *       QueryGrantableRolesRequest.newBuilder()
+   *           .setFullResourceName(&quot;fullResourceName-853732376&quot;)
+   *           .setView(RoleView.forNumber(0))
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Role&gt; future = iAMClient.queryGrantableRolesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Role element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;QueryGrantableRolesRequest, QueryGrantableRolesPagedResponse&gt;
+      queryGrantableRolesPagedCallable() {
+<span class="fc" id="L2482">    return stub.queryGrantableRolesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists roles that can be granted on a Google Cloud resource. A role is grantable if the IAM
+   * policy for the resource can contain bindings to the role.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   QueryGrantableRolesRequest request =
+   *       QueryGrantableRolesRequest.newBuilder()
+   *           .setFullResourceName(&quot;fullResourceName-853732376&quot;)
+   *           .setView(RoleView.forNumber(0))
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     QueryGrantableRolesResponse response =
+   *         iAMClient.queryGrantableRolesCallable().call(request);
+   *     for (Role element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;QueryGrantableRolesRequest, QueryGrantableRolesResponse&gt;
+      queryGrantableRolesCallable() {
+<span class="nc" id="L2521">    return stub.queryGrantableRolesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every predefined [Role][google.iam.admin.v1.Role] that IAM supports, or every custom role
+   * that is defined for an organization or project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ListRolesRequest request =
+   *       ListRolesRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setView(RoleView.forNumber(0))
+   *           .setShowDeleted(true)
+   *           .build();
+   *   for (Role element : iAMClient.listRoles(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRolesPagedResponse listRoles(ListRolesRequest request) {
+<span class="fc" id="L2553">    return listRolesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every predefined [Role][google.iam.admin.v1.Role] that IAM supports, or every custom role
+   * that is defined for an organization or project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ListRolesRequest request =
+   *       ListRolesRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setView(RoleView.forNumber(0))
+   *           .setShowDeleted(true)
+   *           .build();
+   *   ApiFuture&lt;Role&gt; future = iAMClient.listRolesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Role element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRolesRequest, ListRolesPagedResponse&gt; listRolesPagedCallable() {
+<span class="fc" id="L2584">    return stub.listRolesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every predefined [Role][google.iam.admin.v1.Role] that IAM supports, or every custom role
+   * that is defined for an organization or project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   ListRolesRequest request =
+   *       ListRolesRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setView(RoleView.forNumber(0))
+   *           .setShowDeleted(true)
+   *           .build();
+   *   while (true) {
+   *     ListRolesResponse response = iAMClient.listRolesCallable().call(request);
+   *     for (Role element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRolesRequest, ListRolesResponse&gt; listRolesCallable() {
+<span class="nc" id="L2622">    return stub.listRolesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the definition of a [Role][google.iam.admin.v1.Role].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   GetRoleRequest request =
+   *       GetRoleRequest.newBuilder().setName(ProjectName.of(&quot;[PROJECT]&quot;).toString()).build();
+   *   Role response = iAMClient.getRole(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Role getRole(GetRoleRequest request) {
+<span class="fc" id="L2645">    return getRoleCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the definition of a [Role][google.iam.admin.v1.Role].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   GetRoleRequest request =
+   *       GetRoleRequest.newBuilder().setName(ProjectName.of(&quot;[PROJECT]&quot;).toString()).build();
+   *   ApiFuture&lt;Role&gt; future = iAMClient.getRoleCallable().futureCall(request);
+   *   // Do something.
+   *   Role response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetRoleRequest, Role&gt; getRoleCallable() {
+<span class="fc" id="L2667">    return stub.getRoleCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new custom [Role][google.iam.admin.v1.Role].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   CreateRoleRequest request =
+   *       CreateRoleRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setRoleId(&quot;roleId-925416399&quot;)
+   *           .setRole(Role.newBuilder().build())
+   *           .build();
+   *   Role response = iAMClient.createRole(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Role createRole(CreateRoleRequest request) {
+<span class="fc" id="L2694">    return createRoleCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new custom [Role][google.iam.admin.v1.Role].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   CreateRoleRequest request =
+   *       CreateRoleRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setRoleId(&quot;roleId-925416399&quot;)
+   *           .setRole(Role.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Role&gt; future = iAMClient.createRoleCallable().futureCall(request);
+   *   // Do something.
+   *   Role response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateRoleRequest, Role&gt; createRoleCallable() {
+<span class="fc" id="L2720">    return stub.createRoleCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the definition of a custom [Role][google.iam.admin.v1.Role].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   UpdateRoleRequest request =
+   *       UpdateRoleRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setRole(Role.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Role response = iAMClient.updateRole(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Role updateRole(UpdateRoleRequest request) {
+<span class="fc" id="L2747">    return updateRoleCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the definition of a custom [Role][google.iam.admin.v1.Role].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   UpdateRoleRequest request =
+   *       UpdateRoleRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setRole(Role.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Role&gt; future = iAMClient.updateRoleCallable().futureCall(request);
+   *   // Do something.
+   *   Role response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateRoleRequest, Role&gt; updateRoleCallable() {
+<span class="fc" id="L2773">    return stub.updateRoleCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a custom [Role][google.iam.admin.v1.Role].
+   *
+   * &lt;p&gt;When you delete a custom role, the following changes occur immediately:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;You cannot bind a member to the custom role in an IAM [Policy][google.iam.v1.Policy].
+   *   &lt;li&gt;Existing bindings to the custom role are not changed, but they have no effect.
+   *   &lt;li&gt;By default, the response from [ListRoles][google.iam.admin.v1.IAM.ListRoles] does not
+   *       include the custom role.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;You have 7 days to undelete the custom role. After 7 days, the following changes occur:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;The custom role is permanently deleted and cannot be recovered.
+   *   &lt;li&gt;If an IAM policy contains a binding to the custom role, the binding is permanently
+   *       removed.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   DeleteRoleRequest request =
+   *       DeleteRoleRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setEtag(ByteString.EMPTY)
+   *           .build();
+   *   Role response = iAMClient.deleteRole(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Role deleteRole(DeleteRoleRequest request) {
+<span class="fc" id="L2816">    return deleteRoleCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a custom [Role][google.iam.admin.v1.Role].
+   *
+   * &lt;p&gt;When you delete a custom role, the following changes occur immediately:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;You cannot bind a member to the custom role in an IAM [Policy][google.iam.v1.Policy].
+   *   &lt;li&gt;Existing bindings to the custom role are not changed, but they have no effect.
+   *   &lt;li&gt;By default, the response from [ListRoles][google.iam.admin.v1.IAM.ListRoles] does not
+   *       include the custom role.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;You have 7 days to undelete the custom role. After 7 days, the following changes occur:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;The custom role is permanently deleted and cannot be recovered.
+   *   &lt;li&gt;If an IAM policy contains a binding to the custom role, the binding is permanently
+   *       removed.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   DeleteRoleRequest request =
+   *       DeleteRoleRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setEtag(ByteString.EMPTY)
+   *           .build();
+   *   ApiFuture&lt;Role&gt; future = iAMClient.deleteRoleCallable().futureCall(request);
+   *   // Do something.
+   *   Role response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteRoleRequest, Role&gt; deleteRoleCallable() {
+<span class="fc" id="L2858">    return stub.deleteRoleCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Undeletes a custom [Role][google.iam.admin.v1.Role].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   UndeleteRoleRequest request =
+   *       UndeleteRoleRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setEtag(ByteString.EMPTY)
+   *           .build();
+   *   Role response = iAMClient.undeleteRole(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Role undeleteRole(UndeleteRoleRequest request) {
+<span class="fc" id="L2884">    return undeleteRoleCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Undeletes a custom [Role][google.iam.admin.v1.Role].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   UndeleteRoleRequest request =
+   *       UndeleteRoleRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setEtag(ByteString.EMPTY)
+   *           .build();
+   *   ApiFuture&lt;Role&gt; future = iAMClient.undeleteRoleCallable().futureCall(request);
+   *   // Do something.
+   *   Role response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UndeleteRoleRequest, Role&gt; undeleteRoleCallable() {
+<span class="fc" id="L2909">    return stub.undeleteRoleCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every permission that you can test on a resource. A permission is testable if you can
+   * check whether a member has that permission on the resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   QueryTestablePermissionsRequest request =
+   *       QueryTestablePermissionsRequest.newBuilder()
+   *           .setFullResourceName(&quot;fullResourceName-853732376&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Permission element : iAMClient.queryTestablePermissions(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final QueryTestablePermissionsPagedResponse queryTestablePermissions(
+      QueryTestablePermissionsRequest request) {
+<span class="fc" id="L2940">    return queryTestablePermissionsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every permission that you can test on a resource. A permission is testable if you can
+   * check whether a member has that permission on the resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   QueryTestablePermissionsRequest request =
+   *       QueryTestablePermissionsRequest.newBuilder()
+   *           .setFullResourceName(&quot;fullResourceName-853732376&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Permission&gt; future =
+   *       iAMClient.queryTestablePermissionsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Permission element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;QueryTestablePermissionsRequest, QueryTestablePermissionsPagedResponse&gt;
+      queryTestablePermissionsPagedCallable() {
+<span class="fc" id="L2971">    return stub.queryTestablePermissionsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists every permission that you can test on a resource. A permission is testable if you can
+   * check whether a member has that permission on the resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   QueryTestablePermissionsRequest request =
+   *       QueryTestablePermissionsRequest.newBuilder()
+   *           .setFullResourceName(&quot;fullResourceName-853732376&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     QueryTestablePermissionsResponse response =
+   *         iAMClient.queryTestablePermissionsCallable().call(request);
+   *     for (Permission element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;QueryTestablePermissionsRequest, QueryTestablePermissionsResponse&gt;
+      queryTestablePermissionsCallable() {
+<span class="nc" id="L3009">    return stub.queryTestablePermissionsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of services that allow you to opt into audit logs that are not generated by
+   * default.
+   *
+   * &lt;p&gt;To learn more about audit logs, see the [Logging
+   * documentation](https://cloud.google.com/logging/docs/audit).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   QueryAuditableServicesRequest request =
+   *       QueryAuditableServicesRequest.newBuilder()
+   *           .setFullResourceName(&quot;fullResourceName-853732376&quot;)
+   *           .build();
+   *   QueryAuditableServicesResponse response = iAMClient.queryAuditableServices(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final QueryAuditableServicesResponse queryAuditableServices(
+      QueryAuditableServicesRequest request) {
+<span class="fc" id="L3039">    return queryAuditableServicesCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of services that allow you to opt into audit logs that are not generated by
+   * default.
+   *
+   * &lt;p&gt;To learn more about audit logs, see the [Logging
+   * documentation](https://cloud.google.com/logging/docs/audit).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   QueryAuditableServicesRequest request =
+   *       QueryAuditableServicesRequest.newBuilder()
+   *           .setFullResourceName(&quot;fullResourceName-853732376&quot;)
+   *           .build();
+   *   ApiFuture&lt;QueryAuditableServicesResponse&gt; future =
+   *       iAMClient.queryAuditableServicesCallable().futureCall(request);
+   *   // Do something.
+   *   QueryAuditableServicesResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;QueryAuditableServicesRequest, QueryAuditableServicesResponse&gt;
+      queryAuditableServicesCallable() {
+<span class="fc" id="L3069">    return stub.queryAuditableServicesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lints, or validates, an IAM policy. Currently checks the
+   * [google.iam.v1.Binding.condition][google.iam.v1.Binding.condition] field, which contains a
+   * condition expression for a role binding.
+   *
+   * &lt;p&gt;Successful calls to this method always return an HTTP `200 OK` status code, even if the
+   * linter detects an issue in the IAM policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   LintPolicyRequest request =
+   *       LintPolicyRequest.newBuilder().setFullResourceName(&quot;fullResourceName-853732376&quot;).build();
+   *   LintPolicyResponse response = iAMClient.lintPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final LintPolicyResponse lintPolicy(LintPolicyRequest request) {
+<span class="fc" id="L3097">    return lintPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lints, or validates, an IAM policy. Currently checks the
+   * [google.iam.v1.Binding.condition][google.iam.v1.Binding.condition] field, which contains a
+   * condition expression for a role binding.
+   *
+   * &lt;p&gt;Successful calls to this method always return an HTTP `200 OK` status code, even if the
+   * linter detects an issue in the IAM policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (IAMClient iAMClient = IAMClient.create()) {
+   *   LintPolicyRequest request =
+   *       LintPolicyRequest.newBuilder().setFullResourceName(&quot;fullResourceName-853732376&quot;).build();
+   *   ApiFuture&lt;LintPolicyResponse&gt; future = iAMClient.lintPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   LintPolicyResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;LintPolicyRequest, LintPolicyResponse&gt; lintPolicyCallable() {
+<span class="fc" id="L3124">    return stub.lintPolicyCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L3129">    stub.close();</span>
+<span class="fc" id="L3130">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L3134">    stub.shutdown();</span>
+<span class="nc" id="L3135">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L3139">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L3144">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L3149">    stub.shutdownNow();</span>
+<span class="nc" id="L3150">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L3154">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListServiceAccountsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListServiceAccountsRequest,
+          ListServiceAccountsResponse,
+          ServiceAccount,
+          ListServiceAccountsPage,
+          ListServiceAccountsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListServiceAccountsPagedResponse&gt; createAsync(
+        PageContext&lt;ListServiceAccountsRequest, ListServiceAccountsResponse, ServiceAccount&gt;
+            context,
+        ApiFuture&lt;ListServiceAccountsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListServiceAccountsPage&gt; futurePage =
+<span class="fc" id="L3170">          ListServiceAccountsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3171">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3173">          input -&gt; new ListServiceAccountsPagedResponse(input),</span>
+<span class="fc" id="L3174">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListServiceAccountsPagedResponse(ListServiceAccountsPage page) {
+<span class="fc" id="L3178">      super(page, ListServiceAccountsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3179">    }</span>
+  }
+
+  public static class ListServiceAccountsPage
+      extends AbstractPage&lt;
+          ListServiceAccountsRequest,
+          ListServiceAccountsResponse,
+          ServiceAccount,
+          ListServiceAccountsPage&gt; {
+
+    private ListServiceAccountsPage(
+        PageContext&lt;ListServiceAccountsRequest, ListServiceAccountsResponse, ServiceAccount&gt;
+            context,
+        ListServiceAccountsResponse response) {
+<span class="fc" id="L3193">      super(context, response);</span>
+<span class="fc" id="L3194">    }</span>
+
+    private static ListServiceAccountsPage createEmptyPage() {
+<span class="fc" id="L3197">      return new ListServiceAccountsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListServiceAccountsPage createPage(
+        PageContext&lt;ListServiceAccountsRequest, ListServiceAccountsResponse, ServiceAccount&gt;
+            context,
+        ListServiceAccountsResponse response) {
+<span class="fc" id="L3205">      return new ListServiceAccountsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListServiceAccountsPage&gt; createPageAsync(
+        PageContext&lt;ListServiceAccountsRequest, ListServiceAccountsResponse, ServiceAccount&gt;
+            context,
+        ApiFuture&lt;ListServiceAccountsResponse&gt; futureResponse) {
+<span class="fc" id="L3213">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListServiceAccountsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListServiceAccountsRequest,
+          ListServiceAccountsResponse,
+          ServiceAccount,
+          ListServiceAccountsPage,
+          ListServiceAccountsFixedSizeCollection&gt; {
+
+    private ListServiceAccountsFixedSizeCollection(
+        List&lt;ListServiceAccountsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3227">      super(pages, collectionSize);</span>
+<span class="fc" id="L3228">    }</span>
+
+    private static ListServiceAccountsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3231">      return new ListServiceAccountsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListServiceAccountsFixedSizeCollection createCollection(
+        List&lt;ListServiceAccountsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3237">      return new ListServiceAccountsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class QueryGrantableRolesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          QueryGrantableRolesRequest,
+          QueryGrantableRolesResponse,
+          Role,
+          QueryGrantableRolesPage,
+          QueryGrantableRolesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;QueryGrantableRolesPagedResponse&gt; createAsync(
+        PageContext&lt;QueryGrantableRolesRequest, QueryGrantableRolesResponse, Role&gt; context,
+        ApiFuture&lt;QueryGrantableRolesResponse&gt; futureResponse) {
+      ApiFuture&lt;QueryGrantableRolesPage&gt; futurePage =
+<span class="fc" id="L3253">          QueryGrantableRolesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3254">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3256">          input -&gt; new QueryGrantableRolesPagedResponse(input),</span>
+<span class="fc" id="L3257">          MoreExecutors.directExecutor());</span>
+    }
+
+    private QueryGrantableRolesPagedResponse(QueryGrantableRolesPage page) {
+<span class="fc" id="L3261">      super(page, QueryGrantableRolesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3262">    }</span>
+  }
+
+  public static class QueryGrantableRolesPage
+      extends AbstractPage&lt;
+          QueryGrantableRolesRequest, QueryGrantableRolesResponse, Role, QueryGrantableRolesPage&gt; {
+
+    private QueryGrantableRolesPage(
+        PageContext&lt;QueryGrantableRolesRequest, QueryGrantableRolesResponse, Role&gt; context,
+        QueryGrantableRolesResponse response) {
+<span class="fc" id="L3272">      super(context, response);</span>
+<span class="fc" id="L3273">    }</span>
+
+    private static QueryGrantableRolesPage createEmptyPage() {
+<span class="fc" id="L3276">      return new QueryGrantableRolesPage(null, null);</span>
+    }
+
+    @Override
+    protected QueryGrantableRolesPage createPage(
+        PageContext&lt;QueryGrantableRolesRequest, QueryGrantableRolesResponse, Role&gt; context,
+        QueryGrantableRolesResponse response) {
+<span class="fc" id="L3283">      return new QueryGrantableRolesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;QueryGrantableRolesPage&gt; createPageAsync(
+        PageContext&lt;QueryGrantableRolesRequest, QueryGrantableRolesResponse, Role&gt; context,
+        ApiFuture&lt;QueryGrantableRolesResponse&gt; futureResponse) {
+<span class="fc" id="L3290">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class QueryGrantableRolesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          QueryGrantableRolesRequest,
+          QueryGrantableRolesResponse,
+          Role,
+          QueryGrantableRolesPage,
+          QueryGrantableRolesFixedSizeCollection&gt; {
+
+    private QueryGrantableRolesFixedSizeCollection(
+        List&lt;QueryGrantableRolesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3304">      super(pages, collectionSize);</span>
+<span class="fc" id="L3305">    }</span>
+
+    private static QueryGrantableRolesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3308">      return new QueryGrantableRolesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected QueryGrantableRolesFixedSizeCollection createCollection(
+        List&lt;QueryGrantableRolesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3314">      return new QueryGrantableRolesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListRolesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListRolesRequest, ListRolesResponse, Role, ListRolesPage, ListRolesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListRolesPagedResponse&gt; createAsync(
+        PageContext&lt;ListRolesRequest, ListRolesResponse, Role&gt; context,
+        ApiFuture&lt;ListRolesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListRolesPage&gt; futurePage =
+<span class="fc" id="L3326">          ListRolesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3327">      return ApiFutures.transform(</span>
+<span class="fc" id="L3328">          futurePage, input -&gt; new ListRolesPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListRolesPagedResponse(ListRolesPage page) {
+<span class="fc" id="L3332">      super(page, ListRolesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3333">    }</span>
+  }
+
+  public static class ListRolesPage
+      extends AbstractPage&lt;ListRolesRequest, ListRolesResponse, Role, ListRolesPage&gt; {
+
+    private ListRolesPage(
+        PageContext&lt;ListRolesRequest, ListRolesResponse, Role&gt; context,
+        ListRolesResponse response) {
+<span class="fc" id="L3342">      super(context, response);</span>
+<span class="fc" id="L3343">    }</span>
+
+    private static ListRolesPage createEmptyPage() {
+<span class="fc" id="L3346">      return new ListRolesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListRolesPage createPage(
+        PageContext&lt;ListRolesRequest, ListRolesResponse, Role&gt; context,
+        ListRolesResponse response) {
+<span class="fc" id="L3353">      return new ListRolesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListRolesPage&gt; createPageAsync(
+        PageContext&lt;ListRolesRequest, ListRolesResponse, Role&gt; context,
+        ApiFuture&lt;ListRolesResponse&gt; futureResponse) {
+<span class="fc" id="L3360">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListRolesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListRolesRequest, ListRolesResponse, Role, ListRolesPage, ListRolesFixedSizeCollection&gt; {
+
+    private ListRolesFixedSizeCollection(List&lt;ListRolesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3369">      super(pages, collectionSize);</span>
+<span class="fc" id="L3370">    }</span>
+
+    private static ListRolesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3373">      return new ListRolesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListRolesFixedSizeCollection createCollection(
+        List&lt;ListRolesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3379">      return new ListRolesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class QueryTestablePermissionsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          QueryTestablePermissionsRequest,
+          QueryTestablePermissionsResponse,
+          Permission,
+          QueryTestablePermissionsPage,
+          QueryTestablePermissionsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;QueryTestablePermissionsPagedResponse&gt; createAsync(
+        PageContext&lt;QueryTestablePermissionsRequest, QueryTestablePermissionsResponse, Permission&gt;
+            context,
+        ApiFuture&lt;QueryTestablePermissionsResponse&gt; futureResponse) {
+      ApiFuture&lt;QueryTestablePermissionsPage&gt; futurePage =
+<span class="fc" id="L3396">          QueryTestablePermissionsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3397">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3399">          input -&gt; new QueryTestablePermissionsPagedResponse(input),</span>
+<span class="fc" id="L3400">          MoreExecutors.directExecutor());</span>
+    }
+
+    private QueryTestablePermissionsPagedResponse(QueryTestablePermissionsPage page) {
+<span class="fc" id="L3404">      super(page, QueryTestablePermissionsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3405">    }</span>
+  }
+
+  public static class QueryTestablePermissionsPage
+      extends AbstractPage&lt;
+          QueryTestablePermissionsRequest,
+          QueryTestablePermissionsResponse,
+          Permission,
+          QueryTestablePermissionsPage&gt; {
+
+    private QueryTestablePermissionsPage(
+        PageContext&lt;QueryTestablePermissionsRequest, QueryTestablePermissionsResponse, Permission&gt;
+            context,
+        QueryTestablePermissionsResponse response) {
+<span class="fc" id="L3419">      super(context, response);</span>
+<span class="fc" id="L3420">    }</span>
+
+    private static QueryTestablePermissionsPage createEmptyPage() {
+<span class="fc" id="L3423">      return new QueryTestablePermissionsPage(null, null);</span>
+    }
+
+    @Override
+    protected QueryTestablePermissionsPage createPage(
+        PageContext&lt;QueryTestablePermissionsRequest, QueryTestablePermissionsResponse, Permission&gt;
+            context,
+        QueryTestablePermissionsResponse response) {
+<span class="fc" id="L3431">      return new QueryTestablePermissionsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;QueryTestablePermissionsPage&gt; createPageAsync(
+        PageContext&lt;QueryTestablePermissionsRequest, QueryTestablePermissionsResponse, Permission&gt;
+            context,
+        ApiFuture&lt;QueryTestablePermissionsResponse&gt; futureResponse) {
+<span class="fc" id="L3439">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class QueryTestablePermissionsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          QueryTestablePermissionsRequest,
+          QueryTestablePermissionsResponse,
+          Permission,
+          QueryTestablePermissionsPage,
+          QueryTestablePermissionsFixedSizeCollection&gt; {
+
+    private QueryTestablePermissionsFixedSizeCollection(
+        List&lt;QueryTestablePermissionsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3453">      super(pages, collectionSize);</span>
+<span class="fc" id="L3454">    }</span>
+
+    private static QueryTestablePermissionsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3457">      return new QueryTestablePermissionsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected QueryTestablePermissionsFixedSizeCollection createCollection(
+        List&lt;QueryTestablePermissionsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3463">      return new QueryTestablePermissionsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

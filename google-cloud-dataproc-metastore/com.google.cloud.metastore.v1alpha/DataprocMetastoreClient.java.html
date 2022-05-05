@@ -1,0 +1,2547 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DataprocMetastoreClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-dataproc-metastore</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.metastore.v1alpha</a> &gt; <span class="el_source">DataprocMetastoreClient.java</span></div><h1>DataprocMetastoreClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.metastore.v1alpha;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.metastore.v1alpha.stub.DataprocMetastoreStub;
+import com.google.cloud.metastore.v1alpha.stub.DataprocMetastoreStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Configures and manages metastore services. Metastore services are fully
+ * managed, highly available, autoscaled, autohealing, OSS-native deployments of technical metadata
+ * management software. Each metastore service exposes a network endpoint through which metadata
+ * queries are served. Metadata queries can originate from a variety of sources, including Apache
+ * Hive, Apache Presto, and Apache Spark.
+ *
+ * &lt;p&gt;The Dataproc Metastore API defines the following resource model:
+ *
+ * &lt;ul&gt;
+ *   &lt;li&gt;The service works with a collection of Google Cloud projects, named: `/projects/&amp;#42;`
+ *   &lt;li&gt;Each project has a collection of available locations, named: `/locations/&amp;#42;` (a location
+ *       must refer to a Google Cloud `region`)
+ *   &lt;li&gt;Each location has a collection of services, named: `/services/&amp;#42;`
+ *   &lt;li&gt;Dataproc Metastore services are resources with names of the form:
+ * &lt;/ul&gt;
+ *
+ * &lt;p&gt;`/projects/{project_number}/locations/{location_id}/services/{service_id}`.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+ *   ServiceName name = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;);
+ *   Service response = dataprocMetastoreClient.getService(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the DataprocMetastoreClient object to clean up resources
+ * such as threads. In the example above, try-with-resources is used, which automatically calls
+ * close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of DataprocMetastoreSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * DataprocMetastoreSettings dataprocMetastoreSettings =
+ *     DataprocMetastoreSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * DataprocMetastoreClient dataprocMetastoreClient =
+ *     DataprocMetastoreClient.create(dataprocMetastoreSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * DataprocMetastoreSettings dataprocMetastoreSettings =
+ *     DataprocMetastoreSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * DataprocMetastoreClient dataprocMetastoreClient =
+ *     DataprocMetastoreClient.create(dataprocMetastoreSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@BetaApi
+@Generated(&quot;by gapic-generator-java&quot;)
+public class DataprocMetastoreClient implements BackgroundResource {
+  private final DataprocMetastoreSettings settings;
+  private final DataprocMetastoreStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of DataprocMetastoreClient with default settings. */
+  public static final DataprocMetastoreClient create() throws IOException {
+<span class="nc" id="L136">    return create(DataprocMetastoreSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of DataprocMetastoreClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final DataprocMetastoreClient create(DataprocMetastoreSettings settings)
+      throws IOException {
+<span class="fc" id="L145">    return new DataprocMetastoreClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of DataprocMetastoreClient, using the given stub for making calls. This
+   * is for advanced usage - prefer using create(DataprocMetastoreSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final DataprocMetastoreClient create(DataprocMetastoreStub stub) {
+<span class="nc" id="L154">    return new DataprocMetastoreClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of DataprocMetastoreClient, using the given settings. This is protected
+   * so that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L162">  protected DataprocMetastoreClient(DataprocMetastoreSettings settings) throws IOException {</span>
+<span class="fc" id="L163">    this.settings = settings;</span>
+<span class="fc" id="L164">    this.stub = ((DataprocMetastoreStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L165">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L166">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L169">  protected DataprocMetastoreClient(DataprocMetastoreStub stub) {</span>
+<span class="nc" id="L170">    this.settings = null;</span>
+<span class="nc" id="L171">    this.stub = stub;</span>
+<span class="nc" id="L172">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L173">  }</span>
+
+  public final DataprocMetastoreSettings getSettings() {
+<span class="nc" id="L176">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public DataprocMetastoreStub getStub() {
+<span class="nc" id="L181">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L189">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists services in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Service element : dataprocMetastoreClient.listServices(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The relative resource name of the location of metastore services to
+   *     list, in the following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServicesPagedResponse listServices(LocationName parent) {
+    ListServicesRequest request =
+<span class="fc" id="L216">        ListServicesRequest.newBuilder()</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L218">            .build();</span>
+<span class="fc" id="L219">    return listServices(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists services in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Service element : dataprocMetastoreClient.listServices(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The relative resource name of the location of metastore services to
+   *     list, in the following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServicesPagedResponse listServices(String parent) {
+<span class="fc" id="L245">    ListServicesRequest request = ListServicesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L246">    return listServices(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists services in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ListServicesRequest request =
+   *       ListServicesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Service element : dataprocMetastoreClient.listServices(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServicesPagedResponse listServices(ListServicesRequest request) {
+<span class="fc" id="L277">    return listServicesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists services in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ListServicesRequest request =
+   *       ListServicesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Service&gt; future =
+   *       dataprocMetastoreClient.listServicesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Service element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListServicesRequest, ListServicesPagedResponse&gt;
+      listServicesPagedCallable() {
+<span class="fc" id="L309">    return stub.listServicesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists services in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ListServicesRequest request =
+   *       ListServicesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListServicesResponse response =
+   *         dataprocMetastoreClient.listServicesCallable().call(request);
+   *     for (Service element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListServicesRequest, ListServicesResponse&gt; listServicesCallable() {
+<span class="nc" id="L347">    return stub.listServicesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a single service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ServiceName name = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;);
+   *   Service response = dataprocMetastoreClient.getService(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The relative resource name of the metastore service to retrieve, in the
+   *     following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service getService(ServiceName name) {
+    GetServiceRequest request =
+<span class="pc bpc" id="L372" title="1 of 2 branches missed.">        GetServiceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L373">    return getService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a single service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   String name = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   Service response = dataprocMetastoreClient.getService(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The relative resource name of the metastore service to retrieve, in the
+   *     following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service getService(String name) {
+<span class="fc" id="L397">    GetServiceRequest request = GetServiceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L398">    return getService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a single service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   GetServiceRequest request =
+   *       GetServiceRequest.newBuilder()
+   *           .setName(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .build();
+   *   Service response = dataprocMetastoreClient.getService(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service getService(GetServiceRequest request) {
+<span class="fc" id="L423">    return getServiceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a single service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   GetServiceRequest request =
+   *       GetServiceRequest.newBuilder()
+   *           .setName(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Service&gt; future = dataprocMetastoreClient.getServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Service response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetServiceRequest, Service&gt; getServiceCallable() {
+<span class="fc" id="L447">    return stub.getServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a metastore service in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Service service = Service.newBuilder().build();
+   *   String serviceId = &quot;serviceId-194185552&quot;;
+   *   Service response =
+   *       dataprocMetastoreClient.createServiceAsync(parent, service, serviceId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The relative resource name of the location in which to create a
+   *     metastore service, in the following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}`.
+   * @param service Required. The Metastore service to create. The `name` field is ignored. The ID
+   *     of the created metastore service must be provided in the request's `service_id` field.
+   * @param serviceId Required. The ID of the metastore service, which is used as the final
+   *     component of the metastore service's name.
+   *     &lt;p&gt;This value must be between 2 and 63 characters long inclusive, begin with a letter, end
+   *     with a letter or number, and consist of alpha-numeric ASCII characters or hyphens.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Service, OperationMetadata&gt; createServiceAsync(
+      LocationName parent, Service service, String serviceId) {
+    CreateServiceRequest request =
+<span class="fc" id="L482">        CreateServiceRequest.newBuilder()</span>
+<span class="pc bpc" id="L483" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L484">            .setService(service)</span>
+<span class="fc" id="L485">            .setServiceId(serviceId)</span>
+<span class="fc" id="L486">            .build();</span>
+<span class="fc" id="L487">    return createServiceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a metastore service in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Service service = Service.newBuilder().build();
+   *   String serviceId = &quot;serviceId-194185552&quot;;
+   *   Service response =
+   *       dataprocMetastoreClient.createServiceAsync(parent, service, serviceId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The relative resource name of the location in which to create a
+   *     metastore service, in the following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}`.
+   * @param service Required. The Metastore service to create. The `name` field is ignored. The ID
+   *     of the created metastore service must be provided in the request's `service_id` field.
+   * @param serviceId Required. The ID of the metastore service, which is used as the final
+   *     component of the metastore service's name.
+   *     &lt;p&gt;This value must be between 2 and 63 characters long inclusive, begin with a letter, end
+   *     with a letter or number, and consist of alpha-numeric ASCII characters or hyphens.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Service, OperationMetadata&gt; createServiceAsync(
+      String parent, Service service, String serviceId) {
+    CreateServiceRequest request =
+<span class="fc" id="L522">        CreateServiceRequest.newBuilder()</span>
+<span class="fc" id="L523">            .setParent(parent)</span>
+<span class="fc" id="L524">            .setService(service)</span>
+<span class="fc" id="L525">            .setServiceId(serviceId)</span>
+<span class="fc" id="L526">            .build();</span>
+<span class="fc" id="L527">    return createServiceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a metastore service in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   CreateServiceRequest request =
+   *       CreateServiceRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setServiceId(&quot;serviceId-194185552&quot;)
+   *           .setService(Service.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   Service response = dataprocMetastoreClient.createServiceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Service, OperationMetadata&gt; createServiceAsync(
+      CreateServiceRequest request) {
+<span class="fc" id="L556">    return createServiceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a metastore service in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   CreateServiceRequest request =
+   *       CreateServiceRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setServiceId(&quot;serviceId-194185552&quot;)
+   *           .setService(Service.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Service, OperationMetadata&gt; future =
+   *       dataprocMetastoreClient.createServiceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Service response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateServiceRequest, Service, OperationMetadata&gt;
+      createServiceOperationCallable() {
+<span class="fc" id="L585">    return stub.createServiceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a metastore service in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   CreateServiceRequest request =
+   *       CreateServiceRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setServiceId(&quot;serviceId-194185552&quot;)
+   *           .setService(Service.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       dataprocMetastoreClient.createServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateServiceRequest, Operation&gt; createServiceCallable() {
+<span class="nc" id="L613">    return stub.createServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the parameters of a single service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   Service service = Service.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Service response = dataprocMetastoreClient.updateServiceAsync(service, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param service Required. The metastore service to update. The server only merges fields in the
+   *     service if they are specified in `update_mask`.
+   *     &lt;p&gt;The metastore service's `name` field is used to identify the metastore service to be
+   *     updated.
+   * @param updateMask Required. A field mask used to specify the fields to be overwritten in the
+   *     metastore service resource by the update. Fields specified in the `update_mask` are
+   *     relative to the resource (not to the full request). A field is overwritten if it is in the
+   *     mask.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Service, OperationMetadata&gt; updateServiceAsync(
+      Service service, FieldMask updateMask) {
+    UpdateServiceRequest request =
+<span class="fc" id="L645">        UpdateServiceRequest.newBuilder().setService(service).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L646">    return updateServiceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the parameters of a single service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   UpdateServiceRequest request =
+   *       UpdateServiceRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setService(Service.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   Service response = dataprocMetastoreClient.updateServiceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Service, OperationMetadata&gt; updateServiceAsync(
+      UpdateServiceRequest request) {
+<span class="fc" id="L674">    return updateServiceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the parameters of a single service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   UpdateServiceRequest request =
+   *       UpdateServiceRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setService(Service.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Service, OperationMetadata&gt; future =
+   *       dataprocMetastoreClient.updateServiceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Service response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpdateServiceRequest, Service, OperationMetadata&gt;
+      updateServiceOperationCallable() {
+<span class="fc" id="L702">    return stub.updateServiceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the parameters of a single service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   UpdateServiceRequest request =
+   *       UpdateServiceRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setService(Service.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       dataprocMetastoreClient.updateServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateServiceRequest, Operation&gt; updateServiceCallable() {
+<span class="nc" id="L729">    return stub.updateServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ServiceName name = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;);
+   *   dataprocMetastoreClient.deleteServiceAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The relative resource name of the metastore service to delete, in the
+   *     following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteServiceAsync(ServiceName name) {
+    DeleteServiceRequest request =
+<span class="pc bpc" id="L754" title="1 of 2 branches missed.">        DeleteServiceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L755">    return deleteServiceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   String name = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   dataprocMetastoreClient.deleteServiceAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The relative resource name of the metastore service to delete, in the
+   *     following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteServiceAsync(String name) {
+<span class="fc" id="L779">    DeleteServiceRequest request = DeleteServiceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L780">    return deleteServiceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   DeleteServiceRequest request =
+   *       DeleteServiceRequest.newBuilder()
+   *           .setName(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   dataprocMetastoreClient.deleteServiceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteServiceAsync(
+      DeleteServiceRequest request) {
+<span class="fc" id="L807">    return deleteServiceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   DeleteServiceRequest request =
+   *       DeleteServiceRequest.newBuilder()
+   *           .setName(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       dataprocMetastoreClient.deleteServiceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteServiceRequest, Empty, OperationMetadata&gt;
+      deleteServiceOperationCallable() {
+<span class="fc" id="L834">    return stub.deleteServiceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   DeleteServiceRequest request =
+   *       DeleteServiceRequest.newBuilder()
+   *           .setName(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       dataprocMetastoreClient.deleteServiceCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteServiceRequest, Operation&gt; deleteServiceCallable() {
+<span class="nc" id="L860">    return stub.deleteServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists imports in a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ServiceName parent = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;);
+   *   for (MetadataImport element :
+   *       dataprocMetastoreClient.listMetadataImports(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The relative resource name of the service whose metadata imports to
+   *     list, in the following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}/metadataImports`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListMetadataImportsPagedResponse listMetadataImports(ServiceName parent) {
+    ListMetadataImportsRequest request =
+<span class="fc" id="L888">        ListMetadataImportsRequest.newBuilder()</span>
+<span class="pc bpc" id="L889" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L890">            .build();</span>
+<span class="fc" id="L891">    return listMetadataImports(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists imports in a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   String parent = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   for (MetadataImport element :
+   *       dataprocMetastoreClient.listMetadataImports(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The relative resource name of the service whose metadata imports to
+   *     list, in the following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}/metadataImports`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListMetadataImportsPagedResponse listMetadataImports(String parent) {
+    ListMetadataImportsRequest request =
+<span class="fc" id="L919">        ListMetadataImportsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L920">    return listMetadataImports(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists imports in a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ListMetadataImportsRequest request =
+   *       ListMetadataImportsRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (MetadataImport element :
+   *       dataprocMetastoreClient.listMetadataImports(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListMetadataImportsPagedResponse listMetadataImports(
+      ListMetadataImportsRequest request) {
+<span class="fc" id="L953">    return listMetadataImportsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists imports in a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ListMetadataImportsRequest request =
+   *       ListMetadataImportsRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;MetadataImport&gt; future =
+   *       dataprocMetastoreClient.listMetadataImportsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (MetadataImport element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListMetadataImportsRequest, ListMetadataImportsPagedResponse&gt;
+      listMetadataImportsPagedCallable() {
+<span class="fc" id="L985">    return stub.listMetadataImportsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists imports in a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ListMetadataImportsRequest request =
+   *       ListMetadataImportsRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListMetadataImportsResponse response =
+   *         dataprocMetastoreClient.listMetadataImportsCallable().call(request);
+   *     for (MetadataImport element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListMetadataImportsRequest, ListMetadataImportsResponse&gt;
+      listMetadataImportsCallable() {
+<span class="nc" id="L1024">    return stub.listMetadataImportsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single import.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   MetadataImportName name =
+   *       MetadataImportName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[METADATA_IMPORT]&quot;);
+   *   MetadataImport response = dataprocMetastoreClient.getMetadataImport(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The relative resource name of the metadata import to retrieve, in the
+   *     following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}/metadataImports/{import_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final MetadataImport getMetadataImport(MetadataImportName name) {
+    GetMetadataImportRequest request =
+<span class="fc" id="L1050">        GetMetadataImportRequest.newBuilder()</span>
+<span class="pc bpc" id="L1051" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1052">            .build();</span>
+<span class="fc" id="L1053">    return getMetadataImport(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single import.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   String name =
+   *       MetadataImportName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[METADATA_IMPORT]&quot;)
+   *           .toString();
+   *   MetadataImport response = dataprocMetastoreClient.getMetadataImport(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The relative resource name of the metadata import to retrieve, in the
+   *     following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}/metadataImports/{import_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final MetadataImport getMetadataImport(String name) {
+<span class="fc" id="L1079">    GetMetadataImportRequest request = GetMetadataImportRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1080">    return getMetadataImport(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single import.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   GetMetadataImportRequest request =
+   *       GetMetadataImportRequest.newBuilder()
+   *           .setName(
+   *               MetadataImportName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[METADATA_IMPORT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   MetadataImport response = dataprocMetastoreClient.getMetadataImport(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final MetadataImport getMetadataImport(GetMetadataImportRequest request) {
+<span class="fc" id="L1107">    return getMetadataImportCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single import.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   GetMetadataImportRequest request =
+   *       GetMetadataImportRequest.newBuilder()
+   *           .setName(
+   *               MetadataImportName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[METADATA_IMPORT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;MetadataImport&gt; future =
+   *       dataprocMetastoreClient.getMetadataImportCallable().futureCall(request);
+   *   // Do something.
+   *   MetadataImport response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetMetadataImportRequest, MetadataImport&gt; getMetadataImportCallable() {
+<span class="fc" id="L1134">    return stub.getMetadataImportCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new MetadataImport in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ServiceName parent = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;);
+   *   MetadataImport metadataImport = MetadataImport.newBuilder().build();
+   *   String metadataImportId = &quot;metadataImportId1824548847&quot;;
+   *   MetadataImport response =
+   *       dataprocMetastoreClient
+   *           .createMetadataImportAsync(parent, metadataImport, metadataImportId)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The relative resource name of the service in which to create a
+   *     metastore import, in the following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}`.
+   * @param metadataImport Required. The metadata import to create. The `name` field is ignored. The
+   *     ID of the created metadata import must be provided in the request's `metadata_import_id`
+   *     field.
+   * @param metadataImportId Required. The ID of the metadata import, which is used as the final
+   *     component of the metadata import's name.
+   *     &lt;p&gt;This value must be between 1 and 64 characters long, begin with a letter, end with a
+   *     letter or number, and consist of alpha-numeric ASCII characters or hyphens.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;MetadataImport, OperationMetadata&gt; createMetadataImportAsync(
+      ServiceName parent, MetadataImport metadataImport, String metadataImportId) {
+    CreateMetadataImportRequest request =
+<span class="fc" id="L1172">        CreateMetadataImportRequest.newBuilder()</span>
+<span class="pc bpc" id="L1173" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1174">            .setMetadataImport(metadataImport)</span>
+<span class="fc" id="L1175">            .setMetadataImportId(metadataImportId)</span>
+<span class="fc" id="L1176">            .build();</span>
+<span class="fc" id="L1177">    return createMetadataImportAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new MetadataImport in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   String parent = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   MetadataImport metadataImport = MetadataImport.newBuilder().build();
+   *   String metadataImportId = &quot;metadataImportId1824548847&quot;;
+   *   MetadataImport response =
+   *       dataprocMetastoreClient
+   *           .createMetadataImportAsync(parent, metadataImport, metadataImportId)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The relative resource name of the service in which to create a
+   *     metastore import, in the following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}`.
+   * @param metadataImport Required. The metadata import to create. The `name` field is ignored. The
+   *     ID of the created metadata import must be provided in the request's `metadata_import_id`
+   *     field.
+   * @param metadataImportId Required. The ID of the metadata import, which is used as the final
+   *     component of the metadata import's name.
+   *     &lt;p&gt;This value must be between 1 and 64 characters long, begin with a letter, end with a
+   *     letter or number, and consist of alpha-numeric ASCII characters or hyphens.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;MetadataImport, OperationMetadata&gt; createMetadataImportAsync(
+      String parent, MetadataImport metadataImport, String metadataImportId) {
+    CreateMetadataImportRequest request =
+<span class="fc" id="L1215">        CreateMetadataImportRequest.newBuilder()</span>
+<span class="fc" id="L1216">            .setParent(parent)</span>
+<span class="fc" id="L1217">            .setMetadataImport(metadataImport)</span>
+<span class="fc" id="L1218">            .setMetadataImportId(metadataImportId)</span>
+<span class="fc" id="L1219">            .build();</span>
+<span class="fc" id="L1220">    return createMetadataImportAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new MetadataImport in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   CreateMetadataImportRequest request =
+   *       CreateMetadataImportRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setMetadataImportId(&quot;metadataImportId1824548847&quot;)
+   *           .setMetadataImport(MetadataImport.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   MetadataImport response = dataprocMetastoreClient.createMetadataImportAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;MetadataImport, OperationMetadata&gt; createMetadataImportAsync(
+      CreateMetadataImportRequest request) {
+<span class="fc" id="L1249">    return createMetadataImportOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new MetadataImport in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   CreateMetadataImportRequest request =
+   *       CreateMetadataImportRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setMetadataImportId(&quot;metadataImportId1824548847&quot;)
+   *           .setMetadataImport(MetadataImport.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;MetadataImport, OperationMetadata&gt; future =
+   *       dataprocMetastoreClient.createMetadataImportOperationCallable().futureCall(request);
+   *   // Do something.
+   *   MetadataImport response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateMetadataImportRequest, MetadataImport, OperationMetadata&gt;
+      createMetadataImportOperationCallable() {
+<span class="fc" id="L1278">    return stub.createMetadataImportOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new MetadataImport in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   CreateMetadataImportRequest request =
+   *       CreateMetadataImportRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setMetadataImportId(&quot;metadataImportId1824548847&quot;)
+   *           .setMetadataImport(MetadataImport.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       dataprocMetastoreClient.createMetadataImportCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateMetadataImportRequest, Operation&gt;
+      createMetadataImportCallable() {
+<span class="nc" id="L1307">    return stub.createMetadataImportCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a single import. Only the description field of MetadataImport is supported to be
+   * updated.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   MetadataImport metadataImport = MetadataImport.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   MetadataImport response =
+   *       dataprocMetastoreClient.updateMetadataImportAsync(metadataImport, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param metadataImport Required. The metadata import to update. The server only merges fields in
+   *     the import if they are specified in `update_mask`.
+   *     &lt;p&gt;The metadata import's `name` field is used to identify the metastore import to be
+   *     updated.
+   * @param updateMask Required. A field mask used to specify the fields to be overwritten in the
+   *     metadata import resource by the update. Fields specified in the `update_mask` are relative
+   *     to the resource (not to the full request). A field is overwritten if it is in the mask.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;MetadataImport, OperationMetadata&gt; updateMetadataImportAsync(
+      MetadataImport metadataImport, FieldMask updateMask) {
+    UpdateMetadataImportRequest request =
+<span class="fc" id="L1340">        UpdateMetadataImportRequest.newBuilder()</span>
+<span class="fc" id="L1341">            .setMetadataImport(metadataImport)</span>
+<span class="fc" id="L1342">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L1343">            .build();</span>
+<span class="fc" id="L1344">    return updateMetadataImportAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a single import. Only the description field of MetadataImport is supported to be
+   * updated.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   UpdateMetadataImportRequest request =
+   *       UpdateMetadataImportRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setMetadataImport(MetadataImport.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   MetadataImport response = dataprocMetastoreClient.updateMetadataImportAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;MetadataImport, OperationMetadata&gt; updateMetadataImportAsync(
+      UpdateMetadataImportRequest request) {
+<span class="fc" id="L1373">    return updateMetadataImportOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a single import. Only the description field of MetadataImport is supported to be
+   * updated.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   UpdateMetadataImportRequest request =
+   *       UpdateMetadataImportRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setMetadataImport(MetadataImport.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;MetadataImport, OperationMetadata&gt; future =
+   *       dataprocMetastoreClient.updateMetadataImportOperationCallable().futureCall(request);
+   *   // Do something.
+   *   MetadataImport response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpdateMetadataImportRequest, MetadataImport, OperationMetadata&gt;
+      updateMetadataImportOperationCallable() {
+<span class="fc" id="L1402">    return stub.updateMetadataImportOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a single import. Only the description field of MetadataImport is supported to be
+   * updated.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   UpdateMetadataImportRequest request =
+   *       UpdateMetadataImportRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setMetadataImport(MetadataImport.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       dataprocMetastoreClient.updateMetadataImportCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateMetadataImportRequest, Operation&gt;
+      updateMetadataImportCallable() {
+<span class="nc" id="L1431">    return stub.updateMetadataImportCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports metadata from a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ExportMetadataRequest request =
+   *       ExportMetadataRequest.newBuilder()
+   *           .setService(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   MetadataExport response = dataprocMetastoreClient.exportMetadataAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;MetadataExport, OperationMetadata&gt; exportMetadataAsync(
+      ExportMetadataRequest request) {
+<span class="fc" id="L1458">    return exportMetadataOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports metadata from a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ExportMetadataRequest request =
+   *       ExportMetadataRequest.newBuilder()
+   *           .setService(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;MetadataExport, OperationMetadata&gt; future =
+   *       dataprocMetastoreClient.exportMetadataOperationCallable().futureCall(request);
+   *   // Do something.
+   *   MetadataExport response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;ExportMetadataRequest, MetadataExport, OperationMetadata&gt;
+      exportMetadataOperationCallable() {
+<span class="fc" id="L1485">    return stub.exportMetadataOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports metadata from a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ExportMetadataRequest request =
+   *       ExportMetadataRequest.newBuilder()
+   *           .setService(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       dataprocMetastoreClient.exportMetadataCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ExportMetadataRequest, Operation&gt; exportMetadataCallable() {
+<span class="nc" id="L1511">    return stub.exportMetadataCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restores a service from a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ServiceName service = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;);
+   *   BackupName backup = BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;);
+   *   Restore response = dataprocMetastoreClient.restoreServiceAsync(service, backup).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param service Required. The relative resource name of the metastore service to run restore, in
+   *     the following form:
+   *     &lt;p&gt;`projects/{project_id}/locations/{location_id}/services/{service_id}`.
+   * @param backup Required. The relative resource name of the metastore service backup to restore
+   *     from, in the following form:
+   *     &lt;p&gt;`projects/{project_id}/locations/{location_id}/services/{service_id}/backups/{backup_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Restore, OperationMetadata&gt; restoreServiceAsync(
+      ServiceName service, BackupName backup) {
+    RestoreServiceRequest request =
+<span class="fc" id="L1541">        RestoreServiceRequest.newBuilder()</span>
+<span class="pc bpc" id="L1542" title="1 of 2 branches missed.">            .setService(service == null ? null : service.toString())</span>
+<span class="pc bpc" id="L1543" title="1 of 2 branches missed.">            .setBackup(backup == null ? null : backup.toString())</span>
+<span class="fc" id="L1544">            .build();</span>
+<span class="fc" id="L1545">    return restoreServiceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restores a service from a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ServiceName service = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;);
+   *   String backup = BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;).toString();
+   *   Restore response = dataprocMetastoreClient.restoreServiceAsync(service, backup).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param service Required. The relative resource name of the metastore service to run restore, in
+   *     the following form:
+   *     &lt;p&gt;`projects/{project_id}/locations/{location_id}/services/{service_id}`.
+   * @param backup Required. The relative resource name of the metastore service backup to restore
+   *     from, in the following form:
+   *     &lt;p&gt;`projects/{project_id}/locations/{location_id}/services/{service_id}/backups/{backup_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Restore, OperationMetadata&gt; restoreServiceAsync(
+      ServiceName service, String backup) {
+    RestoreServiceRequest request =
+<span class="fc" id="L1575">        RestoreServiceRequest.newBuilder()</span>
+<span class="pc bpc" id="L1576" title="1 of 2 branches missed.">            .setService(service == null ? null : service.toString())</span>
+<span class="fc" id="L1577">            .setBackup(backup)</span>
+<span class="fc" id="L1578">            .build();</span>
+<span class="fc" id="L1579">    return restoreServiceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restores a service from a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   String service = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   BackupName backup = BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;);
+   *   Restore response = dataprocMetastoreClient.restoreServiceAsync(service, backup).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param service Required. The relative resource name of the metastore service to run restore, in
+   *     the following form:
+   *     &lt;p&gt;`projects/{project_id}/locations/{location_id}/services/{service_id}`.
+   * @param backup Required. The relative resource name of the metastore service backup to restore
+   *     from, in the following form:
+   *     &lt;p&gt;`projects/{project_id}/locations/{location_id}/services/{service_id}/backups/{backup_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Restore, OperationMetadata&gt; restoreServiceAsync(
+      String service, BackupName backup) {
+    RestoreServiceRequest request =
+<span class="fc" id="L1609">        RestoreServiceRequest.newBuilder()</span>
+<span class="fc" id="L1610">            .setService(service)</span>
+<span class="pc bpc" id="L1611" title="1 of 2 branches missed.">            .setBackup(backup == null ? null : backup.toString())</span>
+<span class="fc" id="L1612">            .build();</span>
+<span class="fc" id="L1613">    return restoreServiceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restores a service from a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   String service = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   String backup = BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;).toString();
+   *   Restore response = dataprocMetastoreClient.restoreServiceAsync(service, backup).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param service Required. The relative resource name of the metastore service to run restore, in
+   *     the following form:
+   *     &lt;p&gt;`projects/{project_id}/locations/{location_id}/services/{service_id}`.
+   * @param backup Required. The relative resource name of the metastore service backup to restore
+   *     from, in the following form:
+   *     &lt;p&gt;`projects/{project_id}/locations/{location_id}/services/{service_id}/backups/{backup_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Restore, OperationMetadata&gt; restoreServiceAsync(
+      String service, String backup) {
+    RestoreServiceRequest request =
+<span class="fc" id="L1643">        RestoreServiceRequest.newBuilder().setService(service).setBackup(backup).build();</span>
+<span class="fc" id="L1644">    return restoreServiceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restores a service from a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   RestoreServiceRequest request =
+   *       RestoreServiceRequest.newBuilder()
+   *           .setService(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setBackup(
+   *               BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   Restore response = dataprocMetastoreClient.restoreServiceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Restore, OperationMetadata&gt; restoreServiceAsync(
+      RestoreServiceRequest request) {
+<span class="fc" id="L1673">    return restoreServiceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restores a service from a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   RestoreServiceRequest request =
+   *       RestoreServiceRequest.newBuilder()
+   *           .setService(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setBackup(
+   *               BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Restore, OperationMetadata&gt; future =
+   *       dataprocMetastoreClient.restoreServiceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Restore response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;RestoreServiceRequest, Restore, OperationMetadata&gt;
+      restoreServiceOperationCallable() {
+<span class="fc" id="L1702">    return stub.restoreServiceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restores a service from a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   RestoreServiceRequest request =
+   *       RestoreServiceRequest.newBuilder()
+   *           .setService(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setBackup(
+   *               BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       dataprocMetastoreClient.restoreServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RestoreServiceRequest, Operation&gt; restoreServiceCallable() {
+<span class="nc" id="L1730">    return stub.restoreServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists backups in a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ServiceName parent = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;);
+   *   for (Backup element : dataprocMetastoreClient.listBackups(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The relative resource name of the service whose backups to list, in the
+   *     following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}/backups`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBackupsPagedResponse listBackups(ServiceName parent) {
+    ListBackupsRequest request =
+<span class="fc" id="L1757">        ListBackupsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1758" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1759">            .build();</span>
+<span class="fc" id="L1760">    return listBackups(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists backups in a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   String parent = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   for (Backup element : dataprocMetastoreClient.listBackups(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The relative resource name of the service whose backups to list, in the
+   *     following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}/backups`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBackupsPagedResponse listBackups(String parent) {
+<span class="fc" id="L1786">    ListBackupsRequest request = ListBackupsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1787">    return listBackups(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists backups in a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ListBackupsRequest request =
+   *       ListBackupsRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Backup element : dataprocMetastoreClient.listBackups(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBackupsPagedResponse listBackups(ListBackupsRequest request) {
+<span class="fc" id="L1818">    return listBackupsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists backups in a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ListBackupsRequest request =
+   *       ListBackupsRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Backup&gt; future =
+   *       dataprocMetastoreClient.listBackupsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Backup element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListBackupsRequest, ListBackupsPagedResponse&gt;
+      listBackupsPagedCallable() {
+<span class="fc" id="L1850">    return stub.listBackupsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists backups in a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ListBackupsRequest request =
+   *       ListBackupsRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListBackupsResponse response = dataprocMetastoreClient.listBackupsCallable().call(request);
+   *     for (Backup element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListBackupsRequest, ListBackupsResponse&gt; listBackupsCallable() {
+<span class="nc" id="L1887">    return stub.listBackupsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   BackupName name = BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;);
+   *   Backup response = dataprocMetastoreClient.getBackup(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The relative resource name of the backup to retrieve, in the following
+   *     form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}/backups/{backup_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Backup getBackup(BackupName name) {
+    GetBackupRequest request =
+<span class="pc bpc" id="L1912" title="1 of 2 branches missed.">        GetBackupRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1913">    return getBackup(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   String name = BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;).toString();
+   *   Backup response = dataprocMetastoreClient.getBackup(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The relative resource name of the backup to retrieve, in the following
+   *     form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}/backups/{backup_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Backup getBackup(String name) {
+<span class="fc" id="L1937">    GetBackupRequest request = GetBackupRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1938">    return getBackup(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   GetBackupRequest request =
+   *       GetBackupRequest.newBuilder()
+   *           .setName(BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;).toString())
+   *           .build();
+   *   Backup response = dataprocMetastoreClient.getBackup(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Backup getBackup(GetBackupRequest request) {
+<span class="fc" id="L1963">    return getBackupCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   GetBackupRequest request =
+   *       GetBackupRequest.newBuilder()
+   *           .setName(BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Backup&gt; future = dataprocMetastoreClient.getBackupCallable().futureCall(request);
+   *   // Do something.
+   *   Backup response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetBackupRequest, Backup&gt; getBackupCallable() {
+<span class="fc" id="L1987">    return stub.getBackupCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new backup in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   ServiceName parent = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;);
+   *   Backup backup = Backup.newBuilder().build();
+   *   String backupId = &quot;backupId2121930365&quot;;
+   *   Backup response = dataprocMetastoreClient.createBackupAsync(parent, backup, backupId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The relative resource name of the service in which to create a backup
+   *     of the following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}`.
+   * @param backup Required. The backup to create. The `name` field is ignored. The ID of the
+   *     created backup must be provided in the request's `backup_id` field.
+   * @param backupId Required. The ID of the backup, which is used as the final component of the
+   *     backup's name.
+   *     &lt;p&gt;This value must be between 1 and 64 characters long, begin with a letter, end with a
+   *     letter or number, and consist of alpha-numeric ASCII characters or hyphens.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Backup, OperationMetadata&gt; createBackupAsync(
+      ServiceName parent, Backup backup, String backupId) {
+    CreateBackupRequest request =
+<span class="fc" id="L2021">        CreateBackupRequest.newBuilder()</span>
+<span class="pc bpc" id="L2022" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L2023">            .setBackup(backup)</span>
+<span class="fc" id="L2024">            .setBackupId(backupId)</span>
+<span class="fc" id="L2025">            .build();</span>
+<span class="fc" id="L2026">    return createBackupAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new backup in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   String parent = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   Backup backup = Backup.newBuilder().build();
+   *   String backupId = &quot;backupId2121930365&quot;;
+   *   Backup response = dataprocMetastoreClient.createBackupAsync(parent, backup, backupId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The relative resource name of the service in which to create a backup
+   *     of the following form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}`.
+   * @param backup Required. The backup to create. The `name` field is ignored. The ID of the
+   *     created backup must be provided in the request's `backup_id` field.
+   * @param backupId Required. The ID of the backup, which is used as the final component of the
+   *     backup's name.
+   *     &lt;p&gt;This value must be between 1 and 64 characters long, begin with a letter, end with a
+   *     letter or number, and consist of alpha-numeric ASCII characters or hyphens.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Backup, OperationMetadata&gt; createBackupAsync(
+      String parent, Backup backup, String backupId) {
+    CreateBackupRequest request =
+<span class="fc" id="L2060">        CreateBackupRequest.newBuilder()</span>
+<span class="fc" id="L2061">            .setParent(parent)</span>
+<span class="fc" id="L2062">            .setBackup(backup)</span>
+<span class="fc" id="L2063">            .setBackupId(backupId)</span>
+<span class="fc" id="L2064">            .build();</span>
+<span class="fc" id="L2065">    return createBackupAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new backup in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   CreateBackupRequest request =
+   *       CreateBackupRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setBackupId(&quot;backupId2121930365&quot;)
+   *           .setBackup(Backup.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   Backup response = dataprocMetastoreClient.createBackupAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Backup, OperationMetadata&gt; createBackupAsync(
+      CreateBackupRequest request) {
+<span class="fc" id="L2094">    return createBackupOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new backup in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   CreateBackupRequest request =
+   *       CreateBackupRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setBackupId(&quot;backupId2121930365&quot;)
+   *           .setBackup(Backup.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Backup, OperationMetadata&gt; future =
+   *       dataprocMetastoreClient.createBackupOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Backup response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateBackupRequest, Backup, OperationMetadata&gt;
+      createBackupOperationCallable() {
+<span class="fc" id="L2123">    return stub.createBackupOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new backup in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   CreateBackupRequest request =
+   *       CreateBackupRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setBackupId(&quot;backupId2121930365&quot;)
+   *           .setBackup(Backup.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       dataprocMetastoreClient.createBackupCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateBackupRequest, Operation&gt; createBackupCallable() {
+<span class="nc" id="L2151">    return stub.createBackupCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   BackupName name = BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;);
+   *   dataprocMetastoreClient.deleteBackupAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The relative resource name of the backup to delete, in the following
+   *     form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}/backups/{backup_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteBackupAsync(BackupName name) {
+    DeleteBackupRequest request =
+<span class="pc bpc" id="L2176" title="1 of 2 branches missed.">        DeleteBackupRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L2177">    return deleteBackupAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   String name = BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;).toString();
+   *   dataprocMetastoreClient.deleteBackupAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The relative resource name of the backup to delete, in the following
+   *     form:
+   *     &lt;p&gt;`projects/{project_number}/locations/{location_id}/services/{service_id}/backups/{backup_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteBackupAsync(String name) {
+<span class="fc" id="L2201">    DeleteBackupRequest request = DeleteBackupRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2202">    return deleteBackupAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   DeleteBackupRequest request =
+   *       DeleteBackupRequest.newBuilder()
+   *           .setName(BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   dataprocMetastoreClient.deleteBackupAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteBackupAsync(
+      DeleteBackupRequest request) {
+<span class="fc" id="L2229">    return deleteBackupOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   DeleteBackupRequest request =
+   *       DeleteBackupRequest.newBuilder()
+   *           .setName(BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       dataprocMetastoreClient.deleteBackupOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteBackupRequest, Empty, OperationMetadata&gt;
+      deleteBackupOperationCallable() {
+<span class="fc" id="L2256">    return stub.deleteBackupOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataprocMetastoreClient dataprocMetastoreClient = DataprocMetastoreClient.create()) {
+   *   DeleteBackupRequest request =
+   *       DeleteBackupRequest.newBuilder()
+   *           .setName(BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[BACKUP]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       dataprocMetastoreClient.deleteBackupCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteBackupRequest, Operation&gt; deleteBackupCallable() {
+<span class="nc" id="L2282">    return stub.deleteBackupCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L2287">    stub.close();</span>
+<span class="fc" id="L2288">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L2292">    stub.shutdown();</span>
+<span class="nc" id="L2293">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L2297">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L2302">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L2307">    stub.shutdownNow();</span>
+<span class="nc" id="L2308">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L2312">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListServicesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListServicesRequest,
+          ListServicesResponse,
+          Service,
+          ListServicesPage,
+          ListServicesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListServicesPagedResponse&gt; createAsync(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ApiFuture&lt;ListServicesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListServicesPage&gt; futurePage =
+<span class="fc" id="L2327">          ListServicesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2328">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2330">          input -&gt; new ListServicesPagedResponse(input),</span>
+<span class="fc" id="L2331">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListServicesPagedResponse(ListServicesPage page) {
+<span class="fc" id="L2335">      super(page, ListServicesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2336">    }</span>
+  }
+
+  public static class ListServicesPage
+      extends AbstractPage&lt;ListServicesRequest, ListServicesResponse, Service, ListServicesPage&gt; {
+
+    private ListServicesPage(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ListServicesResponse response) {
+<span class="fc" id="L2345">      super(context, response);</span>
+<span class="fc" id="L2346">    }</span>
+
+    private static ListServicesPage createEmptyPage() {
+<span class="fc" id="L2349">      return new ListServicesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListServicesPage createPage(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ListServicesResponse response) {
+<span class="fc" id="L2356">      return new ListServicesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListServicesPage&gt; createPageAsync(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ApiFuture&lt;ListServicesResponse&gt; futureResponse) {
+<span class="fc" id="L2363">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListServicesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListServicesRequest,
+          ListServicesResponse,
+          Service,
+          ListServicesPage,
+          ListServicesFixedSizeCollection&gt; {
+
+    private ListServicesFixedSizeCollection(List&lt;ListServicesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2376">      super(pages, collectionSize);</span>
+<span class="fc" id="L2377">    }</span>
+
+    private static ListServicesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2380">      return new ListServicesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListServicesFixedSizeCollection createCollection(
+        List&lt;ListServicesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2386">      return new ListServicesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListMetadataImportsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListMetadataImportsRequest,
+          ListMetadataImportsResponse,
+          MetadataImport,
+          ListMetadataImportsPage,
+          ListMetadataImportsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListMetadataImportsPagedResponse&gt; createAsync(
+        PageContext&lt;ListMetadataImportsRequest, ListMetadataImportsResponse, MetadataImport&gt;
+            context,
+        ApiFuture&lt;ListMetadataImportsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListMetadataImportsPage&gt; futurePage =
+<span class="fc" id="L2403">          ListMetadataImportsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2404">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2406">          input -&gt; new ListMetadataImportsPagedResponse(input),</span>
+<span class="fc" id="L2407">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListMetadataImportsPagedResponse(ListMetadataImportsPage page) {
+<span class="fc" id="L2411">      super(page, ListMetadataImportsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2412">    }</span>
+  }
+
+  public static class ListMetadataImportsPage
+      extends AbstractPage&lt;
+          ListMetadataImportsRequest,
+          ListMetadataImportsResponse,
+          MetadataImport,
+          ListMetadataImportsPage&gt; {
+
+    private ListMetadataImportsPage(
+        PageContext&lt;ListMetadataImportsRequest, ListMetadataImportsResponse, MetadataImport&gt;
+            context,
+        ListMetadataImportsResponse response) {
+<span class="fc" id="L2426">      super(context, response);</span>
+<span class="fc" id="L2427">    }</span>
+
+    private static ListMetadataImportsPage createEmptyPage() {
+<span class="fc" id="L2430">      return new ListMetadataImportsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListMetadataImportsPage createPage(
+        PageContext&lt;ListMetadataImportsRequest, ListMetadataImportsResponse, MetadataImport&gt;
+            context,
+        ListMetadataImportsResponse response) {
+<span class="fc" id="L2438">      return new ListMetadataImportsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListMetadataImportsPage&gt; createPageAsync(
+        PageContext&lt;ListMetadataImportsRequest, ListMetadataImportsResponse, MetadataImport&gt;
+            context,
+        ApiFuture&lt;ListMetadataImportsResponse&gt; futureResponse) {
+<span class="fc" id="L2446">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListMetadataImportsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListMetadataImportsRequest,
+          ListMetadataImportsResponse,
+          MetadataImport,
+          ListMetadataImportsPage,
+          ListMetadataImportsFixedSizeCollection&gt; {
+
+    private ListMetadataImportsFixedSizeCollection(
+        List&lt;ListMetadataImportsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2460">      super(pages, collectionSize);</span>
+<span class="fc" id="L2461">    }</span>
+
+    private static ListMetadataImportsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2464">      return new ListMetadataImportsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListMetadataImportsFixedSizeCollection createCollection(
+        List&lt;ListMetadataImportsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2470">      return new ListMetadataImportsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListBackupsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListBackupsRequest,
+          ListBackupsResponse,
+          Backup,
+          ListBackupsPage,
+          ListBackupsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListBackupsPagedResponse&gt; createAsync(
+        PageContext&lt;ListBackupsRequest, ListBackupsResponse, Backup&gt; context,
+        ApiFuture&lt;ListBackupsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListBackupsPage&gt; futurePage =
+<span class="fc" id="L2486">          ListBackupsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2487">      return ApiFutures.transform(</span>
+<span class="fc" id="L2488">          futurePage, input -&gt; new ListBackupsPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListBackupsPagedResponse(ListBackupsPage page) {
+<span class="fc" id="L2492">      super(page, ListBackupsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2493">    }</span>
+  }
+
+  public static class ListBackupsPage
+      extends AbstractPage&lt;ListBackupsRequest, ListBackupsResponse, Backup, ListBackupsPage&gt; {
+
+    private ListBackupsPage(
+        PageContext&lt;ListBackupsRequest, ListBackupsResponse, Backup&gt; context,
+        ListBackupsResponse response) {
+<span class="fc" id="L2502">      super(context, response);</span>
+<span class="fc" id="L2503">    }</span>
+
+    private static ListBackupsPage createEmptyPage() {
+<span class="fc" id="L2506">      return new ListBackupsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListBackupsPage createPage(
+        PageContext&lt;ListBackupsRequest, ListBackupsResponse, Backup&gt; context,
+        ListBackupsResponse response) {
+<span class="fc" id="L2513">      return new ListBackupsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListBackupsPage&gt; createPageAsync(
+        PageContext&lt;ListBackupsRequest, ListBackupsResponse, Backup&gt; context,
+        ApiFuture&lt;ListBackupsResponse&gt; futureResponse) {
+<span class="fc" id="L2520">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListBackupsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListBackupsRequest,
+          ListBackupsResponse,
+          Backup,
+          ListBackupsPage,
+          ListBackupsFixedSizeCollection&gt; {
+
+    private ListBackupsFixedSizeCollection(List&lt;ListBackupsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2533">      super(pages, collectionSize);</span>
+<span class="fc" id="L2534">    }</span>
+
+    private static ListBackupsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2537">      return new ListBackupsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListBackupsFixedSizeCollection createCollection(
+        List&lt;ListBackupsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2543">      return new ListBackupsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

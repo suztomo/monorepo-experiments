@@ -1,0 +1,3700 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>NotebookServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-notebooks</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.notebooks.v1</a> &gt; <span class="el_source">NotebookServiceClient.java</span></div><h1>NotebookServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.notebooks.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.notebooks.v1.stub.NotebookServiceStub;
+import com.google.cloud.notebooks.v1.stub.NotebookServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: API v1 service for Cloud AI Platform Notebooks.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+ *   String name = &quot;name3373707&quot;;
+ *   Instance response = notebookServiceClient.getInstance(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the NotebookServiceClient object to clean up resources
+ * such as threads. In the example above, try-with-resources is used, which automatically calls
+ * close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of NotebookServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * NotebookServiceSettings notebookServiceSettings =
+ *     NotebookServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * NotebookServiceClient notebookServiceClient =
+ *     NotebookServiceClient.create(notebookServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * NotebookServiceSettings notebookServiceSettings =
+ *     NotebookServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * NotebookServiceClient notebookServiceClient =
+ *     NotebookServiceClient.create(notebookServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class NotebookServiceClient implements BackgroundResource {
+  private final NotebookServiceSettings settings;
+  private final NotebookServiceStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of NotebookServiceClient with default settings. */
+  public static final NotebookServiceClient create() throws IOException {
+<span class="nc" id="L118">    return create(NotebookServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of NotebookServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final NotebookServiceClient create(NotebookServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L127">    return new NotebookServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of NotebookServiceClient, using the given stub for making calls. This is
+   * for advanced usage - prefer using create(NotebookServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final NotebookServiceClient create(NotebookServiceStub stub) {
+<span class="nc" id="L136">    return new NotebookServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of NotebookServiceClient, using the given settings. This is protected so
+   * that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L144">  protected NotebookServiceClient(NotebookServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L145">    this.settings = settings;</span>
+<span class="fc" id="L146">    this.stub = ((NotebookServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L147">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L148">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L151">  protected NotebookServiceClient(NotebookServiceStub stub) {</span>
+<span class="nc" id="L152">    this.settings = null;</span>
+<span class="nc" id="L153">    this.stub = stub;</span>
+<span class="nc" id="L154">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L155">  }</span>
+
+  public final NotebookServiceSettings getSettings() {
+<span class="nc" id="L158">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public NotebookServiceStub getStub() {
+<span class="nc" id="L163">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L171">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists instances in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String parent = &quot;parent-995424086&quot;;
+   *   for (Instance element : notebookServiceClient.listInstances(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Format: `parent=projects/{project_id}/locations/{location}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListInstancesPagedResponse listInstances(String parent) {
+<span class="fc" id="L195">    ListInstancesRequest request = ListInstancesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L196">    return listInstances(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists instances in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ListInstancesRequest request =
+   *       ListInstancesRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Instance element : notebookServiceClient.listInstances(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListInstancesPagedResponse listInstances(ListInstancesRequest request) {
+<span class="fc" id="L225">    return listInstancesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists instances in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ListInstancesRequest request =
+   *       ListInstancesRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Instance&gt; future =
+   *       notebookServiceClient.listInstancesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Instance element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListInstancesRequest, ListInstancesPagedResponse&gt;
+      listInstancesPagedCallable() {
+<span class="fc" id="L255">    return stub.listInstancesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists instances in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ListInstancesRequest request =
+   *       ListInstancesRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListInstancesResponse response =
+   *         notebookServiceClient.listInstancesCallable().call(request);
+   *     for (Instance element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListInstancesRequest, ListInstancesResponse&gt; listInstancesCallable() {
+<span class="nc" id="L291">    return stub.listInstancesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   Instance response = notebookServiceClient.getInstance(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Format:
+   *     `projects/{project_id}/locations/{location}/instances/{instance_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Instance getInstance(String name) {
+<span class="fc" id="L314">    GetInstanceRequest request = GetInstanceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L315">    return getInstance(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   GetInstanceRequest request = GetInstanceRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   Instance response = notebookServiceClient.getInstance(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Instance getInstance(GetInstanceRequest request) {
+<span class="fc" id="L337">    return getInstanceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   GetInstanceRequest request = GetInstanceRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;Instance&gt; future = notebookServiceClient.getInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetInstanceRequest, Instance&gt; getInstanceCallable() {
+<span class="fc" id="L358">    return stub.getInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Instance in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String parent = &quot;parent-995424086&quot;;
+   *   Instance instance = Instance.newBuilder().build();
+   *   String instanceId = &quot;instanceId902024336&quot;;
+   *   Instance response =
+   *       notebookServiceClient.createInstanceAsync(parent, instance, instanceId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Format: `parent=projects/{project_id}/locations/{location}`
+   * @param instance Required. The instance to be created.
+   * @param instanceId Required. User-defined unique ID of this instance.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; createInstanceAsync(
+      String parent, Instance instance, String instanceId) {
+    CreateInstanceRequest request =
+<span class="fc" id="L387">        CreateInstanceRequest.newBuilder()</span>
+<span class="fc" id="L388">            .setParent(parent)</span>
+<span class="fc" id="L389">            .setInstance(instance)</span>
+<span class="fc" id="L390">            .setInstanceId(instanceId)</span>
+<span class="fc" id="L391">            .build();</span>
+<span class="fc" id="L392">    return createInstanceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Instance in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   CreateInstanceRequest request =
+   *       CreateInstanceRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setInstanceId(&quot;instanceId902024336&quot;)
+   *           .setInstance(Instance.newBuilder().build())
+   *           .build();
+   *   Instance response = notebookServiceClient.createInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; createInstanceAsync(
+      CreateInstanceRequest request) {
+<span class="fc" id="L420">    return createInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Instance in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   CreateInstanceRequest request =
+   *       CreateInstanceRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setInstanceId(&quot;instanceId902024336&quot;)
+   *           .setInstance(Instance.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       notebookServiceClient.createInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateInstanceRequest, Instance, OperationMetadata&gt;
+      createInstanceOperationCallable() {
+<span class="fc" id="L448">    return stub.createInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Instance in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   CreateInstanceRequest request =
+   *       CreateInstanceRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setInstanceId(&quot;instanceId902024336&quot;)
+   *           .setInstance(Instance.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.createInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateInstanceRequest, Operation&gt; createInstanceCallable() {
+<span class="nc" id="L475">    return stub.createInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Registers an existing legacy notebook instance to the Notebooks API server. Legacy instances
+   * are instances created with the legacy Compute Engine calls. They are not manageable by the
+   * Notebooks API out of the box. This call makes these instances manageable by the Notebooks API.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   RegisterInstanceRequest request =
+   *       RegisterInstanceRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setInstanceId(&quot;instanceId902024336&quot;)
+   *           .build();
+   *   Instance response = notebookServiceClient.registerInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; registerInstanceAsync(
+      RegisterInstanceRequest request) {
+<span class="fc" id="L504">    return registerInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Registers an existing legacy notebook instance to the Notebooks API server. Legacy instances
+   * are instances created with the legacy Compute Engine calls. They are not manageable by the
+   * Notebooks API out of the box. This call makes these instances manageable by the Notebooks API.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   RegisterInstanceRequest request =
+   *       RegisterInstanceRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setInstanceId(&quot;instanceId902024336&quot;)
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       notebookServiceClient.registerInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;RegisterInstanceRequest, Instance, OperationMetadata&gt;
+      registerInstanceOperationCallable() {
+<span class="fc" id="L533">    return stub.registerInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Registers an existing legacy notebook instance to the Notebooks API server. Legacy instances
+   * are instances created with the legacy Compute Engine calls. They are not manageable by the
+   * Notebooks API out of the box. This call makes these instances manageable by the Notebooks API.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   RegisterInstanceRequest request =
+   *       RegisterInstanceRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setInstanceId(&quot;instanceId902024336&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.registerInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RegisterInstanceRequest, Operation&gt; registerInstanceCallable() {
+<span class="nc" id="L561">    return stub.registerInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the guest accelerators of a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   SetInstanceAcceleratorRequest request =
+   *       SetInstanceAcceleratorRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setCoreCount(-1963855761)
+   *           .build();
+   *   Instance response = notebookServiceClient.setInstanceAcceleratorAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; setInstanceAcceleratorAsync(
+      SetInstanceAcceleratorRequest request) {
+<span class="fc" id="L588">    return setInstanceAcceleratorOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the guest accelerators of a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   SetInstanceAcceleratorRequest request =
+   *       SetInstanceAcceleratorRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setCoreCount(-1963855761)
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       notebookServiceClient.setInstanceAcceleratorOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;SetInstanceAcceleratorRequest, Instance, OperationMetadata&gt;
+      setInstanceAcceleratorOperationCallable() {
+<span class="fc" id="L615">    return stub.setInstanceAcceleratorOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the guest accelerators of a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   SetInstanceAcceleratorRequest request =
+   *       SetInstanceAcceleratorRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setCoreCount(-1963855761)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.setInstanceAcceleratorCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetInstanceAcceleratorRequest, Operation&gt;
+      setInstanceAcceleratorCallable() {
+<span class="nc" id="L642">    return stub.setInstanceAcceleratorCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the machine type of a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   SetInstanceMachineTypeRequest request =
+   *       SetInstanceMachineTypeRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setMachineType(&quot;machineType-218117087&quot;)
+   *           .build();
+   *   Instance response = notebookServiceClient.setInstanceMachineTypeAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; setInstanceMachineTypeAsync(
+      SetInstanceMachineTypeRequest request) {
+<span class="fc" id="L669">    return setInstanceMachineTypeOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the machine type of a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   SetInstanceMachineTypeRequest request =
+   *       SetInstanceMachineTypeRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setMachineType(&quot;machineType-218117087&quot;)
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       notebookServiceClient.setInstanceMachineTypeOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;SetInstanceMachineTypeRequest, Instance, OperationMetadata&gt;
+      setInstanceMachineTypeOperationCallable() {
+<span class="fc" id="L696">    return stub.setInstanceMachineTypeOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the machine type of a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   SetInstanceMachineTypeRequest request =
+   *       SetInstanceMachineTypeRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setMachineType(&quot;machineType-218117087&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.setInstanceMachineTypeCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetInstanceMachineTypeRequest, Operation&gt;
+      setInstanceMachineTypeCallable() {
+<span class="nc" id="L723">    return stub.setInstanceMachineTypeCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update Notebook Instance configurations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   UpdateInstanceConfigRequest request =
+   *       UpdateInstanceConfigRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setConfig(InstanceConfig.newBuilder().build())
+   *           .build();
+   *   Instance response = notebookServiceClient.updateInstanceConfigAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; updateInstanceConfigAsync(
+      UpdateInstanceConfigRequest request) {
+<span class="fc" id="L750">    return updateInstanceConfigOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update Notebook Instance configurations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   UpdateInstanceConfigRequest request =
+   *       UpdateInstanceConfigRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setConfig(InstanceConfig.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       notebookServiceClient.updateInstanceConfigOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpdateInstanceConfigRequest, Instance, OperationMetadata&gt;
+      updateInstanceConfigOperationCallable() {
+<span class="fc" id="L777">    return stub.updateInstanceConfigOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update Notebook Instance configurations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   UpdateInstanceConfigRequest request =
+   *       UpdateInstanceConfigRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setConfig(InstanceConfig.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.updateInstanceConfigCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateInstanceConfigRequest, Operation&gt;
+      updateInstanceConfigCallable() {
+<span class="nc" id="L804">    return stub.updateInstanceConfigCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the Shielded instance configuration of a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   UpdateShieldedInstanceConfigRequest request =
+   *       UpdateShieldedInstanceConfigRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setShieldedInstanceConfig(Instance.ShieldedInstanceConfig.newBuilder().build())
+   *           .build();
+   *   Instance response = notebookServiceClient.updateShieldedInstanceConfigAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; updateShieldedInstanceConfigAsync(
+      UpdateShieldedInstanceConfigRequest request) {
+<span class="fc" id="L831">    return updateShieldedInstanceConfigOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the Shielded instance configuration of a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   UpdateShieldedInstanceConfigRequest request =
+   *       UpdateShieldedInstanceConfigRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setShieldedInstanceConfig(Instance.ShieldedInstanceConfig.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       notebookServiceClient.updateShieldedInstanceConfigOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpdateShieldedInstanceConfigRequest, Instance, OperationMetadata&gt;
+      updateShieldedInstanceConfigOperationCallable() {
+<span class="fc" id="L858">    return stub.updateShieldedInstanceConfigOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the Shielded instance configuration of a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   UpdateShieldedInstanceConfigRequest request =
+   *       UpdateShieldedInstanceConfigRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setShieldedInstanceConfig(Instance.ShieldedInstanceConfig.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.updateShieldedInstanceConfigCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateShieldedInstanceConfigRequest, Operation&gt;
+      updateShieldedInstanceConfigCallable() {
+<span class="nc" id="L885">    return stub.updateShieldedInstanceConfigCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Replaces all the labels of an Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   SetInstanceLabelsRequest request =
+   *       SetInstanceLabelsRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .putAllLabels(new HashMap&lt;String, String&gt;())
+   *           .build();
+   *   Instance response = notebookServiceClient.setInstanceLabelsAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; setInstanceLabelsAsync(
+      SetInstanceLabelsRequest request) {
+<span class="fc" id="L912">    return setInstanceLabelsOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Replaces all the labels of an Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   SetInstanceLabelsRequest request =
+   *       SetInstanceLabelsRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .putAllLabels(new HashMap&lt;String, String&gt;())
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       notebookServiceClient.setInstanceLabelsOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;SetInstanceLabelsRequest, Instance, OperationMetadata&gt;
+      setInstanceLabelsOperationCallable() {
+<span class="fc" id="L939">    return stub.setInstanceLabelsOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Replaces all the labels of an Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   SetInstanceLabelsRequest request =
+   *       SetInstanceLabelsRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .putAllLabels(new HashMap&lt;String, String&gt;())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.setInstanceLabelsCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetInstanceLabelsRequest, Operation&gt; setInstanceLabelsCallable() {
+<span class="nc" id="L965">    return stub.setInstanceLabelsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Add/update metadata items for an instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   UpdateInstanceMetadataItemsRequest request =
+   *       UpdateInstanceMetadataItemsRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .putAllItems(new HashMap&lt;String, String&gt;())
+   *           .build();
+   *   UpdateInstanceMetadataItemsResponse response =
+   *       notebookServiceClient.updateInstanceMetadataItems(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UpdateInstanceMetadataItemsResponse updateInstanceMetadataItems(
+      UpdateInstanceMetadataItemsRequest request) {
+<span class="fc" id="L993">    return updateInstanceMetadataItemsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Add/update metadata items for an instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   UpdateInstanceMetadataItemsRequest request =
+   *       UpdateInstanceMetadataItemsRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .putAllItems(new HashMap&lt;String, String&gt;())
+   *           .build();
+   *   ApiFuture&lt;UpdateInstanceMetadataItemsResponse&gt; future =
+   *       notebookServiceClient.updateInstanceMetadataItemsCallable().futureCall(request);
+   *   // Do something.
+   *   UpdateInstanceMetadataItemsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          UpdateInstanceMetadataItemsRequest, UpdateInstanceMetadataItemsResponse&gt;
+      updateInstanceMetadataItemsCallable() {
+<span class="fc" id="L1021">    return stub.updateInstanceMetadataItemsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   notebookServiceClient.deleteInstanceAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Format:
+   *     `projects/{project_id}/locations/{location}/instances/{instance_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteInstanceAsync(String name) {
+<span class="fc" id="L1044">    DeleteInstanceRequest request = DeleteInstanceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1045">    return deleteInstanceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   DeleteInstanceRequest request =
+   *       DeleteInstanceRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   notebookServiceClient.deleteInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteInstanceAsync(
+      DeleteInstanceRequest request) {
+<span class="fc" id="L1069">    return deleteInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   DeleteInstanceRequest request =
+   *       DeleteInstanceRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       notebookServiceClient.deleteInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteInstanceRequest, Empty, OperationMetadata&gt;
+      deleteInstanceOperationCallable() {
+<span class="fc" id="L1093">    return stub.deleteInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single Instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   DeleteInstanceRequest request =
+   *       DeleteInstanceRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.deleteInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteInstanceRequest, Operation&gt; deleteInstanceCallable() {
+<span class="nc" id="L1116">    return stub.deleteInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts a notebook instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   StartInstanceRequest request =
+   *       StartInstanceRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   Instance response = notebookServiceClient.startInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; startInstanceAsync(
+      StartInstanceRequest request) {
+<span class="fc" id="L1140">    return startInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts a notebook instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   StartInstanceRequest request =
+   *       StartInstanceRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       notebookServiceClient.startInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;StartInstanceRequest, Instance, OperationMetadata&gt;
+      startInstanceOperationCallable() {
+<span class="fc" id="L1164">    return stub.startInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts a notebook instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   StartInstanceRequest request =
+   *       StartInstanceRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.startInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;StartInstanceRequest, Operation&gt; startInstanceCallable() {
+<span class="nc" id="L1187">    return stub.startInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Stops a notebook instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   StopInstanceRequest request = StopInstanceRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   Instance response = notebookServiceClient.stopInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; stopInstanceAsync(
+      StopInstanceRequest request) {
+<span class="fc" id="L1210">    return stopInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Stops a notebook instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   StopInstanceRequest request = StopInstanceRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       notebookServiceClient.stopInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;StopInstanceRequest, Instance, OperationMetadata&gt;
+      stopInstanceOperationCallable() {
+<span class="fc" id="L1233">    return stub.stopInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Stops a notebook instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   StopInstanceRequest request = StopInstanceRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.stopInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;StopInstanceRequest, Operation&gt; stopInstanceCallable() {
+<span class="nc" id="L1255">    return stub.stopInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resets a notebook instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ResetInstanceRequest request =
+   *       ResetInstanceRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   Instance response = notebookServiceClient.resetInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; resetInstanceAsync(
+      ResetInstanceRequest request) {
+<span class="fc" id="L1279">    return resetInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resets a notebook instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ResetInstanceRequest request =
+   *       ResetInstanceRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       notebookServiceClient.resetInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;ResetInstanceRequest, Instance, OperationMetadata&gt;
+      resetInstanceOperationCallable() {
+<span class="fc" id="L1303">    return stub.resetInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resets a notebook instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ResetInstanceRequest request =
+   *       ResetInstanceRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.resetInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ResetInstanceRequest, Operation&gt; resetInstanceCallable() {
+<span class="nc" id="L1326">    return stub.resetInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Allows notebook instances to report their latest instance information to the Notebooks API
+   * server. The server will merge the reported information to the instance metadata store. Do not
+   * use this method directly.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ReportInstanceInfoRequest request =
+   *       ReportInstanceInfoRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setVmId(&quot;vmId3622450&quot;)
+   *           .putAllMetadata(new HashMap&lt;String, String&gt;())
+   *           .build();
+   *   Instance response = notebookServiceClient.reportInstanceInfoAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; reportInstanceInfoAsync(
+      ReportInstanceInfoRequest request) {
+<span class="fc" id="L1356">    return reportInstanceInfoOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Allows notebook instances to report their latest instance information to the Notebooks API
+   * server. The server will merge the reported information to the instance metadata store. Do not
+   * use this method directly.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ReportInstanceInfoRequest request =
+   *       ReportInstanceInfoRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setVmId(&quot;vmId3622450&quot;)
+   *           .putAllMetadata(new HashMap&lt;String, String&gt;())
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       notebookServiceClient.reportInstanceInfoOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;ReportInstanceInfoRequest, Instance, OperationMetadata&gt;
+      reportInstanceInfoOperationCallable() {
+<span class="fc" id="L1386">    return stub.reportInstanceInfoOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Allows notebook instances to report their latest instance information to the Notebooks API
+   * server. The server will merge the reported information to the instance metadata store. Do not
+   * use this method directly.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ReportInstanceInfoRequest request =
+   *       ReportInstanceInfoRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setVmId(&quot;vmId3622450&quot;)
+   *           .putAllMetadata(new HashMap&lt;String, String&gt;())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.reportInstanceInfoCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ReportInstanceInfoRequest, Operation&gt; reportInstanceInfoCallable() {
+<span class="nc" id="L1415">    return stub.reportInstanceInfoCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Check if a notebook instance is upgradable.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   IsInstanceUpgradeableRequest request =
+   *       IsInstanceUpgradeableRequest.newBuilder()
+   *           .setNotebookInstance(&quot;notebookInstance-544239728&quot;)
+   *           .setType(UpgradeType.forNumber(0))
+   *           .build();
+   *   IsInstanceUpgradeableResponse response = notebookServiceClient.isInstanceUpgradeable(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final IsInstanceUpgradeableResponse isInstanceUpgradeable(
+      IsInstanceUpgradeableRequest request) {
+<span class="fc" id="L1442">    return isInstanceUpgradeableCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Check if a notebook instance is upgradable.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   IsInstanceUpgradeableRequest request =
+   *       IsInstanceUpgradeableRequest.newBuilder()
+   *           .setNotebookInstance(&quot;notebookInstance-544239728&quot;)
+   *           .setType(UpgradeType.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;IsInstanceUpgradeableResponse&gt; future =
+   *       notebookServiceClient.isInstanceUpgradeableCallable().futureCall(request);
+   *   // Do something.
+   *   IsInstanceUpgradeableResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;IsInstanceUpgradeableRequest, IsInstanceUpgradeableResponse&gt;
+      isInstanceUpgradeableCallable() {
+<span class="fc" id="L1469">    return stub.isInstanceUpgradeableCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Check if a notebook instance is healthy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   InstanceName name = InstanceName.of(&quot;[PROJECT]&quot;, &quot;[INSTANCE]&quot;);
+   *   GetInstanceHealthResponse response = notebookServiceClient.getInstanceHealth(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Format:
+   *     `projects/{project_id}/locations/{location}/instances/{instance_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GetInstanceHealthResponse getInstanceHealth(InstanceName name) {
+    GetInstanceHealthRequest request =
+<span class="fc" id="L1493">        GetInstanceHealthRequest.newBuilder()</span>
+<span class="pc bpc" id="L1494" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1495">            .build();</span>
+<span class="fc" id="L1496">    return getInstanceHealth(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Check if a notebook instance is healthy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String name = InstanceName.of(&quot;[PROJECT]&quot;, &quot;[INSTANCE]&quot;).toString();
+   *   GetInstanceHealthResponse response = notebookServiceClient.getInstanceHealth(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Format:
+   *     `projects/{project_id}/locations/{location}/instances/{instance_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GetInstanceHealthResponse getInstanceHealth(String name) {
+<span class="fc" id="L1519">    GetInstanceHealthRequest request = GetInstanceHealthRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1520">    return getInstanceHealth(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Check if a notebook instance is healthy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   GetInstanceHealthRequest request =
+   *       GetInstanceHealthRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   GetInstanceHealthResponse response = notebookServiceClient.getInstanceHealth(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GetInstanceHealthResponse getInstanceHealth(GetInstanceHealthRequest request) {
+<span class="fc" id="L1545">    return getInstanceHealthCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Check if a notebook instance is healthy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   GetInstanceHealthRequest request =
+   *       GetInstanceHealthRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;GetInstanceHealthResponse&gt; future =
+   *       notebookServiceClient.getInstanceHealthCallable().futureCall(request);
+   *   // Do something.
+   *   GetInstanceHealthResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetInstanceHealthRequest, GetInstanceHealthResponse&gt;
+      getInstanceHealthCallable() {
+<span class="fc" id="L1571">    return stub.getInstanceHealthCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Upgrades a notebook instance to the latest version.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   UpgradeInstanceRequest request =
+   *       UpgradeInstanceRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setType(UpgradeType.forNumber(0))
+   *           .build();
+   *   Instance response = notebookServiceClient.upgradeInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; upgradeInstanceAsync(
+      UpgradeInstanceRequest request) {
+<span class="fc" id="L1598">    return upgradeInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Upgrades a notebook instance to the latest version.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   UpgradeInstanceRequest request =
+   *       UpgradeInstanceRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setType(UpgradeType.forNumber(0))
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       notebookServiceClient.upgradeInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpgradeInstanceRequest, Instance, OperationMetadata&gt;
+      upgradeInstanceOperationCallable() {
+<span class="fc" id="L1625">    return stub.upgradeInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Upgrades a notebook instance to the latest version.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   UpgradeInstanceRequest request =
+   *       UpgradeInstanceRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setType(UpgradeType.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.upgradeInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpgradeInstanceRequest, Operation&gt; upgradeInstanceCallable() {
+<span class="nc" id="L1651">    return stub.upgradeInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Rollbacks a notebook instance to the previous version.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   RollbackInstanceRequest request =
+   *       RollbackInstanceRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setTargetSnapshot(&quot;targetSnapshot-1307211147&quot;)
+   *           .build();
+   *   Instance response = notebookServiceClient.rollbackInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; rollbackInstanceAsync(
+      RollbackInstanceRequest request) {
+<span class="fc" id="L1678">    return rollbackInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Rollbacks a notebook instance to the previous version.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   RollbackInstanceRequest request =
+   *       RollbackInstanceRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setTargetSnapshot(&quot;targetSnapshot-1307211147&quot;)
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       notebookServiceClient.rollbackInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;RollbackInstanceRequest, Instance, OperationMetadata&gt;
+      rollbackInstanceOperationCallable() {
+<span class="fc" id="L1705">    return stub.rollbackInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Rollbacks a notebook instance to the previous version.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   RollbackInstanceRequest request =
+   *       RollbackInstanceRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setTargetSnapshot(&quot;targetSnapshot-1307211147&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.rollbackInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RollbackInstanceRequest, Operation&gt; rollbackInstanceCallable() {
+<span class="nc" id="L1731">    return stub.rollbackInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Allows notebook instances to call this endpoint to upgrade themselves. Do not use this method
+   * directly.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   UpgradeInstanceInternalRequest request =
+   *       UpgradeInstanceInternalRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setVmId(&quot;vmId3622450&quot;)
+   *           .setType(UpgradeType.forNumber(0))
+   *           .build();
+   *   Instance response = notebookServiceClient.upgradeInstanceInternalAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; upgradeInstanceInternalAsync(
+      UpgradeInstanceInternalRequest request) {
+<span class="fc" id="L1760">    return upgradeInstanceInternalOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Allows notebook instances to call this endpoint to upgrade themselves. Do not use this method
+   * directly.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   UpgradeInstanceInternalRequest request =
+   *       UpgradeInstanceInternalRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setVmId(&quot;vmId3622450&quot;)
+   *           .setType(UpgradeType.forNumber(0))
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       notebookServiceClient.upgradeInstanceInternalOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpgradeInstanceInternalRequest, Instance, OperationMetadata&gt;
+      upgradeInstanceInternalOperationCallable() {
+<span class="fc" id="L1789">    return stub.upgradeInstanceInternalOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Allows notebook instances to call this endpoint to upgrade themselves. Do not use this method
+   * directly.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   UpgradeInstanceInternalRequest request =
+   *       UpgradeInstanceInternalRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setVmId(&quot;vmId3622450&quot;)
+   *           .setType(UpgradeType.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.upgradeInstanceInternalCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpgradeInstanceInternalRequest, Operation&gt;
+      upgradeInstanceInternalCallable() {
+<span class="nc" id="L1818">    return stub.upgradeInstanceInternalCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists environments in a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String parent = &quot;parent-995424086&quot;;
+   *   for (Environment element : notebookServiceClient.listEnvironments(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Format: `projects/{project_id}/locations/{location}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListEnvironmentsPagedResponse listEnvironments(String parent) {
+    ListEnvironmentsRequest request =
+<span class="fc" id="L1843">        ListEnvironmentsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1844">    return listEnvironments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists environments in a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ListEnvironmentsRequest request =
+   *       ListEnvironmentsRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Environment element : notebookServiceClient.listEnvironments(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListEnvironmentsPagedResponse listEnvironments(ListEnvironmentsRequest request) {
+<span class="fc" id="L1873">    return listEnvironmentsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists environments in a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ListEnvironmentsRequest request =
+   *       ListEnvironmentsRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Environment&gt; future =
+   *       notebookServiceClient.listEnvironmentsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Environment element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListEnvironmentsRequest, ListEnvironmentsPagedResponse&gt;
+      listEnvironmentsPagedCallable() {
+<span class="fc" id="L1903">    return stub.listEnvironmentsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists environments in a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ListEnvironmentsRequest request =
+   *       ListEnvironmentsRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListEnvironmentsResponse response =
+   *         notebookServiceClient.listEnvironmentsCallable().call(request);
+   *     for (Environment element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListEnvironmentsRequest, ListEnvironmentsResponse&gt;
+      listEnvironmentsCallable() {
+<span class="nc" id="L1940">    return stub.listEnvironmentsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single Environment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   Environment response = notebookServiceClient.getEnvironment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Format:
+   *     `projects/{project_id}/locations/{location}/environments/{environment_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Environment getEnvironment(String name) {
+<span class="fc" id="L1963">    GetEnvironmentRequest request = GetEnvironmentRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1964">    return getEnvironment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single Environment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   GetEnvironmentRequest request =
+   *       GetEnvironmentRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   Environment response = notebookServiceClient.getEnvironment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Environment getEnvironment(GetEnvironmentRequest request) {
+<span class="fc" id="L1987">    return getEnvironmentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single Environment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   GetEnvironmentRequest request =
+   *       GetEnvironmentRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;Environment&gt; future =
+   *       notebookServiceClient.getEnvironmentCallable().futureCall(request);
+   *   // Do something.
+   *   Environment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetEnvironmentRequest, Environment&gt; getEnvironmentCallable() {
+<span class="fc" id="L2010">    return stub.getEnvironmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Environment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String parent = &quot;parent-995424086&quot;;
+   *   Environment environment = Environment.newBuilder().build();
+   *   String environmentId = &quot;environmentId-950205810&quot;;
+   *   Environment response =
+   *       notebookServiceClient.createEnvironmentAsync(parent, environment, environmentId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Format: `projects/{project_id}/locations/{location}`
+   * @param environment Required. The environment to be created.
+   * @param environmentId Required. User-defined unique ID of this environment. The `environment_id`
+   *     must be 1 to 63 characters long and contain only lowercase letters, numeric characters, and
+   *     dashes. The first character must be a lowercase letter and the last character cannot be a
+   *     dash.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Environment, OperationMetadata&gt; createEnvironmentAsync(
+      String parent, Environment environment, String environmentId) {
+    CreateEnvironmentRequest request =
+<span class="fc" id="L2042">        CreateEnvironmentRequest.newBuilder()</span>
+<span class="fc" id="L2043">            .setParent(parent)</span>
+<span class="fc" id="L2044">            .setEnvironment(environment)</span>
+<span class="fc" id="L2045">            .setEnvironmentId(environmentId)</span>
+<span class="fc" id="L2046">            .build();</span>
+<span class="fc" id="L2047">    return createEnvironmentAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Environment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   CreateEnvironmentRequest request =
+   *       CreateEnvironmentRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setEnvironmentId(&quot;environmentId-950205810&quot;)
+   *           .setEnvironment(Environment.newBuilder().build())
+   *           .build();
+   *   Environment response = notebookServiceClient.createEnvironmentAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Environment, OperationMetadata&gt; createEnvironmentAsync(
+      CreateEnvironmentRequest request) {
+<span class="fc" id="L2075">    return createEnvironmentOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Environment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   CreateEnvironmentRequest request =
+   *       CreateEnvironmentRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setEnvironmentId(&quot;environmentId-950205810&quot;)
+   *           .setEnvironment(Environment.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Environment, OperationMetadata&gt; future =
+   *       notebookServiceClient.createEnvironmentOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Environment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateEnvironmentRequest, Environment, OperationMetadata&gt;
+      createEnvironmentOperationCallable() {
+<span class="fc" id="L2103">    return stub.createEnvironmentOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Environment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   CreateEnvironmentRequest request =
+   *       CreateEnvironmentRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setEnvironmentId(&quot;environmentId-950205810&quot;)
+   *           .setEnvironment(Environment.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.createEnvironmentCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateEnvironmentRequest, Operation&gt; createEnvironmentCallable() {
+<span class="nc" id="L2130">    return stub.createEnvironmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single Environment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String name = &quot;name3373707&quot;;
+   *   notebookServiceClient.deleteEnvironmentAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Format:
+   *     `projects/{project_id}/locations/{location}/environments/{environment_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteEnvironmentAsync(String name) {
+<span class="fc" id="L2153">    DeleteEnvironmentRequest request = DeleteEnvironmentRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2154">    return deleteEnvironmentAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single Environment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   DeleteEnvironmentRequest request =
+   *       DeleteEnvironmentRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   notebookServiceClient.deleteEnvironmentAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteEnvironmentAsync(
+      DeleteEnvironmentRequest request) {
+<span class="fc" id="L2178">    return deleteEnvironmentOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single Environment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   DeleteEnvironmentRequest request =
+   *       DeleteEnvironmentRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       notebookServiceClient.deleteEnvironmentOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteEnvironmentRequest, Empty, OperationMetadata&gt;
+      deleteEnvironmentOperationCallable() {
+<span class="fc" id="L2202">    return stub.deleteEnvironmentOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single Environment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   DeleteEnvironmentRequest request =
+   *       DeleteEnvironmentRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.deleteEnvironmentCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteEnvironmentRequest, Operation&gt; deleteEnvironmentCallable() {
+<span class="nc" id="L2225">    return stub.deleteEnvironmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists schedules in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ScheduleName parent = ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;);
+   *   for (Schedule element : notebookServiceClient.listSchedules(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Format: `parent=projects/{project_id}/locations/{location}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListSchedulesPagedResponse listSchedules(ScheduleName parent) {
+    ListSchedulesRequest request =
+<span class="fc" id="L2250">        ListSchedulesRequest.newBuilder()</span>
+<span class="pc bpc" id="L2251" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L2252">            .build();</span>
+<span class="fc" id="L2253">    return listSchedules(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists schedules in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String parent = ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString();
+   *   for (Schedule element : notebookServiceClient.listSchedules(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Format: `parent=projects/{project_id}/locations/{location}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListSchedulesPagedResponse listSchedules(String parent) {
+<span class="fc" id="L2277">    ListSchedulesRequest request = ListSchedulesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L2278">    return listSchedules(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists schedules in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ListSchedulesRequest request =
+   *       ListSchedulesRequest.newBuilder()
+   *           .setParent(ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Schedule element : notebookServiceClient.listSchedules(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListSchedulesPagedResponse listSchedules(ListSchedulesRequest request) {
+<span class="fc" id="L2309">    return listSchedulesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists schedules in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ListSchedulesRequest request =
+   *       ListSchedulesRequest.newBuilder()
+   *           .setParent(ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Schedule&gt; future =
+   *       notebookServiceClient.listSchedulesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Schedule element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListSchedulesRequest, ListSchedulesPagedResponse&gt;
+      listSchedulesPagedCallable() {
+<span class="fc" id="L2341">    return stub.listSchedulesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists schedules in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ListSchedulesRequest request =
+   *       ListSchedulesRequest.newBuilder()
+   *           .setParent(ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListSchedulesResponse response =
+   *         notebookServiceClient.listSchedulesCallable().call(request);
+   *     for (Schedule element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListSchedulesRequest, ListSchedulesResponse&gt; listSchedulesCallable() {
+<span class="nc" id="L2379">    return stub.listSchedulesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of schedule
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ScheduleName name = ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;);
+   *   Schedule response = notebookServiceClient.getSchedule(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Format:
+   *     `projects/{project_id}/locations/{location}/schedules/{schedule_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Schedule getSchedule(ScheduleName name) {
+    GetScheduleRequest request =
+<span class="pc bpc" id="L2403" title="1 of 2 branches missed.">        GetScheduleRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L2404">    return getSchedule(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of schedule
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String name = ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString();
+   *   Schedule response = notebookServiceClient.getSchedule(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Format:
+   *     `projects/{project_id}/locations/{location}/schedules/{schedule_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Schedule getSchedule(String name) {
+<span class="fc" id="L2427">    GetScheduleRequest request = GetScheduleRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2428">    return getSchedule(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of schedule
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   GetScheduleRequest request =
+   *       GetScheduleRequest.newBuilder()
+   *           .setName(ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString())
+   *           .build();
+   *   Schedule response = notebookServiceClient.getSchedule(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Schedule getSchedule(GetScheduleRequest request) {
+<span class="fc" id="L2453">    return getScheduleCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of schedule
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   GetScheduleRequest request =
+   *       GetScheduleRequest.newBuilder()
+   *           .setName(ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Schedule&gt; future = notebookServiceClient.getScheduleCallable().futureCall(request);
+   *   // Do something.
+   *   Schedule response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetScheduleRequest, Schedule&gt; getScheduleCallable() {
+<span class="fc" id="L2477">    return stub.getScheduleCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes schedule and all underlying jobs
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ScheduleName name = ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;);
+   *   notebookServiceClient.deleteScheduleAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Format:
+   *     `projects/{project_id}/locations/{location}/schedules/{schedule_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteScheduleAsync(ScheduleName name) {
+    DeleteScheduleRequest request =
+<span class="pc bpc" id="L2501" title="1 of 2 branches missed.">        DeleteScheduleRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L2502">    return deleteScheduleAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes schedule and all underlying jobs
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String name = ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString();
+   *   notebookServiceClient.deleteScheduleAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Format:
+   *     `projects/{project_id}/locations/{location}/schedules/{schedule_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteScheduleAsync(String name) {
+<span class="fc" id="L2525">    DeleteScheduleRequest request = DeleteScheduleRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2526">    return deleteScheduleAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes schedule and all underlying jobs
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   DeleteScheduleRequest request =
+   *       DeleteScheduleRequest.newBuilder()
+   *           .setName(ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString())
+   *           .build();
+   *   notebookServiceClient.deleteScheduleAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteScheduleAsync(
+      DeleteScheduleRequest request) {
+<span class="fc" id="L2552">    return deleteScheduleOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes schedule and all underlying jobs
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   DeleteScheduleRequest request =
+   *       DeleteScheduleRequest.newBuilder()
+   *           .setName(ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       notebookServiceClient.deleteScheduleOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteScheduleRequest, Empty, OperationMetadata&gt;
+      deleteScheduleOperationCallable() {
+<span class="fc" id="L2578">    return stub.deleteScheduleOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes schedule and all underlying jobs
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   DeleteScheduleRequest request =
+   *       DeleteScheduleRequest.newBuilder()
+   *           .setName(ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.deleteScheduleCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteScheduleRequest, Operation&gt; deleteScheduleCallable() {
+<span class="nc" id="L2603">    return stub.deleteScheduleCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Scheduled Notebook in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ScheduleName parent = ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;);
+   *   Schedule schedule = Schedule.newBuilder().build();
+   *   String scheduleId = &quot;scheduleId-687058414&quot;;
+   *   Schedule response =
+   *       notebookServiceClient.createScheduleAsync(parent, schedule, scheduleId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Format: `parent=projects/{project_id}/locations/{location}`
+   * @param schedule Required. The schedule to be created.
+   * @param scheduleId Required. User-defined unique ID of this schedule.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Schedule, OperationMetadata&gt; createScheduleAsync(
+      ScheduleName parent, Schedule schedule, String scheduleId) {
+    CreateScheduleRequest request =
+<span class="fc" id="L2632">        CreateScheduleRequest.newBuilder()</span>
+<span class="pc bpc" id="L2633" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L2634">            .setSchedule(schedule)</span>
+<span class="fc" id="L2635">            .setScheduleId(scheduleId)</span>
+<span class="fc" id="L2636">            .build();</span>
+<span class="fc" id="L2637">    return createScheduleAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Scheduled Notebook in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String parent = ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString();
+   *   Schedule schedule = Schedule.newBuilder().build();
+   *   String scheduleId = &quot;scheduleId-687058414&quot;;
+   *   Schedule response =
+   *       notebookServiceClient.createScheduleAsync(parent, schedule, scheduleId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Format: `parent=projects/{project_id}/locations/{location}`
+   * @param schedule Required. The schedule to be created.
+   * @param scheduleId Required. User-defined unique ID of this schedule.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Schedule, OperationMetadata&gt; createScheduleAsync(
+      String parent, Schedule schedule, String scheduleId) {
+    CreateScheduleRequest request =
+<span class="fc" id="L2666">        CreateScheduleRequest.newBuilder()</span>
+<span class="fc" id="L2667">            .setParent(parent)</span>
+<span class="fc" id="L2668">            .setSchedule(schedule)</span>
+<span class="fc" id="L2669">            .setScheduleId(scheduleId)</span>
+<span class="fc" id="L2670">            .build();</span>
+<span class="fc" id="L2671">    return createScheduleAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Scheduled Notebook in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   CreateScheduleRequest request =
+   *       CreateScheduleRequest.newBuilder()
+   *           .setParent(ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString())
+   *           .setScheduleId(&quot;scheduleId-687058414&quot;)
+   *           .setSchedule(Schedule.newBuilder().build())
+   *           .build();
+   *   Schedule response = notebookServiceClient.createScheduleAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Schedule, OperationMetadata&gt; createScheduleAsync(
+      CreateScheduleRequest request) {
+<span class="fc" id="L2699">    return createScheduleOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Scheduled Notebook in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   CreateScheduleRequest request =
+   *       CreateScheduleRequest.newBuilder()
+   *           .setParent(ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString())
+   *           .setScheduleId(&quot;scheduleId-687058414&quot;)
+   *           .setSchedule(Schedule.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Schedule, OperationMetadata&gt; future =
+   *       notebookServiceClient.createScheduleOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Schedule response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateScheduleRequest, Schedule, OperationMetadata&gt;
+      createScheduleOperationCallable() {
+<span class="fc" id="L2727">    return stub.createScheduleOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Scheduled Notebook in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   CreateScheduleRequest request =
+   *       CreateScheduleRequest.newBuilder()
+   *           .setParent(ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString())
+   *           .setScheduleId(&quot;scheduleId-687058414&quot;)
+   *           .setSchedule(Schedule.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.createScheduleCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateScheduleRequest, Operation&gt; createScheduleCallable() {
+<span class="nc" id="L2754">    return stub.createScheduleCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Triggers execution of an existing schedule.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   TriggerScheduleRequest request =
+   *       TriggerScheduleRequest.newBuilder()
+   *           .setName(ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString())
+   *           .build();
+   *   Schedule response = notebookServiceClient.triggerScheduleAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Schedule, OperationMetadata&gt; triggerScheduleAsync(
+      TriggerScheduleRequest request) {
+<span class="fc" id="L2780">    return triggerScheduleOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Triggers execution of an existing schedule.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   TriggerScheduleRequest request =
+   *       TriggerScheduleRequest.newBuilder()
+   *           .setName(ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Schedule, OperationMetadata&gt; future =
+   *       notebookServiceClient.triggerScheduleOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Schedule response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;TriggerScheduleRequest, Schedule, OperationMetadata&gt;
+      triggerScheduleOperationCallable() {
+<span class="fc" id="L2806">    return stub.triggerScheduleOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Triggers execution of an existing schedule.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   TriggerScheduleRequest request =
+   *       TriggerScheduleRequest.newBuilder()
+   *           .setName(ScheduleName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SCHEDULE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.triggerScheduleCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;TriggerScheduleRequest, Operation&gt; triggerScheduleCallable() {
+<span class="nc" id="L2831">    return stub.triggerScheduleCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists executions in a given project and location
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ExecutionName parent = ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;);
+   *   for (Execution element : notebookServiceClient.listExecutions(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Format: `parent=projects/{project_id}/locations/{location}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListExecutionsPagedResponse listExecutions(ExecutionName parent) {
+    ListExecutionsRequest request =
+<span class="fc" id="L2856">        ListExecutionsRequest.newBuilder()</span>
+<span class="pc bpc" id="L2857" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L2858">            .build();</span>
+<span class="fc" id="L2859">    return listExecutions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists executions in a given project and location
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String parent = ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString();
+   *   for (Execution element : notebookServiceClient.listExecutions(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Format: `parent=projects/{project_id}/locations/{location}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListExecutionsPagedResponse listExecutions(String parent) {
+<span class="fc" id="L2883">    ListExecutionsRequest request = ListExecutionsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L2884">    return listExecutions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists executions in a given project and location
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ListExecutionsRequest request =
+   *       ListExecutionsRequest.newBuilder()
+   *           .setParent(ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Execution element : notebookServiceClient.listExecutions(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListExecutionsPagedResponse listExecutions(ListExecutionsRequest request) {
+<span class="fc" id="L2915">    return listExecutionsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists executions in a given project and location
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ListExecutionsRequest request =
+   *       ListExecutionsRequest.newBuilder()
+   *           .setParent(ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Execution&gt; future =
+   *       notebookServiceClient.listExecutionsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Execution element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListExecutionsRequest, ListExecutionsPagedResponse&gt;
+      listExecutionsPagedCallable() {
+<span class="fc" id="L2947">    return stub.listExecutionsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists executions in a given project and location
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ListExecutionsRequest request =
+   *       ListExecutionsRequest.newBuilder()
+   *           .setParent(ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListExecutionsResponse response =
+   *         notebookServiceClient.listExecutionsCallable().call(request);
+   *     for (Execution element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListExecutionsRequest, ListExecutionsResponse&gt;
+      listExecutionsCallable() {
+<span class="nc" id="L2986">    return stub.listExecutionsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of executions
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ExecutionName name = ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;);
+   *   Execution response = notebookServiceClient.getExecution(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Format:
+   *     `projects/{project_id}/locations/{location}/executions/{execution_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Execution getExecution(ExecutionName name) {
+    GetExecutionRequest request =
+<span class="pc bpc" id="L3010" title="1 of 2 branches missed.">        GetExecutionRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L3011">    return getExecution(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of executions
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String name = ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString();
+   *   Execution response = notebookServiceClient.getExecution(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Format:
+   *     `projects/{project_id}/locations/{location}/executions/{execution_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Execution getExecution(String name) {
+<span class="fc" id="L3034">    GetExecutionRequest request = GetExecutionRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L3035">    return getExecution(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of executions
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   GetExecutionRequest request =
+   *       GetExecutionRequest.newBuilder()
+   *           .setName(ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString())
+   *           .build();
+   *   Execution response = notebookServiceClient.getExecution(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Execution getExecution(GetExecutionRequest request) {
+<span class="fc" id="L3060">    return getExecutionCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of executions
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   GetExecutionRequest request =
+   *       GetExecutionRequest.newBuilder()
+   *           .setName(ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Execution&gt; future =
+   *       notebookServiceClient.getExecutionCallable().futureCall(request);
+   *   // Do something.
+   *   Execution response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetExecutionRequest, Execution&gt; getExecutionCallable() {
+<span class="fc" id="L3085">    return stub.getExecutionCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes execution
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ExecutionName name = ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;);
+   *   notebookServiceClient.deleteExecutionAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Format:
+   *     `projects/{project_id}/locations/{location}/executions/{execution_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteExecutionAsync(ExecutionName name) {
+    DeleteExecutionRequest request =
+<span class="pc bpc" id="L3109" title="1 of 2 branches missed.">        DeleteExecutionRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L3110">    return deleteExecutionAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes execution
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String name = ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString();
+   *   notebookServiceClient.deleteExecutionAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Format:
+   *     `projects/{project_id}/locations/{location}/executions/{execution_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteExecutionAsync(String name) {
+<span class="fc" id="L3133">    DeleteExecutionRequest request = DeleteExecutionRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L3134">    return deleteExecutionAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes execution
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   DeleteExecutionRequest request =
+   *       DeleteExecutionRequest.newBuilder()
+   *           .setName(ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString())
+   *           .build();
+   *   notebookServiceClient.deleteExecutionAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteExecutionAsync(
+      DeleteExecutionRequest request) {
+<span class="fc" id="L3160">    return deleteExecutionOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes execution
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   DeleteExecutionRequest request =
+   *       DeleteExecutionRequest.newBuilder()
+   *           .setName(ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       notebookServiceClient.deleteExecutionOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteExecutionRequest, Empty, OperationMetadata&gt;
+      deleteExecutionOperationCallable() {
+<span class="fc" id="L3186">    return stub.deleteExecutionOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes execution
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   DeleteExecutionRequest request =
+   *       DeleteExecutionRequest.newBuilder()
+   *           .setName(ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.deleteExecutionCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteExecutionRequest, Operation&gt; deleteExecutionCallable() {
+<span class="nc" id="L3211">    return stub.deleteExecutionCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Execution in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   ExecutionName parent = ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;);
+   *   Execution execution = Execution.newBuilder().build();
+   *   String executionId = &quot;executionId-454906285&quot;;
+   *   Execution response =
+   *       notebookServiceClient.createExecutionAsync(parent, execution, executionId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Format: `parent=projects/{project_id}/locations/{location}`
+   * @param execution Required. The execution to be created.
+   * @param executionId Required. User-defined unique ID of this execution.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Execution, OperationMetadata&gt; createExecutionAsync(
+      ExecutionName parent, Execution execution, String executionId) {
+    CreateExecutionRequest request =
+<span class="fc" id="L3240">        CreateExecutionRequest.newBuilder()</span>
+<span class="pc bpc" id="L3241" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L3242">            .setExecution(execution)</span>
+<span class="fc" id="L3243">            .setExecutionId(executionId)</span>
+<span class="fc" id="L3244">            .build();</span>
+<span class="fc" id="L3245">    return createExecutionAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Execution in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   String parent = ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString();
+   *   Execution execution = Execution.newBuilder().build();
+   *   String executionId = &quot;executionId-454906285&quot;;
+   *   Execution response =
+   *       notebookServiceClient.createExecutionAsync(parent, execution, executionId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Format: `parent=projects/{project_id}/locations/{location}`
+   * @param execution Required. The execution to be created.
+   * @param executionId Required. User-defined unique ID of this execution.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Execution, OperationMetadata&gt; createExecutionAsync(
+      String parent, Execution execution, String executionId) {
+    CreateExecutionRequest request =
+<span class="fc" id="L3274">        CreateExecutionRequest.newBuilder()</span>
+<span class="fc" id="L3275">            .setParent(parent)</span>
+<span class="fc" id="L3276">            .setExecution(execution)</span>
+<span class="fc" id="L3277">            .setExecutionId(executionId)</span>
+<span class="fc" id="L3278">            .build();</span>
+<span class="fc" id="L3279">    return createExecutionAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Execution in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   CreateExecutionRequest request =
+   *       CreateExecutionRequest.newBuilder()
+   *           .setParent(ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString())
+   *           .setExecutionId(&quot;executionId-454906285&quot;)
+   *           .setExecution(Execution.newBuilder().build())
+   *           .build();
+   *   Execution response = notebookServiceClient.createExecutionAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Execution, OperationMetadata&gt; createExecutionAsync(
+      CreateExecutionRequest request) {
+<span class="fc" id="L3307">    return createExecutionOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Execution in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   CreateExecutionRequest request =
+   *       CreateExecutionRequest.newBuilder()
+   *           .setParent(ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString())
+   *           .setExecutionId(&quot;executionId-454906285&quot;)
+   *           .setExecution(Execution.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Execution, OperationMetadata&gt; future =
+   *       notebookServiceClient.createExecutionOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Execution response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateExecutionRequest, Execution, OperationMetadata&gt;
+      createExecutionOperationCallable() {
+<span class="fc" id="L3335">    return stub.createExecutionOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Execution in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotebookServiceClient notebookServiceClient = NotebookServiceClient.create()) {
+   *   CreateExecutionRequest request =
+   *       CreateExecutionRequest.newBuilder()
+   *           .setParent(ExecutionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EXECUTION]&quot;).toString())
+   *           .setExecutionId(&quot;executionId-454906285&quot;)
+   *           .setExecution(Execution.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       notebookServiceClient.createExecutionCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateExecutionRequest, Operation&gt; createExecutionCallable() {
+<span class="nc" id="L3362">    return stub.createExecutionCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L3367">    stub.close();</span>
+<span class="fc" id="L3368">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L3372">    stub.shutdown();</span>
+<span class="nc" id="L3373">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L3377">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L3382">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L3387">    stub.shutdownNow();</span>
+<span class="nc" id="L3388">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L3392">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListInstancesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListInstancesRequest,
+          ListInstancesResponse,
+          Instance,
+          ListInstancesPage,
+          ListInstancesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListInstancesPagedResponse&gt; createAsync(
+        PageContext&lt;ListInstancesRequest, ListInstancesResponse, Instance&gt; context,
+        ApiFuture&lt;ListInstancesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListInstancesPage&gt; futurePage =
+<span class="fc" id="L3407">          ListInstancesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3408">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3410">          input -&gt; new ListInstancesPagedResponse(input),</span>
+<span class="fc" id="L3411">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListInstancesPagedResponse(ListInstancesPage page) {
+<span class="fc" id="L3415">      super(page, ListInstancesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3416">    }</span>
+  }
+
+  public static class ListInstancesPage
+      extends AbstractPage&lt;
+          ListInstancesRequest, ListInstancesResponse, Instance, ListInstancesPage&gt; {
+
+    private ListInstancesPage(
+        PageContext&lt;ListInstancesRequest, ListInstancesResponse, Instance&gt; context,
+        ListInstancesResponse response) {
+<span class="fc" id="L3426">      super(context, response);</span>
+<span class="fc" id="L3427">    }</span>
+
+    private static ListInstancesPage createEmptyPage() {
+<span class="fc" id="L3430">      return new ListInstancesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListInstancesPage createPage(
+        PageContext&lt;ListInstancesRequest, ListInstancesResponse, Instance&gt; context,
+        ListInstancesResponse response) {
+<span class="fc" id="L3437">      return new ListInstancesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListInstancesPage&gt; createPageAsync(
+        PageContext&lt;ListInstancesRequest, ListInstancesResponse, Instance&gt; context,
+        ApiFuture&lt;ListInstancesResponse&gt; futureResponse) {
+<span class="fc" id="L3444">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListInstancesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListInstancesRequest,
+          ListInstancesResponse,
+          Instance,
+          ListInstancesPage,
+          ListInstancesFixedSizeCollection&gt; {
+
+    private ListInstancesFixedSizeCollection(List&lt;ListInstancesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3457">      super(pages, collectionSize);</span>
+<span class="fc" id="L3458">    }</span>
+
+    private static ListInstancesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3461">      return new ListInstancesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListInstancesFixedSizeCollection createCollection(
+        List&lt;ListInstancesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3467">      return new ListInstancesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListEnvironmentsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListEnvironmentsRequest,
+          ListEnvironmentsResponse,
+          Environment,
+          ListEnvironmentsPage,
+          ListEnvironmentsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListEnvironmentsPagedResponse&gt; createAsync(
+        PageContext&lt;ListEnvironmentsRequest, ListEnvironmentsResponse, Environment&gt; context,
+        ApiFuture&lt;ListEnvironmentsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListEnvironmentsPage&gt; futurePage =
+<span class="fc" id="L3483">          ListEnvironmentsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3484">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3486">          input -&gt; new ListEnvironmentsPagedResponse(input),</span>
+<span class="fc" id="L3487">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListEnvironmentsPagedResponse(ListEnvironmentsPage page) {
+<span class="fc" id="L3491">      super(page, ListEnvironmentsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3492">    }</span>
+  }
+
+  public static class ListEnvironmentsPage
+      extends AbstractPage&lt;
+          ListEnvironmentsRequest, ListEnvironmentsResponse, Environment, ListEnvironmentsPage&gt; {
+
+    private ListEnvironmentsPage(
+        PageContext&lt;ListEnvironmentsRequest, ListEnvironmentsResponse, Environment&gt; context,
+        ListEnvironmentsResponse response) {
+<span class="fc" id="L3502">      super(context, response);</span>
+<span class="fc" id="L3503">    }</span>
+
+    private static ListEnvironmentsPage createEmptyPage() {
+<span class="fc" id="L3506">      return new ListEnvironmentsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListEnvironmentsPage createPage(
+        PageContext&lt;ListEnvironmentsRequest, ListEnvironmentsResponse, Environment&gt; context,
+        ListEnvironmentsResponse response) {
+<span class="fc" id="L3513">      return new ListEnvironmentsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListEnvironmentsPage&gt; createPageAsync(
+        PageContext&lt;ListEnvironmentsRequest, ListEnvironmentsResponse, Environment&gt; context,
+        ApiFuture&lt;ListEnvironmentsResponse&gt; futureResponse) {
+<span class="fc" id="L3520">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListEnvironmentsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListEnvironmentsRequest,
+          ListEnvironmentsResponse,
+          Environment,
+          ListEnvironmentsPage,
+          ListEnvironmentsFixedSizeCollection&gt; {
+
+    private ListEnvironmentsFixedSizeCollection(
+        List&lt;ListEnvironmentsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3534">      super(pages, collectionSize);</span>
+<span class="fc" id="L3535">    }</span>
+
+    private static ListEnvironmentsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3538">      return new ListEnvironmentsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListEnvironmentsFixedSizeCollection createCollection(
+        List&lt;ListEnvironmentsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3544">      return new ListEnvironmentsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListSchedulesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListSchedulesRequest,
+          ListSchedulesResponse,
+          Schedule,
+          ListSchedulesPage,
+          ListSchedulesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListSchedulesPagedResponse&gt; createAsync(
+        PageContext&lt;ListSchedulesRequest, ListSchedulesResponse, Schedule&gt; context,
+        ApiFuture&lt;ListSchedulesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListSchedulesPage&gt; futurePage =
+<span class="fc" id="L3560">          ListSchedulesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3561">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3563">          input -&gt; new ListSchedulesPagedResponse(input),</span>
+<span class="fc" id="L3564">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListSchedulesPagedResponse(ListSchedulesPage page) {
+<span class="fc" id="L3568">      super(page, ListSchedulesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3569">    }</span>
+  }
+
+  public static class ListSchedulesPage
+      extends AbstractPage&lt;
+          ListSchedulesRequest, ListSchedulesResponse, Schedule, ListSchedulesPage&gt; {
+
+    private ListSchedulesPage(
+        PageContext&lt;ListSchedulesRequest, ListSchedulesResponse, Schedule&gt; context,
+        ListSchedulesResponse response) {
+<span class="fc" id="L3579">      super(context, response);</span>
+<span class="fc" id="L3580">    }</span>
+
+    private static ListSchedulesPage createEmptyPage() {
+<span class="fc" id="L3583">      return new ListSchedulesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListSchedulesPage createPage(
+        PageContext&lt;ListSchedulesRequest, ListSchedulesResponse, Schedule&gt; context,
+        ListSchedulesResponse response) {
+<span class="fc" id="L3590">      return new ListSchedulesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListSchedulesPage&gt; createPageAsync(
+        PageContext&lt;ListSchedulesRequest, ListSchedulesResponse, Schedule&gt; context,
+        ApiFuture&lt;ListSchedulesResponse&gt; futureResponse) {
+<span class="fc" id="L3597">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListSchedulesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListSchedulesRequest,
+          ListSchedulesResponse,
+          Schedule,
+          ListSchedulesPage,
+          ListSchedulesFixedSizeCollection&gt; {
+
+    private ListSchedulesFixedSizeCollection(List&lt;ListSchedulesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3610">      super(pages, collectionSize);</span>
+<span class="fc" id="L3611">    }</span>
+
+    private static ListSchedulesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3614">      return new ListSchedulesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListSchedulesFixedSizeCollection createCollection(
+        List&lt;ListSchedulesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3620">      return new ListSchedulesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListExecutionsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListExecutionsRequest,
+          ListExecutionsResponse,
+          Execution,
+          ListExecutionsPage,
+          ListExecutionsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListExecutionsPagedResponse&gt; createAsync(
+        PageContext&lt;ListExecutionsRequest, ListExecutionsResponse, Execution&gt; context,
+        ApiFuture&lt;ListExecutionsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListExecutionsPage&gt; futurePage =
+<span class="fc" id="L3636">          ListExecutionsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3637">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3639">          input -&gt; new ListExecutionsPagedResponse(input),</span>
+<span class="fc" id="L3640">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListExecutionsPagedResponse(ListExecutionsPage page) {
+<span class="fc" id="L3644">      super(page, ListExecutionsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3645">    }</span>
+  }
+
+  public static class ListExecutionsPage
+      extends AbstractPage&lt;
+          ListExecutionsRequest, ListExecutionsResponse, Execution, ListExecutionsPage&gt; {
+
+    private ListExecutionsPage(
+        PageContext&lt;ListExecutionsRequest, ListExecutionsResponse, Execution&gt; context,
+        ListExecutionsResponse response) {
+<span class="fc" id="L3655">      super(context, response);</span>
+<span class="fc" id="L3656">    }</span>
+
+    private static ListExecutionsPage createEmptyPage() {
+<span class="fc" id="L3659">      return new ListExecutionsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListExecutionsPage createPage(
+        PageContext&lt;ListExecutionsRequest, ListExecutionsResponse, Execution&gt; context,
+        ListExecutionsResponse response) {
+<span class="fc" id="L3666">      return new ListExecutionsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListExecutionsPage&gt; createPageAsync(
+        PageContext&lt;ListExecutionsRequest, ListExecutionsResponse, Execution&gt; context,
+        ApiFuture&lt;ListExecutionsResponse&gt; futureResponse) {
+<span class="fc" id="L3673">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListExecutionsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListExecutionsRequest,
+          ListExecutionsResponse,
+          Execution,
+          ListExecutionsPage,
+          ListExecutionsFixedSizeCollection&gt; {
+
+    private ListExecutionsFixedSizeCollection(List&lt;ListExecutionsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3686">      super(pages, collectionSize);</span>
+<span class="fc" id="L3687">    }</span>
+
+    private static ListExecutionsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3690">      return new ListExecutionsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListExecutionsFixedSizeCollection createCollection(
+        List&lt;ListExecutionsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3696">      return new ListExecutionsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

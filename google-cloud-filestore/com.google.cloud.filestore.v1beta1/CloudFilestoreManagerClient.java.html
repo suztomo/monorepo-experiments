@@ -1,0 +1,1844 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>CloudFilestoreManagerClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-filestore</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.filestore.v1beta1</a> &gt; <span class="el_source">CloudFilestoreManagerClient.java</span></div><h1>CloudFilestoreManagerClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.filestore.v1beta1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.common.OperationMetadata;
+import com.google.cloud.filestore.v1beta1.stub.CloudFilestoreManagerStub;
+import com.google.cloud.filestore.v1beta1.stub.CloudFilestoreManagerStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Configures and manages Cloud Filestore resources.
+ *
+ * &lt;p&gt;Cloud Filestore Manager v1beta1.
+ *
+ * &lt;p&gt;The `file.googleapis.com` service implements the Cloud Filestore API and defines the following
+ * model for managing resources:
+ *
+ * &lt;ul&gt;
+ *   &lt;li&gt;The service works with a collection of cloud projects, named: `/projects/&amp;#42;`
+ *   &lt;li&gt;Each project has a collection of available locations, named: `/locations/&amp;#42;`
+ *   &lt;li&gt;Each location has a collection of instances and backups, named: `/instances/&amp;#42;` and
+ *       `/backups/&amp;#42;` respectively.
+ *   &lt;li&gt;As such, Cloud Filestore instances are resources of the form:
+ *       `/projects/{project_id}/locations/{location_id}/instances/{instance_id}` backups are
+ *       resources of the form: `/projects/{project_id}/locations/{location_id}/backup/{backup_id}`
+ * &lt;/ul&gt;
+ *
+ * &lt;p&gt;Note that location_id can represent a GCP `zone` or `region` depending on the resource. for
+ * example: A zonal Filestore instance:
+ *
+ * &lt;ul&gt;
+ *   &lt;li&gt;`projects/my-project/locations/us-central1-c/instances/my-basic-tier-filer` A regional
+ *       Filestore instance:
+ *   &lt;li&gt;`projects/my-project/locations/us-central1/instances/my-enterprise-filer`
+ * &lt;/ul&gt;
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+ *     CloudFilestoreManagerClient.create()) {
+ *   InstanceName name = InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;);
+ *   Instance response = cloudFilestoreManagerClient.getInstance(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the CloudFilestoreManagerClient object to clean up
+ * resources such as threads. In the example above, try-with-resources is used, which automatically
+ * calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of CloudFilestoreManagerSettings
+ * to create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * CloudFilestoreManagerSettings cloudFilestoreManagerSettings =
+ *     CloudFilestoreManagerSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * CloudFilestoreManagerClient cloudFilestoreManagerClient =
+ *     CloudFilestoreManagerClient.create(cloudFilestoreManagerSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * CloudFilestoreManagerSettings cloudFilestoreManagerSettings =
+ *     CloudFilestoreManagerSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * CloudFilestoreManagerClient cloudFilestoreManagerClient =
+ *     CloudFilestoreManagerClient.create(cloudFilestoreManagerSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@BetaApi
+@Generated(&quot;by gapic-generator-java&quot;)
+public class CloudFilestoreManagerClient implements BackgroundResource {
+  private final CloudFilestoreManagerSettings settings;
+  private final CloudFilestoreManagerStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of CloudFilestoreManagerClient with default settings. */
+  public static final CloudFilestoreManagerClient create() throws IOException {
+<span class="nc" id="L146">    return create(CloudFilestoreManagerSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of CloudFilestoreManagerClient, using the given settings. The channels
+   * are created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final CloudFilestoreManagerClient create(CloudFilestoreManagerSettings settings)
+      throws IOException {
+<span class="fc" id="L155">    return new CloudFilestoreManagerClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of CloudFilestoreManagerClient, using the given stub for making calls.
+   * This is for advanced usage - prefer using create(CloudFilestoreManagerSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final CloudFilestoreManagerClient create(CloudFilestoreManagerStub stub) {
+<span class="nc" id="L164">    return new CloudFilestoreManagerClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of CloudFilestoreManagerClient, using the given settings. This is
+   * protected so that it is easy to make a subclass, but otherwise, the static factory methods
+   * should be preferred.
+   */
+<span class="fc" id="L172">  protected CloudFilestoreManagerClient(CloudFilestoreManagerSettings settings) throws IOException {</span>
+<span class="fc" id="L173">    this.settings = settings;</span>
+<span class="fc" id="L174">    this.stub = ((CloudFilestoreManagerStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L175">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L176">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L179">  protected CloudFilestoreManagerClient(CloudFilestoreManagerStub stub) {</span>
+<span class="nc" id="L180">    this.settings = null;</span>
+<span class="nc" id="L181">    this.stub = stub;</span>
+<span class="nc" id="L182">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L183">  }</span>
+
+  public final CloudFilestoreManagerSettings getSettings() {
+<span class="nc" id="L186">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public CloudFilestoreManagerStub getStub() {
+<span class="nc" id="L191">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L199">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all instances in a project for either a specified location or for all locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Instance element : cloudFilestoreManagerClient.listInstances(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The project and location for which to retrieve instance information, in
+   *     the format `projects/{project_id}/locations/{location}`. In Cloud Filestore, locations map
+   *     to GCP zones, for example &amp;#42;&amp;#42;us-west1-b&amp;#42;&amp;#42;. To retrieve instance information
+   *     for all locations, use &quot;-&quot; for the `{location}` value.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListInstancesPagedResponse listInstances(LocationName parent) {
+    ListInstancesRequest request =
+<span class="fc" id="L228">        ListInstancesRequest.newBuilder()</span>
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L230">            .build();</span>
+<span class="fc" id="L231">    return listInstances(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all instances in a project for either a specified location or for all locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Instance element : cloudFilestoreManagerClient.listInstances(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The project and location for which to retrieve instance information, in
+   *     the format `projects/{project_id}/locations/{location}`. In Cloud Filestore, locations map
+   *     to GCP zones, for example &amp;#42;&amp;#42;us-west1-b&amp;#42;&amp;#42;. To retrieve instance information
+   *     for all locations, use &quot;-&quot; for the `{location}` value.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListInstancesPagedResponse listInstances(String parent) {
+<span class="fc" id="L259">    ListInstancesRequest request = ListInstancesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L260">    return listInstances(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all instances in a project for either a specified location or for all locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   ListInstancesRequest request =
+   *       ListInstancesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   for (Instance element : cloudFilestoreManagerClient.listInstances(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListInstancesPagedResponse listInstances(ListInstancesRequest request) {
+<span class="fc" id="L292">    return listInstancesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all instances in a project for either a specified location or for all locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   ListInstancesRequest request =
+   *       ListInstancesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;Instance&gt; future =
+   *       cloudFilestoreManagerClient.listInstancesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Instance element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListInstancesRequest, ListInstancesPagedResponse&gt;
+      listInstancesPagedCallable() {
+<span class="fc" id="L325">    return stub.listInstancesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all instances in a project for either a specified location or for all locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   ListInstancesRequest request =
+   *       ListInstancesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListInstancesResponse response =
+   *         cloudFilestoreManagerClient.listInstancesCallable().call(request);
+   *     for (Instance element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListInstancesRequest, ListInstancesResponse&gt; listInstancesCallable() {
+<span class="nc" id="L364">    return stub.listInstancesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a specific instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   InstanceName name = InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;);
+   *   Instance response = cloudFilestoreManagerClient.getInstance(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The instance resource name, in the format
+   *     `projects/{project_id}/locations/{location}/instances/{instance_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Instance getInstance(InstanceName name) {
+    GetInstanceRequest request =
+<span class="pc bpc" id="L389" title="1 of 2 branches missed.">        GetInstanceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L390">    return getInstance(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a specific instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   String name = InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString();
+   *   Instance response = cloudFilestoreManagerClient.getInstance(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The instance resource name, in the format
+   *     `projects/{project_id}/locations/{location}/instances/{instance_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Instance getInstance(String name) {
+<span class="fc" id="L414">    GetInstanceRequest request = GetInstanceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L415">    return getInstance(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a specific instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   GetInstanceRequest request =
+   *       GetInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   Instance response = cloudFilestoreManagerClient.getInstance(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Instance getInstance(GetInstanceRequest request) {
+<span class="fc" id="L441">    return getInstanceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a specific instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   GetInstanceRequest request =
+   *       GetInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Instance&gt; future =
+   *       cloudFilestoreManagerClient.getInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetInstanceRequest, Instance&gt; getInstanceCallable() {
+<span class="fc" id="L467">    return stub.getInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an instance. When creating from a backup, the capacity of the new instance needs to be
+   * equal to or larger than the capacity of the backup (and also equal to or larger than the
+   * minimum capacity of the tier).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Instance instance = Instance.newBuilder().build();
+   *   String instanceId = &quot;instanceId902024336&quot;;
+   *   Instance response =
+   *       cloudFilestoreManagerClient.createInstanceAsync(parent, instance, instanceId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The instance's project and location, in the format
+   *     `projects/{project_id}/locations/{location}`. In Cloud Filestore, locations map to GCP
+   *     zones, for example &amp;#42;&amp;#42;us-west1-b&amp;#42;&amp;#42;.
+   * @param instance Required. An [instance resource][google.cloud.filestore.v1beta1.Instance]
+   * @param instanceId Required. The ID of the instance to create. The ID must be unique within the
+   *     specified project and location.
+   *     &lt;p&gt;This value must start with a lowercase letter followed by up to 62 lowercase letters,
+   *     numbers, or hyphens, and cannot end with a hyphen.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; createInstanceAsync(
+      LocationName parent, Instance instance, String instanceId) {
+    CreateInstanceRequest request =
+<span class="fc" id="L504">        CreateInstanceRequest.newBuilder()</span>
+<span class="pc bpc" id="L505" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L506">            .setInstance(instance)</span>
+<span class="fc" id="L507">            .setInstanceId(instanceId)</span>
+<span class="fc" id="L508">            .build();</span>
+<span class="fc" id="L509">    return createInstanceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an instance. When creating from a backup, the capacity of the new instance needs to be
+   * equal to or larger than the capacity of the backup (and also equal to or larger than the
+   * minimum capacity of the tier).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Instance instance = Instance.newBuilder().build();
+   *   String instanceId = &quot;instanceId902024336&quot;;
+   *   Instance response =
+   *       cloudFilestoreManagerClient.createInstanceAsync(parent, instance, instanceId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The instance's project and location, in the format
+   *     `projects/{project_id}/locations/{location}`. In Cloud Filestore, locations map to GCP
+   *     zones, for example &amp;#42;&amp;#42;us-west1-b&amp;#42;&amp;#42;.
+   * @param instance Required. An [instance resource][google.cloud.filestore.v1beta1.Instance]
+   * @param instanceId Required. The ID of the instance to create. The ID must be unique within the
+   *     specified project and location.
+   *     &lt;p&gt;This value must start with a lowercase letter followed by up to 62 lowercase letters,
+   *     numbers, or hyphens, and cannot end with a hyphen.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; createInstanceAsync(
+      String parent, Instance instance, String instanceId) {
+    CreateInstanceRequest request =
+<span class="fc" id="L546">        CreateInstanceRequest.newBuilder()</span>
+<span class="fc" id="L547">            .setParent(parent)</span>
+<span class="fc" id="L548">            .setInstance(instance)</span>
+<span class="fc" id="L549">            .setInstanceId(instanceId)</span>
+<span class="fc" id="L550">            .build();</span>
+<span class="fc" id="L551">    return createInstanceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an instance. When creating from a backup, the capacity of the new instance needs to be
+   * equal to or larger than the capacity of the backup (and also equal to or larger than the
+   * minimum capacity of the tier).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   CreateInstanceRequest request =
+   *       CreateInstanceRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setInstanceId(&quot;instanceId902024336&quot;)
+   *           .setInstance(Instance.newBuilder().build())
+   *           .build();
+   *   Instance response = cloudFilestoreManagerClient.createInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; createInstanceAsync(
+      CreateInstanceRequest request) {
+<span class="fc" id="L582">    return createInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an instance. When creating from a backup, the capacity of the new instance needs to be
+   * equal to or larger than the capacity of the backup (and also equal to or larger than the
+   * minimum capacity of the tier).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   CreateInstanceRequest request =
+   *       CreateInstanceRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setInstanceId(&quot;instanceId902024336&quot;)
+   *           .setInstance(Instance.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       cloudFilestoreManagerClient.createInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateInstanceRequest, Instance, OperationMetadata&gt;
+      createInstanceOperationCallable() {
+<span class="fc" id="L613">    return stub.createInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an instance. When creating from a backup, the capacity of the new instance needs to be
+   * equal to or larger than the capacity of the backup (and also equal to or larger than the
+   * minimum capacity of the tier).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   CreateInstanceRequest request =
+   *       CreateInstanceRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setInstanceId(&quot;instanceId902024336&quot;)
+   *           .setInstance(Instance.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       cloudFilestoreManagerClient.createInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateInstanceRequest, Operation&gt; createInstanceCallable() {
+<span class="nc" id="L643">    return stub.createInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the settings of a specific instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   Instance instance = Instance.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Instance response =
+   *       cloudFilestoreManagerClient.updateInstanceAsync(instance, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param instance Required. Only fields specified in update_mask are updated.
+   * @param updateMask Required. Mask of fields to update. At least one path must be supplied in
+   *     this field. The elements of the repeated paths field may only include these fields:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;&quot;description&quot;
+   *       &lt;li&gt;&quot;file_shares&quot;
+   *       &lt;li&gt;&quot;labels&quot;
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; updateInstanceAsync(
+      Instance instance, FieldMask updateMask) {
+    UpdateInstanceRequest request =
+<span class="fc" id="L678">        UpdateInstanceRequest.newBuilder().setInstance(instance).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L679">    return updateInstanceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the settings of a specific instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   UpdateInstanceRequest request =
+   *       UpdateInstanceRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setInstance(Instance.newBuilder().build())
+   *           .build();
+   *   Instance response = cloudFilestoreManagerClient.updateInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; updateInstanceAsync(
+      UpdateInstanceRequest request) {
+<span class="fc" id="L707">    return updateInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the settings of a specific instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   UpdateInstanceRequest request =
+   *       UpdateInstanceRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setInstance(Instance.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       cloudFilestoreManagerClient.updateInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpdateInstanceRequest, Instance, OperationMetadata&gt;
+      updateInstanceOperationCallable() {
+<span class="fc" id="L735">    return stub.updateInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the settings of a specific instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   UpdateInstanceRequest request =
+   *       UpdateInstanceRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setInstance(Instance.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       cloudFilestoreManagerClient.updateInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateInstanceRequest, Operation&gt; updateInstanceCallable() {
+<span class="nc" id="L762">    return stub.updateInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restores an existing instance's file share from a backup.
+   *
+   * &lt;p&gt;The capacity of the instance needs to be equal to or larger than the capacity of the backup
+   * (and also equal to or larger than the minimum capacity of the tier).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   RestoreInstanceRequest request =
+   *       RestoreInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .setFileShare(&quot;fileShare-1327728701&quot;)
+   *           .build();
+   *   Instance response = cloudFilestoreManagerClient.restoreInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; restoreInstanceAsync(
+      RestoreInstanceRequest request) {
+<span class="fc" id="L793">    return restoreInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restores an existing instance's file share from a backup.
+   *
+   * &lt;p&gt;The capacity of the instance needs to be equal to or larger than the capacity of the backup
+   * (and also equal to or larger than the minimum capacity of the tier).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   RestoreInstanceRequest request =
+   *       RestoreInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .setFileShare(&quot;fileShare-1327728701&quot;)
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       cloudFilestoreManagerClient.restoreInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;RestoreInstanceRequest, Instance, OperationMetadata&gt;
+      restoreInstanceOperationCallable() {
+<span class="fc" id="L824">    return stub.restoreInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restores an existing instance's file share from a backup.
+   *
+   * &lt;p&gt;The capacity of the instance needs to be equal to or larger than the capacity of the backup
+   * (and also equal to or larger than the minimum capacity of the tier).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   RestoreInstanceRequest request =
+   *       RestoreInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .setFileShare(&quot;fileShare-1327728701&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       cloudFilestoreManagerClient.restoreInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RestoreInstanceRequest, Operation&gt; restoreInstanceCallable() {
+<span class="nc" id="L854">    return stub.restoreInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   InstanceName name = InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;);
+   *   cloudFilestoreManagerClient.deleteInstanceAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The instance resource name, in the format
+   *     `projects/{project_id}/locations/{location}/instances/{instance_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteInstanceAsync(InstanceName name) {
+    DeleteInstanceRequest request =
+<span class="pc bpc" id="L879" title="1 of 2 branches missed.">        DeleteInstanceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L880">    return deleteInstanceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   String name = InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString();
+   *   cloudFilestoreManagerClient.deleteInstanceAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The instance resource name, in the format
+   *     `projects/{project_id}/locations/{location}/instances/{instance_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteInstanceAsync(String name) {
+<span class="fc" id="L904">    DeleteInstanceRequest request = DeleteInstanceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L905">    return deleteInstanceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   DeleteInstanceRequest request =
+   *       DeleteInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   cloudFilestoreManagerClient.deleteInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteInstanceAsync(
+      DeleteInstanceRequest request) {
+<span class="fc" id="L932">    return deleteInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   DeleteInstanceRequest request =
+   *       DeleteInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       cloudFilestoreManagerClient.deleteInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteInstanceRequest, Empty, OperationMetadata&gt;
+      deleteInstanceOperationCallable() {
+<span class="fc" id="L959">    return stub.deleteInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   DeleteInstanceRequest request =
+   *       DeleteInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       cloudFilestoreManagerClient.deleteInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteInstanceRequest, Operation&gt; deleteInstanceCallable() {
+<span class="nc" id="L985">    return stub.deleteInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all backups in a project for either a specified location or for all locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Backup element : cloudFilestoreManagerClient.listBackups(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The project and location for which to retrieve backup information, in
+   *     the format `projects/{project_id}/locations/{location}`. In Cloud Filestore, backup
+   *     locations map to GCP regions, for example &amp;#42;&amp;#42;us-west1&amp;#42;&amp;#42;. To retrieve backup
+   *     information for all locations, use &quot;-&quot; for the `{location}` value.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBackupsPagedResponse listBackups(LocationName parent) {
+    ListBackupsRequest request =
+<span class="fc" id="L1014">        ListBackupsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1015" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1016">            .build();</span>
+<span class="fc" id="L1017">    return listBackups(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all backups in a project for either a specified location or for all locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Backup element : cloudFilestoreManagerClient.listBackups(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The project and location for which to retrieve backup information, in
+   *     the format `projects/{project_id}/locations/{location}`. In Cloud Filestore, backup
+   *     locations map to GCP regions, for example &amp;#42;&amp;#42;us-west1&amp;#42;&amp;#42;. To retrieve backup
+   *     information for all locations, use &quot;-&quot; for the `{location}` value.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBackupsPagedResponse listBackups(String parent) {
+<span class="fc" id="L1045">    ListBackupsRequest request = ListBackupsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1046">    return listBackups(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all backups in a project for either a specified location or for all locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   ListBackupsRequest request =
+   *       ListBackupsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   for (Backup element : cloudFilestoreManagerClient.listBackups(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBackupsPagedResponse listBackups(ListBackupsRequest request) {
+<span class="fc" id="L1078">    return listBackupsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all backups in a project for either a specified location or for all locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   ListBackupsRequest request =
+   *       ListBackupsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;Backup&gt; future =
+   *       cloudFilestoreManagerClient.listBackupsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Backup element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListBackupsRequest, ListBackupsPagedResponse&gt;
+      listBackupsPagedCallable() {
+<span class="fc" id="L1111">    return stub.listBackupsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all backups in a project for either a specified location or for all locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   ListBackupsRequest request =
+   *       ListBackupsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListBackupsResponse response =
+   *         cloudFilestoreManagerClient.listBackupsCallable().call(request);
+   *     for (Backup element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListBackupsRequest, ListBackupsResponse&gt; listBackupsCallable() {
+<span class="nc" id="L1150">    return stub.listBackupsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a specific backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   BackupName name = BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[BACKUP]&quot;);
+   *   Backup response = cloudFilestoreManagerClient.getBackup(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The backup resource name, in the format
+   *     `projects/{project_id}/locations/{location}/backups/{backup_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Backup getBackup(BackupName name) {
+    GetBackupRequest request =
+<span class="pc bpc" id="L1175" title="1 of 2 branches missed.">        GetBackupRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1176">    return getBackup(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a specific backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   String name = BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[BACKUP]&quot;).toString();
+   *   Backup response = cloudFilestoreManagerClient.getBackup(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The backup resource name, in the format
+   *     `projects/{project_id}/locations/{location}/backups/{backup_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Backup getBackup(String name) {
+<span class="fc" id="L1200">    GetBackupRequest request = GetBackupRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1201">    return getBackup(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a specific backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   GetBackupRequest request =
+   *       GetBackupRequest.newBuilder()
+   *           .setName(BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[BACKUP]&quot;).toString())
+   *           .build();
+   *   Backup response = cloudFilestoreManagerClient.getBackup(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Backup getBackup(GetBackupRequest request) {
+<span class="fc" id="L1227">    return getBackupCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a specific backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   GetBackupRequest request =
+   *       GetBackupRequest.newBuilder()
+   *           .setName(BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[BACKUP]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Backup&gt; future =
+   *       cloudFilestoreManagerClient.getBackupCallable().futureCall(request);
+   *   // Do something.
+   *   Backup response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetBackupRequest, Backup&gt; getBackupCallable() {
+<span class="fc" id="L1253">    return stub.getBackupCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Backup backup = Backup.newBuilder().build();
+   *   String backupId = &quot;backupId2121930365&quot;;
+   *   Backup response =
+   *       cloudFilestoreManagerClient.createBackupAsync(parent, backup, backupId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The backup's project and location, in the format
+   *     `projects/{project_id}/locations/{location}`. In Cloud Filestore, backup locations map to
+   *     GCP regions, for example &amp;#42;&amp;#42;us-west1&amp;#42;&amp;#42;.
+   * @param backup Required. A [backup resource][google.cloud.filestore.v1beta1.Backup]
+   * @param backupId Required. The ID to use for the backup. The ID must be unique within the
+   *     specified project and location.
+   *     &lt;p&gt;This value must start with a lowercase letter followed by up to 62 lowercase letters,
+   *     numbers, or hyphens, and cannot end with a hyphen.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Backup, OperationMetadata&gt; createBackupAsync(
+      LocationName parent, Backup backup, String backupId) {
+    CreateBackupRequest request =
+<span class="fc" id="L1288">        CreateBackupRequest.newBuilder()</span>
+<span class="pc bpc" id="L1289" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1290">            .setBackup(backup)</span>
+<span class="fc" id="L1291">            .setBackupId(backupId)</span>
+<span class="fc" id="L1292">            .build();</span>
+<span class="fc" id="L1293">    return createBackupAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Backup backup = Backup.newBuilder().build();
+   *   String backupId = &quot;backupId2121930365&quot;;
+   *   Backup response =
+   *       cloudFilestoreManagerClient.createBackupAsync(parent, backup, backupId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The backup's project and location, in the format
+   *     `projects/{project_id}/locations/{location}`. In Cloud Filestore, backup locations map to
+   *     GCP regions, for example &amp;#42;&amp;#42;us-west1&amp;#42;&amp;#42;.
+   * @param backup Required. A [backup resource][google.cloud.filestore.v1beta1.Backup]
+   * @param backupId Required. The ID to use for the backup. The ID must be unique within the
+   *     specified project and location.
+   *     &lt;p&gt;This value must start with a lowercase letter followed by up to 62 lowercase letters,
+   *     numbers, or hyphens, and cannot end with a hyphen.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Backup, OperationMetadata&gt; createBackupAsync(
+      String parent, Backup backup, String backupId) {
+    CreateBackupRequest request =
+<span class="fc" id="L1328">        CreateBackupRequest.newBuilder()</span>
+<span class="fc" id="L1329">            .setParent(parent)</span>
+<span class="fc" id="L1330">            .setBackup(backup)</span>
+<span class="fc" id="L1331">            .setBackupId(backupId)</span>
+<span class="fc" id="L1332">            .build();</span>
+<span class="fc" id="L1333">    return createBackupAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   CreateBackupRequest request =
+   *       CreateBackupRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setBackup(Backup.newBuilder().build())
+   *           .setBackupId(&quot;backupId2121930365&quot;)
+   *           .build();
+   *   Backup response = cloudFilestoreManagerClient.createBackupAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Backup, OperationMetadata&gt; createBackupAsync(
+      CreateBackupRequest request) {
+<span class="fc" id="L1362">    return createBackupOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   CreateBackupRequest request =
+   *       CreateBackupRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setBackup(Backup.newBuilder().build())
+   *           .setBackupId(&quot;backupId2121930365&quot;)
+   *           .build();
+   *   OperationFuture&lt;Backup, OperationMetadata&gt; future =
+   *       cloudFilestoreManagerClient.createBackupOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Backup response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateBackupRequest, Backup, OperationMetadata&gt;
+      createBackupOperationCallable() {
+<span class="fc" id="L1391">    return stub.createBackupOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   CreateBackupRequest request =
+   *       CreateBackupRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setBackup(Backup.newBuilder().build())
+   *           .setBackupId(&quot;backupId2121930365&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       cloudFilestoreManagerClient.createBackupCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateBackupRequest, Operation&gt; createBackupCallable() {
+<span class="nc" id="L1419">    return stub.createBackupCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   BackupName name = BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[BACKUP]&quot;);
+   *   cloudFilestoreManagerClient.deleteBackupAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The backup resource name, in the format
+   *     `projects/{project_id}/locations/{location}/backups/{backup_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteBackupAsync(BackupName name) {
+    DeleteBackupRequest request =
+<span class="pc bpc" id="L1444" title="1 of 2 branches missed.">        DeleteBackupRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1445">    return deleteBackupAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   String name = BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[BACKUP]&quot;).toString();
+   *   cloudFilestoreManagerClient.deleteBackupAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The backup resource name, in the format
+   *     `projects/{project_id}/locations/{location}/backups/{backup_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteBackupAsync(String name) {
+<span class="fc" id="L1469">    DeleteBackupRequest request = DeleteBackupRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1470">    return deleteBackupAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   DeleteBackupRequest request =
+   *       DeleteBackupRequest.newBuilder()
+   *           .setName(BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[BACKUP]&quot;).toString())
+   *           .build();
+   *   cloudFilestoreManagerClient.deleteBackupAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteBackupAsync(
+      DeleteBackupRequest request) {
+<span class="fc" id="L1497">    return deleteBackupOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   DeleteBackupRequest request =
+   *       DeleteBackupRequest.newBuilder()
+   *           .setName(BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[BACKUP]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       cloudFilestoreManagerClient.deleteBackupOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteBackupRequest, Empty, OperationMetadata&gt;
+      deleteBackupOperationCallable() {
+<span class="fc" id="L1524">    return stub.deleteBackupOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   DeleteBackupRequest request =
+   *       DeleteBackupRequest.newBuilder()
+   *           .setName(BackupName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[BACKUP]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       cloudFilestoreManagerClient.deleteBackupCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteBackupRequest, Operation&gt; deleteBackupCallable() {
+<span class="nc" id="L1550">    return stub.deleteBackupCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the settings of a specific backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   Backup backup = Backup.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Backup response = cloudFilestoreManagerClient.updateBackupAsync(backup, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param backup Required. A [backup resource][google.cloud.filestore.v1beta1.Backup]
+   * @param updateMask Required. Mask of fields to update. At least one path must be supplied in
+   *     this field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Backup, OperationMetadata&gt; updateBackupAsync(
+      Backup backup, FieldMask updateMask) {
+    UpdateBackupRequest request =
+<span class="fc" id="L1578">        UpdateBackupRequest.newBuilder().setBackup(backup).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L1579">    return updateBackupAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the settings of a specific backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   UpdateBackupRequest request =
+   *       UpdateBackupRequest.newBuilder()
+   *           .setBackup(Backup.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Backup response = cloudFilestoreManagerClient.updateBackupAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Backup, OperationMetadata&gt; updateBackupAsync(
+      UpdateBackupRequest request) {
+<span class="fc" id="L1607">    return updateBackupOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the settings of a specific backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   UpdateBackupRequest request =
+   *       UpdateBackupRequest.newBuilder()
+   *           .setBackup(Backup.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Backup, OperationMetadata&gt; future =
+   *       cloudFilestoreManagerClient.updateBackupOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Backup response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpdateBackupRequest, Backup, OperationMetadata&gt;
+      updateBackupOperationCallable() {
+<span class="fc" id="L1635">    return stub.updateBackupOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the settings of a specific backup.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (CloudFilestoreManagerClient cloudFilestoreManagerClient =
+   *     CloudFilestoreManagerClient.create()) {
+   *   UpdateBackupRequest request =
+   *       UpdateBackupRequest.newBuilder()
+   *           .setBackup(Backup.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       cloudFilestoreManagerClient.updateBackupCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateBackupRequest, Operation&gt; updateBackupCallable() {
+<span class="nc" id="L1662">    return stub.updateBackupCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1667">    stub.close();</span>
+<span class="fc" id="L1668">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1672">    stub.shutdown();</span>
+<span class="nc" id="L1673">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1677">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1682">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1687">    stub.shutdownNow();</span>
+<span class="nc" id="L1688">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1692">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListInstancesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListInstancesRequest,
+          ListInstancesResponse,
+          Instance,
+          ListInstancesPage,
+          ListInstancesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListInstancesPagedResponse&gt; createAsync(
+        PageContext&lt;ListInstancesRequest, ListInstancesResponse, Instance&gt; context,
+        ApiFuture&lt;ListInstancesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListInstancesPage&gt; futurePage =
+<span class="fc" id="L1707">          ListInstancesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1708">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1710">          input -&gt; new ListInstancesPagedResponse(input),</span>
+<span class="fc" id="L1711">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListInstancesPagedResponse(ListInstancesPage page) {
+<span class="fc" id="L1715">      super(page, ListInstancesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1716">    }</span>
+  }
+
+  public static class ListInstancesPage
+      extends AbstractPage&lt;
+          ListInstancesRequest, ListInstancesResponse, Instance, ListInstancesPage&gt; {
+
+    private ListInstancesPage(
+        PageContext&lt;ListInstancesRequest, ListInstancesResponse, Instance&gt; context,
+        ListInstancesResponse response) {
+<span class="fc" id="L1726">      super(context, response);</span>
+<span class="fc" id="L1727">    }</span>
+
+    private static ListInstancesPage createEmptyPage() {
+<span class="fc" id="L1730">      return new ListInstancesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListInstancesPage createPage(
+        PageContext&lt;ListInstancesRequest, ListInstancesResponse, Instance&gt; context,
+        ListInstancesResponse response) {
+<span class="fc" id="L1737">      return new ListInstancesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListInstancesPage&gt; createPageAsync(
+        PageContext&lt;ListInstancesRequest, ListInstancesResponse, Instance&gt; context,
+        ApiFuture&lt;ListInstancesResponse&gt; futureResponse) {
+<span class="fc" id="L1744">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListInstancesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListInstancesRequest,
+          ListInstancesResponse,
+          Instance,
+          ListInstancesPage,
+          ListInstancesFixedSizeCollection&gt; {
+
+    private ListInstancesFixedSizeCollection(List&lt;ListInstancesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1757">      super(pages, collectionSize);</span>
+<span class="fc" id="L1758">    }</span>
+
+    private static ListInstancesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1761">      return new ListInstancesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListInstancesFixedSizeCollection createCollection(
+        List&lt;ListInstancesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1767">      return new ListInstancesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListBackupsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListBackupsRequest,
+          ListBackupsResponse,
+          Backup,
+          ListBackupsPage,
+          ListBackupsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListBackupsPagedResponse&gt; createAsync(
+        PageContext&lt;ListBackupsRequest, ListBackupsResponse, Backup&gt; context,
+        ApiFuture&lt;ListBackupsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListBackupsPage&gt; futurePage =
+<span class="fc" id="L1783">          ListBackupsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1784">      return ApiFutures.transform(</span>
+<span class="fc" id="L1785">          futurePage, input -&gt; new ListBackupsPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListBackupsPagedResponse(ListBackupsPage page) {
+<span class="fc" id="L1789">      super(page, ListBackupsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1790">    }</span>
+  }
+
+  public static class ListBackupsPage
+      extends AbstractPage&lt;ListBackupsRequest, ListBackupsResponse, Backup, ListBackupsPage&gt; {
+
+    private ListBackupsPage(
+        PageContext&lt;ListBackupsRequest, ListBackupsResponse, Backup&gt; context,
+        ListBackupsResponse response) {
+<span class="fc" id="L1799">      super(context, response);</span>
+<span class="fc" id="L1800">    }</span>
+
+    private static ListBackupsPage createEmptyPage() {
+<span class="fc" id="L1803">      return new ListBackupsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListBackupsPage createPage(
+        PageContext&lt;ListBackupsRequest, ListBackupsResponse, Backup&gt; context,
+        ListBackupsResponse response) {
+<span class="fc" id="L1810">      return new ListBackupsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListBackupsPage&gt; createPageAsync(
+        PageContext&lt;ListBackupsRequest, ListBackupsResponse, Backup&gt; context,
+        ApiFuture&lt;ListBackupsResponse&gt; futureResponse) {
+<span class="fc" id="L1817">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListBackupsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListBackupsRequest,
+          ListBackupsResponse,
+          Backup,
+          ListBackupsPage,
+          ListBackupsFixedSizeCollection&gt; {
+
+    private ListBackupsFixedSizeCollection(List&lt;ListBackupsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1830">      super(pages, collectionSize);</span>
+<span class="fc" id="L1831">    }</span>
+
+    private static ListBackupsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1834">      return new ListBackupsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListBackupsFixedSizeCollection createCollection(
+        List&lt;ListBackupsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1840">      return new ListBackupsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ResourceSettingsServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-resource-settings</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.resourcesettings.v1</a> &gt; <span class="el_source">ResourceSettingsServiceClient.java</span></div><h1>ResourceSettingsServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.resourcesettings.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.api.resourcenames.ResourceName;
+import com.google.cloud.resourcesettings.v1.stub.ResourceSettingsServiceStub;
+import com.google.cloud.resourcesettings.v1.stub.ResourceSettingsServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: An interface to interact with resource settings and setting values
+ * throughout the resource hierarchy.
+ *
+ * &lt;p&gt;Services may surface a number of settings for users to control how their resources behave.
+ * Values of settings applied on a given Cloud resource are evaluated hierarchically and inherited
+ * by all descendants of that resource.
+ *
+ * &lt;p&gt;For all requests, returns a `google.rpc.Status` with `google.rpc.Code.PERMISSION_DENIED` if
+ * the IAM check fails or the `parent` resource is not in a Cloud Organization. For all requests,
+ * returns a `google.rpc.Status` with `google.rpc.Code.INVALID_ARGUMENT` if the request is
+ * malformed.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (ResourceSettingsServiceClient resourceSettingsServiceClient =
+ *     ResourceSettingsServiceClient.create()) {
+ *   SettingName name =
+ *       SettingName.ofProjectNumberSettingNameName(&quot;[PROJECT_NUMBER]&quot;, &quot;[SETTING_NAME]&quot;);
+ *   Setting response = resourceSettingsServiceClient.getSetting(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the ResourceSettingsServiceClient object to clean up
+ * resources such as threads. In the example above, try-with-resources is used, which automatically
+ * calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of
+ * ResourceSettingsServiceSettings to create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * ResourceSettingsServiceSettings resourceSettingsServiceSettings =
+ *     ResourceSettingsServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * ResourceSettingsServiceClient resourceSettingsServiceClient =
+ *     ResourceSettingsServiceClient.create(resourceSettingsServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * ResourceSettingsServiceSettings resourceSettingsServiceSettings =
+ *     ResourceSettingsServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * ResourceSettingsServiceClient resourceSettingsServiceClient =
+ *     ResourceSettingsServiceClient.create(resourceSettingsServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class ResourceSettingsServiceClient implements BackgroundResource {
+  private final ResourceSettingsServiceSettings settings;
+  private final ResourceSettingsServiceStub stub;
+
+  /** Constructs an instance of ResourceSettingsServiceClient with default settings. */
+  public static final ResourceSettingsServiceClient create() throws IOException {
+<span class="nc" id="L125">    return create(ResourceSettingsServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of ResourceSettingsServiceClient, using the given settings. The channels
+   * are created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final ResourceSettingsServiceClient create(ResourceSettingsServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L134">    return new ResourceSettingsServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of ResourceSettingsServiceClient, using the given stub for making calls.
+   * This is for advanced usage - prefer using create(ResourceSettingsServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final ResourceSettingsServiceClient create(ResourceSettingsServiceStub stub) {
+<span class="nc" id="L143">    return new ResourceSettingsServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of ResourceSettingsServiceClient, using the given settings. This is
+   * protected so that it is easy to make a subclass, but otherwise, the static factory methods
+   * should be preferred.
+   */
+  protected ResourceSettingsServiceClient(ResourceSettingsServiceSettings settings)
+<span class="fc" id="L152">      throws IOException {</span>
+<span class="fc" id="L153">    this.settings = settings;</span>
+<span class="fc" id="L154">    this.stub = ((ResourceSettingsServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L155">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L158">  protected ResourceSettingsServiceClient(ResourceSettingsServiceStub stub) {</span>
+<span class="nc" id="L159">    this.settings = null;</span>
+<span class="nc" id="L160">    this.stub = stub;</span>
+<span class="nc" id="L161">  }</span>
+
+  public final ResourceSettingsServiceSettings getSettings() {
+<span class="nc" id="L164">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public ResourceSettingsServiceStub getStub() {
+<span class="nc" id="L169">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the settings that are available on the Cloud resource `parent`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ResourceSettingsServiceClient resourceSettingsServiceClient =
+   *     ResourceSettingsServiceClient.create()) {
+   *   ResourceName parent =
+   *       SettingName.ofProjectNumberSettingNameName(&quot;[PROJECT_NUMBER]&quot;, &quot;[SETTING_NAME]&quot;);
+   *   for (Setting element : resourceSettingsServiceClient.listSettings(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The Cloud resource that parents the setting. Must be in one of the
+   *     following forms:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`projects/{project_number}`
+   *       &lt;li&gt;`projects/{project_id}`
+   *       &lt;li&gt;`folders/{folder_id}`
+   *       &lt;li&gt;`organizations/{organization_id}`
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListSettingsPagedResponse listSettings(ResourceName parent) {
+    ListSettingsRequest request =
+<span class="fc" id="L204">        ListSettingsRequest.newBuilder()</span>
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L206">            .build();</span>
+<span class="fc" id="L207">    return listSettings(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the settings that are available on the Cloud resource `parent`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ResourceSettingsServiceClient resourceSettingsServiceClient =
+   *     ResourceSettingsServiceClient.create()) {
+   *   String parent =
+   *       SettingName.ofProjectNumberSettingNameName(&quot;[PROJECT_NUMBER]&quot;, &quot;[SETTING_NAME]&quot;)
+   *           .toString();
+   *   for (Setting element : resourceSettingsServiceClient.listSettings(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The Cloud resource that parents the setting. Must be in one of the
+   *     following forms:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`projects/{project_number}`
+   *       &lt;li&gt;`projects/{project_id}`
+   *       &lt;li&gt;`folders/{folder_id}`
+   *       &lt;li&gt;`organizations/{organization_id}`
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListSettingsPagedResponse listSettings(String parent) {
+<span class="fc" id="L242">    ListSettingsRequest request = ListSettingsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L243">    return listSettings(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the settings that are available on the Cloud resource `parent`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ResourceSettingsServiceClient resourceSettingsServiceClient =
+   *     ResourceSettingsServiceClient.create()) {
+   *   ListSettingsRequest request =
+   *       ListSettingsRequest.newBuilder()
+   *           .setParent(
+   *               SettingName.ofProjectNumberSettingNameName(&quot;[PROJECT_NUMBER]&quot;, &quot;[SETTING_NAME]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setView(SettingView.forNumber(0))
+   *           .build();
+   *   for (Setting element : resourceSettingsServiceClient.listSettings(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListSettingsPagedResponse listSettings(ListSettingsRequest request) {
+<span class="fc" id="L276">    return listSettingsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the settings that are available on the Cloud resource `parent`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ResourceSettingsServiceClient resourceSettingsServiceClient =
+   *     ResourceSettingsServiceClient.create()) {
+   *   ListSettingsRequest request =
+   *       ListSettingsRequest.newBuilder()
+   *           .setParent(
+   *               SettingName.ofProjectNumberSettingNameName(&quot;[PROJECT_NUMBER]&quot;, &quot;[SETTING_NAME]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setView(SettingView.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;Setting&gt; future =
+   *       resourceSettingsServiceClient.listSettingsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Setting element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListSettingsRequest, ListSettingsPagedResponse&gt;
+      listSettingsPagedCallable() {
+<span class="fc" id="L310">    return stub.listSettingsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the settings that are available on the Cloud resource `parent`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ResourceSettingsServiceClient resourceSettingsServiceClient =
+   *     ResourceSettingsServiceClient.create()) {
+   *   ListSettingsRequest request =
+   *       ListSettingsRequest.newBuilder()
+   *           .setParent(
+   *               SettingName.ofProjectNumberSettingNameName(&quot;[PROJECT_NUMBER]&quot;, &quot;[SETTING_NAME]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setView(SettingView.forNumber(0))
+   *           .build();
+   *   while (true) {
+   *     ListSettingsResponse response =
+   *         resourceSettingsServiceClient.listSettingsCallable().call(request);
+   *     for (Setting element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListSettingsRequest, ListSettingsResponse&gt; listSettingsCallable() {
+<span class="nc" id="L350">    return stub.listSettingsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a setting.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the setting does not
+   * exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ResourceSettingsServiceClient resourceSettingsServiceClient =
+   *     ResourceSettingsServiceClient.create()) {
+   *   SettingName name =
+   *       SettingName.ofProjectNumberSettingNameName(&quot;[PROJECT_NUMBER]&quot;, &quot;[SETTING_NAME]&quot;);
+   *   Setting response = resourceSettingsServiceClient.getSetting(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the setting to get. See
+   *     [Setting][google.cloud.resourcesettings.v1.Setting] for naming requirements.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Setting getSetting(SettingName name) {
+    GetSettingRequest request =
+<span class="pc bpc" id="L379" title="1 of 2 branches missed.">        GetSettingRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L380">    return getSetting(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a setting.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the setting does not
+   * exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ResourceSettingsServiceClient resourceSettingsServiceClient =
+   *     ResourceSettingsServiceClient.create()) {
+   *   String name =
+   *       SettingName.ofProjectNumberSettingNameName(&quot;[PROJECT_NUMBER]&quot;, &quot;[SETTING_NAME]&quot;)
+   *           .toString();
+   *   Setting response = resourceSettingsServiceClient.getSetting(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the setting to get. See
+   *     [Setting][google.cloud.resourcesettings.v1.Setting] for naming requirements.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Setting getSetting(String name) {
+<span class="fc" id="L409">    GetSettingRequest request = GetSettingRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L410">    return getSetting(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a setting.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the setting does not
+   * exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ResourceSettingsServiceClient resourceSettingsServiceClient =
+   *     ResourceSettingsServiceClient.create()) {
+   *   GetSettingRequest request =
+   *       GetSettingRequest.newBuilder()
+   *           .setName(
+   *               SettingName.ofProjectNumberSettingNameName(&quot;[PROJECT_NUMBER]&quot;, &quot;[SETTING_NAME]&quot;)
+   *                   .toString())
+   *           .setView(SettingView.forNumber(0))
+   *           .build();
+   *   Setting response = resourceSettingsServiceClient.getSetting(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Setting getSetting(GetSettingRequest request) {
+<span class="fc" id="L442">    return getSettingCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a setting.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the setting does not
+   * exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ResourceSettingsServiceClient resourceSettingsServiceClient =
+   *     ResourceSettingsServiceClient.create()) {
+   *   GetSettingRequest request =
+   *       GetSettingRequest.newBuilder()
+   *           .setName(
+   *               SettingName.ofProjectNumberSettingNameName(&quot;[PROJECT_NUMBER]&quot;, &quot;[SETTING_NAME]&quot;)
+   *                   .toString())
+   *           .setView(SettingView.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;Setting&gt; future =
+   *       resourceSettingsServiceClient.getSettingCallable().futureCall(request);
+   *   // Do something.
+   *   Setting response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetSettingRequest, Setting&gt; getSettingCallable() {
+<span class="fc" id="L474">    return stub.getSettingCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a setting.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the setting does not
+   * exist. Returns a `google.rpc.Status` with `google.rpc.Code.FAILED_PRECONDITION` if the setting
+   * is flagged as read only. Returns a `google.rpc.Status` with `google.rpc.Code.ABORTED` if the
+   * etag supplied in the request does not match the persisted etag of the setting value.
+   *
+   * &lt;p&gt;On success, the response will contain only `name`, `local_value` and `etag`. The `metadata`
+   * and `effective_value` cannot be updated through this API.
+   *
+   * &lt;p&gt;Note: the supplied setting will perform a full overwrite of the `local_value` field.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ResourceSettingsServiceClient resourceSettingsServiceClient =
+   *     ResourceSettingsServiceClient.create()) {
+   *   UpdateSettingRequest request =
+   *       UpdateSettingRequest.newBuilder().setSetting(Setting.newBuilder().build()).build();
+   *   Setting response = resourceSettingsServiceClient.updateSetting(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Setting updateSetting(UpdateSettingRequest request) {
+<span class="fc" id="L508">    return updateSettingCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a setting.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the setting does not
+   * exist. Returns a `google.rpc.Status` with `google.rpc.Code.FAILED_PRECONDITION` if the setting
+   * is flagged as read only. Returns a `google.rpc.Status` with `google.rpc.Code.ABORTED` if the
+   * etag supplied in the request does not match the persisted etag of the setting value.
+   *
+   * &lt;p&gt;On success, the response will contain only `name`, `local_value` and `etag`. The `metadata`
+   * and `effective_value` cannot be updated through this API.
+   *
+   * &lt;p&gt;Note: the supplied setting will perform a full overwrite of the `local_value` field.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ResourceSettingsServiceClient resourceSettingsServiceClient =
+   *     ResourceSettingsServiceClient.create()) {
+   *   UpdateSettingRequest request =
+   *       UpdateSettingRequest.newBuilder().setSetting(Setting.newBuilder().build()).build();
+   *   ApiFuture&lt;Setting&gt; future =
+   *       resourceSettingsServiceClient.updateSettingCallable().futureCall(request);
+   *   // Do something.
+   *   Setting response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateSettingRequest, Setting&gt; updateSettingCallable() {
+<span class="fc" id="L542">    return stub.updateSettingCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L547">    stub.close();</span>
+<span class="fc" id="L548">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L552">    stub.shutdown();</span>
+<span class="nc" id="L553">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L557">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L562">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L567">    stub.shutdownNow();</span>
+<span class="nc" id="L568">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L572">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListSettingsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListSettingsRequest,
+          ListSettingsResponse,
+          Setting,
+          ListSettingsPage,
+          ListSettingsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListSettingsPagedResponse&gt; createAsync(
+        PageContext&lt;ListSettingsRequest, ListSettingsResponse, Setting&gt; context,
+        ApiFuture&lt;ListSettingsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListSettingsPage&gt; futurePage =
+<span class="fc" id="L587">          ListSettingsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L588">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L590">          input -&gt; new ListSettingsPagedResponse(input),</span>
+<span class="fc" id="L591">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListSettingsPagedResponse(ListSettingsPage page) {
+<span class="fc" id="L595">      super(page, ListSettingsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L596">    }</span>
+  }
+
+  public static class ListSettingsPage
+      extends AbstractPage&lt;ListSettingsRequest, ListSettingsResponse, Setting, ListSettingsPage&gt; {
+
+    private ListSettingsPage(
+        PageContext&lt;ListSettingsRequest, ListSettingsResponse, Setting&gt; context,
+        ListSettingsResponse response) {
+<span class="fc" id="L605">      super(context, response);</span>
+<span class="fc" id="L606">    }</span>
+
+    private static ListSettingsPage createEmptyPage() {
+<span class="fc" id="L609">      return new ListSettingsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListSettingsPage createPage(
+        PageContext&lt;ListSettingsRequest, ListSettingsResponse, Setting&gt; context,
+        ListSettingsResponse response) {
+<span class="fc" id="L616">      return new ListSettingsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListSettingsPage&gt; createPageAsync(
+        PageContext&lt;ListSettingsRequest, ListSettingsResponse, Setting&gt; context,
+        ApiFuture&lt;ListSettingsResponse&gt; futureResponse) {
+<span class="fc" id="L623">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListSettingsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListSettingsRequest,
+          ListSettingsResponse,
+          Setting,
+          ListSettingsPage,
+          ListSettingsFixedSizeCollection&gt; {
+
+    private ListSettingsFixedSizeCollection(List&lt;ListSettingsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L636">      super(pages, collectionSize);</span>
+<span class="fc" id="L637">    }</span>
+
+    private static ListSettingsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L640">      return new ListSettingsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListSettingsFixedSizeCollection createCollection(
+        List&lt;ListSettingsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L646">      return new ListSettingsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

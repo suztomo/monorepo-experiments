@@ -1,0 +1,1700 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>VizierServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-aiplatform</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.aiplatform.v1beta1</a> &gt; <span class="el_source">VizierServiceClient.java</span></div><h1>VizierServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.aiplatform.v1beta1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.aiplatform.v1beta1.stub.VizierServiceStub;
+import com.google.cloud.aiplatform.v1beta1.stub.VizierServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Vertex AI Vizier API.
+ *
+ * &lt;p&gt;Vertex AI Vizier is a service to solve blackbox optimization problems, such as tuning machine
+ * learning hyperparameters and searching over deep learning architectures.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+ *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+ *   Study study = Study.newBuilder().build();
+ *   Study response = vizierServiceClient.createStudy(parent, study);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the VizierServiceClient object to clean up resources such
+ * as threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of VizierServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * VizierServiceSettings vizierServiceSettings =
+ *     VizierServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * VizierServiceClient vizierServiceClient = VizierServiceClient.create(vizierServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * VizierServiceSettings vizierServiceSettings =
+ *     VizierServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * VizierServiceClient vizierServiceClient = VizierServiceClient.create(vizierServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@BetaApi
+@Generated(&quot;by gapic-generator-java&quot;)
+public class VizierServiceClient implements BackgroundResource {
+  private final VizierServiceSettings settings;
+  private final VizierServiceStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of VizierServiceClient with default settings. */
+  public static final VizierServiceClient create() throws IOException {
+<span class="nc" id="L114">    return create(VizierServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of VizierServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final VizierServiceClient create(VizierServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L123">    return new VizierServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of VizierServiceClient, using the given stub for making calls. This is
+   * for advanced usage - prefer using create(VizierServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final VizierServiceClient create(VizierServiceStub stub) {
+<span class="nc" id="L132">    return new VizierServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of VizierServiceClient, using the given settings. This is protected so
+   * that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L140">  protected VizierServiceClient(VizierServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L141">    this.settings = settings;</span>
+<span class="fc" id="L142">    this.stub = ((VizierServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L143">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L144">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L147">  protected VizierServiceClient(VizierServiceStub stub) {</span>
+<span class="nc" id="L148">    this.settings = null;</span>
+<span class="nc" id="L149">    this.stub = stub;</span>
+<span class="nc" id="L150">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L151">  }</span>
+
+  public final VizierServiceSettings getSettings() {
+<span class="nc" id="L154">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public VizierServiceStub getStub() {
+<span class="nc" id="L159">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L167">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Study. A resource name will be generated after creation of the Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Study study = Study.newBuilder().build();
+   *   Study response = vizierServiceClient.createStudy(parent, study);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Location to create the CustomJob in. Format:
+   *     `projects/{project}/locations/{location}`
+   * @param study Required. The Study configuration used to create the Study.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Study createStudy(LocationName parent, Study study) {
+    CreateStudyRequest request =
+<span class="fc" id="L191">        CreateStudyRequest.newBuilder()</span>
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L193">            .setStudy(study)</span>
+<span class="fc" id="L194">            .build();</span>
+<span class="fc" id="L195">    return createStudy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Study. A resource name will be generated after creation of the Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Study study = Study.newBuilder().build();
+   *   Study response = vizierServiceClient.createStudy(parent, study);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Location to create the CustomJob in. Format:
+   *     `projects/{project}/locations/{location}`
+   * @param study Required. The Study configuration used to create the Study.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Study createStudy(String parent, Study study) {
+    CreateStudyRequest request =
+<span class="fc" id="L219">        CreateStudyRequest.newBuilder().setParent(parent).setStudy(study).build();</span>
+<span class="fc" id="L220">    return createStudy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Study. A resource name will be generated after creation of the Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   CreateStudyRequest request =
+   *       CreateStudyRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setStudy(Study.newBuilder().build())
+   *           .build();
+   *   Study response = vizierServiceClient.createStudy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Study createStudy(CreateStudyRequest request) {
+<span class="fc" id="L244">    return createStudyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Study. A resource name will be generated after creation of the Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   CreateStudyRequest request =
+   *       CreateStudyRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setStudy(Study.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Study&gt; future = vizierServiceClient.createStudyCallable().futureCall(request);
+   *   // Do something.
+   *   Study response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateStudyRequest, Study&gt; createStudyCallable() {
+<span class="fc" id="L267">    return stub.createStudyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Study by name.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   StudyName name = StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;);
+   *   Study response = vizierServiceClient.getStudy(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Study resource. Format:
+   *     `projects/{project}/locations/{location}/studies/{study}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Study getStudy(StudyName name) {
+    GetStudyRequest request =
+<span class="pc bpc" id="L289" title="1 of 2 branches missed.">        GetStudyRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L290">    return getStudy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Study by name.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   String name = StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString();
+   *   Study response = vizierServiceClient.getStudy(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Study resource. Format:
+   *     `projects/{project}/locations/{location}/studies/{study}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Study getStudy(String name) {
+<span class="fc" id="L311">    GetStudyRequest request = GetStudyRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L312">    return getStudy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Study by name.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   GetStudyRequest request =
+   *       GetStudyRequest.newBuilder()
+   *           .setName(StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString())
+   *           .build();
+   *   Study response = vizierServiceClient.getStudy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Study getStudy(GetStudyRequest request) {
+<span class="fc" id="L335">    return getStudyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Study by name.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   GetStudyRequest request =
+   *       GetStudyRequest.newBuilder()
+   *           .setName(StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Study&gt; future = vizierServiceClient.getStudyCallable().futureCall(request);
+   *   // Do something.
+   *   Study response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetStudyRequest, Study&gt; getStudyCallable() {
+<span class="fc" id="L357">    return stub.getStudyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the studies in a region for an associated project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Study element : vizierServiceClient.listStudies(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Location to list the Study from. Format:
+   *     `projects/{project}/locations/{location}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListStudiesPagedResponse listStudies(LocationName parent) {
+    ListStudiesRequest request =
+<span class="fc" id="L381">        ListStudiesRequest.newBuilder()</span>
+<span class="pc bpc" id="L382" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L383">            .build();</span>
+<span class="fc" id="L384">    return listStudies(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the studies in a region for an associated project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Study element : vizierServiceClient.listStudies(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Location to list the Study from. Format:
+   *     `projects/{project}/locations/{location}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListStudiesPagedResponse listStudies(String parent) {
+<span class="fc" id="L407">    ListStudiesRequest request = ListStudiesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L408">    return listStudies(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the studies in a region for an associated project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   ListStudiesRequest request =
+   *       ListStudiesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   for (Study element : vizierServiceClient.listStudies(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListStudiesPagedResponse listStudies(ListStudiesRequest request) {
+<span class="fc" id="L435">    return listStudiesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the studies in a region for an associated project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   ListStudiesRequest request =
+   *       ListStudiesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   ApiFuture&lt;Study&gt; future = vizierServiceClient.listStudiesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Study element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListStudiesRequest, ListStudiesPagedResponse&gt;
+      listStudiesPagedCallable() {
+<span class="fc" id="L462">    return stub.listStudiesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the studies in a region for an associated project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   ListStudiesRequest request =
+   *       ListStudiesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   while (true) {
+   *     ListStudiesResponse response = vizierServiceClient.listStudiesCallable().call(request);
+   *     for (Study element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListStudiesRequest, ListStudiesResponse&gt; listStudiesCallable() {
+<span class="nc" id="L495">    return stub.listStudiesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   StudyName name = StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;);
+   *   vizierServiceClient.deleteStudy(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Study resource to be deleted. Format:
+   *     `projects/{project}/locations/{location}/studies/{study}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteStudy(StudyName name) {
+    DeleteStudyRequest request =
+<span class="pc bpc" id="L517" title="1 of 2 branches missed.">        DeleteStudyRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L518">    deleteStudy(request);</span>
+<span class="fc" id="L519">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   String name = StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString();
+   *   vizierServiceClient.deleteStudy(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Study resource to be deleted. Format:
+   *     `projects/{project}/locations/{location}/studies/{study}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteStudy(String name) {
+<span class="fc" id="L539">    DeleteStudyRequest request = DeleteStudyRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L540">    deleteStudy(request);</span>
+<span class="fc" id="L541">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   DeleteStudyRequest request =
+   *       DeleteStudyRequest.newBuilder()
+   *           .setName(StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString())
+   *           .build();
+   *   vizierServiceClient.deleteStudy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteStudy(DeleteStudyRequest request) {
+<span class="fc" id="L563">    deleteStudyCallable().call(request);</span>
+<span class="fc" id="L564">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   DeleteStudyRequest request =
+   *       DeleteStudyRequest.newBuilder()
+   *           .setName(StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = vizierServiceClient.deleteStudyCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteStudyRequest, Empty&gt; deleteStudyCallable() {
+<span class="fc" id="L585">    return stub.deleteStudyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Looks a study up using the user-defined display_name field instead of the fully qualified
+   * resource name.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Study response = vizierServiceClient.lookupStudy(parent);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Location to get the Study from. Format:
+   *     `projects/{project}/locations/{location}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Study lookupStudy(LocationName parent) {
+    LookupStudyRequest request =
+<span class="fc" id="L608">        LookupStudyRequest.newBuilder()</span>
+<span class="pc bpc" id="L609" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L610">            .build();</span>
+<span class="fc" id="L611">    return lookupStudy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Looks a study up using the user-defined display_name field instead of the fully qualified
+   * resource name.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Study response = vizierServiceClient.lookupStudy(parent);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Location to get the Study from. Format:
+   *     `projects/{project}/locations/{location}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Study lookupStudy(String parent) {
+<span class="fc" id="L633">    LookupStudyRequest request = LookupStudyRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L634">    return lookupStudy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Looks a study up using the user-defined display_name field instead of the fully qualified
+   * resource name.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   LookupStudyRequest request =
+   *       LookupStudyRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setDisplayName(&quot;displayName1714148973&quot;)
+   *           .build();
+   *   Study response = vizierServiceClient.lookupStudy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Study lookupStudy(LookupStudyRequest request) {
+<span class="fc" id="L659">    return lookupStudyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Looks a study up using the user-defined display_name field instead of the fully qualified
+   * resource name.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   LookupStudyRequest request =
+   *       LookupStudyRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setDisplayName(&quot;displayName1714148973&quot;)
+   *           .build();
+   *   ApiFuture&lt;Study&gt; future = vizierServiceClient.lookupStudyCallable().futureCall(request);
+   *   // Do something.
+   *   Study response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;LookupStudyRequest, Study&gt; lookupStudyCallable() {
+<span class="fc" id="L683">    return stub.lookupStudyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Adds one or more Trials to a Study, with parameter values suggested by Vertex AI Vizier.
+   * Returns a long-running operation associated with the generation of Trial suggestions. When this
+   * long-running operation succeeds, it will contain a
+   * [SuggestTrialsResponse][google.cloud.ml.v1.SuggestTrialsResponse].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   SuggestTrialsRequest request =
+   *       SuggestTrialsRequest.newBuilder()
+   *           .setParent(StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString())
+   *           .setSuggestionCount(390130452)
+   *           .setClientId(&quot;clientId908408390&quot;)
+   *           .build();
+   *   SuggestTrialsResponse response = vizierServiceClient.suggestTrialsAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;SuggestTrialsResponse, SuggestTrialsMetadata&gt; suggestTrialsAsync(
+      SuggestTrialsRequest request) {
+<span class="fc" id="L712">    return suggestTrialsOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Adds one or more Trials to a Study, with parameter values suggested by Vertex AI Vizier.
+   * Returns a long-running operation associated with the generation of Trial suggestions. When this
+   * long-running operation succeeds, it will contain a
+   * [SuggestTrialsResponse][google.cloud.ml.v1.SuggestTrialsResponse].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   SuggestTrialsRequest request =
+   *       SuggestTrialsRequest.newBuilder()
+   *           .setParent(StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString())
+   *           .setSuggestionCount(390130452)
+   *           .setClientId(&quot;clientId908408390&quot;)
+   *           .build();
+   *   OperationFuture&lt;SuggestTrialsResponse, SuggestTrialsMetadata&gt; future =
+   *       vizierServiceClient.suggestTrialsOperationCallable().futureCall(request);
+   *   // Do something.
+   *   SuggestTrialsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;SuggestTrialsRequest, SuggestTrialsResponse, SuggestTrialsMetadata&gt;
+      suggestTrialsOperationCallable() {
+<span class="fc" id="L741">    return stub.suggestTrialsOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Adds one or more Trials to a Study, with parameter values suggested by Vertex AI Vizier.
+   * Returns a long-running operation associated with the generation of Trial suggestions. When this
+   * long-running operation succeeds, it will contain a
+   * [SuggestTrialsResponse][google.cloud.ml.v1.SuggestTrialsResponse].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   SuggestTrialsRequest request =
+   *       SuggestTrialsRequest.newBuilder()
+   *           .setParent(StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString())
+   *           .setSuggestionCount(390130452)
+   *           .setClientId(&quot;clientId908408390&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = vizierServiceClient.suggestTrialsCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SuggestTrialsRequest, Operation&gt; suggestTrialsCallable() {
+<span class="nc" id="L768">    return stub.suggestTrialsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Adds a user provided Trial to a Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   StudyName parent = StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;);
+   *   Trial trial = Trial.newBuilder().build();
+   *   Trial response = vizierServiceClient.createTrial(parent, trial);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Study to create the Trial in. Format:
+   *     `projects/{project}/locations/{location}/studies/{study}`
+   * @param trial Required. The Trial to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Trial createTrial(StudyName parent, Trial trial) {
+    CreateTrialRequest request =
+<span class="fc" id="L792">        CreateTrialRequest.newBuilder()</span>
+<span class="pc bpc" id="L793" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L794">            .setTrial(trial)</span>
+<span class="fc" id="L795">            .build();</span>
+<span class="fc" id="L796">    return createTrial(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Adds a user provided Trial to a Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   String parent = StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString();
+   *   Trial trial = Trial.newBuilder().build();
+   *   Trial response = vizierServiceClient.createTrial(parent, trial);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Study to create the Trial in. Format:
+   *     `projects/{project}/locations/{location}/studies/{study}`
+   * @param trial Required. The Trial to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Trial createTrial(String parent, Trial trial) {
+    CreateTrialRequest request =
+<span class="fc" id="L820">        CreateTrialRequest.newBuilder().setParent(parent).setTrial(trial).build();</span>
+<span class="fc" id="L821">    return createTrial(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Adds a user provided Trial to a Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   CreateTrialRequest request =
+   *       CreateTrialRequest.newBuilder()
+   *           .setParent(StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString())
+   *           .setTrial(Trial.newBuilder().build())
+   *           .build();
+   *   Trial response = vizierServiceClient.createTrial(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Trial createTrial(CreateTrialRequest request) {
+<span class="fc" id="L845">    return createTrialCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Adds a user provided Trial to a Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   CreateTrialRequest request =
+   *       CreateTrialRequest.newBuilder()
+   *           .setParent(StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString())
+   *           .setTrial(Trial.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Trial&gt; future = vizierServiceClient.createTrialCallable().futureCall(request);
+   *   // Do something.
+   *   Trial response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateTrialRequest, Trial&gt; createTrialCallable() {
+<span class="fc" id="L868">    return stub.createTrialCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Trial.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   TrialName name = TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;);
+   *   Trial response = vizierServiceClient.getTrial(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Trial resource. Format:
+   *     `projects/{project}/locations/{location}/studies/{study}/trials/{trial}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Trial getTrial(TrialName name) {
+    GetTrialRequest request =
+<span class="pc bpc" id="L890" title="1 of 2 branches missed.">        GetTrialRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L891">    return getTrial(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Trial.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   String name = TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString();
+   *   Trial response = vizierServiceClient.getTrial(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Trial resource. Format:
+   *     `projects/{project}/locations/{location}/studies/{study}/trials/{trial}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Trial getTrial(String name) {
+<span class="fc" id="L912">    GetTrialRequest request = GetTrialRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L913">    return getTrial(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Trial.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   GetTrialRequest request =
+   *       GetTrialRequest.newBuilder()
+   *           .setName(TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString())
+   *           .build();
+   *   Trial response = vizierServiceClient.getTrial(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Trial getTrial(GetTrialRequest request) {
+<span class="fc" id="L936">    return getTrialCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Trial.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   GetTrialRequest request =
+   *       GetTrialRequest.newBuilder()
+   *           .setName(TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Trial&gt; future = vizierServiceClient.getTrialCallable().futureCall(request);
+   *   // Do something.
+   *   Trial response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetTrialRequest, Trial&gt; getTrialCallable() {
+<span class="fc" id="L958">    return stub.getTrialCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the Trials associated with a Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   StudyName parent = StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;);
+   *   for (Trial element : vizierServiceClient.listTrials(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Study to list the Trial from. Format:
+   *     `projects/{project}/locations/{location}/studies/{study}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTrialsPagedResponse listTrials(StudyName parent) {
+    ListTrialsRequest request =
+<span class="pc bpc" id="L982" title="1 of 2 branches missed.">        ListTrialsRequest.newBuilder().setParent(parent == null ? null : parent.toString()).build();</span>
+<span class="fc" id="L983">    return listTrials(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the Trials associated with a Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   String parent = StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString();
+   *   for (Trial element : vizierServiceClient.listTrials(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Study to list the Trial from. Format:
+   *     `projects/{project}/locations/{location}/studies/{study}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTrialsPagedResponse listTrials(String parent) {
+<span class="fc" id="L1006">    ListTrialsRequest request = ListTrialsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1007">    return listTrials(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the Trials associated with a Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   ListTrialsRequest request =
+   *       ListTrialsRequest.newBuilder()
+   *           .setParent(StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   for (Trial element : vizierServiceClient.listTrials(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTrialsPagedResponse listTrials(ListTrialsRequest request) {
+<span class="fc" id="L1034">    return listTrialsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the Trials associated with a Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   ListTrialsRequest request =
+   *       ListTrialsRequest.newBuilder()
+   *           .setParent(StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   ApiFuture&lt;Trial&gt; future = vizierServiceClient.listTrialsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Trial element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTrialsRequest, ListTrialsPagedResponse&gt; listTrialsPagedCallable() {
+<span class="fc" id="L1060">    return stub.listTrialsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the Trials associated with a Study.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   ListTrialsRequest request =
+   *       ListTrialsRequest.newBuilder()
+   *           .setParent(StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   while (true) {
+   *     ListTrialsResponse response = vizierServiceClient.listTrialsCallable().call(request);
+   *     for (Trial element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTrialsRequest, ListTrialsResponse&gt; listTrialsCallable() {
+<span class="nc" id="L1093">    return stub.listTrialsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Adds a measurement of the objective metrics to a Trial. This measurement is assumed to have
+   * been taken before the Trial is complete.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   AddTrialMeasurementRequest request =
+   *       AddTrialMeasurementRequest.newBuilder()
+   *           .setTrialName(
+   *               TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString())
+   *           .setMeasurement(Measurement.newBuilder().build())
+   *           .build();
+   *   Trial response = vizierServiceClient.addTrialMeasurement(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Trial addTrialMeasurement(AddTrialMeasurementRequest request) {
+<span class="fc" id="L1119">    return addTrialMeasurementCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Adds a measurement of the objective metrics to a Trial. This measurement is assumed to have
+   * been taken before the Trial is complete.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   AddTrialMeasurementRequest request =
+   *       AddTrialMeasurementRequest.newBuilder()
+   *           .setTrialName(
+   *               TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString())
+   *           .setMeasurement(Measurement.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Trial&gt; future =
+   *       vizierServiceClient.addTrialMeasurementCallable().futureCall(request);
+   *   // Do something.
+   *   Trial response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;AddTrialMeasurementRequest, Trial&gt; addTrialMeasurementCallable() {
+<span class="fc" id="L1145">    return stub.addTrialMeasurementCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Marks a Trial as complete.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   CompleteTrialRequest request =
+   *       CompleteTrialRequest.newBuilder()
+   *           .setName(TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString())
+   *           .setFinalMeasurement(Measurement.newBuilder().build())
+   *           .setTrialInfeasible(true)
+   *           .setInfeasibleReason(&quot;infeasibleReason1040725388&quot;)
+   *           .build();
+   *   Trial response = vizierServiceClient.completeTrial(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Trial completeTrial(CompleteTrialRequest request) {
+<span class="fc" id="L1171">    return completeTrialCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Marks a Trial as complete.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   CompleteTrialRequest request =
+   *       CompleteTrialRequest.newBuilder()
+   *           .setName(TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString())
+   *           .setFinalMeasurement(Measurement.newBuilder().build())
+   *           .setTrialInfeasible(true)
+   *           .setInfeasibleReason(&quot;infeasibleReason1040725388&quot;)
+   *           .build();
+   *   ApiFuture&lt;Trial&gt; future = vizierServiceClient.completeTrialCallable().futureCall(request);
+   *   // Do something.
+   *   Trial response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CompleteTrialRequest, Trial&gt; completeTrialCallable() {
+<span class="fc" id="L1196">    return stub.completeTrialCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Trial.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   TrialName name = TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;);
+   *   vizierServiceClient.deleteTrial(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The Trial's name. Format:
+   *     `projects/{project}/locations/{location}/studies/{study}/trials/{trial}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteTrial(TrialName name) {
+    DeleteTrialRequest request =
+<span class="pc bpc" id="L1218" title="1 of 2 branches missed.">        DeleteTrialRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1219">    deleteTrial(request);</span>
+<span class="fc" id="L1220">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Trial.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   String name = TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString();
+   *   vizierServiceClient.deleteTrial(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The Trial's name. Format:
+   *     `projects/{project}/locations/{location}/studies/{study}/trials/{trial}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteTrial(String name) {
+<span class="fc" id="L1240">    DeleteTrialRequest request = DeleteTrialRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1241">    deleteTrial(request);</span>
+<span class="fc" id="L1242">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Trial.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   DeleteTrialRequest request =
+   *       DeleteTrialRequest.newBuilder()
+   *           .setName(TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString())
+   *           .build();
+   *   vizierServiceClient.deleteTrial(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteTrial(DeleteTrialRequest request) {
+<span class="fc" id="L1264">    deleteTrialCallable().call(request);</span>
+<span class="fc" id="L1265">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Trial.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   DeleteTrialRequest request =
+   *       DeleteTrialRequest.newBuilder()
+   *           .setName(TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = vizierServiceClient.deleteTrialCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteTrialRequest, Empty&gt; deleteTrialCallable() {
+<span class="fc" id="L1286">    return stub.deleteTrialCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Checks whether a Trial should stop or not. Returns a long-running operation. When the operation
+   * is successful, it will contain a
+   * [CheckTrialEarlyStoppingStateResponse][google.cloud.ml.v1.CheckTrialEarlyStoppingStateResponse].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   CheckTrialEarlyStoppingStateRequest request =
+   *       CheckTrialEarlyStoppingStateRequest.newBuilder()
+   *           .setTrialName(
+   *               TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString())
+   *           .build();
+   *   CheckTrialEarlyStoppingStateResponse response =
+   *       vizierServiceClient.checkTrialEarlyStoppingStateAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;
+          CheckTrialEarlyStoppingStateResponse, CheckTrialEarlyStoppingStateMetatdata&gt;
+      checkTrialEarlyStoppingStateAsync(CheckTrialEarlyStoppingStateRequest request) {
+<span class="fc" id="L1315">    return checkTrialEarlyStoppingStateOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Checks whether a Trial should stop or not. Returns a long-running operation. When the operation
+   * is successful, it will contain a
+   * [CheckTrialEarlyStoppingStateResponse][google.cloud.ml.v1.CheckTrialEarlyStoppingStateResponse].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   CheckTrialEarlyStoppingStateRequest request =
+   *       CheckTrialEarlyStoppingStateRequest.newBuilder()
+   *           .setTrialName(
+   *               TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;CheckTrialEarlyStoppingStateResponse, CheckTrialEarlyStoppingStateMetatdata&gt;
+   *       future =
+   *           vizierServiceClient
+   *               .checkTrialEarlyStoppingStateOperationCallable()
+   *               .futureCall(request);
+   *   // Do something.
+   *   CheckTrialEarlyStoppingStateResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          CheckTrialEarlyStoppingStateRequest,
+          CheckTrialEarlyStoppingStateResponse,
+          CheckTrialEarlyStoppingStateMetatdata&gt;
+      checkTrialEarlyStoppingStateOperationCallable() {
+<span class="fc" id="L1348">    return stub.checkTrialEarlyStoppingStateOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Checks whether a Trial should stop or not. Returns a long-running operation. When the operation
+   * is successful, it will contain a
+   * [CheckTrialEarlyStoppingStateResponse][google.cloud.ml.v1.CheckTrialEarlyStoppingStateResponse].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   CheckTrialEarlyStoppingStateRequest request =
+   *       CheckTrialEarlyStoppingStateRequest.newBuilder()
+   *           .setTrialName(
+   *               TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       vizierServiceClient.checkTrialEarlyStoppingStateCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CheckTrialEarlyStoppingStateRequest, Operation&gt;
+      checkTrialEarlyStoppingStateCallable() {
+<span class="nc" id="L1375">    return stub.checkTrialEarlyStoppingStateCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Stops a Trial.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   StopTrialRequest request =
+   *       StopTrialRequest.newBuilder()
+   *           .setName(TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString())
+   *           .build();
+   *   Trial response = vizierServiceClient.stopTrial(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Trial stopTrial(StopTrialRequest request) {
+<span class="fc" id="L1398">    return stopTrialCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Stops a Trial.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   StopTrialRequest request =
+   *       StopTrialRequest.newBuilder()
+   *           .setName(TrialName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;, &quot;[TRIAL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Trial&gt; future = vizierServiceClient.stopTrialCallable().futureCall(request);
+   *   // Do something.
+   *   Trial response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;StopTrialRequest, Trial&gt; stopTrialCallable() {
+<span class="fc" id="L1420">    return stub.stopTrialCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the pareto-optimal Trials for multi-objective Study or the optimal Trials for
+   * single-objective Study. The definition of pareto-optimal can be checked in wiki page.
+   * https://en.wikipedia.org/wiki/Pareto_efficiency
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   StudyName parent = StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;);
+   *   ListOptimalTrialsResponse response = vizierServiceClient.listOptimalTrials(parent);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the Study that the optimal Trial belongs to.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListOptimalTrialsResponse listOptimalTrials(StudyName parent) {
+    ListOptimalTrialsRequest request =
+<span class="fc" id="L1443">        ListOptimalTrialsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1444" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1445">            .build();</span>
+<span class="fc" id="L1446">    return listOptimalTrials(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the pareto-optimal Trials for multi-objective Study or the optimal Trials for
+   * single-objective Study. The definition of pareto-optimal can be checked in wiki page.
+   * https://en.wikipedia.org/wiki/Pareto_efficiency
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   String parent = StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString();
+   *   ListOptimalTrialsResponse response = vizierServiceClient.listOptimalTrials(parent);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the Study that the optimal Trial belongs to.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListOptimalTrialsResponse listOptimalTrials(String parent) {
+    ListOptimalTrialsRequest request =
+<span class="fc" id="L1469">        ListOptimalTrialsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1470">    return listOptimalTrials(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the pareto-optimal Trials for multi-objective Study or the optimal Trials for
+   * single-objective Study. The definition of pareto-optimal can be checked in wiki page.
+   * https://en.wikipedia.org/wiki/Pareto_efficiency
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   ListOptimalTrialsRequest request =
+   *       ListOptimalTrialsRequest.newBuilder()
+   *           .setParent(StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString())
+   *           .build();
+   *   ListOptimalTrialsResponse response = vizierServiceClient.listOptimalTrials(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListOptimalTrialsResponse listOptimalTrials(ListOptimalTrialsRequest request) {
+<span class="fc" id="L1495">    return listOptimalTrialsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the pareto-optimal Trials for multi-objective Study or the optimal Trials for
+   * single-objective Study. The definition of pareto-optimal can be checked in wiki page.
+   * https://en.wikipedia.org/wiki/Pareto_efficiency
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (VizierServiceClient vizierServiceClient = VizierServiceClient.create()) {
+   *   ListOptimalTrialsRequest request =
+   *       ListOptimalTrialsRequest.newBuilder()
+   *           .setParent(StudyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STUDY]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;ListOptimalTrialsResponse&gt; future =
+   *       vizierServiceClient.listOptimalTrialsCallable().futureCall(request);
+   *   // Do something.
+   *   ListOptimalTrialsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListOptimalTrialsRequest, ListOptimalTrialsResponse&gt;
+      listOptimalTrialsCallable() {
+<span class="fc" id="L1521">    return stub.listOptimalTrialsCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1526">    stub.close();</span>
+<span class="fc" id="L1527">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1531">    stub.shutdown();</span>
+<span class="nc" id="L1532">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1536">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1541">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1546">    stub.shutdownNow();</span>
+<span class="nc" id="L1547">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1551">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListStudiesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListStudiesRequest,
+          ListStudiesResponse,
+          Study,
+          ListStudiesPage,
+          ListStudiesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListStudiesPagedResponse&gt; createAsync(
+        PageContext&lt;ListStudiesRequest, ListStudiesResponse, Study&gt; context,
+        ApiFuture&lt;ListStudiesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListStudiesPage&gt; futurePage =
+<span class="fc" id="L1566">          ListStudiesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1567">      return ApiFutures.transform(</span>
+<span class="fc" id="L1568">          futurePage, input -&gt; new ListStudiesPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListStudiesPagedResponse(ListStudiesPage page) {
+<span class="fc" id="L1572">      super(page, ListStudiesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1573">    }</span>
+  }
+
+  public static class ListStudiesPage
+      extends AbstractPage&lt;ListStudiesRequest, ListStudiesResponse, Study, ListStudiesPage&gt; {
+
+    private ListStudiesPage(
+        PageContext&lt;ListStudiesRequest, ListStudiesResponse, Study&gt; context,
+        ListStudiesResponse response) {
+<span class="fc" id="L1582">      super(context, response);</span>
+<span class="fc" id="L1583">    }</span>
+
+    private static ListStudiesPage createEmptyPage() {
+<span class="fc" id="L1586">      return new ListStudiesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListStudiesPage createPage(
+        PageContext&lt;ListStudiesRequest, ListStudiesResponse, Study&gt; context,
+        ListStudiesResponse response) {
+<span class="fc" id="L1593">      return new ListStudiesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListStudiesPage&gt; createPageAsync(
+        PageContext&lt;ListStudiesRequest, ListStudiesResponse, Study&gt; context,
+        ApiFuture&lt;ListStudiesResponse&gt; futureResponse) {
+<span class="fc" id="L1600">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListStudiesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListStudiesRequest,
+          ListStudiesResponse,
+          Study,
+          ListStudiesPage,
+          ListStudiesFixedSizeCollection&gt; {
+
+    private ListStudiesFixedSizeCollection(List&lt;ListStudiesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1613">      super(pages, collectionSize);</span>
+<span class="fc" id="L1614">    }</span>
+
+    private static ListStudiesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1617">      return new ListStudiesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListStudiesFixedSizeCollection createCollection(
+        List&lt;ListStudiesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1623">      return new ListStudiesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListTrialsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListTrialsRequest,
+          ListTrialsResponse,
+          Trial,
+          ListTrialsPage,
+          ListTrialsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListTrialsPagedResponse&gt; createAsync(
+        PageContext&lt;ListTrialsRequest, ListTrialsResponse, Trial&gt; context,
+        ApiFuture&lt;ListTrialsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListTrialsPage&gt; futurePage =
+<span class="fc" id="L1639">          ListTrialsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1640">      return ApiFutures.transform(</span>
+<span class="fc" id="L1641">          futurePage, input -&gt; new ListTrialsPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListTrialsPagedResponse(ListTrialsPage page) {
+<span class="fc" id="L1645">      super(page, ListTrialsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1646">    }</span>
+  }
+
+  public static class ListTrialsPage
+      extends AbstractPage&lt;ListTrialsRequest, ListTrialsResponse, Trial, ListTrialsPage&gt; {
+
+    private ListTrialsPage(
+        PageContext&lt;ListTrialsRequest, ListTrialsResponse, Trial&gt; context,
+        ListTrialsResponse response) {
+<span class="fc" id="L1655">      super(context, response);</span>
+<span class="fc" id="L1656">    }</span>
+
+    private static ListTrialsPage createEmptyPage() {
+<span class="fc" id="L1659">      return new ListTrialsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListTrialsPage createPage(
+        PageContext&lt;ListTrialsRequest, ListTrialsResponse, Trial&gt; context,
+        ListTrialsResponse response) {
+<span class="fc" id="L1666">      return new ListTrialsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListTrialsPage&gt; createPageAsync(
+        PageContext&lt;ListTrialsRequest, ListTrialsResponse, Trial&gt; context,
+        ApiFuture&lt;ListTrialsResponse&gt; futureResponse) {
+<span class="fc" id="L1673">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListTrialsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListTrialsRequest,
+          ListTrialsResponse,
+          Trial,
+          ListTrialsPage,
+          ListTrialsFixedSizeCollection&gt; {
+
+    private ListTrialsFixedSizeCollection(List&lt;ListTrialsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1686">      super(pages, collectionSize);</span>
+<span class="fc" id="L1687">    }</span>
+
+    private static ListTrialsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1690">      return new ListTrialsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListTrialsFixedSizeCollection createCollection(
+        List&lt;ListTrialsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1696">      return new ListTrialsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

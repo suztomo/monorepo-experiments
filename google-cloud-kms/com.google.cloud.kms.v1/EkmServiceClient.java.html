@@ -1,0 +1,942 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>EkmServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-kms</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.kms.v1</a> &gt; <span class="el_source">EkmServiceClient.java</span></div><h1>EkmServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.kms.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.kms.v1.stub.EkmServiceStub;
+import com.google.cloud.kms.v1.stub.EkmServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.iam.v1.GetIamPolicyRequest;
+import com.google.iam.v1.Policy;
+import com.google.iam.v1.SetIamPolicyRequest;
+import com.google.iam.v1.TestIamPermissionsRequest;
+import com.google.iam.v1.TestIamPermissionsResponse;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Google Cloud Key Management EKM Service
+ *
+ * &lt;p&gt;Manages external cryptographic keys and operations using those keys. Implements a REST model
+ * with the following objects:
+ *
+ * &lt;ul&gt;
+ *   &lt;li&gt;[EkmConnection][google.cloud.kms.v1.EkmConnection]
+ * &lt;/ul&gt;
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+ *   EkmConnectionName name = EkmConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EKM_CONNECTION]&quot;);
+ *   EkmConnection response = ekmServiceClient.getEkmConnection(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the EkmServiceClient object to clean up resources such as
+ * threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of EkmServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * EkmServiceSettings ekmServiceSettings =
+ *     EkmServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * EkmServiceClient ekmServiceClient = EkmServiceClient.create(ekmServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * EkmServiceSettings ekmServiceSettings =
+ *     EkmServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * EkmServiceClient ekmServiceClient = EkmServiceClient.create(ekmServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class EkmServiceClient implements BackgroundResource {
+  private final EkmServiceSettings settings;
+  private final EkmServiceStub stub;
+
+  /** Constructs an instance of EkmServiceClient with default settings. */
+  public static final EkmServiceClient create() throws IOException {
+<span class="nc" id="L122">    return create(EkmServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of EkmServiceClient, using the given settings. The channels are created
+   * based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final EkmServiceClient create(EkmServiceSettings settings) throws IOException {
+<span class="fc" id="L130">    return new EkmServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of EkmServiceClient, using the given stub for making calls. This is for
+   * advanced usage - prefer using create(EkmServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final EkmServiceClient create(EkmServiceStub stub) {
+<span class="nc" id="L139">    return new EkmServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of EkmServiceClient, using the given settings. This is protected so that
+   * it is easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   */
+<span class="fc" id="L146">  protected EkmServiceClient(EkmServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L147">    this.settings = settings;</span>
+<span class="fc" id="L148">    this.stub = ((EkmServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L149">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L152">  protected EkmServiceClient(EkmServiceStub stub) {</span>
+<span class="nc" id="L153">    this.settings = null;</span>
+<span class="nc" id="L154">    this.stub = stub;</span>
+<span class="nc" id="L155">  }</span>
+
+  public final EkmServiceSettings getSettings() {
+<span class="nc" id="L158">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public EkmServiceStub getStub() {
+<span class="nc" id="L163">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists [EkmConnections][google.cloud.kms.v1.EkmConnection].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (EkmConnection element : ekmServiceClient.listEkmConnections(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the location associated with the
+   *     [EkmConnections][google.cloud.kms.v1.EkmConnection] to list, in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListEkmConnectionsPagedResponse listEkmConnections(LocationName parent) {
+    ListEkmConnectionsRequest request =
+<span class="fc" id="L190">        ListEkmConnectionsRequest.newBuilder()</span>
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L192">            .build();</span>
+<span class="fc" id="L193">    return listEkmConnections(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists [EkmConnections][google.cloud.kms.v1.EkmConnection].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (EkmConnection element : ekmServiceClient.listEkmConnections(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the location associated with the
+   *     [EkmConnections][google.cloud.kms.v1.EkmConnection] to list, in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListEkmConnectionsPagedResponse listEkmConnections(String parent) {
+    ListEkmConnectionsRequest request =
+<span class="fc" id="L220">        ListEkmConnectionsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L221">    return listEkmConnections(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists [EkmConnections][google.cloud.kms.v1.EkmConnection].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   ListEkmConnectionsRequest request =
+   *       ListEkmConnectionsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (EkmConnection element : ekmServiceClient.listEkmConnections(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListEkmConnectionsPagedResponse listEkmConnections(
+      ListEkmConnectionsRequest request) {
+<span class="fc" id="L253">    return listEkmConnectionsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists [EkmConnections][google.cloud.kms.v1.EkmConnection].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   ListEkmConnectionsRequest request =
+   *       ListEkmConnectionsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;EkmConnection&gt; future =
+   *       ekmServiceClient.listEkmConnectionsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (EkmConnection element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListEkmConnectionsRequest, ListEkmConnectionsPagedResponse&gt;
+      listEkmConnectionsPagedCallable() {
+<span class="fc" id="L285">    return stub.listEkmConnectionsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists [EkmConnections][google.cloud.kms.v1.EkmConnection].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   ListEkmConnectionsRequest request =
+   *       ListEkmConnectionsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListEkmConnectionsResponse response =
+   *         ekmServiceClient.listEkmConnectionsCallable().call(request);
+   *     for (EkmConnection element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListEkmConnectionsRequest, ListEkmConnectionsResponse&gt;
+      listEkmConnectionsCallable() {
+<span class="nc" id="L324">    return stub.listEkmConnectionsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns metadata for a given [EkmConnection][google.cloud.kms.v1.EkmConnection].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   EkmConnectionName name = EkmConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EKM_CONNECTION]&quot;);
+   *   EkmConnection response = ekmServiceClient.getEkmConnection(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [name][google.cloud.kms.v1.EkmConnection.name] of the
+   *     [EkmConnection][google.cloud.kms.v1.EkmConnection] to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final EkmConnection getEkmConnection(EkmConnectionName name) {
+    GetEkmConnectionRequest request =
+<span class="pc bpc" id="L348" title="1 of 2 branches missed.">        GetEkmConnectionRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L349">    return getEkmConnection(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns metadata for a given [EkmConnection][google.cloud.kms.v1.EkmConnection].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   String name = EkmConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EKM_CONNECTION]&quot;).toString();
+   *   EkmConnection response = ekmServiceClient.getEkmConnection(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [name][google.cloud.kms.v1.EkmConnection.name] of the
+   *     [EkmConnection][google.cloud.kms.v1.EkmConnection] to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final EkmConnection getEkmConnection(String name) {
+<span class="fc" id="L372">    GetEkmConnectionRequest request = GetEkmConnectionRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L373">    return getEkmConnection(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns metadata for a given [EkmConnection][google.cloud.kms.v1.EkmConnection].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   GetEkmConnectionRequest request =
+   *       GetEkmConnectionRequest.newBuilder()
+   *           .setName(
+   *               EkmConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EKM_CONNECTION]&quot;).toString())
+   *           .build();
+   *   EkmConnection response = ekmServiceClient.getEkmConnection(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final EkmConnection getEkmConnection(GetEkmConnectionRequest request) {
+<span class="fc" id="L399">    return getEkmConnectionCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns metadata for a given [EkmConnection][google.cloud.kms.v1.EkmConnection].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   GetEkmConnectionRequest request =
+   *       GetEkmConnectionRequest.newBuilder()
+   *           .setName(
+   *               EkmConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[EKM_CONNECTION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;EkmConnection&gt; future =
+   *       ekmServiceClient.getEkmConnectionCallable().futureCall(request);
+   *   // Do something.
+   *   EkmConnection response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetEkmConnectionRequest, EkmConnection&gt; getEkmConnectionCallable() {
+<span class="fc" id="L425">    return stub.getEkmConnectionCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new [EkmConnection][google.cloud.kms.v1.EkmConnection] in a given Project and
+   * Location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   String ekmConnectionId = &quot;ekmConnectionId-445017408&quot;;
+   *   EkmConnection ekmConnection = EkmConnection.newBuilder().build();
+   *   EkmConnection response =
+   *       ekmServiceClient.createEkmConnection(parent, ekmConnectionId, ekmConnection);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the location associated with the
+   *     [EkmConnection][google.cloud.kms.v1.EkmConnection], in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;`.
+   * @param ekmConnectionId Required. It must be unique within a location and match the regular
+   *     expression `[a-zA-Z0-9_-]{1,63}`.
+   * @param ekmConnection Required. An [EkmConnection][google.cloud.kms.v1.EkmConnection] with
+   *     initial field values.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final EkmConnection createEkmConnection(
+      LocationName parent, String ekmConnectionId, EkmConnection ekmConnection) {
+    CreateEkmConnectionRequest request =
+<span class="fc" id="L459">        CreateEkmConnectionRequest.newBuilder()</span>
+<span class="pc bpc" id="L460" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L461">            .setEkmConnectionId(ekmConnectionId)</span>
+<span class="fc" id="L462">            .setEkmConnection(ekmConnection)</span>
+<span class="fc" id="L463">            .build();</span>
+<span class="fc" id="L464">    return createEkmConnection(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new [EkmConnection][google.cloud.kms.v1.EkmConnection] in a given Project and
+   * Location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   String ekmConnectionId = &quot;ekmConnectionId-445017408&quot;;
+   *   EkmConnection ekmConnection = EkmConnection.newBuilder().build();
+   *   EkmConnection response =
+   *       ekmServiceClient.createEkmConnection(parent, ekmConnectionId, ekmConnection);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the location associated with the
+   *     [EkmConnection][google.cloud.kms.v1.EkmConnection], in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;`.
+   * @param ekmConnectionId Required. It must be unique within a location and match the regular
+   *     expression `[a-zA-Z0-9_-]{1,63}`.
+   * @param ekmConnection Required. An [EkmConnection][google.cloud.kms.v1.EkmConnection] with
+   *     initial field values.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final EkmConnection createEkmConnection(
+      String parent, String ekmConnectionId, EkmConnection ekmConnection) {
+    CreateEkmConnectionRequest request =
+<span class="fc" id="L498">        CreateEkmConnectionRequest.newBuilder()</span>
+<span class="fc" id="L499">            .setParent(parent)</span>
+<span class="fc" id="L500">            .setEkmConnectionId(ekmConnectionId)</span>
+<span class="fc" id="L501">            .setEkmConnection(ekmConnection)</span>
+<span class="fc" id="L502">            .build();</span>
+<span class="fc" id="L503">    return createEkmConnection(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new [EkmConnection][google.cloud.kms.v1.EkmConnection] in a given Project and
+   * Location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   CreateEkmConnectionRequest request =
+   *       CreateEkmConnectionRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setEkmConnectionId(&quot;ekmConnectionId-445017408&quot;)
+   *           .setEkmConnection(EkmConnection.newBuilder().build())
+   *           .build();
+   *   EkmConnection response = ekmServiceClient.createEkmConnection(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final EkmConnection createEkmConnection(CreateEkmConnectionRequest request) {
+<span class="fc" id="L531">    return createEkmConnectionCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new [EkmConnection][google.cloud.kms.v1.EkmConnection] in a given Project and
+   * Location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   CreateEkmConnectionRequest request =
+   *       CreateEkmConnectionRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setEkmConnectionId(&quot;ekmConnectionId-445017408&quot;)
+   *           .setEkmConnection(EkmConnection.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;EkmConnection&gt; future =
+   *       ekmServiceClient.createEkmConnectionCallable().futureCall(request);
+   *   // Do something.
+   *   EkmConnection response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateEkmConnectionRequest, EkmConnection&gt;
+      createEkmConnectionCallable() {
+<span class="fc" id="L560">    return stub.createEkmConnectionCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an [EkmConnection][google.cloud.kms.v1.EkmConnection]'s metadata.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   EkmConnection ekmConnection = EkmConnection.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   EkmConnection response = ekmServiceClient.updateEkmConnection(ekmConnection, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param ekmConnection Required. [EkmConnection][google.cloud.kms.v1.EkmConnection] with updated
+   *     values.
+   * @param updateMask Required. List of fields to be updated in this request.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final EkmConnection updateEkmConnection(
+      EkmConnection ekmConnection, FieldMask updateMask) {
+    UpdateEkmConnectionRequest request =
+<span class="fc" id="L587">        UpdateEkmConnectionRequest.newBuilder()</span>
+<span class="fc" id="L588">            .setEkmConnection(ekmConnection)</span>
+<span class="fc" id="L589">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L590">            .build();</span>
+<span class="fc" id="L591">    return updateEkmConnection(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an [EkmConnection][google.cloud.kms.v1.EkmConnection]'s metadata.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   UpdateEkmConnectionRequest request =
+   *       UpdateEkmConnectionRequest.newBuilder()
+   *           .setEkmConnection(EkmConnection.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   EkmConnection response = ekmServiceClient.updateEkmConnection(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final EkmConnection updateEkmConnection(UpdateEkmConnectionRequest request) {
+<span class="fc" id="L617">    return updateEkmConnectionCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an [EkmConnection][google.cloud.kms.v1.EkmConnection]'s metadata.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   UpdateEkmConnectionRequest request =
+   *       UpdateEkmConnectionRequest.newBuilder()
+   *           .setEkmConnection(EkmConnection.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;EkmConnection&gt; future =
+   *       ekmServiceClient.updateEkmConnectionCallable().futureCall(request);
+   *   // Do something.
+   *   EkmConnection response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateEkmConnectionRequest, EkmConnection&gt;
+      updateEkmConnectionCallable() {
+<span class="fc" id="L644">    return stub.updateEkmConnectionCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy on the specified resource. Replacesany existing policy.
+   *
+   * &lt;p&gt;Can return `NOT_FOUND`, `INVALID_ARGUMENT`, and `PERMISSION_DENIED`errors.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(
+   *               CryptoKeyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[KEY_RING]&quot;, &quot;[CRYPTO_KEY]&quot;)
+   *                   .toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Policy response = ekmServiceClient.setIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(SetIamPolicyRequest request) {
+<span class="fc" id="L675">    return setIamPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy on the specified resource. Replacesany existing policy.
+   *
+   * &lt;p&gt;Can return `NOT_FOUND`, `INVALID_ARGUMENT`, and `PERMISSION_DENIED`errors.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(
+   *               CryptoKeyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[KEY_RING]&quot;, &quot;[CRYPTO_KEY]&quot;)
+   *                   .toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = ekmServiceClient.setIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetIamPolicyRequest, Policy&gt; setIamPolicyCallable() {
+<span class="fc" id="L705">    return stub.setIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy for a resource. Returns an empty policyif the resource exists
+   * and does not have a policy set.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(
+   *               CryptoKeyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[KEY_RING]&quot;, &quot;[CRYPTO_KEY]&quot;)
+   *                   .toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   Policy response = ekmServiceClient.getIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(GetIamPolicyRequest request) {
+<span class="fc" id="L734">    return getIamPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy for a resource. Returns an empty policyif the resource exists
+   * and does not have a policy set.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(
+   *               CryptoKeyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[KEY_RING]&quot;, &quot;[CRYPTO_KEY]&quot;)
+   *                   .toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = ekmServiceClient.getIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetIamPolicyRequest, Policy&gt; getIamPolicyCallable() {
+<span class="fc" id="L762">    return stub.getIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns permissions that a caller has on the specified resource. If theresource does not exist,
+   * this will return an empty set ofpermissions, not a `NOT_FOUND` error.
+   *
+   * &lt;p&gt;Note: This operation is designed to be used for buildingpermission-aware UIs and
+   * command-line tools, not for authorizationchecking. This operation may &quot;fail open&quot; without
+   * warning.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(
+   *               CryptoKeyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[KEY_RING]&quot;, &quot;[CRYPTO_KEY]&quot;)
+   *                   .toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   TestIamPermissionsResponse response = ekmServiceClient.testIamPermissions(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(TestIamPermissionsRequest request) {
+<span class="fc" id="L795">    return testIamPermissionsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns permissions that a caller has on the specified resource. If theresource does not exist,
+   * this will return an empty set ofpermissions, not a `NOT_FOUND` error.
+   *
+   * &lt;p&gt;Note: This operation is designed to be used for buildingpermission-aware UIs and
+   * command-line tools, not for authorizationchecking. This operation may &quot;fail open&quot; without
+   * warning.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (EkmServiceClient ekmServiceClient = EkmServiceClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(
+   *               CryptoKeyName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[KEY_RING]&quot;, &quot;[CRYPTO_KEY]&quot;)
+   *                   .toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   ApiFuture&lt;TestIamPermissionsResponse&gt; future =
+   *       ekmServiceClient.testIamPermissionsCallable().futureCall(request);
+   *   // Do something.
+   *   TestIamPermissionsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+      testIamPermissionsCallable() {
+<span class="fc" id="L829">    return stub.testIamPermissionsCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L834">    stub.close();</span>
+<span class="fc" id="L835">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L839">    stub.shutdown();</span>
+<span class="nc" id="L840">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L844">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L849">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L854">    stub.shutdownNow();</span>
+<span class="nc" id="L855">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L859">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListEkmConnectionsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListEkmConnectionsRequest,
+          ListEkmConnectionsResponse,
+          EkmConnection,
+          ListEkmConnectionsPage,
+          ListEkmConnectionsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListEkmConnectionsPagedResponse&gt; createAsync(
+        PageContext&lt;ListEkmConnectionsRequest, ListEkmConnectionsResponse, EkmConnection&gt; context,
+        ApiFuture&lt;ListEkmConnectionsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListEkmConnectionsPage&gt; futurePage =
+<span class="fc" id="L874">          ListEkmConnectionsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L875">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L877">          input -&gt; new ListEkmConnectionsPagedResponse(input),</span>
+<span class="fc" id="L878">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListEkmConnectionsPagedResponse(ListEkmConnectionsPage page) {
+<span class="fc" id="L882">      super(page, ListEkmConnectionsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L883">    }</span>
+  }
+
+  public static class ListEkmConnectionsPage
+      extends AbstractPage&lt;
+          ListEkmConnectionsRequest,
+          ListEkmConnectionsResponse,
+          EkmConnection,
+          ListEkmConnectionsPage&gt; {
+
+    private ListEkmConnectionsPage(
+        PageContext&lt;ListEkmConnectionsRequest, ListEkmConnectionsResponse, EkmConnection&gt; context,
+        ListEkmConnectionsResponse response) {
+<span class="fc" id="L896">      super(context, response);</span>
+<span class="fc" id="L897">    }</span>
+
+    private static ListEkmConnectionsPage createEmptyPage() {
+<span class="fc" id="L900">      return new ListEkmConnectionsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListEkmConnectionsPage createPage(
+        PageContext&lt;ListEkmConnectionsRequest, ListEkmConnectionsResponse, EkmConnection&gt; context,
+        ListEkmConnectionsResponse response) {
+<span class="fc" id="L907">      return new ListEkmConnectionsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListEkmConnectionsPage&gt; createPageAsync(
+        PageContext&lt;ListEkmConnectionsRequest, ListEkmConnectionsResponse, EkmConnection&gt; context,
+        ApiFuture&lt;ListEkmConnectionsResponse&gt; futureResponse) {
+<span class="fc" id="L914">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListEkmConnectionsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListEkmConnectionsRequest,
+          ListEkmConnectionsResponse,
+          EkmConnection,
+          ListEkmConnectionsPage,
+          ListEkmConnectionsFixedSizeCollection&gt; {
+
+    private ListEkmConnectionsFixedSizeCollection(
+        List&lt;ListEkmConnectionsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L928">      super(pages, collectionSize);</span>
+<span class="fc" id="L929">    }</span>
+
+    private static ListEkmConnectionsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L932">      return new ListEkmConnectionsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListEkmConnectionsFixedSizeCollection createCollection(
+        List&lt;ListEkmConnectionsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L938">      return new ListEkmConnectionsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

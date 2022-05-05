@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>RevisionsClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-run</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.run.v2</a> &gt; <span class="el_source">RevisionsClient.java</span></div><h1>RevisionsClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.run.v2;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.run.v2.stub.RevisionsStub;
+import com.google.cloud.run.v2.stub.RevisionsStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Cloud Run Revision Control Plane API.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+ *   RevisionName name = RevisionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[REVISION]&quot;);
+ *   Revision response = revisionsClient.getRevision(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the RevisionsClient object to clean up resources such as
+ * threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of RevisionsSettings to create().
+ * For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * RevisionsSettings revisionsSettings =
+ *     RevisionsSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * RevisionsClient revisionsClient = RevisionsClient.create(revisionsSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * RevisionsSettings revisionsSettings =
+ *     RevisionsSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * RevisionsClient revisionsClient = RevisionsClient.create(revisionsSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class RevisionsClient implements BackgroundResource {
+  private final RevisionsSettings settings;
+  private final RevisionsStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of RevisionsClient with default settings. */
+  public static final RevisionsClient create() throws IOException {
+<span class="nc" id="L114">    return create(RevisionsSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of RevisionsClient, using the given settings. The channels are created
+   * based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final RevisionsClient create(RevisionsSettings settings) throws IOException {
+<span class="fc" id="L122">    return new RevisionsClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of RevisionsClient, using the given stub for making calls. This is for
+   * advanced usage - prefer using create(RevisionsSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final RevisionsClient create(RevisionsStub stub) {
+<span class="nc" id="L131">    return new RevisionsClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of RevisionsClient, using the given settings. This is protected so that
+   * it is easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   */
+<span class="fc" id="L138">  protected RevisionsClient(RevisionsSettings settings) throws IOException {</span>
+<span class="fc" id="L139">    this.settings = settings;</span>
+<span class="fc" id="L140">    this.stub = ((RevisionsStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L141">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L142">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L145">  protected RevisionsClient(RevisionsStub stub) {</span>
+<span class="nc" id="L146">    this.settings = null;</span>
+<span class="nc" id="L147">    this.stub = stub;</span>
+<span class="nc" id="L148">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L149">  }</span>
+
+  public final RevisionsSettings getSettings() {
+<span class="nc" id="L152">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public RevisionsStub getStub() {
+<span class="nc" id="L157">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L165">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a Revision.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+   *   RevisionName name = RevisionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[REVISION]&quot;);
+   *   Revision response = revisionsClient.getRevision(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The full name of the Revision. Format:
+   *     projects/{project}/locations/{location}/services/{service}/revisions/{revision}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Revision getRevision(RevisionName name) {
+    GetRevisionRequest request =
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">        GetRevisionRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L190">    return getRevision(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a Revision.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+   *   String name =
+   *       RevisionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[REVISION]&quot;).toString();
+   *   Revision response = revisionsClient.getRevision(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The full name of the Revision. Format:
+   *     projects/{project}/locations/{location}/services/{service}/revisions/{revision}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Revision getRevision(String name) {
+<span class="fc" id="L214">    GetRevisionRequest request = GetRevisionRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L215">    return getRevision(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a Revision.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+   *   GetRevisionRequest request =
+   *       GetRevisionRequest.newBuilder()
+   *           .setName(
+   *               RevisionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[REVISION]&quot;).toString())
+   *           .build();
+   *   Revision response = revisionsClient.getRevision(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Revision getRevision(GetRevisionRequest request) {
+<span class="fc" id="L241">    return getRevisionCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a Revision.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+   *   GetRevisionRequest request =
+   *       GetRevisionRequest.newBuilder()
+   *           .setName(
+   *               RevisionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[REVISION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Revision&gt; future = revisionsClient.getRevisionCallable().futureCall(request);
+   *   // Do something.
+   *   Revision response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetRevisionRequest, Revision&gt; getRevisionCallable() {
+<span class="fc" id="L266">    return stub.getRevisionCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List Revisions from a given Service, or from a given location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+   *   ServiceName parent = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;);
+   *   for (Revision element : revisionsClient.listRevisions(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The Service from which the Revisions should be listed. To list all
+   *     Revisions across Services, use &quot;-&quot; instead of Service name. Format:
+   *     projects/{project}/locations/{location}/services/{service}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRevisionsPagedResponse listRevisions(ServiceName parent) {
+    ListRevisionsRequest request =
+<span class="fc" id="L293">        ListRevisionsRequest.newBuilder()</span>
+<span class="pc bpc" id="L294" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L295">            .build();</span>
+<span class="fc" id="L296">    return listRevisions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List Revisions from a given Service, or from a given location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+   *   String parent = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   for (Revision element : revisionsClient.listRevisions(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The Service from which the Revisions should be listed. To list all
+   *     Revisions across Services, use &quot;-&quot; instead of Service name. Format:
+   *     projects/{project}/locations/{location}/services/{service}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRevisionsPagedResponse listRevisions(String parent) {
+<span class="fc" id="L322">    ListRevisionsRequest request = ListRevisionsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L323">    return listRevisions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List Revisions from a given Service, or from a given location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+   *   ListRevisionsRequest request =
+   *       ListRevisionsRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setShowDeleted(true)
+   *           .build();
+   *   for (Revision element : revisionsClient.listRevisions(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRevisionsPagedResponse listRevisions(ListRevisionsRequest request) {
+<span class="fc" id="L353">    return listRevisionsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List Revisions from a given Service, or from a given location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+   *   ListRevisionsRequest request =
+   *       ListRevisionsRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setShowDeleted(true)
+   *           .build();
+   *   ApiFuture&lt;Revision&gt; future = revisionsClient.listRevisionsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Revision element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRevisionsRequest, ListRevisionsPagedResponse&gt;
+      listRevisionsPagedCallable() {
+<span class="fc" id="L383">    return stub.listRevisionsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List Revisions from a given Service, or from a given location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+   *   ListRevisionsRequest request =
+   *       ListRevisionsRequest.newBuilder()
+   *           .setParent(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setShowDeleted(true)
+   *           .build();
+   *   while (true) {
+   *     ListRevisionsResponse response = revisionsClient.listRevisionsCallable().call(request);
+   *     for (Revision element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRevisionsRequest, ListRevisionsResponse&gt; listRevisionsCallable() {
+<span class="nc" id="L419">    return stub.listRevisionsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete a Revision.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+   *   RevisionName name = RevisionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[REVISION]&quot;);
+   *   Revision response = revisionsClient.deleteRevisionAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Revision to delete. Format:
+   *     projects/{project}/locations/{location}/services/{service}/revisions/{revision}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Revision, Revision&gt; deleteRevisionAsync(RevisionName name) {
+    DeleteRevisionRequest request =
+<span class="pc bpc" id="L443" title="1 of 2 branches missed.">        DeleteRevisionRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L444">    return deleteRevisionAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete a Revision.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+   *   String name =
+   *       RevisionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[REVISION]&quot;).toString();
+   *   Revision response = revisionsClient.deleteRevisionAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Revision to delete. Format:
+   *     projects/{project}/locations/{location}/services/{service}/revisions/{revision}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Revision, Revision&gt; deleteRevisionAsync(String name) {
+<span class="fc" id="L468">    DeleteRevisionRequest request = DeleteRevisionRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L469">    return deleteRevisionAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete a Revision.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+   *   DeleteRevisionRequest request =
+   *       DeleteRevisionRequest.newBuilder()
+   *           .setName(
+   *               RevisionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[REVISION]&quot;).toString())
+   *           .setValidateOnly(true)
+   *           .setEtag(&quot;etag3123477&quot;)
+   *           .build();
+   *   Revision response = revisionsClient.deleteRevisionAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Revision, Revision&gt; deleteRevisionAsync(
+      DeleteRevisionRequest request) {
+<span class="fc" id="L498">    return deleteRevisionOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete a Revision.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+   *   DeleteRevisionRequest request =
+   *       DeleteRevisionRequest.newBuilder()
+   *           .setName(
+   *               RevisionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[REVISION]&quot;).toString())
+   *           .setValidateOnly(true)
+   *           .setEtag(&quot;etag3123477&quot;)
+   *           .build();
+   *   OperationFuture&lt;Revision, Revision&gt; future =
+   *       revisionsClient.deleteRevisionOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Revision response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteRevisionRequest, Revision, Revision&gt;
+      deleteRevisionOperationCallable() {
+<span class="fc" id="L527">    return stub.deleteRevisionOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete a Revision.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RevisionsClient revisionsClient = RevisionsClient.create()) {
+   *   DeleteRevisionRequest request =
+   *       DeleteRevisionRequest.newBuilder()
+   *           .setName(
+   *               RevisionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;, &quot;[REVISION]&quot;).toString())
+   *           .setValidateOnly(true)
+   *           .setEtag(&quot;etag3123477&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = revisionsClient.deleteRevisionCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteRevisionRequest, Operation&gt; deleteRevisionCallable() {
+<span class="nc" id="L554">    return stub.deleteRevisionCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L559">    stub.close();</span>
+<span class="fc" id="L560">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L564">    stub.shutdown();</span>
+<span class="nc" id="L565">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L569">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L574">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L579">    stub.shutdownNow();</span>
+<span class="nc" id="L580">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L584">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListRevisionsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListRevisionsRequest,
+          ListRevisionsResponse,
+          Revision,
+          ListRevisionsPage,
+          ListRevisionsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListRevisionsPagedResponse&gt; createAsync(
+        PageContext&lt;ListRevisionsRequest, ListRevisionsResponse, Revision&gt; context,
+        ApiFuture&lt;ListRevisionsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListRevisionsPage&gt; futurePage =
+<span class="fc" id="L599">          ListRevisionsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L600">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L602">          input -&gt; new ListRevisionsPagedResponse(input),</span>
+<span class="fc" id="L603">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListRevisionsPagedResponse(ListRevisionsPage page) {
+<span class="fc" id="L607">      super(page, ListRevisionsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L608">    }</span>
+  }
+
+  public static class ListRevisionsPage
+      extends AbstractPage&lt;
+          ListRevisionsRequest, ListRevisionsResponse, Revision, ListRevisionsPage&gt; {
+
+    private ListRevisionsPage(
+        PageContext&lt;ListRevisionsRequest, ListRevisionsResponse, Revision&gt; context,
+        ListRevisionsResponse response) {
+<span class="fc" id="L618">      super(context, response);</span>
+<span class="fc" id="L619">    }</span>
+
+    private static ListRevisionsPage createEmptyPage() {
+<span class="fc" id="L622">      return new ListRevisionsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListRevisionsPage createPage(
+        PageContext&lt;ListRevisionsRequest, ListRevisionsResponse, Revision&gt; context,
+        ListRevisionsResponse response) {
+<span class="fc" id="L629">      return new ListRevisionsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListRevisionsPage&gt; createPageAsync(
+        PageContext&lt;ListRevisionsRequest, ListRevisionsResponse, Revision&gt; context,
+        ApiFuture&lt;ListRevisionsResponse&gt; futureResponse) {
+<span class="fc" id="L636">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListRevisionsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListRevisionsRequest,
+          ListRevisionsResponse,
+          Revision,
+          ListRevisionsPage,
+          ListRevisionsFixedSizeCollection&gt; {
+
+    private ListRevisionsFixedSizeCollection(List&lt;ListRevisionsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L649">      super(pages, collectionSize);</span>
+<span class="fc" id="L650">    }</span>
+
+    private static ListRevisionsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L653">      return new ListRevisionsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListRevisionsFixedSizeCollection createCollection(
+        List&lt;ListRevisionsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L659">      return new ListRevisionsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ArtifactRegistryClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-artifact-registry</a> &gt; <a href="index.source.html" class="el_package">com.google.devtools.artifactregistry.v1</a> &gt; <span class="el_source">ArtifactRegistryClient.java</span></div><h1>ArtifactRegistryClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.devtools.artifactregistry.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.devtools.artifactregistry.v1.stub.ArtifactRegistryStub;
+import com.google.devtools.artifactregistry.v1.stub.ArtifactRegistryStubSettings;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: The Artifact Registry API service.
+ *
+ * &lt;p&gt;Artifact Registry is an artifact management system for storing artifacts from different
+ * package management systems.
+ *
+ * &lt;p&gt;The resources managed by this API are:
+ *
+ * &lt;ul&gt;
+ *   &lt;li&gt;Repositories, which group packages and their data.
+ *   &lt;li&gt;Packages, which group versions and their tags.
+ *   &lt;li&gt;Versions, which are specific forms of a package.
+ *   &lt;li&gt;Tags, which represent alternative names for versions.
+ *   &lt;li&gt;Files, which contain content and are optionally associated with a Package or Version.
+ * &lt;/ul&gt;
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * try (ArtifactRegistryClient artifactRegistryClient = ArtifactRegistryClient.create()) {
+ *   RepositoryName name = RepositoryName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REPOSITORY]&quot;);
+ *   Repository response = artifactRegistryClient.getRepository(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the ArtifactRegistryClient object to clean up resources
+ * such as threads. In the example above, try-with-resources is used, which automatically calls
+ * close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of ArtifactRegistrySettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * ArtifactRegistrySettings artifactRegistrySettings =
+ *     ArtifactRegistrySettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * ArtifactRegistryClient artifactRegistryClient =
+ *     ArtifactRegistryClient.create(artifactRegistrySettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * ArtifactRegistrySettings artifactRegistrySettings =
+ *     ArtifactRegistrySettings.newBuilder().setEndpoint(myEndpoint).build();
+ * ArtifactRegistryClient artifactRegistryClient =
+ *     ArtifactRegistryClient.create(artifactRegistrySettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class ArtifactRegistryClient implements BackgroundResource {
+  private final ArtifactRegistrySettings settings;
+  private final ArtifactRegistryStub stub;
+
+  /** Constructs an instance of ArtifactRegistryClient with default settings. */
+  public static final ArtifactRegistryClient create() throws IOException {
+<span class="nc" id="L119">    return create(ArtifactRegistrySettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of ArtifactRegistryClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final ArtifactRegistryClient create(ArtifactRegistrySettings settings)
+      throws IOException {
+<span class="fc" id="L128">    return new ArtifactRegistryClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of ArtifactRegistryClient, using the given stub for making calls. This
+   * is for advanced usage - prefer using create(ArtifactRegistrySettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final ArtifactRegistryClient create(ArtifactRegistryStub stub) {
+<span class="nc" id="L137">    return new ArtifactRegistryClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of ArtifactRegistryClient, using the given settings. This is protected
+   * so that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L145">  protected ArtifactRegistryClient(ArtifactRegistrySettings settings) throws IOException {</span>
+<span class="fc" id="L146">    this.settings = settings;</span>
+<span class="fc" id="L147">    this.stub = ((ArtifactRegistryStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L148">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L151">  protected ArtifactRegistryClient(ArtifactRegistryStub stub) {</span>
+<span class="nc" id="L152">    this.settings = null;</span>
+<span class="nc" id="L153">    this.stub = stub;</span>
+<span class="nc" id="L154">  }</span>
+
+  public final ArtifactRegistrySettings getSettings() {
+<span class="nc" id="L157">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public ArtifactRegistryStub getStub() {
+<span class="nc" id="L162">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists docker images.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ArtifactRegistryClient artifactRegistryClient = ArtifactRegistryClient.create()) {
+   *   String parent = &quot;parent-995424086&quot;;
+   *   for (DockerImage element : artifactRegistryClient.listDockerImages(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the parent resource whose docker images will be listed.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDockerImagesPagedResponse listDockerImages(String parent) {
+    ListDockerImagesRequest request =
+<span class="fc" id="L185">        ListDockerImagesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L186">    return listDockerImages(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists docker images.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ArtifactRegistryClient artifactRegistryClient = ArtifactRegistryClient.create()) {
+   *   ListDockerImagesRequest request =
+   *       ListDockerImagesRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (DockerImage element : artifactRegistryClient.listDockerImages(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDockerImagesPagedResponse listDockerImages(ListDockerImagesRequest request) {
+<span class="fc" id="L213">    return listDockerImagesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists docker images.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ArtifactRegistryClient artifactRegistryClient = ArtifactRegistryClient.create()) {
+   *   ListDockerImagesRequest request =
+   *       ListDockerImagesRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;DockerImage&gt; future =
+   *       artifactRegistryClient.listDockerImagesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (DockerImage element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListDockerImagesRequest, ListDockerImagesPagedResponse&gt;
+      listDockerImagesPagedCallable() {
+<span class="fc" id="L241">    return stub.listDockerImagesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists docker images.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ArtifactRegistryClient artifactRegistryClient = ArtifactRegistryClient.create()) {
+   *   ListDockerImagesRequest request =
+   *       ListDockerImagesRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListDockerImagesResponse response =
+   *         artifactRegistryClient.listDockerImagesCallable().call(request);
+   *     for (DockerImage element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListDockerImagesRequest, ListDockerImagesResponse&gt;
+      listDockerImagesCallable() {
+<span class="nc" id="L276">    return stub.listDockerImagesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists repositories.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ArtifactRegistryClient artifactRegistryClient = ArtifactRegistryClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Repository element : artifactRegistryClient.listRepositories(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the parent resource whose repositories will be listed.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRepositoriesPagedResponse listRepositories(LocationName parent) {
+    ListRepositoriesRequest request =
+<span class="fc" id="L299">        ListRepositoriesRequest.newBuilder()</span>
+<span class="pc bpc" id="L300" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L301">            .build();</span>
+<span class="fc" id="L302">    return listRepositories(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists repositories.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ArtifactRegistryClient artifactRegistryClient = ArtifactRegistryClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Repository element : artifactRegistryClient.listRepositories(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the parent resource whose repositories will be listed.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRepositoriesPagedResponse listRepositories(String parent) {
+    ListRepositoriesRequest request =
+<span class="fc" id="L325">        ListRepositoriesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L326">    return listRepositories(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists repositories.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ArtifactRegistryClient artifactRegistryClient = ArtifactRegistryClient.create()) {
+   *   ListRepositoriesRequest request =
+   *       ListRepositoriesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Repository element : artifactRegistryClient.listRepositories(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRepositoriesPagedResponse listRepositories(ListRepositoriesRequest request) {
+<span class="fc" id="L353">    return listRepositoriesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists repositories.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ArtifactRegistryClient artifactRegistryClient = ArtifactRegistryClient.create()) {
+   *   ListRepositoriesRequest request =
+   *       ListRepositoriesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Repository&gt; future =
+   *       artifactRegistryClient.listRepositoriesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Repository element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRepositoriesRequest, ListRepositoriesPagedResponse&gt;
+      listRepositoriesPagedCallable() {
+<span class="fc" id="L381">    return stub.listRepositoriesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists repositories.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ArtifactRegistryClient artifactRegistryClient = ArtifactRegistryClient.create()) {
+   *   ListRepositoriesRequest request =
+   *       ListRepositoriesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListRepositoriesResponse response =
+   *         artifactRegistryClient.listRepositoriesCallable().call(request);
+   *     for (Repository element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRepositoriesRequest, ListRepositoriesResponse&gt;
+      listRepositoriesCallable() {
+<span class="nc" id="L416">    return stub.listRepositoriesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a repository.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ArtifactRegistryClient artifactRegistryClient = ArtifactRegistryClient.create()) {
+   *   RepositoryName name = RepositoryName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REPOSITORY]&quot;);
+   *   Repository response = artifactRegistryClient.getRepository(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the repository to retrieve.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Repository getRepository(RepositoryName name) {
+    GetRepositoryRequest request =
+<span class="pc bpc" id="L437" title="1 of 2 branches missed.">        GetRepositoryRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L438">    return getRepository(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a repository.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ArtifactRegistryClient artifactRegistryClient = ArtifactRegistryClient.create()) {
+   *   String name = RepositoryName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REPOSITORY]&quot;).toString();
+   *   Repository response = artifactRegistryClient.getRepository(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the repository to retrieve.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Repository getRepository(String name) {
+<span class="fc" id="L458">    GetRepositoryRequest request = GetRepositoryRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L459">    return getRepository(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a repository.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ArtifactRegistryClient artifactRegistryClient = ArtifactRegistryClient.create()) {
+   *   GetRepositoryRequest request =
+   *       GetRepositoryRequest.newBuilder()
+   *           .setName(RepositoryName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REPOSITORY]&quot;).toString())
+   *           .build();
+   *   Repository response = artifactRegistryClient.getRepository(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Repository getRepository(GetRepositoryRequest request) {
+<span class="fc" id="L482">    return getRepositoryCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a repository.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ArtifactRegistryClient artifactRegistryClient = ArtifactRegistryClient.create()) {
+   *   GetRepositoryRequest request =
+   *       GetRepositoryRequest.newBuilder()
+   *           .setName(RepositoryName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REPOSITORY]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Repository&gt; future =
+   *       artifactRegistryClient.getRepositoryCallable().futureCall(request);
+   *   // Do something.
+   *   Repository response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetRepositoryRequest, Repository&gt; getRepositoryCallable() {
+<span class="fc" id="L505">    return stub.getRepositoryCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L510">    stub.close();</span>
+<span class="fc" id="L511">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L515">    stub.shutdown();</span>
+<span class="nc" id="L516">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L520">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L525">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L530">    stub.shutdownNow();</span>
+<span class="nc" id="L531">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L535">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListDockerImagesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListDockerImagesRequest,
+          ListDockerImagesResponse,
+          DockerImage,
+          ListDockerImagesPage,
+          ListDockerImagesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListDockerImagesPagedResponse&gt; createAsync(
+        PageContext&lt;ListDockerImagesRequest, ListDockerImagesResponse, DockerImage&gt; context,
+        ApiFuture&lt;ListDockerImagesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListDockerImagesPage&gt; futurePage =
+<span class="fc" id="L550">          ListDockerImagesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L551">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L553">          input -&gt; new ListDockerImagesPagedResponse(input),</span>
+<span class="fc" id="L554">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListDockerImagesPagedResponse(ListDockerImagesPage page) {
+<span class="fc" id="L558">      super(page, ListDockerImagesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L559">    }</span>
+  }
+
+  public static class ListDockerImagesPage
+      extends AbstractPage&lt;
+          ListDockerImagesRequest, ListDockerImagesResponse, DockerImage, ListDockerImagesPage&gt; {
+
+    private ListDockerImagesPage(
+        PageContext&lt;ListDockerImagesRequest, ListDockerImagesResponse, DockerImage&gt; context,
+        ListDockerImagesResponse response) {
+<span class="fc" id="L569">      super(context, response);</span>
+<span class="fc" id="L570">    }</span>
+
+    private static ListDockerImagesPage createEmptyPage() {
+<span class="fc" id="L573">      return new ListDockerImagesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListDockerImagesPage createPage(
+        PageContext&lt;ListDockerImagesRequest, ListDockerImagesResponse, DockerImage&gt; context,
+        ListDockerImagesResponse response) {
+<span class="fc" id="L580">      return new ListDockerImagesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListDockerImagesPage&gt; createPageAsync(
+        PageContext&lt;ListDockerImagesRequest, ListDockerImagesResponse, DockerImage&gt; context,
+        ApiFuture&lt;ListDockerImagesResponse&gt; futureResponse) {
+<span class="fc" id="L587">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListDockerImagesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListDockerImagesRequest,
+          ListDockerImagesResponse,
+          DockerImage,
+          ListDockerImagesPage,
+          ListDockerImagesFixedSizeCollection&gt; {
+
+    private ListDockerImagesFixedSizeCollection(
+        List&lt;ListDockerImagesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L601">      super(pages, collectionSize);</span>
+<span class="fc" id="L602">    }</span>
+
+    private static ListDockerImagesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L605">      return new ListDockerImagesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListDockerImagesFixedSizeCollection createCollection(
+        List&lt;ListDockerImagesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L611">      return new ListDockerImagesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListRepositoriesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListRepositoriesRequest,
+          ListRepositoriesResponse,
+          Repository,
+          ListRepositoriesPage,
+          ListRepositoriesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListRepositoriesPagedResponse&gt; createAsync(
+        PageContext&lt;ListRepositoriesRequest, ListRepositoriesResponse, Repository&gt; context,
+        ApiFuture&lt;ListRepositoriesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListRepositoriesPage&gt; futurePage =
+<span class="fc" id="L627">          ListRepositoriesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L628">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L630">          input -&gt; new ListRepositoriesPagedResponse(input),</span>
+<span class="fc" id="L631">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListRepositoriesPagedResponse(ListRepositoriesPage page) {
+<span class="fc" id="L635">      super(page, ListRepositoriesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L636">    }</span>
+  }
+
+  public static class ListRepositoriesPage
+      extends AbstractPage&lt;
+          ListRepositoriesRequest, ListRepositoriesResponse, Repository, ListRepositoriesPage&gt; {
+
+    private ListRepositoriesPage(
+        PageContext&lt;ListRepositoriesRequest, ListRepositoriesResponse, Repository&gt; context,
+        ListRepositoriesResponse response) {
+<span class="fc" id="L646">      super(context, response);</span>
+<span class="fc" id="L647">    }</span>
+
+    private static ListRepositoriesPage createEmptyPage() {
+<span class="fc" id="L650">      return new ListRepositoriesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListRepositoriesPage createPage(
+        PageContext&lt;ListRepositoriesRequest, ListRepositoriesResponse, Repository&gt; context,
+        ListRepositoriesResponse response) {
+<span class="fc" id="L657">      return new ListRepositoriesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListRepositoriesPage&gt; createPageAsync(
+        PageContext&lt;ListRepositoriesRequest, ListRepositoriesResponse, Repository&gt; context,
+        ApiFuture&lt;ListRepositoriesResponse&gt; futureResponse) {
+<span class="fc" id="L664">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListRepositoriesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListRepositoriesRequest,
+          ListRepositoriesResponse,
+          Repository,
+          ListRepositoriesPage,
+          ListRepositoriesFixedSizeCollection&gt; {
+
+    private ListRepositoriesFixedSizeCollection(
+        List&lt;ListRepositoriesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L678">      super(pages, collectionSize);</span>
+<span class="fc" id="L679">    }</span>
+
+    private static ListRepositoriesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L682">      return new ListRepositoriesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListRepositoriesFixedSizeCollection createCollection(
+        List&lt;ListRepositoriesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L688">      return new ListRepositoriesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

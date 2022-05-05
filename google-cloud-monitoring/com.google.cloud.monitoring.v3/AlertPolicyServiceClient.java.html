@@ -1,0 +1,1041 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AlertPolicyServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-monitoring</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.monitoring.v3</a> &gt; <span class="el_source">AlertPolicyServiceClient.java</span></div><h1>AlertPolicyServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.monitoring.v3;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.api.resourcenames.ResourceName;
+import com.google.cloud.monitoring.v3.stub.AlertPolicyServiceStub;
+import com.google.cloud.monitoring.v3.stub.AlertPolicyServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.monitoring.v3.AlertPolicy;
+import com.google.monitoring.v3.AlertPolicyName;
+import com.google.monitoring.v3.CreateAlertPolicyRequest;
+import com.google.monitoring.v3.DeleteAlertPolicyRequest;
+import com.google.monitoring.v3.GetAlertPolicyRequest;
+import com.google.monitoring.v3.ListAlertPoliciesRequest;
+import com.google.monitoring.v3.ListAlertPoliciesResponse;
+import com.google.monitoring.v3.OrganizationName;
+import com.google.monitoring.v3.ProjectName;
+import com.google.monitoring.v3.UpdateAlertPolicyRequest;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: The AlertPolicyService API is used to manage (list, create, delete, edit)
+ * alert policies in Stackdriver Monitoring. An alerting policy is a description of the conditions
+ * under which some aspect of your system is considered to be &quot;unhealthy&quot; and the ways to notify
+ * people or services about this state. In addition to using this API, alert policies can also be
+ * managed through [Stackdriver Monitoring](https://cloud.google.com/monitoring/docs/), which can be
+ * reached by clicking the &quot;Monitoring&quot; tab in [Cloud Console](https://console.cloud.google.com/).
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+ *   AlertPolicyName name =
+ *       AlertPolicyName.ofProjectAlertPolicyName(&quot;[PROJECT]&quot;, &quot;[ALERT_POLICY]&quot;);
+ *   AlertPolicy response = alertPolicyServiceClient.getAlertPolicy(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the AlertPolicyServiceClient object to clean up resources
+ * such as threads. In the example above, try-with-resources is used, which automatically calls
+ * close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of AlertPolicyServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * AlertPolicyServiceSettings alertPolicyServiceSettings =
+ *     AlertPolicyServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * AlertPolicyServiceClient alertPolicyServiceClient =
+ *     AlertPolicyServiceClient.create(alertPolicyServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * AlertPolicyServiceSettings alertPolicyServiceSettings =
+ *     AlertPolicyServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * AlertPolicyServiceClient alertPolicyServiceClient =
+ *     AlertPolicyServiceClient.create(alertPolicyServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class AlertPolicyServiceClient implements BackgroundResource {
+  private final AlertPolicyServiceSettings settings;
+  private final AlertPolicyServiceStub stub;
+
+  /** Constructs an instance of AlertPolicyServiceClient with default settings. */
+  public static final AlertPolicyServiceClient create() throws IOException {
+<span class="nc" id="L131">    return create(AlertPolicyServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of AlertPolicyServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final AlertPolicyServiceClient create(AlertPolicyServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L140">    return new AlertPolicyServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of AlertPolicyServiceClient, using the given stub for making calls. This
+   * is for advanced usage - prefer using create(AlertPolicyServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final AlertPolicyServiceClient create(AlertPolicyServiceStub stub) {
+<span class="nc" id="L149">    return new AlertPolicyServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of AlertPolicyServiceClient, using the given settings. This is protected
+   * so that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L157">  protected AlertPolicyServiceClient(AlertPolicyServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L158">    this.settings = settings;</span>
+<span class="fc" id="L159">    this.stub = ((AlertPolicyServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L160">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L163">  protected AlertPolicyServiceClient(AlertPolicyServiceStub stub) {</span>
+<span class="nc" id="L164">    this.settings = null;</span>
+<span class="nc" id="L165">    this.stub = stub;</span>
+<span class="nc" id="L166">  }</span>
+
+  public final AlertPolicyServiceSettings getSettings() {
+<span class="nc" id="L169">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public AlertPolicyServiceStub getStub() {
+<span class="nc" id="L174">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing alerting policies for the workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   ResourceName name = ResourceName.of(&quot;[FOLDER]&quot;);
+   *   for (AlertPolicy element : alertPolicyServiceClient.listAlertPolicies(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name)
+   *     whose alert policies are to be listed. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;Note that this field names the parent container in which the alerting policies to be
+   *     listed are stored. To retrieve a single alerting policy by name, use the
+   *     [GetAlertPolicy][google.monitoring.v3.AlertPolicyService.GetAlertPolicy] operation,
+   *     instead.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAlertPoliciesPagedResponse listAlertPolicies(ResourceName name) {
+    ListAlertPoliciesRequest request =
+<span class="fc" id="L205">        ListAlertPoliciesRequest.newBuilder()</span>
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L207">            .build();</span>
+<span class="fc" id="L208">    return listAlertPolicies(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing alerting policies for the workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   OrganizationName name = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   for (AlertPolicy element : alertPolicyServiceClient.listAlertPolicies(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name)
+   *     whose alert policies are to be listed. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;Note that this field names the parent container in which the alerting policies to be
+   *     listed are stored. To retrieve a single alerting policy by name, use the
+   *     [GetAlertPolicy][google.monitoring.v3.AlertPolicyService.GetAlertPolicy] operation,
+   *     instead.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAlertPoliciesPagedResponse listAlertPolicies(OrganizationName name) {
+    ListAlertPoliciesRequest request =
+<span class="fc" id="L239">        ListAlertPoliciesRequest.newBuilder()</span>
+<span class="pc bpc" id="L240" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L241">            .build();</span>
+<span class="fc" id="L242">    return listAlertPolicies(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing alerting policies for the workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   ProjectName name = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (AlertPolicy element : alertPolicyServiceClient.listAlertPolicies(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name)
+   *     whose alert policies are to be listed. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;Note that this field names the parent container in which the alerting policies to be
+   *     listed are stored. To retrieve a single alerting policy by name, use the
+   *     [GetAlertPolicy][google.monitoring.v3.AlertPolicyService.GetAlertPolicy] operation,
+   *     instead.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAlertPoliciesPagedResponse listAlertPolicies(ProjectName name) {
+    ListAlertPoliciesRequest request =
+<span class="fc" id="L273">        ListAlertPoliciesRequest.newBuilder()</span>
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L275">            .build();</span>
+<span class="fc" id="L276">    return listAlertPolicies(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing alerting policies for the workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   String name = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (AlertPolicy element : alertPolicyServiceClient.listAlertPolicies(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name)
+   *     whose alert policies are to be listed. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;Note that this field names the parent container in which the alerting policies to be
+   *     listed are stored. To retrieve a single alerting policy by name, use the
+   *     [GetAlertPolicy][google.monitoring.v3.AlertPolicyService.GetAlertPolicy] operation,
+   *     instead.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAlertPoliciesPagedResponse listAlertPolicies(String name) {
+<span class="fc" id="L306">    ListAlertPoliciesRequest request = ListAlertPoliciesRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L307">    return listAlertPolicies(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing alerting policies for the workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   ListAlertPoliciesRequest request =
+   *       ListAlertPoliciesRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (AlertPolicy element : alertPolicyServiceClient.listAlertPolicies(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAlertPoliciesPagedResponse listAlertPolicies(ListAlertPoliciesRequest request) {
+<span class="fc" id="L338">    return listAlertPoliciesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing alerting policies for the workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   ListAlertPoliciesRequest request =
+   *       ListAlertPoliciesRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;AlertPolicy&gt; future =
+   *       alertPolicyServiceClient.listAlertPoliciesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (AlertPolicy element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAlertPoliciesRequest, ListAlertPoliciesPagedResponse&gt;
+      listAlertPoliciesPagedCallable() {
+<span class="fc" id="L370">    return stub.listAlertPoliciesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing alerting policies for the workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   ListAlertPoliciesRequest request =
+   *       ListAlertPoliciesRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListAlertPoliciesResponse response =
+   *         alertPolicyServiceClient.listAlertPoliciesCallable().call(request);
+   *     for (AlertPolicy element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAlertPoliciesRequest, ListAlertPoliciesResponse&gt;
+      listAlertPoliciesCallable() {
+<span class="nc" id="L409">    return stub.listAlertPoliciesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   AlertPolicyName name =
+   *       AlertPolicyName.ofProjectAlertPolicyName(&quot;[PROJECT]&quot;, &quot;[ALERT_POLICY]&quot;);
+   *   AlertPolicy response = alertPolicyServiceClient.getAlertPolicy(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The alerting policy to retrieve. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/alertPolicies/[ALERT_POLICY_ID]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AlertPolicy getAlertPolicy(AlertPolicyName name) {
+    GetAlertPolicyRequest request =
+<span class="pc bpc" id="L434" title="1 of 2 branches missed.">        GetAlertPolicyRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L435">    return getAlertPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   String name =
+   *       AlertPolicyName.ofProjectAlertPolicyName(&quot;[PROJECT]&quot;, &quot;[ALERT_POLICY]&quot;).toString();
+   *   AlertPolicy response = alertPolicyServiceClient.getAlertPolicy(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The alerting policy to retrieve. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/alertPolicies/[ALERT_POLICY_ID]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AlertPolicy getAlertPolicy(String name) {
+<span class="fc" id="L459">    GetAlertPolicyRequest request = GetAlertPolicyRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L460">    return getAlertPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   GetAlertPolicyRequest request =
+   *       GetAlertPolicyRequest.newBuilder()
+   *           .setName(
+   *               AlertPolicyName.ofProjectAlertPolicyName(&quot;[PROJECT]&quot;, &quot;[ALERT_POLICY]&quot;)
+   *                   .toString())
+   *           .build();
+   *   AlertPolicy response = alertPolicyServiceClient.getAlertPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AlertPolicy getAlertPolicy(GetAlertPolicyRequest request) {
+<span class="fc" id="L487">    return getAlertPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   GetAlertPolicyRequest request =
+   *       GetAlertPolicyRequest.newBuilder()
+   *           .setName(
+   *               AlertPolicyName.ofProjectAlertPolicyName(&quot;[PROJECT]&quot;, &quot;[ALERT_POLICY]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;AlertPolicy&gt; future =
+   *       alertPolicyServiceClient.getAlertPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   AlertPolicy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetAlertPolicyRequest, AlertPolicy&gt; getAlertPolicyCallable() {
+<span class="fc" id="L514">    return stub.getAlertPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   ResourceName name = ResourceName.of(&quot;[FOLDER]&quot;);
+   *   AlertPolicy alertPolicy = AlertPolicy.newBuilder().build();
+   *   AlertPolicy response = alertPolicyServiceClient.createAlertPolicy(name, alertPolicy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) in
+   *     which to create the alerting policy. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;Note that this field names the parent container in which the alerting policy will be
+   *     written, not the name of the created policy. |name| must be a host project of a workspace,
+   *     otherwise INVALID_ARGUMENT error will return. The alerting policy that is returned will
+   *     have a name that contains a normalized representation of this name as a prefix but adds a
+   *     suffix of the form `/alertPolicies/[ALERT_POLICY_ID]`, identifying the policy in the
+   *     container.
+   * @param alertPolicy Required. The requested alerting policy. You should omit the `name` field in
+   *     this policy. The name will be returned in the new policy, including a new
+   *     `[ALERT_POLICY_ID]` value.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AlertPolicy createAlertPolicy(ResourceName name, AlertPolicy alertPolicy) {
+    CreateAlertPolicyRequest request =
+<span class="fc" id="L549">        CreateAlertPolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L550" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L551">            .setAlertPolicy(alertPolicy)</span>
+<span class="fc" id="L552">            .build();</span>
+<span class="fc" id="L553">    return createAlertPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   OrganizationName name = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   AlertPolicy alertPolicy = AlertPolicy.newBuilder().build();
+   *   AlertPolicy response = alertPolicyServiceClient.createAlertPolicy(name, alertPolicy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) in
+   *     which to create the alerting policy. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;Note that this field names the parent container in which the alerting policy will be
+   *     written, not the name of the created policy. |name| must be a host project of a workspace,
+   *     otherwise INVALID_ARGUMENT error will return. The alerting policy that is returned will
+   *     have a name that contains a normalized representation of this name as a prefix but adds a
+   *     suffix of the form `/alertPolicies/[ALERT_POLICY_ID]`, identifying the policy in the
+   *     container.
+   * @param alertPolicy Required. The requested alerting policy. You should omit the `name` field in
+   *     this policy. The name will be returned in the new policy, including a new
+   *     `[ALERT_POLICY_ID]` value.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AlertPolicy createAlertPolicy(OrganizationName name, AlertPolicy alertPolicy) {
+    CreateAlertPolicyRequest request =
+<span class="fc" id="L588">        CreateAlertPolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L589" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L590">            .setAlertPolicy(alertPolicy)</span>
+<span class="fc" id="L591">            .build();</span>
+<span class="fc" id="L592">    return createAlertPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   ProjectName name = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   AlertPolicy alertPolicy = AlertPolicy.newBuilder().build();
+   *   AlertPolicy response = alertPolicyServiceClient.createAlertPolicy(name, alertPolicy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) in
+   *     which to create the alerting policy. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;Note that this field names the parent container in which the alerting policy will be
+   *     written, not the name of the created policy. |name| must be a host project of a workspace,
+   *     otherwise INVALID_ARGUMENT error will return. The alerting policy that is returned will
+   *     have a name that contains a normalized representation of this name as a prefix but adds a
+   *     suffix of the form `/alertPolicies/[ALERT_POLICY_ID]`, identifying the policy in the
+   *     container.
+   * @param alertPolicy Required. The requested alerting policy. You should omit the `name` field in
+   *     this policy. The name will be returned in the new policy, including a new
+   *     `[ALERT_POLICY_ID]` value.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AlertPolicy createAlertPolicy(ProjectName name, AlertPolicy alertPolicy) {
+    CreateAlertPolicyRequest request =
+<span class="fc" id="L627">        CreateAlertPolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L628" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L629">            .setAlertPolicy(alertPolicy)</span>
+<span class="fc" id="L630">            .build();</span>
+<span class="fc" id="L631">    return createAlertPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   String name = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   AlertPolicy alertPolicy = AlertPolicy.newBuilder().build();
+   *   AlertPolicy response = alertPolicyServiceClient.createAlertPolicy(name, alertPolicy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) in
+   *     which to create the alerting policy. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;Note that this field names the parent container in which the alerting policy will be
+   *     written, not the name of the created policy. |name| must be a host project of a workspace,
+   *     otherwise INVALID_ARGUMENT error will return. The alerting policy that is returned will
+   *     have a name that contains a normalized representation of this name as a prefix but adds a
+   *     suffix of the form `/alertPolicies/[ALERT_POLICY_ID]`, identifying the policy in the
+   *     container.
+   * @param alertPolicy Required. The requested alerting policy. You should omit the `name` field in
+   *     this policy. The name will be returned in the new policy, including a new
+   *     `[ALERT_POLICY_ID]` value.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AlertPolicy createAlertPolicy(String name, AlertPolicy alertPolicy) {
+    CreateAlertPolicyRequest request =
+<span class="fc" id="L666">        CreateAlertPolicyRequest.newBuilder().setName(name).setAlertPolicy(alertPolicy).build();</span>
+<span class="fc" id="L667">    return createAlertPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   CreateAlertPolicyRequest request =
+   *       CreateAlertPolicyRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setAlertPolicy(AlertPolicy.newBuilder().build())
+   *           .build();
+   *   AlertPolicy response = alertPolicyServiceClient.createAlertPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AlertPolicy createAlertPolicy(CreateAlertPolicyRequest request) {
+<span class="fc" id="L693">    return createAlertPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   CreateAlertPolicyRequest request =
+   *       CreateAlertPolicyRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setAlertPolicy(AlertPolicy.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;AlertPolicy&gt; future =
+   *       alertPolicyServiceClient.createAlertPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   AlertPolicy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateAlertPolicyRequest, AlertPolicy&gt; createAlertPolicyCallable() {
+<span class="fc" id="L719">    return stub.createAlertPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   AlertPolicyName name =
+   *       AlertPolicyName.ofProjectAlertPolicyName(&quot;[PROJECT]&quot;, &quot;[ALERT_POLICY]&quot;);
+   *   alertPolicyServiceClient.deleteAlertPolicy(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The alerting policy to delete. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/alertPolicies/[ALERT_POLICY_ID]
+   *     &lt;p&gt;For more information, see [AlertPolicy][google.monitoring.v3.AlertPolicy].
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteAlertPolicy(AlertPolicyName name) {
+    DeleteAlertPolicyRequest request =
+<span class="fc" id="L745">        DeleteAlertPolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L746" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L747">            .build();</span>
+<span class="fc" id="L748">    deleteAlertPolicy(request);</span>
+<span class="fc" id="L749">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   String name =
+   *       AlertPolicyName.ofProjectAlertPolicyName(&quot;[PROJECT]&quot;, &quot;[ALERT_POLICY]&quot;).toString();
+   *   alertPolicyServiceClient.deleteAlertPolicy(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The alerting policy to delete. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/alertPolicies/[ALERT_POLICY_ID]
+   *     &lt;p&gt;For more information, see [AlertPolicy][google.monitoring.v3.AlertPolicy].
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteAlertPolicy(String name) {
+<span class="fc" id="L773">    DeleteAlertPolicyRequest request = DeleteAlertPolicyRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L774">    deleteAlertPolicy(request);</span>
+<span class="fc" id="L775">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   DeleteAlertPolicyRequest request =
+   *       DeleteAlertPolicyRequest.newBuilder()
+   *           .setName(
+   *               AlertPolicyName.ofProjectAlertPolicyName(&quot;[PROJECT]&quot;, &quot;[ALERT_POLICY]&quot;)
+   *                   .toString())
+   *           .build();
+   *   alertPolicyServiceClient.deleteAlertPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteAlertPolicy(DeleteAlertPolicyRequest request) {
+<span class="fc" id="L801">    deleteAlertPolicyCallable().call(request);</span>
+<span class="fc" id="L802">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   DeleteAlertPolicyRequest request =
+   *       DeleteAlertPolicyRequest.newBuilder()
+   *           .setName(
+   *               AlertPolicyName.ofProjectAlertPolicyName(&quot;[PROJECT]&quot;, &quot;[ALERT_POLICY]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       alertPolicyServiceClient.deleteAlertPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteAlertPolicyRequest, Empty&gt; deleteAlertPolicyCallable() {
+<span class="fc" id="L828">    return stub.deleteAlertPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an alerting policy. You can either replace the entire policy with a new one or replace
+   * only certain fields in the current alerting policy by specifying the fields to be updated via
+   * `updateMask`. Returns the updated alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   AlertPolicy alertPolicy = AlertPolicy.newBuilder().build();
+   *   AlertPolicy response = alertPolicyServiceClient.updateAlertPolicy(updateMask, alertPolicy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param updateMask Optional. A list of alerting policy field names. If this field is not empty,
+   *     each listed field in the existing alerting policy is set to the value of the corresponding
+   *     field in the supplied policy (`alert_policy`), or to the field's default value if the field
+   *     is not in the supplied alerting policy. Fields not listed retain their previous value.
+   *     &lt;p&gt;Examples of valid field masks include `display_name`, `documentation`,
+   *     `documentation.content`, `documentation.mime_type`, `user_labels`, `user_label.nameofkey`,
+   *     `enabled`, `conditions`, `combiner`, etc.
+   *     &lt;p&gt;If this field is empty, then the supplied alerting policy replaces the existing policy.
+   *     It is the same as deleting the existing policy and adding the supplied policy, except for
+   *     the following:
+   *     &lt;p&gt;+ The new policy will have the same `[ALERT_POLICY_ID]` as the former policy. This gives
+   *     you continuity with the former policy in your notifications and incidents. + Conditions in
+   *     the new policy will keep their former `[CONDITION_ID]` if the supplied condition includes
+   *     the `name` field with that `[CONDITION_ID]`. If the supplied condition omits the `name`
+   *     field, then a new `[CONDITION_ID]` is created.
+   * @param alertPolicy Required. The updated alerting policy or the updated values for the fields
+   *     listed in `update_mask`. If `update_mask` is not empty, any fields in this policy that are
+   *     not in `update_mask` are ignored.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AlertPolicy updateAlertPolicy(FieldMask updateMask, AlertPolicy alertPolicy) {
+    UpdateAlertPolicyRequest request =
+<span class="fc" id="L871">        UpdateAlertPolicyRequest.newBuilder()</span>
+<span class="fc" id="L872">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L873">            .setAlertPolicy(alertPolicy)</span>
+<span class="fc" id="L874">            .build();</span>
+<span class="fc" id="L875">    return updateAlertPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an alerting policy. You can either replace the entire policy with a new one or replace
+   * only certain fields in the current alerting policy by specifying the fields to be updated via
+   * `updateMask`. Returns the updated alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   UpdateAlertPolicyRequest request =
+   *       UpdateAlertPolicyRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setAlertPolicy(AlertPolicy.newBuilder().build())
+   *           .build();
+   *   AlertPolicy response = alertPolicyServiceClient.updateAlertPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AlertPolicy updateAlertPolicy(UpdateAlertPolicyRequest request) {
+<span class="fc" id="L903">    return updateAlertPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an alerting policy. You can either replace the entire policy with a new one or replace
+   * only certain fields in the current alerting policy by specifying the fields to be updated via
+   * `updateMask`. Returns the updated alerting policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (AlertPolicyServiceClient alertPolicyServiceClient = AlertPolicyServiceClient.create()) {
+   *   UpdateAlertPolicyRequest request =
+   *       UpdateAlertPolicyRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setAlertPolicy(AlertPolicy.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;AlertPolicy&gt; future =
+   *       alertPolicyServiceClient.updateAlertPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   AlertPolicy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateAlertPolicyRequest, AlertPolicy&gt; updateAlertPolicyCallable() {
+<span class="fc" id="L931">    return stub.updateAlertPolicyCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L936">    stub.close();</span>
+<span class="fc" id="L937">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L941">    stub.shutdown();</span>
+<span class="nc" id="L942">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L946">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L951">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L956">    stub.shutdownNow();</span>
+<span class="nc" id="L957">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L961">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListAlertPoliciesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListAlertPoliciesRequest,
+          ListAlertPoliciesResponse,
+          AlertPolicy,
+          ListAlertPoliciesPage,
+          ListAlertPoliciesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListAlertPoliciesPagedResponse&gt; createAsync(
+        PageContext&lt;ListAlertPoliciesRequest, ListAlertPoliciesResponse, AlertPolicy&gt; context,
+        ApiFuture&lt;ListAlertPoliciesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListAlertPoliciesPage&gt; futurePage =
+<span class="fc" id="L976">          ListAlertPoliciesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L977">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L979">          input -&gt; new ListAlertPoliciesPagedResponse(input),</span>
+<span class="fc" id="L980">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListAlertPoliciesPagedResponse(ListAlertPoliciesPage page) {
+<span class="fc" id="L984">      super(page, ListAlertPoliciesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L985">    }</span>
+  }
+
+  public static class ListAlertPoliciesPage
+      extends AbstractPage&lt;
+          ListAlertPoliciesRequest, ListAlertPoliciesResponse, AlertPolicy, ListAlertPoliciesPage&gt; {
+
+    private ListAlertPoliciesPage(
+        PageContext&lt;ListAlertPoliciesRequest, ListAlertPoliciesResponse, AlertPolicy&gt; context,
+        ListAlertPoliciesResponse response) {
+<span class="fc" id="L995">      super(context, response);</span>
+<span class="fc" id="L996">    }</span>
+
+    private static ListAlertPoliciesPage createEmptyPage() {
+<span class="fc" id="L999">      return new ListAlertPoliciesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListAlertPoliciesPage createPage(
+        PageContext&lt;ListAlertPoliciesRequest, ListAlertPoliciesResponse, AlertPolicy&gt; context,
+        ListAlertPoliciesResponse response) {
+<span class="fc" id="L1006">      return new ListAlertPoliciesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListAlertPoliciesPage&gt; createPageAsync(
+        PageContext&lt;ListAlertPoliciesRequest, ListAlertPoliciesResponse, AlertPolicy&gt; context,
+        ApiFuture&lt;ListAlertPoliciesResponse&gt; futureResponse) {
+<span class="fc" id="L1013">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListAlertPoliciesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListAlertPoliciesRequest,
+          ListAlertPoliciesResponse,
+          AlertPolicy,
+          ListAlertPoliciesPage,
+          ListAlertPoliciesFixedSizeCollection&gt; {
+
+    private ListAlertPoliciesFixedSizeCollection(
+        List&lt;ListAlertPoliciesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1027">      super(pages, collectionSize);</span>
+<span class="fc" id="L1028">    }</span>
+
+    private static ListAlertPoliciesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1031">      return new ListAlertPoliciesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListAlertPoliciesFixedSizeCollection createCollection(
+        List&lt;ListAlertPoliciesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1037">      return new ListAlertPoliciesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

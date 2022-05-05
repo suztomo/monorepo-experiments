@@ -1,0 +1,1707 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ServiceMonitoringServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-monitoring</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.monitoring.v3</a> &gt; <span class="el_source">ServiceMonitoringServiceClient.java</span></div><h1>ServiceMonitoringServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.monitoring.v3;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.api.resourcenames.ResourceName;
+import com.google.cloud.monitoring.v3.stub.ServiceMonitoringServiceStub;
+import com.google.cloud.monitoring.v3.stub.ServiceMonitoringServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.monitoring.v3.CreateServiceLevelObjectiveRequest;
+import com.google.monitoring.v3.CreateServiceRequest;
+import com.google.monitoring.v3.DeleteServiceLevelObjectiveRequest;
+import com.google.monitoring.v3.DeleteServiceRequest;
+import com.google.monitoring.v3.GetServiceLevelObjectiveRequest;
+import com.google.monitoring.v3.GetServiceRequest;
+import com.google.monitoring.v3.ListServiceLevelObjectivesRequest;
+import com.google.monitoring.v3.ListServiceLevelObjectivesResponse;
+import com.google.monitoring.v3.ListServicesRequest;
+import com.google.monitoring.v3.ListServicesResponse;
+import com.google.monitoring.v3.OrganizationName;
+import com.google.monitoring.v3.ProjectName;
+import com.google.monitoring.v3.Service;
+import com.google.monitoring.v3.ServiceLevelObjective;
+import com.google.monitoring.v3.ServiceLevelObjectiveName;
+import com.google.monitoring.v3.ServiceName;
+import com.google.monitoring.v3.UpdateServiceLevelObjectiveRequest;
+import com.google.monitoring.v3.UpdateServiceRequest;
+import com.google.protobuf.Empty;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: The Cloud Monitoring Service-Oriented Monitoring API has endpoints for
+ * managing and querying aspects of a workspace's services. These include the `Service`'s monitored
+ * resources, its Service-Level Objectives, and a taxonomy of categorized Health Metrics.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+ *     ServiceMonitoringServiceClient.create()) {
+ *   ResourceName parent = ResourceName.of(&quot;[FOLDER]&quot;);
+ *   Service service = Service.newBuilder().build();
+ *   Service response = serviceMonitoringServiceClient.createService(parent, service);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the ServiceMonitoringServiceClient object to clean up
+ * resources such as threads. In the example above, try-with-resources is used, which automatically
+ * calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of
+ * ServiceMonitoringServiceSettings to create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * ServiceMonitoringServiceSettings serviceMonitoringServiceSettings =
+ *     ServiceMonitoringServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+ *     ServiceMonitoringServiceClient.create(serviceMonitoringServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * ServiceMonitoringServiceSettings serviceMonitoringServiceSettings =
+ *     ServiceMonitoringServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+ *     ServiceMonitoringServiceClient.create(serviceMonitoringServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class ServiceMonitoringServiceClient implements BackgroundResource {
+  private final ServiceMonitoringServiceSettings settings;
+  private final ServiceMonitoringServiceStub stub;
+
+  /** Constructs an instance of ServiceMonitoringServiceClient with default settings. */
+  public static final ServiceMonitoringServiceClient create() throws IOException {
+<span class="nc" id="L136">    return create(ServiceMonitoringServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of ServiceMonitoringServiceClient, using the given settings. The
+   * channels are created based on the settings passed in, or defaults for any settings that are not
+   * set.
+   */
+  public static final ServiceMonitoringServiceClient create(
+      ServiceMonitoringServiceSettings settings) throws IOException {
+<span class="fc" id="L146">    return new ServiceMonitoringServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of ServiceMonitoringServiceClient, using the given stub for making
+   * calls. This is for advanced usage - prefer using create(ServiceMonitoringServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final ServiceMonitoringServiceClient create(ServiceMonitoringServiceStub stub) {
+<span class="nc" id="L155">    return new ServiceMonitoringServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of ServiceMonitoringServiceClient, using the given settings. This is
+   * protected so that it is easy to make a subclass, but otherwise, the static factory methods
+   * should be preferred.
+   */
+  protected ServiceMonitoringServiceClient(ServiceMonitoringServiceSettings settings)
+<span class="fc" id="L164">      throws IOException {</span>
+<span class="fc" id="L165">    this.settings = settings;</span>
+<span class="fc" id="L166">    this.stub = ((ServiceMonitoringServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L167">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L170">  protected ServiceMonitoringServiceClient(ServiceMonitoringServiceStub stub) {</span>
+<span class="nc" id="L171">    this.settings = null;</span>
+<span class="nc" id="L172">    this.stub = stub;</span>
+<span class="nc" id="L173">  }</span>
+
+  public final ServiceMonitoringServiceSettings getSettings() {
+<span class="nc" id="L176">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public ServiceMonitoringServiceStub getStub() {
+<span class="nc" id="L181">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ResourceName parent = ResourceName.of(&quot;[FOLDER]&quot;);
+   *   Service service = Service.newBuilder().build();
+   *   Service response = serviceMonitoringServiceClient.createService(parent, service);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource
+   *     [name](https://cloud.google.com/monitoring/api/v3#project_name) of the parent workspace.
+   *     The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @param service Required. The `Service` to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service createService(ResourceName parent, Service service) {
+    CreateServiceRequest request =
+<span class="fc" id="L210">        CreateServiceRequest.newBuilder()</span>
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L212">            .setService(service)</span>
+<span class="fc" id="L213">            .build();</span>
+<span class="fc" id="L214">    return createService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   OrganizationName parent = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   Service service = Service.newBuilder().build();
+   *   Service response = serviceMonitoringServiceClient.createService(parent, service);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource
+   *     [name](https://cloud.google.com/monitoring/api/v3#project_name) of the parent workspace.
+   *     The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @param service Required. The `Service` to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service createService(OrganizationName parent, Service service) {
+    CreateServiceRequest request =
+<span class="fc" id="L243">        CreateServiceRequest.newBuilder()</span>
+<span class="pc bpc" id="L244" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L245">            .setService(service)</span>
+<span class="fc" id="L246">            .build();</span>
+<span class="fc" id="L247">    return createService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   Service service = Service.newBuilder().build();
+   *   Service response = serviceMonitoringServiceClient.createService(parent, service);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource
+   *     [name](https://cloud.google.com/monitoring/api/v3#project_name) of the parent workspace.
+   *     The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @param service Required. The `Service` to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service createService(ProjectName parent, Service service) {
+    CreateServiceRequest request =
+<span class="fc" id="L276">        CreateServiceRequest.newBuilder()</span>
+<span class="pc bpc" id="L277" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L278">            .setService(service)</span>
+<span class="fc" id="L279">            .build();</span>
+<span class="fc" id="L280">    return createService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   Service service = Service.newBuilder().build();
+   *   Service response = serviceMonitoringServiceClient.createService(parent, service);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource
+   *     [name](https://cloud.google.com/monitoring/api/v3#project_name) of the parent workspace.
+   *     The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @param service Required. The `Service` to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service createService(String parent, Service service) {
+    CreateServiceRequest request =
+<span class="fc" id="L309">        CreateServiceRequest.newBuilder().setParent(parent).setService(service).build();</span>
+<span class="fc" id="L310">    return createService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   CreateServiceRequest request =
+   *       CreateServiceRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setServiceId(&quot;serviceId-194185552&quot;)
+   *           .setService(Service.newBuilder().build())
+   *           .build();
+   *   Service response = serviceMonitoringServiceClient.createService(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service createService(CreateServiceRequest request) {
+<span class="fc" id="L338">    return createServiceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   CreateServiceRequest request =
+   *       CreateServiceRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setServiceId(&quot;serviceId-194185552&quot;)
+   *           .setService(Service.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Service&gt; future =
+   *       serviceMonitoringServiceClient.createServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Service response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateServiceRequest, Service&gt; createServiceCallable() {
+<span class="fc" id="L366">    return stub.createServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the named `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ServiceName name = ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;);
+   *   Service response = serviceMonitoringServiceClient.getService(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the `Service`. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/services/[SERVICE_ID]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service getService(ServiceName name) {
+    GetServiceRequest request =
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">        GetServiceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L392">    return getService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the named `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   String name = ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   Service response = serviceMonitoringServiceClient.getService(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the `Service`. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/services/[SERVICE_ID]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service getService(String name) {
+<span class="fc" id="L416">    GetServiceRequest request = GetServiceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L417">    return getService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the named `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   GetServiceRequest request =
+   *       GetServiceRequest.newBuilder()
+   *           .setName(ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .build();
+   *   Service response = serviceMonitoringServiceClient.getService(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service getService(GetServiceRequest request) {
+<span class="fc" id="L443">    return getServiceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the named `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   GetServiceRequest request =
+   *       GetServiceRequest.newBuilder()
+   *           .setName(ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Service&gt; future =
+   *       serviceMonitoringServiceClient.getServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Service response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetServiceRequest, Service&gt; getServiceCallable() {
+<span class="fc" id="L469">    return stub.getServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List `Service`s for this workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ResourceName parent = ResourceName.of(&quot;[FOLDER]&quot;);
+   *   for (Service element : serviceMonitoringServiceClient.listServices(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the parent containing the listed services, either a
+   *     [project](https://cloud.google.com/monitoring/api/v3#project_name) or a Monitoring
+   *     Workspace. The formats are:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER] workspaces/[HOST_PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServicesPagedResponse listServices(ResourceName parent) {
+    ListServicesRequest request =
+<span class="fc" id="L498">        ListServicesRequest.newBuilder()</span>
+<span class="pc bpc" id="L499" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L500">            .build();</span>
+<span class="fc" id="L501">    return listServices(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List `Service`s for this workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   OrganizationName parent = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   for (Service element : serviceMonitoringServiceClient.listServices(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the parent containing the listed services, either a
+   *     [project](https://cloud.google.com/monitoring/api/v3#project_name) or a Monitoring
+   *     Workspace. The formats are:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER] workspaces/[HOST_PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServicesPagedResponse listServices(OrganizationName parent) {
+    ListServicesRequest request =
+<span class="fc" id="L530">        ListServicesRequest.newBuilder()</span>
+<span class="pc bpc" id="L531" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L532">            .build();</span>
+<span class="fc" id="L533">    return listServices(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List `Service`s for this workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (Service element : serviceMonitoringServiceClient.listServices(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the parent containing the listed services, either a
+   *     [project](https://cloud.google.com/monitoring/api/v3#project_name) or a Monitoring
+   *     Workspace. The formats are:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER] workspaces/[HOST_PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServicesPagedResponse listServices(ProjectName parent) {
+    ListServicesRequest request =
+<span class="fc" id="L562">        ListServicesRequest.newBuilder()</span>
+<span class="pc bpc" id="L563" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L564">            .build();</span>
+<span class="fc" id="L565">    return listServices(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List `Service`s for this workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (Service element : serviceMonitoringServiceClient.listServices(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the parent containing the listed services, either a
+   *     [project](https://cloud.google.com/monitoring/api/v3#project_name) or a Monitoring
+   *     Workspace. The formats are:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER] workspaces/[HOST_PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServicesPagedResponse listServices(String parent) {
+<span class="fc" id="L593">    ListServicesRequest request = ListServicesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L594">    return listServices(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List `Service`s for this workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ListServicesRequest request =
+   *       ListServicesRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Service element : serviceMonitoringServiceClient.listServices(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServicesPagedResponse listServices(ListServicesRequest request) {
+<span class="fc" id="L625">    return listServicesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List `Service`s for this workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ListServicesRequest request =
+   *       ListServicesRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Service&gt; future =
+   *       serviceMonitoringServiceClient.listServicesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Service element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListServicesRequest, ListServicesPagedResponse&gt;
+      listServicesPagedCallable() {
+<span class="fc" id="L657">    return stub.listServicesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List `Service`s for this workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ListServicesRequest request =
+   *       ListServicesRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListServicesResponse response =
+   *         serviceMonitoringServiceClient.listServicesCallable().call(request);
+   *     for (Service element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListServicesRequest, ListServicesResponse&gt; listServicesCallable() {
+<span class="nc" id="L695">    return stub.listServicesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update this `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   Service service = Service.newBuilder().build();
+   *   Service response = serviceMonitoringServiceClient.updateService(service);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param service Required. The `Service` to draw updates from. The given `name` specifies the
+   *     resource to update.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service updateService(Service service) {
+<span class="fc" id="L719">    UpdateServiceRequest request = UpdateServiceRequest.newBuilder().setService(service).build();</span>
+<span class="fc" id="L720">    return updateService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update this `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   UpdateServiceRequest request =
+   *       UpdateServiceRequest.newBuilder()
+   *           .setService(Service.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Service response = serviceMonitoringServiceClient.updateService(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service updateService(UpdateServiceRequest request) {
+<span class="fc" id="L747">    return updateServiceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update this `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   UpdateServiceRequest request =
+   *       UpdateServiceRequest.newBuilder()
+   *           .setService(Service.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Service&gt; future =
+   *       serviceMonitoringServiceClient.updateServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Service response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateServiceRequest, Service&gt; updateServiceCallable() {
+<span class="fc" id="L774">    return stub.updateServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Soft delete this `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ServiceName name = ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;);
+   *   serviceMonitoringServiceClient.deleteService(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the `Service` to delete. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/services/[SERVICE_ID]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteService(ServiceName name) {
+    DeleteServiceRequest request =
+<span class="pc bpc" id="L799" title="1 of 2 branches missed.">        DeleteServiceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L800">    deleteService(request);</span>
+<span class="fc" id="L801">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Soft delete this `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   String name = ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   serviceMonitoringServiceClient.deleteService(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the `Service` to delete. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/services/[SERVICE_ID]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteService(String name) {
+<span class="fc" id="L824">    DeleteServiceRequest request = DeleteServiceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L825">    deleteService(request);</span>
+<span class="fc" id="L826">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Soft delete this `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   DeleteServiceRequest request =
+   *       DeleteServiceRequest.newBuilder()
+   *           .setName(ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .build();
+   *   serviceMonitoringServiceClient.deleteService(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteService(DeleteServiceRequest request) {
+<span class="fc" id="L851">    deleteServiceCallable().call(request);</span>
+<span class="fc" id="L852">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Soft delete this `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   DeleteServiceRequest request =
+   *       DeleteServiceRequest.newBuilder()
+   *           .setName(ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       serviceMonitoringServiceClient.deleteServiceCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteServiceRequest, Empty&gt; deleteServiceCallable() {
+<span class="fc" id="L877">    return stub.deleteServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a `ServiceLevelObjective` for the given `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ServiceName parent = ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;);
+   *   ServiceLevelObjective serviceLevelObjective = ServiceLevelObjective.newBuilder().build();
+   *   ServiceLevelObjective response =
+   *       serviceMonitoringServiceClient.createServiceLevelObjective(parent, serviceLevelObjective);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the parent `Service`. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/services/[SERVICE_ID]
+   * @param serviceLevelObjective Required. The `ServiceLevelObjective` to create. The provided
+   *     `name` will be respected if no `ServiceLevelObjective` exists with this name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceLevelObjective createServiceLevelObjective(
+      ServiceName parent, ServiceLevelObjective serviceLevelObjective) {
+    CreateServiceLevelObjectiveRequest request =
+<span class="fc" id="L907">        CreateServiceLevelObjectiveRequest.newBuilder()</span>
+<span class="pc bpc" id="L908" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L909">            .setServiceLevelObjective(serviceLevelObjective)</span>
+<span class="fc" id="L910">            .build();</span>
+<span class="fc" id="L911">    return createServiceLevelObjective(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a `ServiceLevelObjective` for the given `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   String parent = ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   ServiceLevelObjective serviceLevelObjective = ServiceLevelObjective.newBuilder().build();
+   *   ServiceLevelObjective response =
+   *       serviceMonitoringServiceClient.createServiceLevelObjective(parent, serviceLevelObjective);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the parent `Service`. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/services/[SERVICE_ID]
+   * @param serviceLevelObjective Required. The `ServiceLevelObjective` to create. The provided
+   *     `name` will be respected if no `ServiceLevelObjective` exists with this name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceLevelObjective createServiceLevelObjective(
+      String parent, ServiceLevelObjective serviceLevelObjective) {
+    CreateServiceLevelObjectiveRequest request =
+<span class="fc" id="L941">        CreateServiceLevelObjectiveRequest.newBuilder()</span>
+<span class="fc" id="L942">            .setParent(parent)</span>
+<span class="fc" id="L943">            .setServiceLevelObjective(serviceLevelObjective)</span>
+<span class="fc" id="L944">            .build();</span>
+<span class="fc" id="L945">    return createServiceLevelObjective(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a `ServiceLevelObjective` for the given `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   CreateServiceLevelObjectiveRequest request =
+   *       CreateServiceLevelObjectiveRequest.newBuilder()
+   *           .setParent(ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setServiceLevelObjectiveId(&quot;serviceLevelObjectiveId-240792859&quot;)
+   *           .setServiceLevelObjective(ServiceLevelObjective.newBuilder().build())
+   *           .build();
+   *   ServiceLevelObjective response =
+   *       serviceMonitoringServiceClient.createServiceLevelObjective(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceLevelObjective createServiceLevelObjective(
+      CreateServiceLevelObjectiveRequest request) {
+<span class="fc" id="L975">    return createServiceLevelObjectiveCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a `ServiceLevelObjective` for the given `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   CreateServiceLevelObjectiveRequest request =
+   *       CreateServiceLevelObjectiveRequest.newBuilder()
+   *           .setParent(ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setServiceLevelObjectiveId(&quot;serviceLevelObjectiveId-240792859&quot;)
+   *           .setServiceLevelObjective(ServiceLevelObjective.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;ServiceLevelObjective&gt; future =
+   *       serviceMonitoringServiceClient.createServiceLevelObjectiveCallable().futureCall(request);
+   *   // Do something.
+   *   ServiceLevelObjective response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateServiceLevelObjectiveRequest, ServiceLevelObjective&gt;
+      createServiceLevelObjectiveCallable() {
+<span class="fc" id="L1004">    return stub.createServiceLevelObjectiveCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a `ServiceLevelObjective` by name.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ServiceLevelObjectiveName name =
+   *       ServiceLevelObjectiveName.ofProjectServiceServiceLevelObjectiveName(
+   *           &quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;, &quot;[SERVICE_LEVEL_OBJECTIVE]&quot;);
+   *   ServiceLevelObjective response =
+   *       serviceMonitoringServiceClient.getServiceLevelObjective(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the `ServiceLevelObjective` to get. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/services/[SERVICE_ID]/serviceLevelObjectives/[SLO_NAME]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceLevelObjective getServiceLevelObjective(ServiceLevelObjectiveName name) {
+    GetServiceLevelObjectiveRequest request =
+<span class="fc" id="L1032">        GetServiceLevelObjectiveRequest.newBuilder()</span>
+<span class="pc bpc" id="L1033" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1034">            .build();</span>
+<span class="fc" id="L1035">    return getServiceLevelObjective(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a `ServiceLevelObjective` by name.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   String name =
+   *       ServiceLevelObjectiveName.ofProjectServiceServiceLevelObjectiveName(
+   *               &quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;, &quot;[SERVICE_LEVEL_OBJECTIVE]&quot;)
+   *           .toString();
+   *   ServiceLevelObjective response =
+   *       serviceMonitoringServiceClient.getServiceLevelObjective(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the `ServiceLevelObjective` to get. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/services/[SERVICE_ID]/serviceLevelObjectives/[SLO_NAME]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceLevelObjective getServiceLevelObjective(String name) {
+    GetServiceLevelObjectiveRequest request =
+<span class="fc" id="L1064">        GetServiceLevelObjectiveRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1065">    return getServiceLevelObjective(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a `ServiceLevelObjective` by name.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   GetServiceLevelObjectiveRequest request =
+   *       GetServiceLevelObjectiveRequest.newBuilder()
+   *           .setName(
+   *               ServiceLevelObjectiveName.ofProjectServiceServiceLevelObjectiveName(
+   *                       &quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;, &quot;[SERVICE_LEVEL_OBJECTIVE]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ServiceLevelObjective response =
+   *       serviceMonitoringServiceClient.getServiceLevelObjective(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceLevelObjective getServiceLevelObjective(
+      GetServiceLevelObjectiveRequest request) {
+<span class="fc" id="L1096">    return getServiceLevelObjectiveCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get a `ServiceLevelObjective` by name.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   GetServiceLevelObjectiveRequest request =
+   *       GetServiceLevelObjectiveRequest.newBuilder()
+   *           .setName(
+   *               ServiceLevelObjectiveName.ofProjectServiceServiceLevelObjectiveName(
+   *                       &quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;, &quot;[SERVICE_LEVEL_OBJECTIVE]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;ServiceLevelObjective&gt; future =
+   *       serviceMonitoringServiceClient.getServiceLevelObjectiveCallable().futureCall(request);
+   *   // Do something.
+   *   ServiceLevelObjective response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetServiceLevelObjectiveRequest, ServiceLevelObjective&gt;
+      getServiceLevelObjectiveCallable() {
+<span class="fc" id="L1126">    return stub.getServiceLevelObjectiveCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the `ServiceLevelObjective`s for the given `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ServiceName parent = ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;);
+   *   for (ServiceLevelObjective element :
+   *       serviceMonitoringServiceClient.listServiceLevelObjectives(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the parent containing the listed SLOs, either a
+   *     project or a Monitoring Workspace. The formats are:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/services/[SERVICE_ID]
+   *     workspaces/[HOST_PROJECT_ID_OR_NUMBER]/services/-
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServiceLevelObjectivesPagedResponse listServiceLevelObjectives(
+      ServiceName parent) {
+    ListServiceLevelObjectivesRequest request =
+<span class="fc" id="L1157">        ListServiceLevelObjectivesRequest.newBuilder()</span>
+<span class="pc bpc" id="L1158" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1159">            .build();</span>
+<span class="fc" id="L1160">    return listServiceLevelObjectives(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the `ServiceLevelObjective`s for the given `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   String parent = ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   for (ServiceLevelObjective element :
+   *       serviceMonitoringServiceClient.listServiceLevelObjectives(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the parent containing the listed SLOs, either a
+   *     project or a Monitoring Workspace. The formats are:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/services/[SERVICE_ID]
+   *     workspaces/[HOST_PROJECT_ID_OR_NUMBER]/services/-
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServiceLevelObjectivesPagedResponse listServiceLevelObjectives(String parent) {
+    ListServiceLevelObjectivesRequest request =
+<span class="fc" id="L1190">        ListServiceLevelObjectivesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1191">    return listServiceLevelObjectives(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the `ServiceLevelObjective`s for the given `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ListServiceLevelObjectivesRequest request =
+   *       ListServiceLevelObjectivesRequest.newBuilder()
+   *           .setParent(ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (ServiceLevelObjective element :
+   *       serviceMonitoringServiceClient.listServiceLevelObjectives(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServiceLevelObjectivesPagedResponse listServiceLevelObjectives(
+      ListServiceLevelObjectivesRequest request) {
+<span class="fc" id="L1224">    return listServiceLevelObjectivesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the `ServiceLevelObjective`s for the given `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ListServiceLevelObjectivesRequest request =
+   *       ListServiceLevelObjectivesRequest.newBuilder()
+   *           .setParent(ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;ServiceLevelObjective&gt; future =
+   *       serviceMonitoringServiceClient
+   *           .listServiceLevelObjectivesPagedCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   for (ServiceLevelObjective element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          ListServiceLevelObjectivesRequest, ListServiceLevelObjectivesPagedResponse&gt;
+      listServiceLevelObjectivesPagedCallable() {
+<span class="fc" id="L1259">    return stub.listServiceLevelObjectivesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the `ServiceLevelObjective`s for the given `Service`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ListServiceLevelObjectivesRequest request =
+   *       ListServiceLevelObjectivesRequest.newBuilder()
+   *           .setParent(ServiceName.ofProjectServiceName(&quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListServiceLevelObjectivesResponse response =
+   *         serviceMonitoringServiceClient.listServiceLevelObjectivesCallable().call(request);
+   *     for (ServiceLevelObjective element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListServiceLevelObjectivesRequest, ListServiceLevelObjectivesResponse&gt;
+      listServiceLevelObjectivesCallable() {
+<span class="nc" id="L1298">    return stub.listServiceLevelObjectivesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update the given `ServiceLevelObjective`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ServiceLevelObjective serviceLevelObjective = ServiceLevelObjective.newBuilder().build();
+   *   ServiceLevelObjective response =
+   *       serviceMonitoringServiceClient.updateServiceLevelObjective(serviceLevelObjective);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param serviceLevelObjective Required. The `ServiceLevelObjective` to draw updates from. The
+   *     given `name` specifies the resource to update.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceLevelObjective updateServiceLevelObjective(
+      ServiceLevelObjective serviceLevelObjective) {
+    UpdateServiceLevelObjectiveRequest request =
+<span class="fc" id="L1325">        UpdateServiceLevelObjectiveRequest.newBuilder()</span>
+<span class="fc" id="L1326">            .setServiceLevelObjective(serviceLevelObjective)</span>
+<span class="fc" id="L1327">            .build();</span>
+<span class="fc" id="L1328">    return updateServiceLevelObjective(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update the given `ServiceLevelObjective`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   UpdateServiceLevelObjectiveRequest request =
+   *       UpdateServiceLevelObjectiveRequest.newBuilder()
+   *           .setServiceLevelObjective(ServiceLevelObjective.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ServiceLevelObjective response =
+   *       serviceMonitoringServiceClient.updateServiceLevelObjective(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ServiceLevelObjective updateServiceLevelObjective(
+      UpdateServiceLevelObjectiveRequest request) {
+<span class="fc" id="L1357">    return updateServiceLevelObjectiveCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update the given `ServiceLevelObjective`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   UpdateServiceLevelObjectiveRequest request =
+   *       UpdateServiceLevelObjectiveRequest.newBuilder()
+   *           .setServiceLevelObjective(ServiceLevelObjective.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;ServiceLevelObjective&gt; future =
+   *       serviceMonitoringServiceClient.updateServiceLevelObjectiveCallable().futureCall(request);
+   *   // Do something.
+   *   ServiceLevelObjective response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateServiceLevelObjectiveRequest, ServiceLevelObjective&gt;
+      updateServiceLevelObjectiveCallable() {
+<span class="fc" id="L1385">    return stub.updateServiceLevelObjectiveCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete the given `ServiceLevelObjective`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   ServiceLevelObjectiveName name =
+   *       ServiceLevelObjectiveName.ofProjectServiceServiceLevelObjectiveName(
+   *           &quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;, &quot;[SERVICE_LEVEL_OBJECTIVE]&quot;);
+   *   serviceMonitoringServiceClient.deleteServiceLevelObjective(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the `ServiceLevelObjective` to delete. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/services/[SERVICE_ID]/serviceLevelObjectives/[SLO_NAME]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteServiceLevelObjective(ServiceLevelObjectiveName name) {
+    DeleteServiceLevelObjectiveRequest request =
+<span class="fc" id="L1412">        DeleteServiceLevelObjectiveRequest.newBuilder()</span>
+<span class="pc bpc" id="L1413" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1414">            .build();</span>
+<span class="fc" id="L1415">    deleteServiceLevelObjective(request);</span>
+<span class="fc" id="L1416">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete the given `ServiceLevelObjective`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   String name =
+   *       ServiceLevelObjectiveName.ofProjectServiceServiceLevelObjectiveName(
+   *               &quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;, &quot;[SERVICE_LEVEL_OBJECTIVE]&quot;)
+   *           .toString();
+   *   serviceMonitoringServiceClient.deleteServiceLevelObjective(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the `ServiceLevelObjective` to delete. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/services/[SERVICE_ID]/serviceLevelObjectives/[SLO_NAME]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteServiceLevelObjective(String name) {
+    DeleteServiceLevelObjectiveRequest request =
+<span class="fc" id="L1443">        DeleteServiceLevelObjectiveRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1444">    deleteServiceLevelObjective(request);</span>
+<span class="fc" id="L1445">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete the given `ServiceLevelObjective`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   DeleteServiceLevelObjectiveRequest request =
+   *       DeleteServiceLevelObjectiveRequest.newBuilder()
+   *           .setName(
+   *               ServiceLevelObjectiveName.ofProjectServiceServiceLevelObjectiveName(
+   *                       &quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;, &quot;[SERVICE_LEVEL_OBJECTIVE]&quot;)
+   *                   .toString())
+   *           .build();
+   *   serviceMonitoringServiceClient.deleteServiceLevelObjective(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteServiceLevelObjective(DeleteServiceLevelObjectiveRequest request) {
+<span class="fc" id="L1473">    deleteServiceLevelObjectiveCallable().call(request);</span>
+<span class="fc" id="L1474">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete the given `ServiceLevelObjective`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServiceMonitoringServiceClient serviceMonitoringServiceClient =
+   *     ServiceMonitoringServiceClient.create()) {
+   *   DeleteServiceLevelObjectiveRequest request =
+   *       DeleteServiceLevelObjectiveRequest.newBuilder()
+   *           .setName(
+   *               ServiceLevelObjectiveName.ofProjectServiceServiceLevelObjectiveName(
+   *                       &quot;[PROJECT]&quot;, &quot;[SERVICE]&quot;, &quot;[SERVICE_LEVEL_OBJECTIVE]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       serviceMonitoringServiceClient.deleteServiceLevelObjectiveCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteServiceLevelObjectiveRequest, Empty&gt;
+      deleteServiceLevelObjectiveCallable() {
+<span class="fc" id="L1503">    return stub.deleteServiceLevelObjectiveCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1508">    stub.close();</span>
+<span class="fc" id="L1509">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1513">    stub.shutdown();</span>
+<span class="nc" id="L1514">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1518">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1523">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1528">    stub.shutdownNow();</span>
+<span class="nc" id="L1529">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1533">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListServicesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListServicesRequest,
+          ListServicesResponse,
+          Service,
+          ListServicesPage,
+          ListServicesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListServicesPagedResponse&gt; createAsync(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ApiFuture&lt;ListServicesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListServicesPage&gt; futurePage =
+<span class="fc" id="L1548">          ListServicesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1549">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1551">          input -&gt; new ListServicesPagedResponse(input),</span>
+<span class="fc" id="L1552">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListServicesPagedResponse(ListServicesPage page) {
+<span class="fc" id="L1556">      super(page, ListServicesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1557">    }</span>
+  }
+
+  public static class ListServicesPage
+      extends AbstractPage&lt;ListServicesRequest, ListServicesResponse, Service, ListServicesPage&gt; {
+
+    private ListServicesPage(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ListServicesResponse response) {
+<span class="fc" id="L1566">      super(context, response);</span>
+<span class="fc" id="L1567">    }</span>
+
+    private static ListServicesPage createEmptyPage() {
+<span class="fc" id="L1570">      return new ListServicesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListServicesPage createPage(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ListServicesResponse response) {
+<span class="fc" id="L1577">      return new ListServicesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListServicesPage&gt; createPageAsync(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ApiFuture&lt;ListServicesResponse&gt; futureResponse) {
+<span class="fc" id="L1584">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListServicesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListServicesRequest,
+          ListServicesResponse,
+          Service,
+          ListServicesPage,
+          ListServicesFixedSizeCollection&gt; {
+
+    private ListServicesFixedSizeCollection(List&lt;ListServicesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1597">      super(pages, collectionSize);</span>
+<span class="fc" id="L1598">    }</span>
+
+    private static ListServicesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1601">      return new ListServicesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListServicesFixedSizeCollection createCollection(
+        List&lt;ListServicesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1607">      return new ListServicesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListServiceLevelObjectivesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListServiceLevelObjectivesRequest,
+          ListServiceLevelObjectivesResponse,
+          ServiceLevelObjective,
+          ListServiceLevelObjectivesPage,
+          ListServiceLevelObjectivesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListServiceLevelObjectivesPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListServiceLevelObjectivesRequest,
+                ListServiceLevelObjectivesResponse,
+                ServiceLevelObjective&gt;
+            context,
+        ApiFuture&lt;ListServiceLevelObjectivesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListServiceLevelObjectivesPage&gt; futurePage =
+<span class="fc" id="L1627">          ListServiceLevelObjectivesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1628">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1630">          input -&gt; new ListServiceLevelObjectivesPagedResponse(input),</span>
+<span class="fc" id="L1631">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListServiceLevelObjectivesPagedResponse(ListServiceLevelObjectivesPage page) {
+<span class="fc" id="L1635">      super(page, ListServiceLevelObjectivesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1636">    }</span>
+  }
+
+  public static class ListServiceLevelObjectivesPage
+      extends AbstractPage&lt;
+          ListServiceLevelObjectivesRequest,
+          ListServiceLevelObjectivesResponse,
+          ServiceLevelObjective,
+          ListServiceLevelObjectivesPage&gt; {
+
+    private ListServiceLevelObjectivesPage(
+        PageContext&lt;
+                ListServiceLevelObjectivesRequest,
+                ListServiceLevelObjectivesResponse,
+                ServiceLevelObjective&gt;
+            context,
+        ListServiceLevelObjectivesResponse response) {
+<span class="fc" id="L1653">      super(context, response);</span>
+<span class="fc" id="L1654">    }</span>
+
+    private static ListServiceLevelObjectivesPage createEmptyPage() {
+<span class="fc" id="L1657">      return new ListServiceLevelObjectivesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListServiceLevelObjectivesPage createPage(
+        PageContext&lt;
+                ListServiceLevelObjectivesRequest,
+                ListServiceLevelObjectivesResponse,
+                ServiceLevelObjective&gt;
+            context,
+        ListServiceLevelObjectivesResponse response) {
+<span class="fc" id="L1668">      return new ListServiceLevelObjectivesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListServiceLevelObjectivesPage&gt; createPageAsync(
+        PageContext&lt;
+                ListServiceLevelObjectivesRequest,
+                ListServiceLevelObjectivesResponse,
+                ServiceLevelObjective&gt;
+            context,
+        ApiFuture&lt;ListServiceLevelObjectivesResponse&gt; futureResponse) {
+<span class="fc" id="L1679">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListServiceLevelObjectivesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListServiceLevelObjectivesRequest,
+          ListServiceLevelObjectivesResponse,
+          ServiceLevelObjective,
+          ListServiceLevelObjectivesPage,
+          ListServiceLevelObjectivesFixedSizeCollection&gt; {
+
+    private ListServiceLevelObjectivesFixedSizeCollection(
+        List&lt;ListServiceLevelObjectivesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1693">      super(pages, collectionSize);</span>
+<span class="fc" id="L1694">    }</span>
+
+    private static ListServiceLevelObjectivesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1697">      return new ListServiceLevelObjectivesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListServiceLevelObjectivesFixedSizeCollection createCollection(
+        List&lt;ListServiceLevelObjectivesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1703">      return new ListServiceLevelObjectivesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

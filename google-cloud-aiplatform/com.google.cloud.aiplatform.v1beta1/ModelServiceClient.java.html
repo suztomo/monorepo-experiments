@@ -1,0 +1,2291 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ModelServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-aiplatform</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.aiplatform.v1beta1</a> &gt; <span class="el_source">ModelServiceClient.java</span></div><h1>ModelServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.aiplatform.v1beta1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.aiplatform.v1beta1.stub.ModelServiceStub;
+import com.google.cloud.aiplatform.v1beta1.stub.ModelServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: A service for managing Vertex AI's machine learning Models.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+ *   ModelName name = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;);
+ *   Model response = modelServiceClient.getModel(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the ModelServiceClient object to clean up resources such
+ * as threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of ModelServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * ModelServiceSettings modelServiceSettings =
+ *     ModelServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * ModelServiceClient modelServiceClient = ModelServiceClient.create(modelServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * ModelServiceSettings modelServiceSettings =
+ *     ModelServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * ModelServiceClient modelServiceClient = ModelServiceClient.create(modelServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@BetaApi
+@Generated(&quot;by gapic-generator-java&quot;)
+public class ModelServiceClient implements BackgroundResource {
+  private final ModelServiceSettings settings;
+  private final ModelServiceStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of ModelServiceClient with default settings. */
+  public static final ModelServiceClient create() throws IOException {
+<span class="nc" id="L111">    return create(ModelServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of ModelServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final ModelServiceClient create(ModelServiceSettings settings) throws IOException {
+<span class="fc" id="L119">    return new ModelServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of ModelServiceClient, using the given stub for making calls. This is
+   * for advanced usage - prefer using create(ModelServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final ModelServiceClient create(ModelServiceStub stub) {
+<span class="nc" id="L128">    return new ModelServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of ModelServiceClient, using the given settings. This is protected so
+   * that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L136">  protected ModelServiceClient(ModelServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L137">    this.settings = settings;</span>
+<span class="fc" id="L138">    this.stub = ((ModelServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L139">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L140">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L143">  protected ModelServiceClient(ModelServiceStub stub) {</span>
+<span class="nc" id="L144">    this.settings = null;</span>
+<span class="nc" id="L145">    this.stub = stub;</span>
+<span class="nc" id="L146">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L147">  }</span>
+
+  public final ModelServiceSettings getSettings() {
+<span class="nc" id="L150">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public ModelServiceStub getStub() {
+<span class="nc" id="L155">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L163">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Uploads a Model artifact into Vertex AI.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Model model = Model.newBuilder().build();
+   *   UploadModelResponse response = modelServiceClient.uploadModelAsync(parent, model).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Location into which to upload the Model.
+   *     Format: `projects/{project}/locations/{location}`
+   * @param model Required. The Model to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;UploadModelResponse, UploadModelOperationMetadata&gt; uploadModelAsync(
+      LocationName parent, Model model) {
+    UploadModelRequest request =
+<span class="fc" id="L188">        UploadModelRequest.newBuilder()</span>
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L190">            .setModel(model)</span>
+<span class="fc" id="L191">            .build();</span>
+<span class="fc" id="L192">    return uploadModelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Uploads a Model artifact into Vertex AI.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Model model = Model.newBuilder().build();
+   *   UploadModelResponse response = modelServiceClient.uploadModelAsync(parent, model).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Location into which to upload the Model.
+   *     Format: `projects/{project}/locations/{location}`
+   * @param model Required. The Model to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;UploadModelResponse, UploadModelOperationMetadata&gt; uploadModelAsync(
+      String parent, Model model) {
+    UploadModelRequest request =
+<span class="fc" id="L217">        UploadModelRequest.newBuilder().setParent(parent).setModel(model).build();</span>
+<span class="fc" id="L218">    return uploadModelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Uploads a Model artifact into Vertex AI.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   UploadModelRequest request =
+   *       UploadModelRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setParentModel(&quot;parentModel998431903&quot;)
+   *           .setModelId(&quot;modelId1226956324&quot;)
+   *           .setModel(Model.newBuilder().build())
+   *           .build();
+   *   UploadModelResponse response = modelServiceClient.uploadModelAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;UploadModelResponse, UploadModelOperationMetadata&gt; uploadModelAsync(
+      UploadModelRequest request) {
+<span class="fc" id="L245">    return uploadModelOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Uploads a Model artifact into Vertex AI.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   UploadModelRequest request =
+   *       UploadModelRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setParentModel(&quot;parentModel998431903&quot;)
+   *           .setModelId(&quot;modelId1226956324&quot;)
+   *           .setModel(Model.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;UploadModelResponse, UploadModelOperationMetadata&gt; future =
+   *       modelServiceClient.uploadModelOperationCallable().futureCall(request);
+   *   // Do something.
+   *   UploadModelResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          UploadModelRequest, UploadModelResponse, UploadModelOperationMetadata&gt;
+      uploadModelOperationCallable() {
+<span class="fc" id="L273">    return stub.uploadModelOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Uploads a Model artifact into Vertex AI.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   UploadModelRequest request =
+   *       UploadModelRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setParentModel(&quot;parentModel998431903&quot;)
+   *           .setModelId(&quot;modelId1226956324&quot;)
+   *           .setModel(Model.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = modelServiceClient.uploadModelCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UploadModelRequest, Operation&gt; uploadModelCallable() {
+<span class="nc" id="L298">    return stub.uploadModelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ModelName name = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;);
+   *   Model response = modelServiceClient.getModel(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Model resource. Format:
+   *     `projects/{project}/locations/{location}/models/{model}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Model getModel(ModelName name) {
+    GetModelRequest request =
+<span class="pc bpc" id="L320" title="1 of 2 branches missed.">        GetModelRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L321">    return getModel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   String name = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString();
+   *   Model response = modelServiceClient.getModel(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Model resource. Format:
+   *     `projects/{project}/locations/{location}/models/{model}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Model getModel(String name) {
+<span class="fc" id="L342">    GetModelRequest request = GetModelRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L343">    return getModel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   GetModelRequest request =
+   *       GetModelRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .build();
+   *   Model response = modelServiceClient.getModel(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Model getModel(GetModelRequest request) {
+<span class="fc" id="L366">    return getModelCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   GetModelRequest request =
+   *       GetModelRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Model&gt; future = modelServiceClient.getModelCallable().futureCall(request);
+   *   // Do something.
+   *   Model response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetModelRequest, Model&gt; getModelCallable() {
+<span class="fc" id="L388">    return stub.getModelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Models in a Location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Model element : modelServiceClient.listModels(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Location to list the Models from. Format:
+   *     `projects/{project}/locations/{location}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListModelsPagedResponse listModels(LocationName parent) {
+    ListModelsRequest request =
+<span class="pc bpc" id="L412" title="1 of 2 branches missed.">        ListModelsRequest.newBuilder().setParent(parent == null ? null : parent.toString()).build();</span>
+<span class="fc" id="L413">    return listModels(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Models in a Location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Model element : modelServiceClient.listModels(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Location to list the Models from. Format:
+   *     `projects/{project}/locations/{location}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListModelsPagedResponse listModels(String parent) {
+<span class="fc" id="L436">    ListModelsRequest request = ListModelsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L437">    return listModels(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Models in a Location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ListModelsRequest request =
+   *       ListModelsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   for (Model element : modelServiceClient.listModels(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListModelsPagedResponse listModels(ListModelsRequest request) {
+<span class="fc" id="L466">    return listModelsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Models in a Location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ListModelsRequest request =
+   *       ListModelsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Model&gt; future = modelServiceClient.listModelsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Model element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListModelsRequest, ListModelsPagedResponse&gt; listModelsPagedCallable() {
+<span class="fc" id="L494">    return stub.listModelsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Models in a Location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ListModelsRequest request =
+   *       ListModelsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   while (true) {
+   *     ListModelsResponse response = modelServiceClient.listModelsCallable().call(request);
+   *     for (Model element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListModelsRequest, ListModelsResponse&gt; listModelsCallable() {
+<span class="nc" id="L529">    return stub.listModelsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists versions of the specified model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ModelName name = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;);
+   *   for (Model element : modelServiceClient.listModelVersions(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the model to list versions for.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListModelVersionsPagedResponse listModelVersions(ModelName name) {
+    ListModelVersionsRequest request =
+<span class="fc" id="L552">        ListModelVersionsRequest.newBuilder()</span>
+<span class="pc bpc" id="L553" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L554">            .build();</span>
+<span class="fc" id="L555">    return listModelVersions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists versions of the specified model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   String name = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString();
+   *   for (Model element : modelServiceClient.listModelVersions(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the model to list versions for.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListModelVersionsPagedResponse listModelVersions(String name) {
+<span class="fc" id="L577">    ListModelVersionsRequest request = ListModelVersionsRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L578">    return listModelVersions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists versions of the specified model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ListModelVersionsRequest request =
+   *       ListModelVersionsRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   for (Model element : modelServiceClient.listModelVersions(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListModelVersionsPagedResponse listModelVersions(ListModelVersionsRequest request) {
+<span class="fc" id="L607">    return listModelVersionsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists versions of the specified model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ListModelVersionsRequest request =
+   *       ListModelVersionsRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Model&gt; future =
+   *       modelServiceClient.listModelVersionsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Model element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListModelVersionsRequest, ListModelVersionsPagedResponse&gt;
+      listModelVersionsPagedCallable() {
+<span class="fc" id="L637">    return stub.listModelVersionsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists versions of the specified model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ListModelVersionsRequest request =
+   *       ListModelVersionsRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   while (true) {
+   *     ListModelVersionsResponse response =
+   *         modelServiceClient.listModelVersionsCallable().call(request);
+   *     for (Model element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListModelVersionsRequest, ListModelVersionsResponse&gt;
+      listModelVersionsCallable() {
+<span class="nc" id="L674">    return stub.listModelVersionsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a Model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   Model model = Model.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Model response = modelServiceClient.updateModel(model, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param model Required. The Model which replaces the resource on the server. When Model
+   *     Versioning is enabled, the model.name will be used to determine whether to update the model
+   *     or model version. 1. model.name with the {@literal @} value, e.g. models/123{@literal @}1,
+   *     refers to a version specific update. 2. model.name without the {@literal @} value, e.g.
+   *     models/123, refers to a model update. 3. model.name with {@literal @}-, e.g.
+   *     models/123{@literal @}-, refers to a model update. 4. Supported model fields: display_name,
+   *     description; supported version-specific fields: version_description. Labels are supported
+   *     in both scenarios. Both the model labels and the version labels are merged when a model is
+   *     returned. When updating labels, if the request is for model-specific update, model label
+   *     gets updated. Otherwise, version labels get updated. 5. A model name or model version name
+   *     fields update mismatch will cause a precondition error. 6. One request cannot update both
+   *     the model and the version fields. You must update them separately.
+   * @param updateMask Required. The update mask applies to the resource. For the `FieldMask`
+   *     definition, see [google.protobuf.FieldMask][google.protobuf.FieldMask].
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Model updateModel(Model model, FieldMask updateMask) {
+    UpdateModelRequest request =
+<span class="fc" id="L709">        UpdateModelRequest.newBuilder().setModel(model).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L710">    return updateModel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a Model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   UpdateModelRequest request =
+   *       UpdateModelRequest.newBuilder()
+   *           .setModel(Model.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Model response = modelServiceClient.updateModel(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Model updateModel(UpdateModelRequest request) {
+<span class="fc" id="L734">    return updateModelCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a Model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   UpdateModelRequest request =
+   *       UpdateModelRequest.newBuilder()
+   *           .setModel(Model.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Model&gt; future = modelServiceClient.updateModelCallable().futureCall(request);
+   *   // Do something.
+   *   Model response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateModelRequest, Model&gt; updateModelCallable() {
+<span class="fc" id="L757">    return stub.updateModelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Model.
+   *
+   * &lt;p&gt;A model cannot be deleted if any [Endpoint][google.cloud.aiplatform.v1beta1.Endpoint]
+   * resource has a [DeployedModel][google.cloud.aiplatform.v1beta1.DeployedModel] based on the
+   * model in its [deployed_models][google.cloud.aiplatform.v1beta1.Endpoint.deployed_models] field.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ModelName name = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;);
+   *   modelServiceClient.deleteModelAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Model resource to be deleted. Format:
+   *     `projects/{project}/locations/{location}/models/{model}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteOperationMetadata&gt; deleteModelAsync(ModelName name) {
+    DeleteModelRequest request =
+<span class="pc bpc" id="L783" title="1 of 2 branches missed.">        DeleteModelRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L784">    return deleteModelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Model.
+   *
+   * &lt;p&gt;A model cannot be deleted if any [Endpoint][google.cloud.aiplatform.v1beta1.Endpoint]
+   * resource has a [DeployedModel][google.cloud.aiplatform.v1beta1.DeployedModel] based on the
+   * model in its [deployed_models][google.cloud.aiplatform.v1beta1.Endpoint.deployed_models] field.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   String name = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString();
+   *   modelServiceClient.deleteModelAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Model resource to be deleted. Format:
+   *     `projects/{project}/locations/{location}/models/{model}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteOperationMetadata&gt; deleteModelAsync(String name) {
+<span class="fc" id="L809">    DeleteModelRequest request = DeleteModelRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L810">    return deleteModelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Model.
+   *
+   * &lt;p&gt;A model cannot be deleted if any [Endpoint][google.cloud.aiplatform.v1beta1.Endpoint]
+   * resource has a [DeployedModel][google.cloud.aiplatform.v1beta1.DeployedModel] based on the
+   * model in its [deployed_models][google.cloud.aiplatform.v1beta1.Endpoint.deployed_models] field.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   DeleteModelRequest request =
+   *       DeleteModelRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .build();
+   *   modelServiceClient.deleteModelAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteOperationMetadata&gt; deleteModelAsync(
+      DeleteModelRequest request) {
+<span class="fc" id="L838">    return deleteModelOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Model.
+   *
+   * &lt;p&gt;A model cannot be deleted if any [Endpoint][google.cloud.aiplatform.v1beta1.Endpoint]
+   * resource has a [DeployedModel][google.cloud.aiplatform.v1beta1.DeployedModel] based on the
+   * model in its [deployed_models][google.cloud.aiplatform.v1beta1.Endpoint.deployed_models] field.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   DeleteModelRequest request =
+   *       DeleteModelRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Empty, DeleteOperationMetadata&gt; future =
+   *       modelServiceClient.deleteModelOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteModelRequest, Empty, DeleteOperationMetadata&gt;
+      deleteModelOperationCallable() {
+<span class="fc" id="L866">    return stub.deleteModelOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Model.
+   *
+   * &lt;p&gt;A model cannot be deleted if any [Endpoint][google.cloud.aiplatform.v1beta1.Endpoint]
+   * resource has a [DeployedModel][google.cloud.aiplatform.v1beta1.DeployedModel] based on the
+   * model in its [deployed_models][google.cloud.aiplatform.v1beta1.Endpoint.deployed_models] field.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   DeleteModelRequest request =
+   *       DeleteModelRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = modelServiceClient.deleteModelCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteModelRequest, Operation&gt; deleteModelCallable() {
+<span class="nc" id="L892">    return stub.deleteModelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Model version.
+   *
+   * &lt;p&gt;Model version can only be deleted if there are no [DeployedModels][] created from it.
+   * Deleting the only version in the Model is not allowed. Use
+   * [DeleteModel][google.cloud.aiplatform.v1beta1.ModelService.DeleteModel] for deleting the Model
+   * instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ModelName name = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;);
+   *   modelServiceClient.deleteModelVersionAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the model version to be deleted, with a version ID explicitly
+   *     included.
+   *     &lt;p&gt;Example: `projects/{project}/locations/{location}/models/{model}{@literal @}1234`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteOperationMetadata&gt; deleteModelVersionAsync(
+      ModelName name) {
+    DeleteModelVersionRequest request =
+<span class="fc" id="L921">        DeleteModelVersionRequest.newBuilder()</span>
+<span class="pc bpc" id="L922" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L923">            .build();</span>
+<span class="fc" id="L924">    return deleteModelVersionAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Model version.
+   *
+   * &lt;p&gt;Model version can only be deleted if there are no [DeployedModels][] created from it.
+   * Deleting the only version in the Model is not allowed. Use
+   * [DeleteModel][google.cloud.aiplatform.v1beta1.ModelService.DeleteModel] for deleting the Model
+   * instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   String name = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString();
+   *   modelServiceClient.deleteModelVersionAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the model version to be deleted, with a version ID explicitly
+   *     included.
+   *     &lt;p&gt;Example: `projects/{project}/locations/{location}/models/{model}{@literal @}1234`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteOperationMetadata&gt; deleteModelVersionAsync(
+      String name) {
+    DeleteModelVersionRequest request =
+<span class="fc" id="L953">        DeleteModelVersionRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L954">    return deleteModelVersionAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Model version.
+   *
+   * &lt;p&gt;Model version can only be deleted if there are no [DeployedModels][] created from it.
+   * Deleting the only version in the Model is not allowed. Use
+   * [DeleteModel][google.cloud.aiplatform.v1beta1.ModelService.DeleteModel] for deleting the Model
+   * instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   DeleteModelVersionRequest request =
+   *       DeleteModelVersionRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .build();
+   *   modelServiceClient.deleteModelVersionAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteOperationMetadata&gt; deleteModelVersionAsync(
+      DeleteModelVersionRequest request) {
+<span class="fc" id="L983">    return deleteModelVersionOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Model version.
+   *
+   * &lt;p&gt;Model version can only be deleted if there are no [DeployedModels][] created from it.
+   * Deleting the only version in the Model is not allowed. Use
+   * [DeleteModel][google.cloud.aiplatform.v1beta1.ModelService.DeleteModel] for deleting the Model
+   * instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   DeleteModelVersionRequest request =
+   *       DeleteModelVersionRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Empty, DeleteOperationMetadata&gt; future =
+   *       modelServiceClient.deleteModelVersionOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteModelVersionRequest, Empty, DeleteOperationMetadata&gt;
+      deleteModelVersionOperationCallable() {
+<span class="fc" id="L1012">    return stub.deleteModelVersionOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Model version.
+   *
+   * &lt;p&gt;Model version can only be deleted if there are no [DeployedModels][] created from it.
+   * Deleting the only version in the Model is not allowed. Use
+   * [DeleteModel][google.cloud.aiplatform.v1beta1.ModelService.DeleteModel] for deleting the Model
+   * instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   DeleteModelVersionRequest request =
+   *       DeleteModelVersionRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       modelServiceClient.deleteModelVersionCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteModelVersionRequest, Operation&gt; deleteModelVersionCallable() {
+<span class="nc" id="L1040">    return stub.deleteModelVersionCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Merges a set of aliases for a Model version.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ModelName name = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;);
+   *   List&lt;String&gt; versionAliases = new ArrayList&lt;&gt;();
+   *   Model response = modelServiceClient.mergeVersionAliases(name, versionAliases);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the model version to merge aliases, with a version ID
+   *     explicitly included.
+   *     &lt;p&gt;Example: `projects/{project}/locations/{location}/models/{model}{@literal @}1234`
+   * @param versionAliases Required. The set of version aliases to merge. The alias should be at
+   *     most 128 characters, and match `[a-z][a-z0-9-]{0,126}[a-z-0-9]`. Add the `-` prefix to an
+   *     alias means removing that alias from the version. `-` is NOT counted in the 128 characters.
+   *     Example: `-golden` means removing the `golden` alias from the version.
+   *     &lt;p&gt;There is NO ordering in aliases, which means 1) The aliases returned from GetModel API
+   *     might not have the exactly same order from this MergeVersionAliases API. 2) Adding and
+   *     deleting the same alias in the request is not recommended, and the 2 operations will be
+   *     cancelled out.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Model mergeVersionAliases(ModelName name, List&lt;String&gt; versionAliases) {
+    MergeVersionAliasesRequest request =
+<span class="fc" id="L1072">        MergeVersionAliasesRequest.newBuilder()</span>
+<span class="pc bpc" id="L1073" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1074">            .addAllVersionAliases(versionAliases)</span>
+<span class="fc" id="L1075">            .build();</span>
+<span class="fc" id="L1076">    return mergeVersionAliases(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Merges a set of aliases for a Model version.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   String name = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString();
+   *   List&lt;String&gt; versionAliases = new ArrayList&lt;&gt;();
+   *   Model response = modelServiceClient.mergeVersionAliases(name, versionAliases);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the model version to merge aliases, with a version ID
+   *     explicitly included.
+   *     &lt;p&gt;Example: `projects/{project}/locations/{location}/models/{model}{@literal @}1234`
+   * @param versionAliases Required. The set of version aliases to merge. The alias should be at
+   *     most 128 characters, and match `[a-z][a-z0-9-]{0,126}[a-z-0-9]`. Add the `-` prefix to an
+   *     alias means removing that alias from the version. `-` is NOT counted in the 128 characters.
+   *     Example: `-golden` means removing the `golden` alias from the version.
+   *     &lt;p&gt;There is NO ordering in aliases, which means 1) The aliases returned from GetModel API
+   *     might not have the exactly same order from this MergeVersionAliases API. 2) Adding and
+   *     deleting the same alias in the request is not recommended, and the 2 operations will be
+   *     cancelled out.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Model mergeVersionAliases(String name, List&lt;String&gt; versionAliases) {
+    MergeVersionAliasesRequest request =
+<span class="fc" id="L1108">        MergeVersionAliasesRequest.newBuilder()</span>
+<span class="fc" id="L1109">            .setName(name)</span>
+<span class="fc" id="L1110">            .addAllVersionAliases(versionAliases)</span>
+<span class="fc" id="L1111">            .build();</span>
+<span class="fc" id="L1112">    return mergeVersionAliases(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Merges a set of aliases for a Model version.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   MergeVersionAliasesRequest request =
+   *       MergeVersionAliasesRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .addAllVersionAliases(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   Model response = modelServiceClient.mergeVersionAliases(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Model mergeVersionAliases(MergeVersionAliasesRequest request) {
+<span class="fc" id="L1136">    return mergeVersionAliasesCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Merges a set of aliases for a Model version.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   MergeVersionAliasesRequest request =
+   *       MergeVersionAliasesRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .addAllVersionAliases(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   ApiFuture&lt;Model&gt; future =
+   *       modelServiceClient.mergeVersionAliasesCallable().futureCall(request);
+   *   // Do something.
+   *   Model response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;MergeVersionAliasesRequest, Model&gt; mergeVersionAliasesCallable() {
+<span class="fc" id="L1160">    return stub.mergeVersionAliasesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports a trained, exportable Model to a location specified by the user. A Model is considered
+   * to be exportable if it has at least one [supported export
+   * format][google.cloud.aiplatform.v1beta1.Model.supported_export_formats].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ModelName name = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;);
+   *   ExportModelRequest.OutputConfig outputConfig =
+   *       ExportModelRequest.OutputConfig.newBuilder().build();
+   *   ExportModelResponse response = modelServiceClient.exportModelAsync(name, outputConfig).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the Model to export.
+   * @param outputConfig Required. The desired output location and configuration.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ExportModelResponse, ExportModelOperationMetadata&gt; exportModelAsync(
+      ModelName name, ExportModelRequest.OutputConfig outputConfig) {
+    ExportModelRequest request =
+<span class="fc" id="L1187">        ExportModelRequest.newBuilder()</span>
+<span class="pc bpc" id="L1188" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1189">            .setOutputConfig(outputConfig)</span>
+<span class="fc" id="L1190">            .build();</span>
+<span class="fc" id="L1191">    return exportModelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports a trained, exportable Model to a location specified by the user. A Model is considered
+   * to be exportable if it has at least one [supported export
+   * format][google.cloud.aiplatform.v1beta1.Model.supported_export_formats].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   String name = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString();
+   *   ExportModelRequest.OutputConfig outputConfig =
+   *       ExportModelRequest.OutputConfig.newBuilder().build();
+   *   ExportModelResponse response = modelServiceClient.exportModelAsync(name, outputConfig).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the Model to export.
+   * @param outputConfig Required. The desired output location and configuration.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ExportModelResponse, ExportModelOperationMetadata&gt; exportModelAsync(
+      String name, ExportModelRequest.OutputConfig outputConfig) {
+    ExportModelRequest request =
+<span class="fc" id="L1218">        ExportModelRequest.newBuilder().setName(name).setOutputConfig(outputConfig).build();</span>
+<span class="fc" id="L1219">    return exportModelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports a trained, exportable Model to a location specified by the user. A Model is considered
+   * to be exportable if it has at least one [supported export
+   * format][google.cloud.aiplatform.v1beta1.Model.supported_export_formats].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ExportModelRequest request =
+   *       ExportModelRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .setOutputConfig(ExportModelRequest.OutputConfig.newBuilder().build())
+   *           .build();
+   *   ExportModelResponse response = modelServiceClient.exportModelAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ExportModelResponse, ExportModelOperationMetadata&gt; exportModelAsync(
+      ExportModelRequest request) {
+<span class="fc" id="L1246">    return exportModelOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports a trained, exportable Model to a location specified by the user. A Model is considered
+   * to be exportable if it has at least one [supported export
+   * format][google.cloud.aiplatform.v1beta1.Model.supported_export_formats].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ExportModelRequest request =
+   *       ExportModelRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .setOutputConfig(ExportModelRequest.OutputConfig.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;ExportModelResponse, ExportModelOperationMetadata&gt; future =
+   *       modelServiceClient.exportModelOperationCallable().futureCall(request);
+   *   // Do something.
+   *   ExportModelResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          ExportModelRequest, ExportModelResponse, ExportModelOperationMetadata&gt;
+      exportModelOperationCallable() {
+<span class="fc" id="L1274">    return stub.exportModelOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports a trained, exportable Model to a location specified by the user. A Model is considered
+   * to be exportable if it has at least one [supported export
+   * format][google.cloud.aiplatform.v1beta1.Model.supported_export_formats].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ExportModelRequest request =
+   *       ExportModelRequest.newBuilder()
+   *           .setName(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .setOutputConfig(ExportModelRequest.OutputConfig.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = modelServiceClient.exportModelCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ExportModelRequest, Operation&gt; exportModelCallable() {
+<span class="nc" id="L1299">    return stub.exportModelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Imports an externally generated ModelEvaluation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ModelName parent = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;);
+   *   ModelEvaluation modelEvaluation = ModelEvaluation.newBuilder().build();
+   *   ModelEvaluation response = modelServiceClient.importModelEvaluation(parent, modelEvaluation);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the parent model resource. Format:
+   *     `projects/{project}/locations/{location}/models/{model}`
+   * @param modelEvaluation Required. Model evaluation resource to be imported.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ModelEvaluation importModelEvaluation(
+      ModelName parent, ModelEvaluation modelEvaluation) {
+    ImportModelEvaluationRequest request =
+<span class="fc" id="L1324">        ImportModelEvaluationRequest.newBuilder()</span>
+<span class="pc bpc" id="L1325" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1326">            .setModelEvaluation(modelEvaluation)</span>
+<span class="fc" id="L1327">            .build();</span>
+<span class="fc" id="L1328">    return importModelEvaluation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Imports an externally generated ModelEvaluation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   String parent = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString();
+   *   ModelEvaluation modelEvaluation = ModelEvaluation.newBuilder().build();
+   *   ModelEvaluation response = modelServiceClient.importModelEvaluation(parent, modelEvaluation);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the parent model resource. Format:
+   *     `projects/{project}/locations/{location}/models/{model}`
+   * @param modelEvaluation Required. Model evaluation resource to be imported.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ModelEvaluation importModelEvaluation(
+      String parent, ModelEvaluation modelEvaluation) {
+    ImportModelEvaluationRequest request =
+<span class="fc" id="L1353">        ImportModelEvaluationRequest.newBuilder()</span>
+<span class="fc" id="L1354">            .setParent(parent)</span>
+<span class="fc" id="L1355">            .setModelEvaluation(modelEvaluation)</span>
+<span class="fc" id="L1356">            .build();</span>
+<span class="fc" id="L1357">    return importModelEvaluation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Imports an externally generated ModelEvaluation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ImportModelEvaluationRequest request =
+   *       ImportModelEvaluationRequest.newBuilder()
+   *           .setParent(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .setModelEvaluation(ModelEvaluation.newBuilder().build())
+   *           .build();
+   *   ModelEvaluation response = modelServiceClient.importModelEvaluation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ModelEvaluation importModelEvaluation(ImportModelEvaluationRequest request) {
+<span class="fc" id="L1381">    return importModelEvaluationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Imports an externally generated ModelEvaluation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ImportModelEvaluationRequest request =
+   *       ImportModelEvaluationRequest.newBuilder()
+   *           .setParent(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .setModelEvaluation(ModelEvaluation.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;ModelEvaluation&gt; future =
+   *       modelServiceClient.importModelEvaluationCallable().futureCall(request);
+   *   // Do something.
+   *   ModelEvaluation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ImportModelEvaluationRequest, ModelEvaluation&gt;
+      importModelEvaluationCallable() {
+<span class="fc" id="L1406">    return stub.importModelEvaluationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a ModelEvaluation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ModelEvaluationName name =
+   *       ModelEvaluationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;, &quot;[EVALUATION]&quot;);
+   *   ModelEvaluation response = modelServiceClient.getModelEvaluation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the ModelEvaluation resource. Format:
+   *     `projects/{project}/locations/{location}/models/{model}/evaluations/{evaluation}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ModelEvaluation getModelEvaluation(ModelEvaluationName name) {
+    GetModelEvaluationRequest request =
+<span class="fc" id="L1429">        GetModelEvaluationRequest.newBuilder()</span>
+<span class="pc bpc" id="L1430" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1431">            .build();</span>
+<span class="fc" id="L1432">    return getModelEvaluation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a ModelEvaluation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   String name =
+   *       ModelEvaluationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;, &quot;[EVALUATION]&quot;).toString();
+   *   ModelEvaluation response = modelServiceClient.getModelEvaluation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the ModelEvaluation resource. Format:
+   *     `projects/{project}/locations/{location}/models/{model}/evaluations/{evaluation}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ModelEvaluation getModelEvaluation(String name) {
+    GetModelEvaluationRequest request =
+<span class="fc" id="L1455">        GetModelEvaluationRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1456">    return getModelEvaluation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a ModelEvaluation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   GetModelEvaluationRequest request =
+   *       GetModelEvaluationRequest.newBuilder()
+   *           .setName(
+   *               ModelEvaluationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;, &quot;[EVALUATION]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ModelEvaluation response = modelServiceClient.getModelEvaluation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ModelEvaluation getModelEvaluation(GetModelEvaluationRequest request) {
+<span class="fc" id="L1481">    return getModelEvaluationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a ModelEvaluation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   GetModelEvaluationRequest request =
+   *       GetModelEvaluationRequest.newBuilder()
+   *           .setName(
+   *               ModelEvaluationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;, &quot;[EVALUATION]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;ModelEvaluation&gt; future =
+   *       modelServiceClient.getModelEvaluationCallable().futureCall(request);
+   *   // Do something.
+   *   ModelEvaluation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetModelEvaluationRequest, ModelEvaluation&gt;
+      getModelEvaluationCallable() {
+<span class="fc" id="L1507">    return stub.getModelEvaluationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists ModelEvaluations in a Model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ModelName parent = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;);
+   *   for (ModelEvaluation element : modelServiceClient.listModelEvaluations(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Model to list the ModelEvaluations from.
+   *     Format: `projects/{project}/locations/{location}/models/{model}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListModelEvaluationsPagedResponse listModelEvaluations(ModelName parent) {
+    ListModelEvaluationsRequest request =
+<span class="fc" id="L1531">        ListModelEvaluationsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1532" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1533">            .build();</span>
+<span class="fc" id="L1534">    return listModelEvaluations(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists ModelEvaluations in a Model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   String parent = ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString();
+   *   for (ModelEvaluation element : modelServiceClient.listModelEvaluations(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Model to list the ModelEvaluations from.
+   *     Format: `projects/{project}/locations/{location}/models/{model}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListModelEvaluationsPagedResponse listModelEvaluations(String parent) {
+    ListModelEvaluationsRequest request =
+<span class="fc" id="L1558">        ListModelEvaluationsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1559">    return listModelEvaluations(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists ModelEvaluations in a Model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ListModelEvaluationsRequest request =
+   *       ListModelEvaluationsRequest.newBuilder()
+   *           .setParent(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   for (ModelEvaluation element :
+   *       modelServiceClient.listModelEvaluations(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListModelEvaluationsPagedResponse listModelEvaluations(
+      ListModelEvaluationsRequest request) {
+<span class="fc" id="L1590">    return listModelEvaluationsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists ModelEvaluations in a Model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ListModelEvaluationsRequest request =
+   *       ListModelEvaluationsRequest.newBuilder()
+   *           .setParent(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;ModelEvaluation&gt; future =
+   *       modelServiceClient.listModelEvaluationsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (ModelEvaluation element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListModelEvaluationsRequest, ListModelEvaluationsPagedResponse&gt;
+      listModelEvaluationsPagedCallable() {
+<span class="fc" id="L1620">    return stub.listModelEvaluationsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists ModelEvaluations in a Model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ListModelEvaluationsRequest request =
+   *       ListModelEvaluationsRequest.newBuilder()
+   *           .setParent(ModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   while (true) {
+   *     ListModelEvaluationsResponse response =
+   *         modelServiceClient.listModelEvaluationsCallable().call(request);
+   *     for (ModelEvaluation element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListModelEvaluationsRequest, ListModelEvaluationsResponse&gt;
+      listModelEvaluationsCallable() {
+<span class="nc" id="L1657">    return stub.listModelEvaluationsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a ModelEvaluationSlice.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ModelEvaluationSliceName name =
+   *       ModelEvaluationSliceName.of(
+   *           &quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;, &quot;[EVALUATION]&quot;, &quot;[SLICE]&quot;);
+   *   ModelEvaluationSlice response = modelServiceClient.getModelEvaluationSlice(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the ModelEvaluationSlice resource. Format:
+   *     `projects/{project}/locations/{location}/models/{model}/evaluations/{evaluation}/slices/{slice}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ModelEvaluationSlice getModelEvaluationSlice(ModelEvaluationSliceName name) {
+    GetModelEvaluationSliceRequest request =
+<span class="fc" id="L1681">        GetModelEvaluationSliceRequest.newBuilder()</span>
+<span class="pc bpc" id="L1682" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1683">            .build();</span>
+<span class="fc" id="L1684">    return getModelEvaluationSlice(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a ModelEvaluationSlice.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   String name =
+   *       ModelEvaluationSliceName.of(
+   *               &quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;, &quot;[EVALUATION]&quot;, &quot;[SLICE]&quot;)
+   *           .toString();
+   *   ModelEvaluationSlice response = modelServiceClient.getModelEvaluationSlice(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the ModelEvaluationSlice resource. Format:
+   *     `projects/{project}/locations/{location}/models/{model}/evaluations/{evaluation}/slices/{slice}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ModelEvaluationSlice getModelEvaluationSlice(String name) {
+    GetModelEvaluationSliceRequest request =
+<span class="fc" id="L1709">        GetModelEvaluationSliceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1710">    return getModelEvaluationSlice(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a ModelEvaluationSlice.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   GetModelEvaluationSliceRequest request =
+   *       GetModelEvaluationSliceRequest.newBuilder()
+   *           .setName(
+   *               ModelEvaluationSliceName.of(
+   *                       &quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;, &quot;[EVALUATION]&quot;, &quot;[SLICE]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ModelEvaluationSlice response = modelServiceClient.getModelEvaluationSlice(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ModelEvaluationSlice getModelEvaluationSlice(
+      GetModelEvaluationSliceRequest request) {
+<span class="fc" id="L1737">    return getModelEvaluationSliceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a ModelEvaluationSlice.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   GetModelEvaluationSliceRequest request =
+   *       GetModelEvaluationSliceRequest.newBuilder()
+   *           .setName(
+   *               ModelEvaluationSliceName.of(
+   *                       &quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;, &quot;[EVALUATION]&quot;, &quot;[SLICE]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;ModelEvaluationSlice&gt; future =
+   *       modelServiceClient.getModelEvaluationSliceCallable().futureCall(request);
+   *   // Do something.
+   *   ModelEvaluationSlice response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetModelEvaluationSliceRequest, ModelEvaluationSlice&gt;
+      getModelEvaluationSliceCallable() {
+<span class="fc" id="L1764">    return stub.getModelEvaluationSliceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists ModelEvaluationSlices in a ModelEvaluation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ModelEvaluationName parent =
+   *       ModelEvaluationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;, &quot;[EVALUATION]&quot;);
+   *   for (ModelEvaluationSlice element :
+   *       modelServiceClient.listModelEvaluationSlices(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the ModelEvaluation to list the
+   *     ModelEvaluationSlices from. Format:
+   *     `projects/{project}/locations/{location}/models/{model}/evaluations/{evaluation}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListModelEvaluationSlicesPagedResponse listModelEvaluationSlices(
+      ModelEvaluationName parent) {
+    ListModelEvaluationSlicesRequest request =
+<span class="fc" id="L1792">        ListModelEvaluationSlicesRequest.newBuilder()</span>
+<span class="pc bpc" id="L1793" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1794">            .build();</span>
+<span class="fc" id="L1795">    return listModelEvaluationSlices(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists ModelEvaluationSlices in a ModelEvaluation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   String parent =
+   *       ModelEvaluationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;, &quot;[EVALUATION]&quot;).toString();
+   *   for (ModelEvaluationSlice element :
+   *       modelServiceClient.listModelEvaluationSlices(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the ModelEvaluation to list the
+   *     ModelEvaluationSlices from. Format:
+   *     `projects/{project}/locations/{location}/models/{model}/evaluations/{evaluation}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListModelEvaluationSlicesPagedResponse listModelEvaluationSlices(String parent) {
+    ListModelEvaluationSlicesRequest request =
+<span class="fc" id="L1822">        ListModelEvaluationSlicesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1823">    return listModelEvaluationSlices(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists ModelEvaluationSlices in a ModelEvaluation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ListModelEvaluationSlicesRequest request =
+   *       ListModelEvaluationSlicesRequest.newBuilder()
+   *           .setParent(
+   *               ModelEvaluationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;, &quot;[EVALUATION]&quot;)
+   *                   .toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   for (ModelEvaluationSlice element :
+   *       modelServiceClient.listModelEvaluationSlices(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListModelEvaluationSlicesPagedResponse listModelEvaluationSlices(
+      ListModelEvaluationSlicesRequest request) {
+<span class="fc" id="L1856">    return listModelEvaluationSlicesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists ModelEvaluationSlices in a ModelEvaluation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ListModelEvaluationSlicesRequest request =
+   *       ListModelEvaluationSlicesRequest.newBuilder()
+   *           .setParent(
+   *               ModelEvaluationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;, &quot;[EVALUATION]&quot;)
+   *                   .toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;ModelEvaluationSlice&gt; future =
+   *       modelServiceClient.listModelEvaluationSlicesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (ModelEvaluationSlice element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          ListModelEvaluationSlicesRequest, ListModelEvaluationSlicesPagedResponse&gt;
+      listModelEvaluationSlicesPagedCallable() {
+<span class="fc" id="L1889">    return stub.listModelEvaluationSlicesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists ModelEvaluationSlices in a ModelEvaluation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ModelServiceClient modelServiceClient = ModelServiceClient.create()) {
+   *   ListModelEvaluationSlicesRequest request =
+   *       ListModelEvaluationSlicesRequest.newBuilder()
+   *           .setParent(
+   *               ModelEvaluationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[MODEL]&quot;, &quot;[EVALUATION]&quot;)
+   *                   .toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   while (true) {
+   *     ListModelEvaluationSlicesResponse response =
+   *         modelServiceClient.listModelEvaluationSlicesCallable().call(request);
+   *     for (ModelEvaluationSlice element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListModelEvaluationSlicesRequest, ListModelEvaluationSlicesResponse&gt;
+      listModelEvaluationSlicesCallable() {
+<span class="nc" id="L1928">    return stub.listModelEvaluationSlicesCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1933">    stub.close();</span>
+<span class="fc" id="L1934">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1938">    stub.shutdown();</span>
+<span class="nc" id="L1939">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1943">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1948">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1953">    stub.shutdownNow();</span>
+<span class="nc" id="L1954">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1958">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListModelsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListModelsRequest,
+          ListModelsResponse,
+          Model,
+          ListModelsPage,
+          ListModelsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListModelsPagedResponse&gt; createAsync(
+        PageContext&lt;ListModelsRequest, ListModelsResponse, Model&gt; context,
+        ApiFuture&lt;ListModelsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListModelsPage&gt; futurePage =
+<span class="fc" id="L1973">          ListModelsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1974">      return ApiFutures.transform(</span>
+<span class="fc" id="L1975">          futurePage, input -&gt; new ListModelsPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListModelsPagedResponse(ListModelsPage page) {
+<span class="fc" id="L1979">      super(page, ListModelsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1980">    }</span>
+  }
+
+  public static class ListModelsPage
+      extends AbstractPage&lt;ListModelsRequest, ListModelsResponse, Model, ListModelsPage&gt; {
+
+    private ListModelsPage(
+        PageContext&lt;ListModelsRequest, ListModelsResponse, Model&gt; context,
+        ListModelsResponse response) {
+<span class="fc" id="L1989">      super(context, response);</span>
+<span class="fc" id="L1990">    }</span>
+
+    private static ListModelsPage createEmptyPage() {
+<span class="fc" id="L1993">      return new ListModelsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListModelsPage createPage(
+        PageContext&lt;ListModelsRequest, ListModelsResponse, Model&gt; context,
+        ListModelsResponse response) {
+<span class="fc" id="L2000">      return new ListModelsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListModelsPage&gt; createPageAsync(
+        PageContext&lt;ListModelsRequest, ListModelsResponse, Model&gt; context,
+        ApiFuture&lt;ListModelsResponse&gt; futureResponse) {
+<span class="fc" id="L2007">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListModelsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListModelsRequest,
+          ListModelsResponse,
+          Model,
+          ListModelsPage,
+          ListModelsFixedSizeCollection&gt; {
+
+    private ListModelsFixedSizeCollection(List&lt;ListModelsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2020">      super(pages, collectionSize);</span>
+<span class="fc" id="L2021">    }</span>
+
+    private static ListModelsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2024">      return new ListModelsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListModelsFixedSizeCollection createCollection(
+        List&lt;ListModelsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2030">      return new ListModelsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListModelVersionsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListModelVersionsRequest,
+          ListModelVersionsResponse,
+          Model,
+          ListModelVersionsPage,
+          ListModelVersionsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListModelVersionsPagedResponse&gt; createAsync(
+        PageContext&lt;ListModelVersionsRequest, ListModelVersionsResponse, Model&gt; context,
+        ApiFuture&lt;ListModelVersionsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListModelVersionsPage&gt; futurePage =
+<span class="fc" id="L2046">          ListModelVersionsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2047">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2049">          input -&gt; new ListModelVersionsPagedResponse(input),</span>
+<span class="fc" id="L2050">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListModelVersionsPagedResponse(ListModelVersionsPage page) {
+<span class="fc" id="L2054">      super(page, ListModelVersionsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2055">    }</span>
+  }
+
+  public static class ListModelVersionsPage
+      extends AbstractPage&lt;
+          ListModelVersionsRequest, ListModelVersionsResponse, Model, ListModelVersionsPage&gt; {
+
+    private ListModelVersionsPage(
+        PageContext&lt;ListModelVersionsRequest, ListModelVersionsResponse, Model&gt; context,
+        ListModelVersionsResponse response) {
+<span class="fc" id="L2065">      super(context, response);</span>
+<span class="fc" id="L2066">    }</span>
+
+    private static ListModelVersionsPage createEmptyPage() {
+<span class="fc" id="L2069">      return new ListModelVersionsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListModelVersionsPage createPage(
+        PageContext&lt;ListModelVersionsRequest, ListModelVersionsResponse, Model&gt; context,
+        ListModelVersionsResponse response) {
+<span class="fc" id="L2076">      return new ListModelVersionsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListModelVersionsPage&gt; createPageAsync(
+        PageContext&lt;ListModelVersionsRequest, ListModelVersionsResponse, Model&gt; context,
+        ApiFuture&lt;ListModelVersionsResponse&gt; futureResponse) {
+<span class="fc" id="L2083">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListModelVersionsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListModelVersionsRequest,
+          ListModelVersionsResponse,
+          Model,
+          ListModelVersionsPage,
+          ListModelVersionsFixedSizeCollection&gt; {
+
+    private ListModelVersionsFixedSizeCollection(
+        List&lt;ListModelVersionsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2097">      super(pages, collectionSize);</span>
+<span class="fc" id="L2098">    }</span>
+
+    private static ListModelVersionsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2101">      return new ListModelVersionsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListModelVersionsFixedSizeCollection createCollection(
+        List&lt;ListModelVersionsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2107">      return new ListModelVersionsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListModelEvaluationsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListModelEvaluationsRequest,
+          ListModelEvaluationsResponse,
+          ModelEvaluation,
+          ListModelEvaluationsPage,
+          ListModelEvaluationsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListModelEvaluationsPagedResponse&gt; createAsync(
+        PageContext&lt;ListModelEvaluationsRequest, ListModelEvaluationsResponse, ModelEvaluation&gt;
+            context,
+        ApiFuture&lt;ListModelEvaluationsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListModelEvaluationsPage&gt; futurePage =
+<span class="fc" id="L2124">          ListModelEvaluationsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2125">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2127">          input -&gt; new ListModelEvaluationsPagedResponse(input),</span>
+<span class="fc" id="L2128">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListModelEvaluationsPagedResponse(ListModelEvaluationsPage page) {
+<span class="fc" id="L2132">      super(page, ListModelEvaluationsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2133">    }</span>
+  }
+
+  public static class ListModelEvaluationsPage
+      extends AbstractPage&lt;
+          ListModelEvaluationsRequest,
+          ListModelEvaluationsResponse,
+          ModelEvaluation,
+          ListModelEvaluationsPage&gt; {
+
+    private ListModelEvaluationsPage(
+        PageContext&lt;ListModelEvaluationsRequest, ListModelEvaluationsResponse, ModelEvaluation&gt;
+            context,
+        ListModelEvaluationsResponse response) {
+<span class="fc" id="L2147">      super(context, response);</span>
+<span class="fc" id="L2148">    }</span>
+
+    private static ListModelEvaluationsPage createEmptyPage() {
+<span class="fc" id="L2151">      return new ListModelEvaluationsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListModelEvaluationsPage createPage(
+        PageContext&lt;ListModelEvaluationsRequest, ListModelEvaluationsResponse, ModelEvaluation&gt;
+            context,
+        ListModelEvaluationsResponse response) {
+<span class="fc" id="L2159">      return new ListModelEvaluationsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListModelEvaluationsPage&gt; createPageAsync(
+        PageContext&lt;ListModelEvaluationsRequest, ListModelEvaluationsResponse, ModelEvaluation&gt;
+            context,
+        ApiFuture&lt;ListModelEvaluationsResponse&gt; futureResponse) {
+<span class="fc" id="L2167">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListModelEvaluationsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListModelEvaluationsRequest,
+          ListModelEvaluationsResponse,
+          ModelEvaluation,
+          ListModelEvaluationsPage,
+          ListModelEvaluationsFixedSizeCollection&gt; {
+
+    private ListModelEvaluationsFixedSizeCollection(
+        List&lt;ListModelEvaluationsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2181">      super(pages, collectionSize);</span>
+<span class="fc" id="L2182">    }</span>
+
+    private static ListModelEvaluationsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2185">      return new ListModelEvaluationsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListModelEvaluationsFixedSizeCollection createCollection(
+        List&lt;ListModelEvaluationsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2191">      return new ListModelEvaluationsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListModelEvaluationSlicesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListModelEvaluationSlicesRequest,
+          ListModelEvaluationSlicesResponse,
+          ModelEvaluationSlice,
+          ListModelEvaluationSlicesPage,
+          ListModelEvaluationSlicesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListModelEvaluationSlicesPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListModelEvaluationSlicesRequest,
+                ListModelEvaluationSlicesResponse,
+                ModelEvaluationSlice&gt;
+            context,
+        ApiFuture&lt;ListModelEvaluationSlicesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListModelEvaluationSlicesPage&gt; futurePage =
+<span class="fc" id="L2211">          ListModelEvaluationSlicesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2212">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2214">          input -&gt; new ListModelEvaluationSlicesPagedResponse(input),</span>
+<span class="fc" id="L2215">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListModelEvaluationSlicesPagedResponse(ListModelEvaluationSlicesPage page) {
+<span class="fc" id="L2219">      super(page, ListModelEvaluationSlicesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2220">    }</span>
+  }
+
+  public static class ListModelEvaluationSlicesPage
+      extends AbstractPage&lt;
+          ListModelEvaluationSlicesRequest,
+          ListModelEvaluationSlicesResponse,
+          ModelEvaluationSlice,
+          ListModelEvaluationSlicesPage&gt; {
+
+    private ListModelEvaluationSlicesPage(
+        PageContext&lt;
+                ListModelEvaluationSlicesRequest,
+                ListModelEvaluationSlicesResponse,
+                ModelEvaluationSlice&gt;
+            context,
+        ListModelEvaluationSlicesResponse response) {
+<span class="fc" id="L2237">      super(context, response);</span>
+<span class="fc" id="L2238">    }</span>
+
+    private static ListModelEvaluationSlicesPage createEmptyPage() {
+<span class="fc" id="L2241">      return new ListModelEvaluationSlicesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListModelEvaluationSlicesPage createPage(
+        PageContext&lt;
+                ListModelEvaluationSlicesRequest,
+                ListModelEvaluationSlicesResponse,
+                ModelEvaluationSlice&gt;
+            context,
+        ListModelEvaluationSlicesResponse response) {
+<span class="fc" id="L2252">      return new ListModelEvaluationSlicesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListModelEvaluationSlicesPage&gt; createPageAsync(
+        PageContext&lt;
+                ListModelEvaluationSlicesRequest,
+                ListModelEvaluationSlicesResponse,
+                ModelEvaluationSlice&gt;
+            context,
+        ApiFuture&lt;ListModelEvaluationSlicesResponse&gt; futureResponse) {
+<span class="fc" id="L2263">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListModelEvaluationSlicesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListModelEvaluationSlicesRequest,
+          ListModelEvaluationSlicesResponse,
+          ModelEvaluationSlice,
+          ListModelEvaluationSlicesPage,
+          ListModelEvaluationSlicesFixedSizeCollection&gt; {
+
+    private ListModelEvaluationSlicesFixedSizeCollection(
+        List&lt;ListModelEvaluationSlicesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2277">      super(pages, collectionSize);</span>
+<span class="fc" id="L2278">    }</span>
+
+    private static ListModelEvaluationSlicesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2281">      return new ListModelEvaluationSlicesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListModelEvaluationSlicesFixedSizeCollection createCollection(
+        List&lt;ListModelEvaluationSlicesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2287">      return new ListModelEvaluationSlicesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

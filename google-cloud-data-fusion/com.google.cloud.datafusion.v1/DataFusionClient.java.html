@@ -1,0 +1,1128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DataFusionClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-data-fusion</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.datafusion.v1</a> &gt; <span class="el_source">DataFusionClient.java</span></div><h1>DataFusionClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.datafusion.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.datafusion.v1.stub.DataFusionStub;
+import com.google.cloud.datafusion.v1.stub.DataFusionStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Service for creating and managing Data Fusion instances. Data Fusion enables
+ * ETL developers to build code-free, data integration pipelines via a point-and-click UI.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+ *   GetInstanceRequest request =
+ *       GetInstanceRequest.newBuilder()
+ *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+ *           .build();
+ *   Instance response = dataFusionClient.getInstance(request);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the DataFusionClient object to clean up resources such as
+ * threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of DataFusionSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * DataFusionSettings dataFusionSettings =
+ *     DataFusionSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * DataFusionClient dataFusionClient = DataFusionClient.create(dataFusionSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * DataFusionSettings dataFusionSettings =
+ *     DataFusionSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * DataFusionClient dataFusionClient = DataFusionClient.create(dataFusionSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class DataFusionClient implements BackgroundResource {
+  private final DataFusionSettings settings;
+  private final DataFusionStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of DataFusionClient with default settings. */
+  public static final DataFusionClient create() throws IOException {
+<span class="nc" id="L120">    return create(DataFusionSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of DataFusionClient, using the given settings. The channels are created
+   * based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final DataFusionClient create(DataFusionSettings settings) throws IOException {
+<span class="fc" id="L128">    return new DataFusionClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of DataFusionClient, using the given stub for making calls. This is for
+   * advanced usage - prefer using create(DataFusionSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final DataFusionClient create(DataFusionStub stub) {
+<span class="nc" id="L137">    return new DataFusionClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of DataFusionClient, using the given settings. This is protected so that
+   * it is easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   */
+<span class="fc" id="L144">  protected DataFusionClient(DataFusionSettings settings) throws IOException {</span>
+<span class="fc" id="L145">    this.settings = settings;</span>
+<span class="fc" id="L146">    this.stub = ((DataFusionStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L147">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L148">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L151">  protected DataFusionClient(DataFusionStub stub) {</span>
+<span class="nc" id="L152">    this.settings = null;</span>
+<span class="nc" id="L153">    this.stub = stub;</span>
+<span class="nc" id="L154">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L155">  }</span>
+
+  public final DataFusionSettings getSettings() {
+<span class="nc" id="L158">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public DataFusionStub getStub() {
+<span class="nc" id="L163">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L171">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists possible versions for Data Fusion instances in the specified project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Version element : dataFusionClient.listAvailableVersions(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The project and location for which to retrieve instance information in
+   *     the format projects/{project}/locations/{location}.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAvailableVersionsPagedResponse listAvailableVersions(LocationName parent) {
+    ListAvailableVersionsRequest request =
+<span class="fc" id="L197">        ListAvailableVersionsRequest.newBuilder()</span>
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L199">            .build();</span>
+<span class="fc" id="L200">    return listAvailableVersions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists possible versions for Data Fusion instances in the specified project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Version element : dataFusionClient.listAvailableVersions(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The project and location for which to retrieve instance information in
+   *     the format projects/{project}/locations/{location}.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAvailableVersionsPagedResponse listAvailableVersions(String parent) {
+    ListAvailableVersionsRequest request =
+<span class="fc" id="L226">        ListAvailableVersionsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L227">    return listAvailableVersions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists possible versions for Data Fusion instances in the specified project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   ListAvailableVersionsRequest request =
+   *       ListAvailableVersionsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setLatestPatchOnly(true)
+   *           .build();
+   *   for (Version element : dataFusionClient.listAvailableVersions(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAvailableVersionsPagedResponse listAvailableVersions(
+      ListAvailableVersionsRequest request) {
+<span class="fc" id="L258">    return listAvailableVersionsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists possible versions for Data Fusion instances in the specified project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   ListAvailableVersionsRequest request =
+   *       ListAvailableVersionsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setLatestPatchOnly(true)
+   *           .build();
+   *   ApiFuture&lt;Version&gt; future =
+   *       dataFusionClient.listAvailableVersionsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Version element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAvailableVersionsRequest, ListAvailableVersionsPagedResponse&gt;
+      listAvailableVersionsPagedCallable() {
+<span class="fc" id="L289">    return stub.listAvailableVersionsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists possible versions for Data Fusion instances in the specified project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   ListAvailableVersionsRequest request =
+   *       ListAvailableVersionsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setLatestPatchOnly(true)
+   *           .build();
+   *   while (true) {
+   *     ListAvailableVersionsResponse response =
+   *         dataFusionClient.listAvailableVersionsCallable().call(request);
+   *     for (Version element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAvailableVersionsRequest, ListAvailableVersionsResponse&gt;
+      listAvailableVersionsCallable() {
+<span class="nc" id="L327">    return stub.listAvailableVersionsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Data Fusion instances in the specified project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   ListInstancesRequest request =
+   *       ListInstancesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Instance element : dataFusionClient.listInstances(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListInstancesPagedResponse listInstances(ListInstancesRequest request) {
+<span class="fc" id="L358">    return listInstancesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Data Fusion instances in the specified project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   ListInstancesRequest request =
+   *       ListInstancesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Instance&gt; future =
+   *       dataFusionClient.listInstancesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Instance element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListInstancesRequest, ListInstancesPagedResponse&gt;
+      listInstancesPagedCallable() {
+<span class="fc" id="L390">    return stub.listInstancesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Data Fusion instances in the specified project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   ListInstancesRequest request =
+   *       ListInstancesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListInstancesResponse response = dataFusionClient.listInstancesCallable().call(request);
+   *     for (Instance element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListInstancesRequest, ListInstancesResponse&gt; listInstancesCallable() {
+<span class="nc" id="L427">    return stub.listInstancesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single Data Fusion instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   GetInstanceRequest request =
+   *       GetInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   Instance response = dataFusionClient.getInstance(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Instance getInstance(GetInstanceRequest request) {
+<span class="fc" id="L452">    return getInstanceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets details of a single Data Fusion instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   GetInstanceRequest request =
+   *       GetInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Instance&gt; future = dataFusionClient.getInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetInstanceRequest, Instance&gt; getInstanceCallable() {
+<span class="fc" id="L476">    return stub.getInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Data Fusion instance in the specified project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Instance instance = Instance.newBuilder().build();
+   *   String instanceId = &quot;instanceId902024336&quot;;
+   *   Instance response = dataFusionClient.createInstanceAsync(parent, instance, instanceId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The instance's project and location in the format
+   *     projects/{project}/locations/{location}.
+   * @param instance An instance resource.
+   * @param instanceId Required. The name of the instance to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; createInstanceAsync(
+      LocationName parent, Instance instance, String instanceId) {
+    CreateInstanceRequest request =
+<span class="fc" id="L505">        CreateInstanceRequest.newBuilder()</span>
+<span class="pc bpc" id="L506" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L507">            .setInstance(instance)</span>
+<span class="fc" id="L508">            .setInstanceId(instanceId)</span>
+<span class="fc" id="L509">            .build();</span>
+<span class="fc" id="L510">    return createInstanceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Data Fusion instance in the specified project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Instance instance = Instance.newBuilder().build();
+   *   String instanceId = &quot;instanceId902024336&quot;;
+   *   Instance response = dataFusionClient.createInstanceAsync(parent, instance, instanceId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The instance's project and location in the format
+   *     projects/{project}/locations/{location}.
+   * @param instance An instance resource.
+   * @param instanceId Required. The name of the instance to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; createInstanceAsync(
+      String parent, Instance instance, String instanceId) {
+    CreateInstanceRequest request =
+<span class="fc" id="L539">        CreateInstanceRequest.newBuilder()</span>
+<span class="fc" id="L540">            .setParent(parent)</span>
+<span class="fc" id="L541">            .setInstance(instance)</span>
+<span class="fc" id="L542">            .setInstanceId(instanceId)</span>
+<span class="fc" id="L543">            .build();</span>
+<span class="fc" id="L544">    return createInstanceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Data Fusion instance in the specified project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   CreateInstanceRequest request =
+   *       CreateInstanceRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setInstanceId(&quot;instanceId902024336&quot;)
+   *           .setInstance(Instance.newBuilder().build())
+   *           .build();
+   *   Instance response = dataFusionClient.createInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; createInstanceAsync(
+      CreateInstanceRequest request) {
+<span class="fc" id="L572">    return createInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Data Fusion instance in the specified project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   CreateInstanceRequest request =
+   *       CreateInstanceRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setInstanceId(&quot;instanceId902024336&quot;)
+   *           .setInstance(Instance.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       dataFusionClient.createInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateInstanceRequest, Instance, OperationMetadata&gt;
+      createInstanceOperationCallable() {
+<span class="fc" id="L600">    return stub.createInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Data Fusion instance in the specified project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   CreateInstanceRequest request =
+   *       CreateInstanceRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setInstanceId(&quot;instanceId902024336&quot;)
+   *           .setInstance(Instance.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = dataFusionClient.createInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateInstanceRequest, Operation&gt; createInstanceCallable() {
+<span class="nc" id="L626">    return stub.createInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single Date Fusion instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   InstanceName name = InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;);
+   *   dataFusionClient.deleteInstanceAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The instance resource name in the format
+   *     projects/{project}/locations/{location}/instances/{instance}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteInstanceAsync(InstanceName name) {
+    DeleteInstanceRequest request =
+<span class="pc bpc" id="L650" title="1 of 2 branches missed.">        DeleteInstanceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L651">    return deleteInstanceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single Date Fusion instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   String name = InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString();
+   *   dataFusionClient.deleteInstanceAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The instance resource name in the format
+   *     projects/{project}/locations/{location}/instances/{instance}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteInstanceAsync(String name) {
+<span class="fc" id="L674">    DeleteInstanceRequest request = DeleteInstanceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L675">    return deleteInstanceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single Date Fusion instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   DeleteInstanceRequest request =
+   *       DeleteInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   dataFusionClient.deleteInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteInstanceAsync(
+      DeleteInstanceRequest request) {
+<span class="fc" id="L701">    return deleteInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single Date Fusion instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   DeleteInstanceRequest request =
+   *       DeleteInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       dataFusionClient.deleteInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteInstanceRequest, Empty, OperationMetadata&gt;
+      deleteInstanceOperationCallable() {
+<span class="fc" id="L727">    return stub.deleteInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a single Date Fusion instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   DeleteInstanceRequest request =
+   *       DeleteInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = dataFusionClient.deleteInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteInstanceRequest, Operation&gt; deleteInstanceCallable() {
+<span class="nc" id="L751">    return stub.deleteInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a single Data Fusion instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   Instance instance = Instance.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Instance response = dataFusionClient.updateInstanceAsync(instance, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param instance Required. The instance resource that replaces the resource on the server.
+   *     Currently, Data Fusion only allows replacing labels, options, and stack driver settings.
+   *     All other fields will be ignored.
+   * @param updateMask Field mask is used to specify the fields that the update will overwrite in an
+   *     instance resource. The fields specified in the update_mask are relative to the resource,
+   *     not the full request. A field will be overwritten if it is in the mask. If the user does
+   *     not provide a mask, all the supported fields (labels, options, and version currently) will
+   *     be overwritten.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; updateInstanceAsync(
+      Instance instance, FieldMask updateMask) {
+    UpdateInstanceRequest request =
+<span class="fc" id="L783">        UpdateInstanceRequest.newBuilder().setInstance(instance).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L784">    return updateInstanceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a single Data Fusion instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   UpdateInstanceRequest request =
+   *       UpdateInstanceRequest.newBuilder()
+   *           .setInstance(Instance.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Instance response = dataFusionClient.updateInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; updateInstanceAsync(
+      UpdateInstanceRequest request) {
+<span class="fc" id="L811">    return updateInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a single Data Fusion instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   UpdateInstanceRequest request =
+   *       UpdateInstanceRequest.newBuilder()
+   *           .setInstance(Instance.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       dataFusionClient.updateInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpdateInstanceRequest, Instance, OperationMetadata&gt;
+      updateInstanceOperationCallable() {
+<span class="fc" id="L838">    return stub.updateInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a single Data Fusion instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   UpdateInstanceRequest request =
+   *       UpdateInstanceRequest.newBuilder()
+   *           .setInstance(Instance.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = dataFusionClient.updateInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateInstanceRequest, Operation&gt; updateInstanceCallable() {
+<span class="nc" id="L863">    return stub.updateInstanceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restart a single Data Fusion instance. At the end of an operation instance is fully restarted.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   RestartInstanceRequest request =
+   *       RestartInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   Instance response = dataFusionClient.restartInstanceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Instance, OperationMetadata&gt; restartInstanceAsync(
+      RestartInstanceRequest request) {
+<span class="fc" id="L889">    return restartInstanceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restart a single Data Fusion instance. At the end of an operation instance is fully restarted.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   RestartInstanceRequest request =
+   *       RestartInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Instance, OperationMetadata&gt; future =
+   *       dataFusionClient.restartInstanceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Instance response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;RestartInstanceRequest, Instance, OperationMetadata&gt;
+      restartInstanceOperationCallable() {
+<span class="fc" id="L915">    return stub.restartInstanceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Restart a single Data Fusion instance. At the end of an operation instance is fully restarted.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataFusionClient dataFusionClient = DataFusionClient.create()) {
+   *   RestartInstanceRequest request =
+   *       RestartInstanceRequest.newBuilder()
+   *           .setName(InstanceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = dataFusionClient.restartInstanceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RestartInstanceRequest, Operation&gt; restartInstanceCallable() {
+<span class="nc" id="L939">    return stub.restartInstanceCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L944">    stub.close();</span>
+<span class="fc" id="L945">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L949">    stub.shutdown();</span>
+<span class="nc" id="L950">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L954">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L959">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L964">    stub.shutdownNow();</span>
+<span class="nc" id="L965">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L969">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListAvailableVersionsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListAvailableVersionsRequest,
+          ListAvailableVersionsResponse,
+          Version,
+          ListAvailableVersionsPage,
+          ListAvailableVersionsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListAvailableVersionsPagedResponse&gt; createAsync(
+        PageContext&lt;ListAvailableVersionsRequest, ListAvailableVersionsResponse, Version&gt; context,
+        ApiFuture&lt;ListAvailableVersionsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListAvailableVersionsPage&gt; futurePage =
+<span class="fc" id="L984">          ListAvailableVersionsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L985">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L987">          input -&gt; new ListAvailableVersionsPagedResponse(input),</span>
+<span class="fc" id="L988">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListAvailableVersionsPagedResponse(ListAvailableVersionsPage page) {
+<span class="fc" id="L992">      super(page, ListAvailableVersionsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L993">    }</span>
+  }
+
+  public static class ListAvailableVersionsPage
+      extends AbstractPage&lt;
+          ListAvailableVersionsRequest,
+          ListAvailableVersionsResponse,
+          Version,
+          ListAvailableVersionsPage&gt; {
+
+    private ListAvailableVersionsPage(
+        PageContext&lt;ListAvailableVersionsRequest, ListAvailableVersionsResponse, Version&gt; context,
+        ListAvailableVersionsResponse response) {
+<span class="fc" id="L1006">      super(context, response);</span>
+<span class="fc" id="L1007">    }</span>
+
+    private static ListAvailableVersionsPage createEmptyPage() {
+<span class="fc" id="L1010">      return new ListAvailableVersionsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListAvailableVersionsPage createPage(
+        PageContext&lt;ListAvailableVersionsRequest, ListAvailableVersionsResponse, Version&gt; context,
+        ListAvailableVersionsResponse response) {
+<span class="fc" id="L1017">      return new ListAvailableVersionsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListAvailableVersionsPage&gt; createPageAsync(
+        PageContext&lt;ListAvailableVersionsRequest, ListAvailableVersionsResponse, Version&gt; context,
+        ApiFuture&lt;ListAvailableVersionsResponse&gt; futureResponse) {
+<span class="fc" id="L1024">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListAvailableVersionsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListAvailableVersionsRequest,
+          ListAvailableVersionsResponse,
+          Version,
+          ListAvailableVersionsPage,
+          ListAvailableVersionsFixedSizeCollection&gt; {
+
+    private ListAvailableVersionsFixedSizeCollection(
+        List&lt;ListAvailableVersionsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1038">      super(pages, collectionSize);</span>
+<span class="fc" id="L1039">    }</span>
+
+    private static ListAvailableVersionsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1042">      return new ListAvailableVersionsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListAvailableVersionsFixedSizeCollection createCollection(
+        List&lt;ListAvailableVersionsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1048">      return new ListAvailableVersionsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListInstancesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListInstancesRequest,
+          ListInstancesResponse,
+          Instance,
+          ListInstancesPage,
+          ListInstancesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListInstancesPagedResponse&gt; createAsync(
+        PageContext&lt;ListInstancesRequest, ListInstancesResponse, Instance&gt; context,
+        ApiFuture&lt;ListInstancesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListInstancesPage&gt; futurePage =
+<span class="fc" id="L1064">          ListInstancesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1065">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1067">          input -&gt; new ListInstancesPagedResponse(input),</span>
+<span class="fc" id="L1068">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListInstancesPagedResponse(ListInstancesPage page) {
+<span class="fc" id="L1072">      super(page, ListInstancesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1073">    }</span>
+  }
+
+  public static class ListInstancesPage
+      extends AbstractPage&lt;
+          ListInstancesRequest, ListInstancesResponse, Instance, ListInstancesPage&gt; {
+
+    private ListInstancesPage(
+        PageContext&lt;ListInstancesRequest, ListInstancesResponse, Instance&gt; context,
+        ListInstancesResponse response) {
+<span class="fc" id="L1083">      super(context, response);</span>
+<span class="fc" id="L1084">    }</span>
+
+    private static ListInstancesPage createEmptyPage() {
+<span class="fc" id="L1087">      return new ListInstancesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListInstancesPage createPage(
+        PageContext&lt;ListInstancesRequest, ListInstancesResponse, Instance&gt; context,
+        ListInstancesResponse response) {
+<span class="fc" id="L1094">      return new ListInstancesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListInstancesPage&gt; createPageAsync(
+        PageContext&lt;ListInstancesRequest, ListInstancesResponse, Instance&gt; context,
+        ApiFuture&lt;ListInstancesResponse&gt; futureResponse) {
+<span class="fc" id="L1101">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListInstancesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListInstancesRequest,
+          ListInstancesResponse,
+          Instance,
+          ListInstancesPage,
+          ListInstancesFixedSizeCollection&gt; {
+
+    private ListInstancesFixedSizeCollection(List&lt;ListInstancesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1114">      super(pages, collectionSize);</span>
+<span class="fc" id="L1115">    }</span>
+
+    private static ListInstancesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1118">      return new ListInstancesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListInstancesFixedSizeCollection createCollection(
+        List&lt;ListInstancesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1124">      return new ListInstancesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

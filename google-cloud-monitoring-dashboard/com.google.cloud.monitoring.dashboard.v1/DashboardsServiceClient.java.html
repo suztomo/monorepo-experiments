@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DashboardsServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-monitoring-dashboard</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.monitoring.dashboard.v1</a> &gt; <span class="el_source">DashboardsServiceClient.java</span></div><h1>DashboardsServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.monitoring.dashboard.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.monitoring.dashboard.v1.stub.DashboardsServiceStub;
+import com.google.cloud.monitoring.dashboard.v1.stub.DashboardsServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.monitoring.dashboard.v1.CreateDashboardRequest;
+import com.google.monitoring.dashboard.v1.Dashboard;
+import com.google.monitoring.dashboard.v1.DeleteDashboardRequest;
+import com.google.monitoring.dashboard.v1.GetDashboardRequest;
+import com.google.monitoring.dashboard.v1.ListDashboardsRequest;
+import com.google.monitoring.dashboard.v1.ListDashboardsResponse;
+import com.google.monitoring.dashboard.v1.UpdateDashboardRequest;
+import com.google.protobuf.Empty;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Manages Stackdriver dashboards. A dashboard is an arrangement of data
+ * display widgets in a specific layout.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (DashboardsServiceClient dashboardsServiceClient = DashboardsServiceClient.create()) {
+ *   CreateDashboardRequest request =
+ *       CreateDashboardRequest.newBuilder()
+ *           .setParent(&quot;parent-995424086&quot;)
+ *           .setDashboard(Dashboard.newBuilder().build())
+ *           .setValidateOnly(true)
+ *           .build();
+ *   Dashboard response = dashboardsServiceClient.createDashboard(request);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the DashboardsServiceClient object to clean up resources
+ * such as threads. In the example above, try-with-resources is used, which automatically calls
+ * close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of DashboardsServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * DashboardsServiceSettings dashboardsServiceSettings =
+ *     DashboardsServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * DashboardsServiceClient dashboardsServiceClient =
+ *     DashboardsServiceClient.create(dashboardsServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * DashboardsServiceSettings dashboardsServiceSettings =
+ *     DashboardsServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * DashboardsServiceClient dashboardsServiceClient =
+ *     DashboardsServiceClient.create(dashboardsServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class DashboardsServiceClient implements BackgroundResource {
+  private final DashboardsServiceSettings settings;
+  private final DashboardsServiceStub stub;
+
+  /** Constructs an instance of DashboardsServiceClient with default settings. */
+  public static final DashboardsServiceClient create() throws IOException {
+<span class="nc" id="L126">    return create(DashboardsServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of DashboardsServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final DashboardsServiceClient create(DashboardsServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L135">    return new DashboardsServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of DashboardsServiceClient, using the given stub for making calls. This
+   * is for advanced usage - prefer using create(DashboardsServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final DashboardsServiceClient create(DashboardsServiceStub stub) {
+<span class="nc" id="L144">    return new DashboardsServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of DashboardsServiceClient, using the given settings. This is protected
+   * so that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L152">  protected DashboardsServiceClient(DashboardsServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L153">    this.settings = settings;</span>
+<span class="fc" id="L154">    this.stub = ((DashboardsServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L155">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L158">  protected DashboardsServiceClient(DashboardsServiceStub stub) {</span>
+<span class="nc" id="L159">    this.settings = null;</span>
+<span class="nc" id="L160">    this.stub = stub;</span>
+<span class="nc" id="L161">  }</span>
+
+  public final DashboardsServiceSettings getSettings() {
+<span class="nc" id="L164">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public DashboardsServiceStub getStub() {
+<span class="nc" id="L169">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new custom dashboard. For examples on how you can use this API to create dashboards,
+   * see [Managing dashboards by API](https://cloud.google.com/monitoring/dashboards/api-dashboard).
+   * This method requires the `monitoring.dashboards.create` permission on the specified project.
+   * For more information about permissions, see [Cloud Identity and Access
+   * Management](https://cloud.google.com/iam).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DashboardsServiceClient dashboardsServiceClient = DashboardsServiceClient.create()) {
+   *   CreateDashboardRequest request =
+   *       CreateDashboardRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setDashboard(Dashboard.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   Dashboard response = dashboardsServiceClient.createDashboard(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Dashboard createDashboard(CreateDashboardRequest request) {
+<span class="fc" id="L200">    return createDashboardCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new custom dashboard. For examples on how you can use this API to create dashboards,
+   * see [Managing dashboards by API](https://cloud.google.com/monitoring/dashboards/api-dashboard).
+   * This method requires the `monitoring.dashboards.create` permission on the specified project.
+   * For more information about permissions, see [Cloud Identity and Access
+   * Management](https://cloud.google.com/iam).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DashboardsServiceClient dashboardsServiceClient = DashboardsServiceClient.create()) {
+   *   CreateDashboardRequest request =
+   *       CreateDashboardRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setDashboard(Dashboard.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   ApiFuture&lt;Dashboard&gt; future =
+   *       dashboardsServiceClient.createDashboardCallable().futureCall(request);
+   *   // Do something.
+   *   Dashboard response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateDashboardRequest, Dashboard&gt; createDashboardCallable() {
+<span class="fc" id="L231">    return stub.createDashboardCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing dashboards.
+   *
+   * &lt;p&gt;This method requires the `monitoring.dashboards.list` permission on the specified project.
+   * For more information, see [Cloud Identity and Access Management](https://cloud.google.com/iam).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DashboardsServiceClient dashboardsServiceClient = DashboardsServiceClient.create()) {
+   *   ListDashboardsRequest request =
+   *       ListDashboardsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Dashboard element : dashboardsServiceClient.listDashboards(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDashboardsPagedResponse listDashboards(ListDashboardsRequest request) {
+<span class="fc" id="L263">    return listDashboardsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing dashboards.
+   *
+   * &lt;p&gt;This method requires the `monitoring.dashboards.list` permission on the specified project.
+   * For more information, see [Cloud Identity and Access Management](https://cloud.google.com/iam).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DashboardsServiceClient dashboardsServiceClient = DashboardsServiceClient.create()) {
+   *   ListDashboardsRequest request =
+   *       ListDashboardsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Dashboard&gt; future =
+   *       dashboardsServiceClient.listDashboardsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Dashboard element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListDashboardsRequest, ListDashboardsPagedResponse&gt;
+      listDashboardsPagedCallable() {
+<span class="fc" id="L296">    return stub.listDashboardsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing dashboards.
+   *
+   * &lt;p&gt;This method requires the `monitoring.dashboards.list` permission on the specified project.
+   * For more information, see [Cloud Identity and Access Management](https://cloud.google.com/iam).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DashboardsServiceClient dashboardsServiceClient = DashboardsServiceClient.create()) {
+   *   ListDashboardsRequest request =
+   *       ListDashboardsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListDashboardsResponse response =
+   *         dashboardsServiceClient.listDashboardsCallable().call(request);
+   *     for (Dashboard element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListDashboardsRequest, ListDashboardsResponse&gt;
+      listDashboardsCallable() {
+<span class="nc" id="L336">    return stub.listDashboardsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Fetches a specific dashboard.
+   *
+   * &lt;p&gt;This method requires the `monitoring.dashboards.get` permission on the specified dashboard.
+   * For more information, see [Cloud Identity and Access Management](https://cloud.google.com/iam).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DashboardsServiceClient dashboardsServiceClient = DashboardsServiceClient.create()) {
+   *   GetDashboardRequest request =
+   *       GetDashboardRequest.newBuilder()
+   *           .setName(DashboardName.of(&quot;[PROJECT]&quot;, &quot;[DASHBOARD]&quot;).toString())
+   *           .build();
+   *   Dashboard response = dashboardsServiceClient.getDashboard(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Dashboard getDashboard(GetDashboardRequest request) {
+<span class="fc" id="L364">    return getDashboardCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Fetches a specific dashboard.
+   *
+   * &lt;p&gt;This method requires the `monitoring.dashboards.get` permission on the specified dashboard.
+   * For more information, see [Cloud Identity and Access Management](https://cloud.google.com/iam).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DashboardsServiceClient dashboardsServiceClient = DashboardsServiceClient.create()) {
+   *   GetDashboardRequest request =
+   *       GetDashboardRequest.newBuilder()
+   *           .setName(DashboardName.of(&quot;[PROJECT]&quot;, &quot;[DASHBOARD]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Dashboard&gt; future =
+   *       dashboardsServiceClient.getDashboardCallable().futureCall(request);
+   *   // Do something.
+   *   Dashboard response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetDashboardRequest, Dashboard&gt; getDashboardCallable() {
+<span class="fc" id="L392">    return stub.getDashboardCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an existing custom dashboard.
+   *
+   * &lt;p&gt;This method requires the `monitoring.dashboards.delete` permission on the specified
+   * dashboard. For more information, see [Cloud Identity and Access
+   * Management](https://cloud.google.com/iam).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DashboardsServiceClient dashboardsServiceClient = DashboardsServiceClient.create()) {
+   *   DeleteDashboardRequest request =
+   *       DeleteDashboardRequest.newBuilder()
+   *           .setName(DashboardName.of(&quot;[PROJECT]&quot;, &quot;[DASHBOARD]&quot;).toString())
+   *           .build();
+   *   dashboardsServiceClient.deleteDashboard(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteDashboard(DeleteDashboardRequest request) {
+<span class="fc" id="L421">    deleteDashboardCallable().call(request);</span>
+<span class="fc" id="L422">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an existing custom dashboard.
+   *
+   * &lt;p&gt;This method requires the `monitoring.dashboards.delete` permission on the specified
+   * dashboard. For more information, see [Cloud Identity and Access
+   * Management](https://cloud.google.com/iam).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DashboardsServiceClient dashboardsServiceClient = DashboardsServiceClient.create()) {
+   *   DeleteDashboardRequest request =
+   *       DeleteDashboardRequest.newBuilder()
+   *           .setName(DashboardName.of(&quot;[PROJECT]&quot;, &quot;[DASHBOARD]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       dashboardsServiceClient.deleteDashboardCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteDashboardRequest, Empty&gt; deleteDashboardCallable() {
+<span class="fc" id="L450">    return stub.deleteDashboardCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Replaces an existing custom dashboard with a new definition.
+   *
+   * &lt;p&gt;This method requires the `monitoring.dashboards.update` permission on the specified
+   * dashboard. For more information, see [Cloud Identity and Access
+   * Management](https://cloud.google.com/iam).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DashboardsServiceClient dashboardsServiceClient = DashboardsServiceClient.create()) {
+   *   UpdateDashboardRequest request =
+   *       UpdateDashboardRequest.newBuilder()
+   *           .setDashboard(Dashboard.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   Dashboard response = dashboardsServiceClient.updateDashboard(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Dashboard updateDashboard(UpdateDashboardRequest request) {
+<span class="fc" id="L480">    return updateDashboardCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Replaces an existing custom dashboard with a new definition.
+   *
+   * &lt;p&gt;This method requires the `monitoring.dashboards.update` permission on the specified
+   * dashboard. For more information, see [Cloud Identity and Access
+   * Management](https://cloud.google.com/iam).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DashboardsServiceClient dashboardsServiceClient = DashboardsServiceClient.create()) {
+   *   UpdateDashboardRequest request =
+   *       UpdateDashboardRequest.newBuilder()
+   *           .setDashboard(Dashboard.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   ApiFuture&lt;Dashboard&gt; future =
+   *       dashboardsServiceClient.updateDashboardCallable().futureCall(request);
+   *   // Do something.
+   *   Dashboard response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateDashboardRequest, Dashboard&gt; updateDashboardCallable() {
+<span class="fc" id="L510">    return stub.updateDashboardCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L515">    stub.close();</span>
+<span class="fc" id="L516">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L520">    stub.shutdown();</span>
+<span class="nc" id="L521">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L525">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L530">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L535">    stub.shutdownNow();</span>
+<span class="nc" id="L536">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L540">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListDashboardsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListDashboardsRequest,
+          ListDashboardsResponse,
+          Dashboard,
+          ListDashboardsPage,
+          ListDashboardsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListDashboardsPagedResponse&gt; createAsync(
+        PageContext&lt;ListDashboardsRequest, ListDashboardsResponse, Dashboard&gt; context,
+        ApiFuture&lt;ListDashboardsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListDashboardsPage&gt; futurePage =
+<span class="fc" id="L555">          ListDashboardsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L556">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L558">          input -&gt; new ListDashboardsPagedResponse(input),</span>
+<span class="fc" id="L559">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListDashboardsPagedResponse(ListDashboardsPage page) {
+<span class="fc" id="L563">      super(page, ListDashboardsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L564">    }</span>
+  }
+
+  public static class ListDashboardsPage
+      extends AbstractPage&lt;
+          ListDashboardsRequest, ListDashboardsResponse, Dashboard, ListDashboardsPage&gt; {
+
+    private ListDashboardsPage(
+        PageContext&lt;ListDashboardsRequest, ListDashboardsResponse, Dashboard&gt; context,
+        ListDashboardsResponse response) {
+<span class="fc" id="L574">      super(context, response);</span>
+<span class="fc" id="L575">    }</span>
+
+    private static ListDashboardsPage createEmptyPage() {
+<span class="fc" id="L578">      return new ListDashboardsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListDashboardsPage createPage(
+        PageContext&lt;ListDashboardsRequest, ListDashboardsResponse, Dashboard&gt; context,
+        ListDashboardsResponse response) {
+<span class="fc" id="L585">      return new ListDashboardsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListDashboardsPage&gt; createPageAsync(
+        PageContext&lt;ListDashboardsRequest, ListDashboardsResponse, Dashboard&gt; context,
+        ApiFuture&lt;ListDashboardsResponse&gt; futureResponse) {
+<span class="fc" id="L592">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListDashboardsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListDashboardsRequest,
+          ListDashboardsResponse,
+          Dashboard,
+          ListDashboardsPage,
+          ListDashboardsFixedSizeCollection&gt; {
+
+    private ListDashboardsFixedSizeCollection(List&lt;ListDashboardsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L605">      super(pages, collectionSize);</span>
+<span class="fc" id="L606">    }</span>
+
+    private static ListDashboardsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L609">      return new ListDashboardsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListDashboardsFixedSizeCollection createCollection(
+        List&lt;ListDashboardsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L615">      return new ListDashboardsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

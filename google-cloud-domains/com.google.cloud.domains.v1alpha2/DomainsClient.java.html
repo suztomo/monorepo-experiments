@@ -1,0 +1,2671 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DomainsClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-domains</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.domains.v1alpha2</a> &gt; <span class="el_source">DomainsClient.java</span></div><h1>DomainsClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.domains.v1alpha2;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.domains.v1alpha2.stub.DomainsStub;
+import com.google.cloud.domains.v1alpha2.stub.DomainsStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import com.google.type.Money;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: The Cloud Domains API enables management and configuration of domain names.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (DomainsClient domainsClient = DomainsClient.create()) {
+ *   LocationName location = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+ *   String query = &quot;query107944136&quot;;
+ *   SearchDomainsResponse response = domainsClient.searchDomains(location, query);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the DomainsClient object to clean up resources such as
+ * threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of DomainsSettings to create().
+ * For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * DomainsSettings domainsSettings =
+ *     DomainsSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * DomainsClient domainsClient = DomainsClient.create(domainsSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * DomainsSettings domainsSettings = DomainsSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * DomainsClient domainsClient = DomainsClient.create(domainsSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@BetaApi
+@Generated(&quot;by gapic-generator-java&quot;)
+public class DomainsClient implements BackgroundResource {
+  private final DomainsSettings settings;
+  private final DomainsStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of DomainsClient with default settings. */
+  public static final DomainsClient create() throws IOException {
+<span class="nc" id="L118">    return create(DomainsSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of DomainsClient, using the given settings. The channels are created
+   * based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final DomainsClient create(DomainsSettings settings) throws IOException {
+<span class="fc" id="L126">    return new DomainsClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of DomainsClient, using the given stub for making calls. This is for
+   * advanced usage - prefer using create(DomainsSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final DomainsClient create(DomainsStub stub) {
+<span class="nc" id="L135">    return new DomainsClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of DomainsClient, using the given settings. This is protected so that it
+   * is easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   */
+<span class="fc" id="L142">  protected DomainsClient(DomainsSettings settings) throws IOException {</span>
+<span class="fc" id="L143">    this.settings = settings;</span>
+<span class="fc" id="L144">    this.stub = ((DomainsStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L145">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L146">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L149">  protected DomainsClient(DomainsStub stub) {</span>
+<span class="nc" id="L150">    this.settings = null;</span>
+<span class="nc" id="L151">    this.stub = stub;</span>
+<span class="nc" id="L152">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L153">  }</span>
+
+  public final DomainsSettings getSettings() {
+<span class="nc" id="L156">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public DomainsStub getStub() {
+<span class="nc" id="L161">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L169">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Searches for available domain names similar to the provided query.
+   *
+   * &lt;p&gt;Availability results from this method are approximate; call `RetrieveRegisterParameters` on
+   * a domain before registering to confirm availability.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   LocationName location = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   String query = &quot;query107944136&quot;;
+   *   SearchDomainsResponse response = domainsClient.searchDomains(location, query);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param location Required. The location. Must be in the format `projects/&amp;#42;/locations/&amp;#42;`.
+   * @param query Required. String used to search for available domain names.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SearchDomainsResponse searchDomains(LocationName location, String query) {
+    SearchDomainsRequest request =
+<span class="fc" id="L197">        SearchDomainsRequest.newBuilder()</span>
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">            .setLocation(location == null ? null : location.toString())</span>
+<span class="fc" id="L199">            .setQuery(query)</span>
+<span class="fc" id="L200">            .build();</span>
+<span class="fc" id="L201">    return searchDomains(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Searches for available domain names similar to the provided query.
+   *
+   * &lt;p&gt;Availability results from this method are approximate; call `RetrieveRegisterParameters` on
+   * a domain before registering to confirm availability.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   String location = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   String query = &quot;query107944136&quot;;
+   *   SearchDomainsResponse response = domainsClient.searchDomains(location, query);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param location Required. The location. Must be in the format `projects/&amp;#42;/locations/&amp;#42;`.
+   * @param query Required. String used to search for available domain names.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SearchDomainsResponse searchDomains(String location, String query) {
+    SearchDomainsRequest request =
+<span class="fc" id="L229">        SearchDomainsRequest.newBuilder().setLocation(location).setQuery(query).build();</span>
+<span class="fc" id="L230">    return searchDomains(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Searches for available domain names similar to the provided query.
+   *
+   * &lt;p&gt;Availability results from this method are approximate; call `RetrieveRegisterParameters` on
+   * a domain before registering to confirm availability.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   SearchDomainsRequest request =
+   *       SearchDomainsRequest.newBuilder()
+   *           .setQuery(&quot;query107944136&quot;)
+   *           .setLocation(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   SearchDomainsResponse response = domainsClient.searchDomains(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SearchDomainsResponse searchDomains(SearchDomainsRequest request) {
+<span class="fc" id="L259">    return searchDomainsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Searches for available domain names similar to the provided query.
+   *
+   * &lt;p&gt;Availability results from this method are approximate; call `RetrieveRegisterParameters` on
+   * a domain before registering to confirm availability.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   SearchDomainsRequest request =
+   *       SearchDomainsRequest.newBuilder()
+   *           .setQuery(&quot;query107944136&quot;)
+   *           .setLocation(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;SearchDomainsResponse&gt; future =
+   *       domainsClient.searchDomainsCallable().futureCall(request);
+   *   // Do something.
+   *   SearchDomainsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SearchDomainsRequest, SearchDomainsResponse&gt; searchDomainsCallable() {
+<span class="fc" id="L288">    return stub.searchDomainsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets parameters needed to register a new domain name, including price and up-to-date
+   * availability. Use the returned values to call `RegisterDomain`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   LocationName location = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   String domainName = &quot;domainName-1244085905&quot;;
+   *   RetrieveRegisterParametersResponse response =
+   *       domainsClient.retrieveRegisterParameters(location, domainName);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param location Required. The location. Must be in the format `projects/&amp;#42;/locations/&amp;#42;`.
+   * @param domainName Required. The domain name. Unicode domain names must be expressed in Punycode
+   *     format.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final RetrieveRegisterParametersResponse retrieveRegisterParameters(
+      LocationName location, String domainName) {
+    RetrieveRegisterParametersRequest request =
+<span class="fc" id="L317">        RetrieveRegisterParametersRequest.newBuilder()</span>
+<span class="pc bpc" id="L318" title="1 of 2 branches missed.">            .setLocation(location == null ? null : location.toString())</span>
+<span class="fc" id="L319">            .setDomainName(domainName)</span>
+<span class="fc" id="L320">            .build();</span>
+<span class="fc" id="L321">    return retrieveRegisterParameters(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets parameters needed to register a new domain name, including price and up-to-date
+   * availability. Use the returned values to call `RegisterDomain`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   String location = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   String domainName = &quot;domainName-1244085905&quot;;
+   *   RetrieveRegisterParametersResponse response =
+   *       domainsClient.retrieveRegisterParameters(location, domainName);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param location Required. The location. Must be in the format `projects/&amp;#42;/locations/&amp;#42;`.
+   * @param domainName Required. The domain name. Unicode domain names must be expressed in Punycode
+   *     format.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final RetrieveRegisterParametersResponse retrieveRegisterParameters(
+      String location, String domainName) {
+    RetrieveRegisterParametersRequest request =
+<span class="fc" id="L350">        RetrieveRegisterParametersRequest.newBuilder()</span>
+<span class="fc" id="L351">            .setLocation(location)</span>
+<span class="fc" id="L352">            .setDomainName(domainName)</span>
+<span class="fc" id="L353">            .build();</span>
+<span class="fc" id="L354">    return retrieveRegisterParameters(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets parameters needed to register a new domain name, including price and up-to-date
+   * availability. Use the returned values to call `RegisterDomain`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RetrieveRegisterParametersRequest request =
+   *       RetrieveRegisterParametersRequest.newBuilder()
+   *           .setDomainName(&quot;domainName-1244085905&quot;)
+   *           .setLocation(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   RetrieveRegisterParametersResponse response =
+   *       domainsClient.retrieveRegisterParameters(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final RetrieveRegisterParametersResponse retrieveRegisterParameters(
+      RetrieveRegisterParametersRequest request) {
+<span class="fc" id="L383">    return retrieveRegisterParametersCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets parameters needed to register a new domain name, including price and up-to-date
+   * availability. Use the returned values to call `RegisterDomain`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RetrieveRegisterParametersRequest request =
+   *       RetrieveRegisterParametersRequest.newBuilder()
+   *           .setDomainName(&quot;domainName-1244085905&quot;)
+   *           .setLocation(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;RetrieveRegisterParametersResponse&gt; future =
+   *       domainsClient.retrieveRegisterParametersCallable().futureCall(request);
+   *   // Do something.
+   *   RetrieveRegisterParametersResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RetrieveRegisterParametersRequest, RetrieveRegisterParametersResponse&gt;
+      retrieveRegisterParametersCallable() {
+<span class="fc" id="L411">    return stub.retrieveRegisterParametersCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Registers a new domain name and creates a corresponding `Registration` resource.
+   *
+   * &lt;p&gt;Call `RetrieveRegisterParameters` first to check availability of the domain name and
+   * determine parameters like price that are needed to build a call to this method.
+   *
+   * &lt;p&gt;A successful call creates a `Registration` resource in state `REGISTRATION_PENDING`, which
+   * resolves to `ACTIVE` within 1-2 minutes, indicating that the domain was successfully
+   * registered. If the resource ends up in state `REGISTRATION_FAILED`, it indicates that the
+   * domain was not registered successfully, and you can safely delete the resource and retry
+   * registration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Registration registration = Registration.newBuilder().build();
+   *   Money yearlyPrice = Money.newBuilder().build();
+   *   Registration response =
+   *       domainsClient.registerDomainAsync(parent, registration, yearlyPrice).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the `Registration`. Must be in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;`.
+   * @param registration Required. The complete `Registration` resource to be created.
+   * @param yearlyPrice Required. Yearly price to register or renew the domain. The value that
+   *     should be put here can be obtained from RetrieveRegisterParameters or SearchDomains calls.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; registerDomainAsync(
+      LocationName parent, Registration registration, Money yearlyPrice) {
+    RegisterDomainRequest request =
+<span class="fc" id="L451">        RegisterDomainRequest.newBuilder()</span>
+<span class="pc bpc" id="L452" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L453">            .setRegistration(registration)</span>
+<span class="fc" id="L454">            .setYearlyPrice(yearlyPrice)</span>
+<span class="fc" id="L455">            .build();</span>
+<span class="fc" id="L456">    return registerDomainAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Registers a new domain name and creates a corresponding `Registration` resource.
+   *
+   * &lt;p&gt;Call `RetrieveRegisterParameters` first to check availability of the domain name and
+   * determine parameters like price that are needed to build a call to this method.
+   *
+   * &lt;p&gt;A successful call creates a `Registration` resource in state `REGISTRATION_PENDING`, which
+   * resolves to `ACTIVE` within 1-2 minutes, indicating that the domain was successfully
+   * registered. If the resource ends up in state `REGISTRATION_FAILED`, it indicates that the
+   * domain was not registered successfully, and you can safely delete the resource and retry
+   * registration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Registration registration = Registration.newBuilder().build();
+   *   Money yearlyPrice = Money.newBuilder().build();
+   *   Registration response =
+   *       domainsClient.registerDomainAsync(parent, registration, yearlyPrice).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the `Registration`. Must be in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;`.
+   * @param registration Required. The complete `Registration` resource to be created.
+   * @param yearlyPrice Required. Yearly price to register or renew the domain. The value that
+   *     should be put here can be obtained from RetrieveRegisterParameters or SearchDomains calls.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; registerDomainAsync(
+      String parent, Registration registration, Money yearlyPrice) {
+    RegisterDomainRequest request =
+<span class="fc" id="L496">        RegisterDomainRequest.newBuilder()</span>
+<span class="fc" id="L497">            .setParent(parent)</span>
+<span class="fc" id="L498">            .setRegistration(registration)</span>
+<span class="fc" id="L499">            .setYearlyPrice(yearlyPrice)</span>
+<span class="fc" id="L500">            .build();</span>
+<span class="fc" id="L501">    return registerDomainAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Registers a new domain name and creates a corresponding `Registration` resource.
+   *
+   * &lt;p&gt;Call `RetrieveRegisterParameters` first to check availability of the domain name and
+   * determine parameters like price that are needed to build a call to this method.
+   *
+   * &lt;p&gt;A successful call creates a `Registration` resource in state `REGISTRATION_PENDING`, which
+   * resolves to `ACTIVE` within 1-2 minutes, indicating that the domain was successfully
+   * registered. If the resource ends up in state `REGISTRATION_FAILED`, it indicates that the
+   * domain was not registered successfully, and you can safely delete the resource and retry
+   * registration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RegisterDomainRequest request =
+   *       RegisterDomainRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setRegistration(Registration.newBuilder().build())
+   *           .addAllDomainNotices(new ArrayList&lt;DomainNotice&gt;())
+   *           .addAllContactNotices(new ArrayList&lt;ContactNotice&gt;())
+   *           .setYearlyPrice(Money.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   Registration response = domainsClient.registerDomainAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; registerDomainAsync(
+      RegisterDomainRequest request) {
+<span class="fc" id="L541">    return registerDomainOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Registers a new domain name and creates a corresponding `Registration` resource.
+   *
+   * &lt;p&gt;Call `RetrieveRegisterParameters` first to check availability of the domain name and
+   * determine parameters like price that are needed to build a call to this method.
+   *
+   * &lt;p&gt;A successful call creates a `Registration` resource in state `REGISTRATION_PENDING`, which
+   * resolves to `ACTIVE` within 1-2 minutes, indicating that the domain was successfully
+   * registered. If the resource ends up in state `REGISTRATION_FAILED`, it indicates that the
+   * domain was not registered successfully, and you can safely delete the resource and retry
+   * registration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RegisterDomainRequest request =
+   *       RegisterDomainRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setRegistration(Registration.newBuilder().build())
+   *           .addAllDomainNotices(new ArrayList&lt;DomainNotice&gt;())
+   *           .addAllContactNotices(new ArrayList&lt;ContactNotice&gt;())
+   *           .setYearlyPrice(Money.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   OperationFuture&lt;Registration, OperationMetadata&gt; future =
+   *       domainsClient.registerDomainOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Registration response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;RegisterDomainRequest, Registration, OperationMetadata&gt;
+      registerDomainOperationCallable() {
+<span class="fc" id="L581">    return stub.registerDomainOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Registers a new domain name and creates a corresponding `Registration` resource.
+   *
+   * &lt;p&gt;Call `RetrieveRegisterParameters` first to check availability of the domain name and
+   * determine parameters like price that are needed to build a call to this method.
+   *
+   * &lt;p&gt;A successful call creates a `Registration` resource in state `REGISTRATION_PENDING`, which
+   * resolves to `ACTIVE` within 1-2 minutes, indicating that the domain was successfully
+   * registered. If the resource ends up in state `REGISTRATION_FAILED`, it indicates that the
+   * domain was not registered successfully, and you can safely delete the resource and retry
+   * registration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RegisterDomainRequest request =
+   *       RegisterDomainRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setRegistration(Registration.newBuilder().build())
+   *           .addAllDomainNotices(new ArrayList&lt;DomainNotice&gt;())
+   *           .addAllContactNotices(new ArrayList&lt;ContactNotice&gt;())
+   *           .setYearlyPrice(Money.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = domainsClient.registerDomainCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RegisterDomainRequest, Operation&gt; registerDomainCallable() {
+<span class="nc" id="L619">    return stub.registerDomainCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets parameters needed to transfer a domain name from another registrar to Cloud Domains. For
+   * domains managed by Google Domains, transferring to Cloud Domains is not supported.
+   *
+   * &lt;p&gt;Use the returned values to call `TransferDomain`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   LocationName location = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   String domainName = &quot;domainName-1244085905&quot;;
+   *   RetrieveTransferParametersResponse response =
+   *       domainsClient.retrieveTransferParameters(location, domainName);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param location Required. The location. Must be in the format `projects/&amp;#42;/locations/&amp;#42;`.
+   * @param domainName Required. The domain name. Unicode domain names must be expressed in Punycode
+   *     format.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final RetrieveTransferParametersResponse retrieveTransferParameters(
+      LocationName location, String domainName) {
+    RetrieveTransferParametersRequest request =
+<span class="fc" id="L650">        RetrieveTransferParametersRequest.newBuilder()</span>
+<span class="pc bpc" id="L651" title="1 of 2 branches missed.">            .setLocation(location == null ? null : location.toString())</span>
+<span class="fc" id="L652">            .setDomainName(domainName)</span>
+<span class="fc" id="L653">            .build();</span>
+<span class="fc" id="L654">    return retrieveTransferParameters(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets parameters needed to transfer a domain name from another registrar to Cloud Domains. For
+   * domains managed by Google Domains, transferring to Cloud Domains is not supported.
+   *
+   * &lt;p&gt;Use the returned values to call `TransferDomain`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   String location = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   String domainName = &quot;domainName-1244085905&quot;;
+   *   RetrieveTransferParametersResponse response =
+   *       domainsClient.retrieveTransferParameters(location, domainName);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param location Required. The location. Must be in the format `projects/&amp;#42;/locations/&amp;#42;`.
+   * @param domainName Required. The domain name. Unicode domain names must be expressed in Punycode
+   *     format.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final RetrieveTransferParametersResponse retrieveTransferParameters(
+      String location, String domainName) {
+    RetrieveTransferParametersRequest request =
+<span class="fc" id="L685">        RetrieveTransferParametersRequest.newBuilder()</span>
+<span class="fc" id="L686">            .setLocation(location)</span>
+<span class="fc" id="L687">            .setDomainName(domainName)</span>
+<span class="fc" id="L688">            .build();</span>
+<span class="fc" id="L689">    return retrieveTransferParameters(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets parameters needed to transfer a domain name from another registrar to Cloud Domains. For
+   * domains managed by Google Domains, transferring to Cloud Domains is not supported.
+   *
+   * &lt;p&gt;Use the returned values to call `TransferDomain`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RetrieveTransferParametersRequest request =
+   *       RetrieveTransferParametersRequest.newBuilder()
+   *           .setDomainName(&quot;domainName-1244085905&quot;)
+   *           .setLocation(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   RetrieveTransferParametersResponse response =
+   *       domainsClient.retrieveTransferParameters(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final RetrieveTransferParametersResponse retrieveTransferParameters(
+      RetrieveTransferParametersRequest request) {
+<span class="fc" id="L720">    return retrieveTransferParametersCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets parameters needed to transfer a domain name from another registrar to Cloud Domains. For
+   * domains managed by Google Domains, transferring to Cloud Domains is not supported.
+   *
+   * &lt;p&gt;Use the returned values to call `TransferDomain`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RetrieveTransferParametersRequest request =
+   *       RetrieveTransferParametersRequest.newBuilder()
+   *           .setDomainName(&quot;domainName-1244085905&quot;)
+   *           .setLocation(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;RetrieveTransferParametersResponse&gt; future =
+   *       domainsClient.retrieveTransferParametersCallable().futureCall(request);
+   *   // Do something.
+   *   RetrieveTransferParametersResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RetrieveTransferParametersRequest, RetrieveTransferParametersResponse&gt;
+      retrieveTransferParametersCallable() {
+<span class="fc" id="L750">    return stub.retrieveTransferParametersCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Transfers a domain name from another registrar to Cloud Domains. For domains managed by Google
+   * Domains, transferring to Cloud Domains is not supported.
+   *
+   * &lt;p&gt;Before calling this method, go to the domain's current registrar to unlock the domain for
+   * transfer and retrieve the domain's transfer authorization code. Then call
+   * `RetrieveTransferParameters` to confirm that the domain is unlocked and to get values needed to
+   * build a call to this method.
+   *
+   * &lt;p&gt;A successful call creates a `Registration` resource in state `TRANSFER_PENDING`. It can take
+   * several days to complete the transfer process. The registrant can often speed up this process
+   * by approving the transfer through the current registrar, either by clicking a link in an email
+   * from the registrar or by visiting the registrar's website.
+   *
+   * &lt;p&gt;A few minutes after transfer approval, the resource transitions to state `ACTIVE`,
+   * indicating that the transfer was successful. If the transfer is rejected or the request expires
+   * without being approved, the resource can end up in state `TRANSFER_FAILED`. If transfer fails,
+   * you can safely delete the resource and retry the transfer.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Registration registration = Registration.newBuilder().build();
+   *   Money yearlyPrice = Money.newBuilder().build();
+   *   AuthorizationCode authorizationCode = AuthorizationCode.newBuilder().build();
+   *   Registration response =
+   *       domainsClient
+   *           .transferDomainAsync(parent, registration, yearlyPrice, authorizationCode)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the `Registration`. Must be in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;`.
+   * @param registration Required. The complete `Registration` resource to be created.
+   *     &lt;p&gt;You can leave `registration.dns_settings` unset to import the domain's current DNS
+   *     configuration from its current registrar. Use this option only if you are sure that the
+   *     domain's current DNS service does not cease upon transfer, as is often the case for DNS
+   *     services provided for free by the registrar.
+   * @param yearlyPrice Required. Acknowledgement of the price to transfer or renew the domain for
+   *     one year. Call `RetrieveTransferParameters` to obtain the price, which you must
+   *     acknowledge.
+   * @param authorizationCode The domain's transfer authorization code. You can obtain this from the
+   *     domain's current registrar.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; transferDomainAsync(
+      LocationName parent,
+      Registration registration,
+      Money yearlyPrice,
+      AuthorizationCode authorizationCode) {
+    TransferDomainRequest request =
+<span class="fc" id="L810">        TransferDomainRequest.newBuilder()</span>
+<span class="pc bpc" id="L811" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L812">            .setRegistration(registration)</span>
+<span class="fc" id="L813">            .setYearlyPrice(yearlyPrice)</span>
+<span class="fc" id="L814">            .setAuthorizationCode(authorizationCode)</span>
+<span class="fc" id="L815">            .build();</span>
+<span class="fc" id="L816">    return transferDomainAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Transfers a domain name from another registrar to Cloud Domains. For domains managed by Google
+   * Domains, transferring to Cloud Domains is not supported.
+   *
+   * &lt;p&gt;Before calling this method, go to the domain's current registrar to unlock the domain for
+   * transfer and retrieve the domain's transfer authorization code. Then call
+   * `RetrieveTransferParameters` to confirm that the domain is unlocked and to get values needed to
+   * build a call to this method.
+   *
+   * &lt;p&gt;A successful call creates a `Registration` resource in state `TRANSFER_PENDING`. It can take
+   * several days to complete the transfer process. The registrant can often speed up this process
+   * by approving the transfer through the current registrar, either by clicking a link in an email
+   * from the registrar or by visiting the registrar's website.
+   *
+   * &lt;p&gt;A few minutes after transfer approval, the resource transitions to state `ACTIVE`,
+   * indicating that the transfer was successful. If the transfer is rejected or the request expires
+   * without being approved, the resource can end up in state `TRANSFER_FAILED`. If transfer fails,
+   * you can safely delete the resource and retry the transfer.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Registration registration = Registration.newBuilder().build();
+   *   Money yearlyPrice = Money.newBuilder().build();
+   *   AuthorizationCode authorizationCode = AuthorizationCode.newBuilder().build();
+   *   Registration response =
+   *       domainsClient
+   *           .transferDomainAsync(parent, registration, yearlyPrice, authorizationCode)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the `Registration`. Must be in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;`.
+   * @param registration Required. The complete `Registration` resource to be created.
+   *     &lt;p&gt;You can leave `registration.dns_settings` unset to import the domain's current DNS
+   *     configuration from its current registrar. Use this option only if you are sure that the
+   *     domain's current DNS service does not cease upon transfer, as is often the case for DNS
+   *     services provided for free by the registrar.
+   * @param yearlyPrice Required. Acknowledgement of the price to transfer or renew the domain for
+   *     one year. Call `RetrieveTransferParameters` to obtain the price, which you must
+   *     acknowledge.
+   * @param authorizationCode The domain's transfer authorization code. You can obtain this from the
+   *     domain's current registrar.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; transferDomainAsync(
+      String parent,
+      Registration registration,
+      Money yearlyPrice,
+      AuthorizationCode authorizationCode) {
+    TransferDomainRequest request =
+<span class="fc" id="L876">        TransferDomainRequest.newBuilder()</span>
+<span class="fc" id="L877">            .setParent(parent)</span>
+<span class="fc" id="L878">            .setRegistration(registration)</span>
+<span class="fc" id="L879">            .setYearlyPrice(yearlyPrice)</span>
+<span class="fc" id="L880">            .setAuthorizationCode(authorizationCode)</span>
+<span class="fc" id="L881">            .build();</span>
+<span class="fc" id="L882">    return transferDomainAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Transfers a domain name from another registrar to Cloud Domains. For domains managed by Google
+   * Domains, transferring to Cloud Domains is not supported.
+   *
+   * &lt;p&gt;Before calling this method, go to the domain's current registrar to unlock the domain for
+   * transfer and retrieve the domain's transfer authorization code. Then call
+   * `RetrieveTransferParameters` to confirm that the domain is unlocked and to get values needed to
+   * build a call to this method.
+   *
+   * &lt;p&gt;A successful call creates a `Registration` resource in state `TRANSFER_PENDING`. It can take
+   * several days to complete the transfer process. The registrant can often speed up this process
+   * by approving the transfer through the current registrar, either by clicking a link in an email
+   * from the registrar or by visiting the registrar's website.
+   *
+   * &lt;p&gt;A few minutes after transfer approval, the resource transitions to state `ACTIVE`,
+   * indicating that the transfer was successful. If the transfer is rejected or the request expires
+   * without being approved, the resource can end up in state `TRANSFER_FAILED`. If transfer fails,
+   * you can safely delete the resource and retry the transfer.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   TransferDomainRequest request =
+   *       TransferDomainRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setRegistration(Registration.newBuilder().build())
+   *           .addAllContactNotices(new ArrayList&lt;ContactNotice&gt;())
+   *           .setYearlyPrice(Money.newBuilder().build())
+   *           .setAuthorizationCode(AuthorizationCode.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   Registration response = domainsClient.transferDomainAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; transferDomainAsync(
+      TransferDomainRequest request) {
+<span class="fc" id="L929">    return transferDomainOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Transfers a domain name from another registrar to Cloud Domains. For domains managed by Google
+   * Domains, transferring to Cloud Domains is not supported.
+   *
+   * &lt;p&gt;Before calling this method, go to the domain's current registrar to unlock the domain for
+   * transfer and retrieve the domain's transfer authorization code. Then call
+   * `RetrieveTransferParameters` to confirm that the domain is unlocked and to get values needed to
+   * build a call to this method.
+   *
+   * &lt;p&gt;A successful call creates a `Registration` resource in state `TRANSFER_PENDING`. It can take
+   * several days to complete the transfer process. The registrant can often speed up this process
+   * by approving the transfer through the current registrar, either by clicking a link in an email
+   * from the registrar or by visiting the registrar's website.
+   *
+   * &lt;p&gt;A few minutes after transfer approval, the resource transitions to state `ACTIVE`,
+   * indicating that the transfer was successful. If the transfer is rejected or the request expires
+   * without being approved, the resource can end up in state `TRANSFER_FAILED`. If transfer fails,
+   * you can safely delete the resource and retry the transfer.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   TransferDomainRequest request =
+   *       TransferDomainRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setRegistration(Registration.newBuilder().build())
+   *           .addAllContactNotices(new ArrayList&lt;ContactNotice&gt;())
+   *           .setYearlyPrice(Money.newBuilder().build())
+   *           .setAuthorizationCode(AuthorizationCode.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   OperationFuture&lt;Registration, OperationMetadata&gt; future =
+   *       domainsClient.transferDomainOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Registration response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;TransferDomainRequest, Registration, OperationMetadata&gt;
+      transferDomainOperationCallable() {
+<span class="fc" id="L976">    return stub.transferDomainOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Transfers a domain name from another registrar to Cloud Domains. For domains managed by Google
+   * Domains, transferring to Cloud Domains is not supported.
+   *
+   * &lt;p&gt;Before calling this method, go to the domain's current registrar to unlock the domain for
+   * transfer and retrieve the domain's transfer authorization code. Then call
+   * `RetrieveTransferParameters` to confirm that the domain is unlocked and to get values needed to
+   * build a call to this method.
+   *
+   * &lt;p&gt;A successful call creates a `Registration` resource in state `TRANSFER_PENDING`. It can take
+   * several days to complete the transfer process. The registrant can often speed up this process
+   * by approving the transfer through the current registrar, either by clicking a link in an email
+   * from the registrar or by visiting the registrar's website.
+   *
+   * &lt;p&gt;A few minutes after transfer approval, the resource transitions to state `ACTIVE`,
+   * indicating that the transfer was successful. If the transfer is rejected or the request expires
+   * without being approved, the resource can end up in state `TRANSFER_FAILED`. If transfer fails,
+   * you can safely delete the resource and retry the transfer.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   TransferDomainRequest request =
+   *       TransferDomainRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setRegistration(Registration.newBuilder().build())
+   *           .addAllContactNotices(new ArrayList&lt;ContactNotice&gt;())
+   *           .setYearlyPrice(Money.newBuilder().build())
+   *           .setAuthorizationCode(AuthorizationCode.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = domainsClient.transferDomainCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;TransferDomainRequest, Operation&gt; transferDomainCallable() {
+<span class="nc" id="L1021">    return stub.transferDomainCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the `Registration` resources in a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Registration element : domainsClient.listRegistrations(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The project and location from which to list `Registration`s, specified
+   *     in the format `projects/&amp;#42;/locations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRegistrationsPagedResponse listRegistrations(LocationName parent) {
+    ListRegistrationsRequest request =
+<span class="fc" id="L1047">        ListRegistrationsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1048" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1049">            .build();</span>
+<span class="fc" id="L1050">    return listRegistrations(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the `Registration` resources in a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Registration element : domainsClient.listRegistrations(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The project and location from which to list `Registration`s, specified
+   *     in the format `projects/&amp;#42;/locations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRegistrationsPagedResponse listRegistrations(String parent) {
+    ListRegistrationsRequest request =
+<span class="fc" id="L1076">        ListRegistrationsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1077">    return listRegistrations(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the `Registration` resources in a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ListRegistrationsRequest request =
+   *       ListRegistrationsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   for (Registration element : domainsClient.listRegistrations(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRegistrationsPagedResponse listRegistrations(ListRegistrationsRequest request) {
+<span class="fc" id="L1107">    return listRegistrationsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the `Registration` resources in a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ListRegistrationsRequest request =
+   *       ListRegistrationsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;Registration&gt; future =
+   *       domainsClient.listRegistrationsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Registration element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRegistrationsRequest, ListRegistrationsPagedResponse&gt;
+      listRegistrationsPagedCallable() {
+<span class="fc" id="L1138">    return stub.listRegistrationsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the `Registration` resources in a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ListRegistrationsRequest request =
+   *       ListRegistrationsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListRegistrationsResponse response =
+   *         domainsClient.listRegistrationsCallable().call(request);
+   *     for (Registration element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRegistrationsRequest, ListRegistrationsResponse&gt;
+      listRegistrationsCallable() {
+<span class="nc" id="L1176">    return stub.listRegistrationsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a `Registration` resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RegistrationName name = RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;);
+   *   Registration response = domainsClient.getRegistration(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the `Registration` to get, in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Registration getRegistration(RegistrationName name) {
+    GetRegistrationRequest request =
+<span class="pc bpc" id="L1200" title="1 of 2 branches missed.">        GetRegistrationRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1201">    return getRegistration(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a `Registration` resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   String name = RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString();
+   *   Registration response = domainsClient.getRegistration(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the `Registration` to get, in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Registration getRegistration(String name) {
+<span class="fc" id="L1224">    GetRegistrationRequest request = GetRegistrationRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1225">    return getRegistration(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a `Registration` resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   GetRegistrationRequest request =
+   *       GetRegistrationRequest.newBuilder()
+   *           .setName(RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .build();
+   *   Registration response = domainsClient.getRegistration(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Registration getRegistration(GetRegistrationRequest request) {
+<span class="fc" id="L1250">    return getRegistrationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a `Registration` resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   GetRegistrationRequest request =
+   *       GetRegistrationRequest.newBuilder()
+   *           .setName(RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Registration&gt; future = domainsClient.getRegistrationCallable().futureCall(request);
+   *   // Do something.
+   *   Registration response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetRegistrationRequest, Registration&gt; getRegistrationCallable() {
+<span class="fc" id="L1274">    return stub.getRegistrationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates select fields of a `Registration` resource, notably `labels`. To update other fields,
+   * use the appropriate custom update method:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;To update management settings, see `ConfigureManagementSettings`
+   *   &lt;li&gt;To update DNS configuration, see `ConfigureDnsSettings`
+   *   &lt;li&gt;To update contact information, see `ConfigureContactSettings`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   Registration registration = Registration.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Registration response = domainsClient.updateRegistrationAsync(registration, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param registration Fields of the `Registration` to update.
+   * @param updateMask Required. The field mask describing which fields to update as a
+   *     comma-separated list. For example, if only the labels are being updated, the `update_mask`
+   *     is `&quot;labels&quot;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; updateRegistrationAsync(
+      Registration registration, FieldMask updateMask) {
+    UpdateRegistrationRequest request =
+<span class="fc" id="L1309">        UpdateRegistrationRequest.newBuilder()</span>
+<span class="fc" id="L1310">            .setRegistration(registration)</span>
+<span class="fc" id="L1311">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L1312">            .build();</span>
+<span class="fc" id="L1313">    return updateRegistrationAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates select fields of a `Registration` resource, notably `labels`. To update other fields,
+   * use the appropriate custom update method:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;To update management settings, see `ConfigureManagementSettings`
+   *   &lt;li&gt;To update DNS configuration, see `ConfigureDnsSettings`
+   *   &lt;li&gt;To update contact information, see `ConfigureContactSettings`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   UpdateRegistrationRequest request =
+   *       UpdateRegistrationRequest.newBuilder()
+   *           .setRegistration(Registration.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Registration response = domainsClient.updateRegistrationAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; updateRegistrationAsync(
+      UpdateRegistrationRequest request) {
+<span class="fc" id="L1347">    return updateRegistrationOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates select fields of a `Registration` resource, notably `labels`. To update other fields,
+   * use the appropriate custom update method:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;To update management settings, see `ConfigureManagementSettings`
+   *   &lt;li&gt;To update DNS configuration, see `ConfigureDnsSettings`
+   *   &lt;li&gt;To update contact information, see `ConfigureContactSettings`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   UpdateRegistrationRequest request =
+   *       UpdateRegistrationRequest.newBuilder()
+   *           .setRegistration(Registration.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Registration, OperationMetadata&gt; future =
+   *       domainsClient.updateRegistrationOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Registration response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpdateRegistrationRequest, Registration, OperationMetadata&gt;
+      updateRegistrationOperationCallable() {
+<span class="fc" id="L1381">    return stub.updateRegistrationOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates select fields of a `Registration` resource, notably `labels`. To update other fields,
+   * use the appropriate custom update method:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;To update management settings, see `ConfigureManagementSettings`
+   *   &lt;li&gt;To update DNS configuration, see `ConfigureDnsSettings`
+   *   &lt;li&gt;To update contact information, see `ConfigureContactSettings`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   UpdateRegistrationRequest request =
+   *       UpdateRegistrationRequest.newBuilder()
+   *           .setRegistration(Registration.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = domainsClient.updateRegistrationCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateRegistrationRequest, Operation&gt; updateRegistrationCallable() {
+<span class="nc" id="L1413">    return stub.updateRegistrationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s management settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RegistrationName registration =
+   *       RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;);
+   *   ManagementSettings managementSettings = ManagementSettings.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Registration response =
+   *       domainsClient
+   *           .configureManagementSettingsAsync(registration, managementSettings, updateMask)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param registration Required. The name of the `Registration` whose management settings are
+   *     being updated, in the format `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @param managementSettings Fields of the `ManagementSettings` to update.
+   * @param updateMask Required. The field mask describing which fields to update as a
+   *     comma-separated list. For example, if only the transfer lock is being updated, the
+   *     `update_mask` is `&quot;transfer_lock_state&quot;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; configureManagementSettingsAsync(
+      RegistrationName registration, ManagementSettings managementSettings, FieldMask updateMask) {
+    ConfigureManagementSettingsRequest request =
+<span class="fc" id="L1448">        ConfigureManagementSettingsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1449" title="1 of 2 branches missed.">            .setRegistration(registration == null ? null : registration.toString())</span>
+<span class="fc" id="L1450">            .setManagementSettings(managementSettings)</span>
+<span class="fc" id="L1451">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L1452">            .build();</span>
+<span class="fc" id="L1453">    return configureManagementSettingsAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s management settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   String registration =
+   *       RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString();
+   *   ManagementSettings managementSettings = ManagementSettings.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Registration response =
+   *       domainsClient
+   *           .configureManagementSettingsAsync(registration, managementSettings, updateMask)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param registration Required. The name of the `Registration` whose management settings are
+   *     being updated, in the format `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @param managementSettings Fields of the `ManagementSettings` to update.
+   * @param updateMask Required. The field mask describing which fields to update as a
+   *     comma-separated list. For example, if only the transfer lock is being updated, the
+   *     `update_mask` is `&quot;transfer_lock_state&quot;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; configureManagementSettingsAsync(
+      String registration, ManagementSettings managementSettings, FieldMask updateMask) {
+    ConfigureManagementSettingsRequest request =
+<span class="fc" id="L1488">        ConfigureManagementSettingsRequest.newBuilder()</span>
+<span class="fc" id="L1489">            .setRegistration(registration)</span>
+<span class="fc" id="L1490">            .setManagementSettings(managementSettings)</span>
+<span class="fc" id="L1491">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L1492">            .build();</span>
+<span class="fc" id="L1493">    return configureManagementSettingsAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s management settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ConfigureManagementSettingsRequest request =
+   *       ConfigureManagementSettingsRequest.newBuilder()
+   *           .setRegistration(
+   *               RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .setManagementSettings(ManagementSettings.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Registration response = domainsClient.configureManagementSettingsAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; configureManagementSettingsAsync(
+      ConfigureManagementSettingsRequest request) {
+<span class="fc" id="L1522">    return configureManagementSettingsOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s management settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ConfigureManagementSettingsRequest request =
+   *       ConfigureManagementSettingsRequest.newBuilder()
+   *           .setRegistration(
+   *               RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .setManagementSettings(ManagementSettings.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Registration, OperationMetadata&gt; future =
+   *       domainsClient.configureManagementSettingsOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Registration response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          ConfigureManagementSettingsRequest, Registration, OperationMetadata&gt;
+      configureManagementSettingsOperationCallable() {
+<span class="fc" id="L1552">    return stub.configureManagementSettingsOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s management settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ConfigureManagementSettingsRequest request =
+   *       ConfigureManagementSettingsRequest.newBuilder()
+   *           .setRegistration(
+   *               RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .setManagementSettings(ManagementSettings.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       domainsClient.configureManagementSettingsCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ConfigureManagementSettingsRequest, Operation&gt;
+      configureManagementSettingsCallable() {
+<span class="nc" id="L1581">    return stub.configureManagementSettingsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s DNS settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RegistrationName registration =
+   *       RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;);
+   *   DnsSettings dnsSettings = DnsSettings.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Registration response =
+   *       domainsClient.configureDnsSettingsAsync(registration, dnsSettings, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param registration Required. The name of the `Registration` whose DNS settings are being
+   *     updated, in the format `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @param dnsSettings Fields of the `DnsSettings` to update.
+   * @param updateMask Required. The field mask describing which fields to update as a
+   *     comma-separated list. For example, if only the name servers are being updated for an
+   *     existing Custom DNS configuration, the `update_mask` is `&quot;custom_dns.name_servers&quot;`.
+   *     &lt;p&gt;When changing the DNS provider from one type to another, pass the new provider's field
+   *     name as part of the field mask. For example, when changing from a Google Domains DNS
+   *     configuration to a Custom DNS configuration, the `update_mask` is `&quot;custom_dns&quot;`. //
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; configureDnsSettingsAsync(
+      RegistrationName registration, DnsSettings dnsSettings, FieldMask updateMask) {
+    ConfigureDnsSettingsRequest request =
+<span class="fc" id="L1617">        ConfigureDnsSettingsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1618" title="1 of 2 branches missed.">            .setRegistration(registration == null ? null : registration.toString())</span>
+<span class="fc" id="L1619">            .setDnsSettings(dnsSettings)</span>
+<span class="fc" id="L1620">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L1621">            .build();</span>
+<span class="fc" id="L1622">    return configureDnsSettingsAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s DNS settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   String registration =
+   *       RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString();
+   *   DnsSettings dnsSettings = DnsSettings.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Registration response =
+   *       domainsClient.configureDnsSettingsAsync(registration, dnsSettings, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param registration Required. The name of the `Registration` whose DNS settings are being
+   *     updated, in the format `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @param dnsSettings Fields of the `DnsSettings` to update.
+   * @param updateMask Required. The field mask describing which fields to update as a
+   *     comma-separated list. For example, if only the name servers are being updated for an
+   *     existing Custom DNS configuration, the `update_mask` is `&quot;custom_dns.name_servers&quot;`.
+   *     &lt;p&gt;When changing the DNS provider from one type to another, pass the new provider's field
+   *     name as part of the field mask. For example, when changing from a Google Domains DNS
+   *     configuration to a Custom DNS configuration, the `update_mask` is `&quot;custom_dns&quot;`. //
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; configureDnsSettingsAsync(
+      String registration, DnsSettings dnsSettings, FieldMask updateMask) {
+    ConfigureDnsSettingsRequest request =
+<span class="fc" id="L1658">        ConfigureDnsSettingsRequest.newBuilder()</span>
+<span class="fc" id="L1659">            .setRegistration(registration)</span>
+<span class="fc" id="L1660">            .setDnsSettings(dnsSettings)</span>
+<span class="fc" id="L1661">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L1662">            .build();</span>
+<span class="fc" id="L1663">    return configureDnsSettingsAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s DNS settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ConfigureDnsSettingsRequest request =
+   *       ConfigureDnsSettingsRequest.newBuilder()
+   *           .setRegistration(
+   *               RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .setDnsSettings(DnsSettings.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   Registration response = domainsClient.configureDnsSettingsAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; configureDnsSettingsAsync(
+      ConfigureDnsSettingsRequest request) {
+<span class="fc" id="L1693">    return configureDnsSettingsOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s DNS settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ConfigureDnsSettingsRequest request =
+   *       ConfigureDnsSettingsRequest.newBuilder()
+   *           .setRegistration(
+   *               RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .setDnsSettings(DnsSettings.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   OperationFuture&lt;Registration, OperationMetadata&gt; future =
+   *       domainsClient.configureDnsSettingsOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Registration response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;ConfigureDnsSettingsRequest, Registration, OperationMetadata&gt;
+      configureDnsSettingsOperationCallable() {
+<span class="fc" id="L1723">    return stub.configureDnsSettingsOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s DNS settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ConfigureDnsSettingsRequest request =
+   *       ConfigureDnsSettingsRequest.newBuilder()
+   *           .setRegistration(
+   *               RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .setDnsSettings(DnsSettings.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       domainsClient.configureDnsSettingsCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ConfigureDnsSettingsRequest, Operation&gt;
+      configureDnsSettingsCallable() {
+<span class="nc" id="L1753">    return stub.configureDnsSettingsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s contact settings. Some changes require confirmation by the domain's
+   * registrant contact .
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RegistrationName registration =
+   *       RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;);
+   *   ContactSettings contactSettings = ContactSettings.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Registration response =
+   *       domainsClient
+   *           .configureContactSettingsAsync(registration, contactSettings, updateMask)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param registration Required. The name of the `Registration` whose contact settings are being
+   *     updated, in the format `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @param contactSettings Fields of the `ContactSettings` to update.
+   * @param updateMask Required. The field mask describing which fields to update as a
+   *     comma-separated list. For example, if only the registrant contact is being updated, the
+   *     `update_mask` is `&quot;registrant_contact&quot;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; configureContactSettingsAsync(
+      RegistrationName registration, ContactSettings contactSettings, FieldMask updateMask) {
+    ConfigureContactSettingsRequest request =
+<span class="fc" id="L1789">        ConfigureContactSettingsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1790" title="1 of 2 branches missed.">            .setRegistration(registration == null ? null : registration.toString())</span>
+<span class="fc" id="L1791">            .setContactSettings(contactSettings)</span>
+<span class="fc" id="L1792">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L1793">            .build();</span>
+<span class="fc" id="L1794">    return configureContactSettingsAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s contact settings. Some changes require confirmation by the domain's
+   * registrant contact .
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   String registration =
+   *       RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString();
+   *   ContactSettings contactSettings = ContactSettings.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Registration response =
+   *       domainsClient
+   *           .configureContactSettingsAsync(registration, contactSettings, updateMask)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param registration Required. The name of the `Registration` whose contact settings are being
+   *     updated, in the format `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @param contactSettings Fields of the `ContactSettings` to update.
+   * @param updateMask Required. The field mask describing which fields to update as a
+   *     comma-separated list. For example, if only the registrant contact is being updated, the
+   *     `update_mask` is `&quot;registrant_contact&quot;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; configureContactSettingsAsync(
+      String registration, ContactSettings contactSettings, FieldMask updateMask) {
+    ConfigureContactSettingsRequest request =
+<span class="fc" id="L1830">        ConfigureContactSettingsRequest.newBuilder()</span>
+<span class="fc" id="L1831">            .setRegistration(registration)</span>
+<span class="fc" id="L1832">            .setContactSettings(contactSettings)</span>
+<span class="fc" id="L1833">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L1834">            .build();</span>
+<span class="fc" id="L1835">    return configureContactSettingsAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s contact settings. Some changes require confirmation by the domain's
+   * registrant contact .
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ConfigureContactSettingsRequest request =
+   *       ConfigureContactSettingsRequest.newBuilder()
+   *           .setRegistration(
+   *               RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .setContactSettings(ContactSettings.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .addAllContactNotices(new ArrayList&lt;ContactNotice&gt;())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   Registration response = domainsClient.configureContactSettingsAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; configureContactSettingsAsync(
+      ConfigureContactSettingsRequest request) {
+<span class="fc" id="L1867">    return configureContactSettingsOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s contact settings. Some changes require confirmation by the domain's
+   * registrant contact .
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ConfigureContactSettingsRequest request =
+   *       ConfigureContactSettingsRequest.newBuilder()
+   *           .setRegistration(
+   *               RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .setContactSettings(ContactSettings.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .addAllContactNotices(new ArrayList&lt;ContactNotice&gt;())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   OperationFuture&lt;Registration, OperationMetadata&gt; future =
+   *       domainsClient.configureContactSettingsOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Registration response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;ConfigureContactSettingsRequest, Registration, OperationMetadata&gt;
+      configureContactSettingsOperationCallable() {
+<span class="fc" id="L1899">    return stub.configureContactSettingsOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a `Registration`'s contact settings. Some changes require confirmation by the domain's
+   * registrant contact .
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ConfigureContactSettingsRequest request =
+   *       ConfigureContactSettingsRequest.newBuilder()
+   *           .setRegistration(
+   *               RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .setContactSettings(ContactSettings.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .addAllContactNotices(new ArrayList&lt;ContactNotice&gt;())
+   *           .setValidateOnly(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       domainsClient.configureContactSettingsCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ConfigureContactSettingsRequest, Operation&gt;
+      configureContactSettingsCallable() {
+<span class="nc" id="L1931">    return stub.configureContactSettingsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports a `Registration` resource, such that it is no longer managed by Cloud Domains.
+   *
+   * &lt;p&gt;When an active domain is successfully exported, you can continue to use the domain in
+   * [Google Domains](https://domains.google/) until it expires. The calling user becomes the
+   * domain's sole owner in Google Domains, and permissions for the domain are subsequently managed
+   * there. The domain does not renew automatically unless the new owner sets up billing in Google
+   * Domains.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RegistrationName name = RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;);
+   *   Registration response = domainsClient.exportRegistrationAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the `Registration` to export, in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; exportRegistrationAsync(
+      RegistrationName name) {
+    ExportRegistrationRequest request =
+<span class="fc" id="L1962">        ExportRegistrationRequest.newBuilder()</span>
+<span class="pc bpc" id="L1963" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1964">            .build();</span>
+<span class="fc" id="L1965">    return exportRegistrationAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports a `Registration` resource, such that it is no longer managed by Cloud Domains.
+   *
+   * &lt;p&gt;When an active domain is successfully exported, you can continue to use the domain in
+   * [Google Domains](https://domains.google/) until it expires. The calling user becomes the
+   * domain's sole owner in Google Domains, and permissions for the domain are subsequently managed
+   * there. The domain does not renew automatically unless the new owner sets up billing in Google
+   * Domains.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   String name = RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString();
+   *   Registration response = domainsClient.exportRegistrationAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the `Registration` to export, in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; exportRegistrationAsync(
+      String name) {
+    ExportRegistrationRequest request =
+<span class="fc" id="L1996">        ExportRegistrationRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1997">    return exportRegistrationAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports a `Registration` resource, such that it is no longer managed by Cloud Domains.
+   *
+   * &lt;p&gt;When an active domain is successfully exported, you can continue to use the domain in
+   * [Google Domains](https://domains.google/) until it expires. The calling user becomes the
+   * domain's sole owner in Google Domains, and permissions for the domain are subsequently managed
+   * there. The domain does not renew automatically unless the new owner sets up billing in Google
+   * Domains.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ExportRegistrationRequest request =
+   *       ExportRegistrationRequest.newBuilder()
+   *           .setName(RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .build();
+   *   Registration response = domainsClient.exportRegistrationAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Registration, OperationMetadata&gt; exportRegistrationAsync(
+      ExportRegistrationRequest request) {
+<span class="fc" id="L2029">    return exportRegistrationOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports a `Registration` resource, such that it is no longer managed by Cloud Domains.
+   *
+   * &lt;p&gt;When an active domain is successfully exported, you can continue to use the domain in
+   * [Google Domains](https://domains.google/) until it expires. The calling user becomes the
+   * domain's sole owner in Google Domains, and permissions for the domain are subsequently managed
+   * there. The domain does not renew automatically unless the new owner sets up billing in Google
+   * Domains.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ExportRegistrationRequest request =
+   *       ExportRegistrationRequest.newBuilder()
+   *           .setName(RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Registration, OperationMetadata&gt; future =
+   *       domainsClient.exportRegistrationOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Registration response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;ExportRegistrationRequest, Registration, OperationMetadata&gt;
+      exportRegistrationOperationCallable() {
+<span class="fc" id="L2061">    return stub.exportRegistrationOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports a `Registration` resource, such that it is no longer managed by Cloud Domains.
+   *
+   * &lt;p&gt;When an active domain is successfully exported, you can continue to use the domain in
+   * [Google Domains](https://domains.google/) until it expires. The calling user becomes the
+   * domain's sole owner in Google Domains, and permissions for the domain are subsequently managed
+   * there. The domain does not renew automatically unless the new owner sets up billing in Google
+   * Domains.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ExportRegistrationRequest request =
+   *       ExportRegistrationRequest.newBuilder()
+   *           .setName(RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = domainsClient.exportRegistrationCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ExportRegistrationRequest, Operation&gt; exportRegistrationCallable() {
+<span class="nc" id="L2091">    return stub.exportRegistrationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a `Registration` resource.
+   *
+   * &lt;p&gt;This method works on any `Registration` resource using [Subscription or Commitment
+   * billing](/domains/pricing#billing-models), provided that the resource was created at least 1
+   * day in the past.
+   *
+   * &lt;p&gt;For `Registration` resources using [Monthly billing](/domains/pricing#billing-models), this
+   * method works if:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;`state` is `EXPORTED` with `expire_time` in the past
+   *   &lt;li&gt;`state` is `REGISTRATION_FAILED`
+   *   &lt;li&gt;`state` is `TRANSFER_FAILED`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;When an active registration is successfully deleted, you can continue to use the domain in
+   * [Google Domains](https://domains.google/) until it expires. The calling user becomes the
+   * domain's sole owner in Google Domains, and permissions for the domain are subsequently managed
+   * there. The domain does not renew automatically unless the new owner sets up billing in Google
+   * Domains.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RegistrationName name = RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;);
+   *   domainsClient.deleteRegistrationAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the `Registration` to delete, in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteRegistrationAsync(
+      RegistrationName name) {
+    DeleteRegistrationRequest request =
+<span class="fc" id="L2135">        DeleteRegistrationRequest.newBuilder()</span>
+<span class="pc bpc" id="L2136" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L2137">            .build();</span>
+<span class="fc" id="L2138">    return deleteRegistrationAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a `Registration` resource.
+   *
+   * &lt;p&gt;This method works on any `Registration` resource using [Subscription or Commitment
+   * billing](/domains/pricing#billing-models), provided that the resource was created at least 1
+   * day in the past.
+   *
+   * &lt;p&gt;For `Registration` resources using [Monthly billing](/domains/pricing#billing-models), this
+   * method works if:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;`state` is `EXPORTED` with `expire_time` in the past
+   *   &lt;li&gt;`state` is `REGISTRATION_FAILED`
+   *   &lt;li&gt;`state` is `TRANSFER_FAILED`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;When an active registration is successfully deleted, you can continue to use the domain in
+   * [Google Domains](https://domains.google/) until it expires. The calling user becomes the
+   * domain's sole owner in Google Domains, and permissions for the domain are subsequently managed
+   * there. The domain does not renew automatically unless the new owner sets up billing in Google
+   * Domains.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   String name = RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString();
+   *   domainsClient.deleteRegistrationAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the `Registration` to delete, in the format
+   *     `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteRegistrationAsync(String name) {
+    DeleteRegistrationRequest request =
+<span class="fc" id="L2181">        DeleteRegistrationRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2182">    return deleteRegistrationAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a `Registration` resource.
+   *
+   * &lt;p&gt;This method works on any `Registration` resource using [Subscription or Commitment
+   * billing](/domains/pricing#billing-models), provided that the resource was created at least 1
+   * day in the past.
+   *
+   * &lt;p&gt;For `Registration` resources using [Monthly billing](/domains/pricing#billing-models), this
+   * method works if:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;`state` is `EXPORTED` with `expire_time` in the past
+   *   &lt;li&gt;`state` is `REGISTRATION_FAILED`
+   *   &lt;li&gt;`state` is `TRANSFER_FAILED`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;When an active registration is successfully deleted, you can continue to use the domain in
+   * [Google Domains](https://domains.google/) until it expires. The calling user becomes the
+   * domain's sole owner in Google Domains, and permissions for the domain are subsequently managed
+   * there. The domain does not renew automatically unless the new owner sets up billing in Google
+   * Domains.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   DeleteRegistrationRequest request =
+   *       DeleteRegistrationRequest.newBuilder()
+   *           .setName(RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .build();
+   *   domainsClient.deleteRegistrationAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteRegistrationAsync(
+      DeleteRegistrationRequest request) {
+<span class="fc" id="L2227">    return deleteRegistrationOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a `Registration` resource.
+   *
+   * &lt;p&gt;This method works on any `Registration` resource using [Subscription or Commitment
+   * billing](/domains/pricing#billing-models), provided that the resource was created at least 1
+   * day in the past.
+   *
+   * &lt;p&gt;For `Registration` resources using [Monthly billing](/domains/pricing#billing-models), this
+   * method works if:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;`state` is `EXPORTED` with `expire_time` in the past
+   *   &lt;li&gt;`state` is `REGISTRATION_FAILED`
+   *   &lt;li&gt;`state` is `TRANSFER_FAILED`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;When an active registration is successfully deleted, you can continue to use the domain in
+   * [Google Domains](https://domains.google/) until it expires. The calling user becomes the
+   * domain's sole owner in Google Domains, and permissions for the domain are subsequently managed
+   * there. The domain does not renew automatically unless the new owner sets up billing in Google
+   * Domains.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   DeleteRegistrationRequest request =
+   *       DeleteRegistrationRequest.newBuilder()
+   *           .setName(RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       domainsClient.deleteRegistrationOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteRegistrationRequest, Empty, OperationMetadata&gt;
+      deleteRegistrationOperationCallable() {
+<span class="fc" id="L2272">    return stub.deleteRegistrationOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a `Registration` resource.
+   *
+   * &lt;p&gt;This method works on any `Registration` resource using [Subscription or Commitment
+   * billing](/domains/pricing#billing-models), provided that the resource was created at least 1
+   * day in the past.
+   *
+   * &lt;p&gt;For `Registration` resources using [Monthly billing](/domains/pricing#billing-models), this
+   * method works if:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;`state` is `EXPORTED` with `expire_time` in the past
+   *   &lt;li&gt;`state` is `REGISTRATION_FAILED`
+   *   &lt;li&gt;`state` is `TRANSFER_FAILED`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;When an active registration is successfully deleted, you can continue to use the domain in
+   * [Google Domains](https://domains.google/) until it expires. The calling user becomes the
+   * domain's sole owner in Google Domains, and permissions for the domain are subsequently managed
+   * there. The domain does not renew automatically unless the new owner sets up billing in Google
+   * Domains.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   DeleteRegistrationRequest request =
+   *       DeleteRegistrationRequest.newBuilder()
+   *           .setName(RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = domainsClient.deleteRegistrationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteRegistrationRequest, Operation&gt; deleteRegistrationCallable() {
+<span class="nc" id="L2315">    return stub.deleteRegistrationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the authorization code of the `Registration` for the purpose of transferring the domain to
+   * another registrar.
+   *
+   * &lt;p&gt;You can call this method only after 60 days have elapsed since the initial domain
+   * registration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RegistrationName registration =
+   *       RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;);
+   *   AuthorizationCode response = domainsClient.retrieveAuthorizationCode(registration);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param registration Required. The name of the `Registration` whose authorization code is being
+   *     retrieved, in the format `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AuthorizationCode retrieveAuthorizationCode(RegistrationName registration) {
+    RetrieveAuthorizationCodeRequest request =
+<span class="fc" id="L2344">        RetrieveAuthorizationCodeRequest.newBuilder()</span>
+<span class="pc bpc" id="L2345" title="1 of 2 branches missed.">            .setRegistration(registration == null ? null : registration.toString())</span>
+<span class="fc" id="L2346">            .build();</span>
+<span class="fc" id="L2347">    return retrieveAuthorizationCode(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the authorization code of the `Registration` for the purpose of transferring the domain to
+   * another registrar.
+   *
+   * &lt;p&gt;You can call this method only after 60 days have elapsed since the initial domain
+   * registration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   String registration =
+   *       RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString();
+   *   AuthorizationCode response = domainsClient.retrieveAuthorizationCode(registration);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param registration Required. The name of the `Registration` whose authorization code is being
+   *     retrieved, in the format `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AuthorizationCode retrieveAuthorizationCode(String registration) {
+    RetrieveAuthorizationCodeRequest request =
+<span class="fc" id="L2376">        RetrieveAuthorizationCodeRequest.newBuilder().setRegistration(registration).build();</span>
+<span class="fc" id="L2377">    return retrieveAuthorizationCode(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the authorization code of the `Registration` for the purpose of transferring the domain to
+   * another registrar.
+   *
+   * &lt;p&gt;You can call this method only after 60 days have elapsed since the initial domain
+   * registration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RetrieveAuthorizationCodeRequest request =
+   *       RetrieveAuthorizationCodeRequest.newBuilder()
+   *           .setRegistration(
+   *               RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .build();
+   *   AuthorizationCode response = domainsClient.retrieveAuthorizationCode(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AuthorizationCode retrieveAuthorizationCode(
+      RetrieveAuthorizationCodeRequest request) {
+<span class="fc" id="L2408">    return retrieveAuthorizationCodeCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the authorization code of the `Registration` for the purpose of transferring the domain to
+   * another registrar.
+   *
+   * &lt;p&gt;You can call this method only after 60 days have elapsed since the initial domain
+   * registration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RetrieveAuthorizationCodeRequest request =
+   *       RetrieveAuthorizationCodeRequest.newBuilder()
+   *           .setRegistration(
+   *               RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;AuthorizationCode&gt; future =
+   *       domainsClient.retrieveAuthorizationCodeCallable().futureCall(request);
+   *   // Do something.
+   *   AuthorizationCode response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RetrieveAuthorizationCodeRequest, AuthorizationCode&gt;
+      retrieveAuthorizationCodeCallable() {
+<span class="fc" id="L2439">    return stub.retrieveAuthorizationCodeCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resets the authorization code of the `Registration` to a new random string.
+   *
+   * &lt;p&gt;You can call this method only after 60 days have elapsed since the initial domain
+   * registration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   RegistrationName registration =
+   *       RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;);
+   *   AuthorizationCode response = domainsClient.resetAuthorizationCode(registration);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param registration Required. The name of the `Registration` whose authorization code is being
+   *     reset, in the format `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AuthorizationCode resetAuthorizationCode(RegistrationName registration) {
+    ResetAuthorizationCodeRequest request =
+<span class="fc" id="L2467">        ResetAuthorizationCodeRequest.newBuilder()</span>
+<span class="pc bpc" id="L2468" title="1 of 2 branches missed.">            .setRegistration(registration == null ? null : registration.toString())</span>
+<span class="fc" id="L2469">            .build();</span>
+<span class="fc" id="L2470">    return resetAuthorizationCode(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resets the authorization code of the `Registration` to a new random string.
+   *
+   * &lt;p&gt;You can call this method only after 60 days have elapsed since the initial domain
+   * registration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   String registration =
+   *       RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString();
+   *   AuthorizationCode response = domainsClient.resetAuthorizationCode(registration);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param registration Required. The name of the `Registration` whose authorization code is being
+   *     reset, in the format `projects/&amp;#42;/locations/&amp;#42;/registrations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AuthorizationCode resetAuthorizationCode(String registration) {
+    ResetAuthorizationCodeRequest request =
+<span class="fc" id="L2498">        ResetAuthorizationCodeRequest.newBuilder().setRegistration(registration).build();</span>
+<span class="fc" id="L2499">    return resetAuthorizationCode(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resets the authorization code of the `Registration` to a new random string.
+   *
+   * &lt;p&gt;You can call this method only after 60 days have elapsed since the initial domain
+   * registration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ResetAuthorizationCodeRequest request =
+   *       ResetAuthorizationCodeRequest.newBuilder()
+   *           .setRegistration(
+   *               RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .build();
+   *   AuthorizationCode response = domainsClient.resetAuthorizationCode(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AuthorizationCode resetAuthorizationCode(ResetAuthorizationCodeRequest request) {
+<span class="fc" id="L2528">    return resetAuthorizationCodeCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resets the authorization code of the `Registration` to a new random string.
+   *
+   * &lt;p&gt;You can call this method only after 60 days have elapsed since the initial domain
+   * registration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DomainsClient domainsClient = DomainsClient.create()) {
+   *   ResetAuthorizationCodeRequest request =
+   *       ResetAuthorizationCodeRequest.newBuilder()
+   *           .setRegistration(
+   *               RegistrationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[REGISTRATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;AuthorizationCode&gt; future =
+   *       domainsClient.resetAuthorizationCodeCallable().futureCall(request);
+   *   // Do something.
+   *   AuthorizationCode response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ResetAuthorizationCodeRequest, AuthorizationCode&gt;
+      resetAuthorizationCodeCallable() {
+<span class="fc" id="L2558">    return stub.resetAuthorizationCodeCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L2563">    stub.close();</span>
+<span class="fc" id="L2564">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L2568">    stub.shutdown();</span>
+<span class="nc" id="L2569">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L2573">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L2578">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L2583">    stub.shutdownNow();</span>
+<span class="nc" id="L2584">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L2588">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListRegistrationsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListRegistrationsRequest,
+          ListRegistrationsResponse,
+          Registration,
+          ListRegistrationsPage,
+          ListRegistrationsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListRegistrationsPagedResponse&gt; createAsync(
+        PageContext&lt;ListRegistrationsRequest, ListRegistrationsResponse, Registration&gt; context,
+        ApiFuture&lt;ListRegistrationsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListRegistrationsPage&gt; futurePage =
+<span class="fc" id="L2603">          ListRegistrationsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2604">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2606">          input -&gt; new ListRegistrationsPagedResponse(input),</span>
+<span class="fc" id="L2607">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListRegistrationsPagedResponse(ListRegistrationsPage page) {
+<span class="fc" id="L2611">      super(page, ListRegistrationsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2612">    }</span>
+  }
+
+  public static class ListRegistrationsPage
+      extends AbstractPage&lt;
+          ListRegistrationsRequest,
+          ListRegistrationsResponse,
+          Registration,
+          ListRegistrationsPage&gt; {
+
+    private ListRegistrationsPage(
+        PageContext&lt;ListRegistrationsRequest, ListRegistrationsResponse, Registration&gt; context,
+        ListRegistrationsResponse response) {
+<span class="fc" id="L2625">      super(context, response);</span>
+<span class="fc" id="L2626">    }</span>
+
+    private static ListRegistrationsPage createEmptyPage() {
+<span class="fc" id="L2629">      return new ListRegistrationsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListRegistrationsPage createPage(
+        PageContext&lt;ListRegistrationsRequest, ListRegistrationsResponse, Registration&gt; context,
+        ListRegistrationsResponse response) {
+<span class="fc" id="L2636">      return new ListRegistrationsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListRegistrationsPage&gt; createPageAsync(
+        PageContext&lt;ListRegistrationsRequest, ListRegistrationsResponse, Registration&gt; context,
+        ApiFuture&lt;ListRegistrationsResponse&gt; futureResponse) {
+<span class="fc" id="L2643">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListRegistrationsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListRegistrationsRequest,
+          ListRegistrationsResponse,
+          Registration,
+          ListRegistrationsPage,
+          ListRegistrationsFixedSizeCollection&gt; {
+
+    private ListRegistrationsFixedSizeCollection(
+        List&lt;ListRegistrationsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2657">      super(pages, collectionSize);</span>
+<span class="fc" id="L2658">    }</span>
+
+    private static ListRegistrationsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2661">      return new ListRegistrationsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListRegistrationsFixedSizeCollection createCollection(
+        List&lt;ListRegistrationsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2667">      return new ListRegistrationsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

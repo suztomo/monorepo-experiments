@@ -1,0 +1,2300 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>RegistrationServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-servicedirectory</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.servicedirectory.v1beta1</a> &gt; <span class="el_source">RegistrationServiceClient.java</span></div><h1>RegistrationServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.servicedirectory.v1beta1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.servicedirectory.v1beta1.stub.RegistrationServiceStub;
+import com.google.cloud.servicedirectory.v1beta1.stub.RegistrationServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.iam.v1.GetIamPolicyRequest;
+import com.google.iam.v1.Policy;
+import com.google.iam.v1.SetIamPolicyRequest;
+import com.google.iam.v1.TestIamPermissionsRequest;
+import com.google.iam.v1.TestIamPermissionsResponse;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Service Directory API for registering services. It defines the following
+ * resource model:
+ *
+ * &lt;p&gt;- The API has a collection of [Namespace][google.cloud.servicedirectory.v1beta1.Namespace]
+ * resources, named `projects/&amp;#42;/locations/&amp;#42;/namespaces/&amp;#42;`.
+ *
+ * &lt;p&gt;- Each Namespace has a collection of [Service][google.cloud.servicedirectory.v1beta1.Service]
+ * resources, named `projects/&amp;#42;/locations/&amp;#42;/namespaces/&amp;#42;/services/&amp;#42;`.
+ *
+ * &lt;p&gt;- Each Service has a collection of [Endpoint][google.cloud.servicedirectory.v1beta1.Endpoint]
+ * resources, named
+ * `projects/&amp;#42;/locations/&amp;#42;/namespaces/&amp;#42;/services/&amp;#42;/endpoints/&amp;#42;`.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+ *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+ *   Namespace namespace = Namespace.newBuilder().build();
+ *   String namespaceId = &quot;namespaceId790852566&quot;;
+ *   Namespace response =
+ *       registrationServiceClient.createNamespace(parent, namespace, namespaceId);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the RegistrationServiceClient object to clean up resources
+ * such as threads. In the example above, try-with-resources is used, which automatically calls
+ * close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of RegistrationServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * RegistrationServiceSettings registrationServiceSettings =
+ *     RegistrationServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * RegistrationServiceClient registrationServiceClient =
+ *     RegistrationServiceClient.create(registrationServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * RegistrationServiceSettings registrationServiceSettings =
+ *     RegistrationServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * RegistrationServiceClient registrationServiceClient =
+ *     RegistrationServiceClient.create(registrationServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@BetaApi
+@Generated(&quot;by gapic-generator-java&quot;)
+public class RegistrationServiceClient implements BackgroundResource {
+  private final RegistrationServiceSettings settings;
+  private final RegistrationServiceStub stub;
+
+  /** Constructs an instance of RegistrationServiceClient with default settings. */
+  public static final RegistrationServiceClient create() throws IOException {
+<span class="nc" id="L134">    return create(RegistrationServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of RegistrationServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final RegistrationServiceClient create(RegistrationServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L143">    return new RegistrationServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of RegistrationServiceClient, using the given stub for making calls.
+   * This is for advanced usage - prefer using create(RegistrationServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final RegistrationServiceClient create(RegistrationServiceStub stub) {
+<span class="nc" id="L152">    return new RegistrationServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of RegistrationServiceClient, using the given settings. This is
+   * protected so that it is easy to make a subclass, but otherwise, the static factory methods
+   * should be preferred.
+   */
+<span class="fc" id="L160">  protected RegistrationServiceClient(RegistrationServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L161">    this.settings = settings;</span>
+<span class="fc" id="L162">    this.stub = ((RegistrationServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L163">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L166">  protected RegistrationServiceClient(RegistrationServiceStub stub) {</span>
+<span class="nc" id="L167">    this.settings = null;</span>
+<span class="nc" id="L168">    this.stub = stub;</span>
+<span class="nc" id="L169">  }</span>
+
+  public final RegistrationServiceSettings getSettings() {
+<span class="nc" id="L172">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public RegistrationServiceStub getStub() {
+<span class="nc" id="L177">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a namespace, and returns the new namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Namespace namespace = Namespace.newBuilder().build();
+   *   String namespaceId = &quot;namespaceId790852566&quot;;
+   *   Namespace response =
+   *       registrationServiceClient.createNamespace(parent, namespace, namespaceId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the project and location the namespace will be
+   *     created in.
+   * @param namespace Required. A namespace with initial fields set.
+   * @param namespaceId Required. The Resource ID must be 1-63 characters long, and comply with
+   *     &amp;lt;a href=&quot;https://www.ietf.org/rfc/rfc1035.txt&quot; target=&quot;_blank&quot;&amp;gt;RFC1035&amp;lt;/a&amp;gt;.
+   *     Specifically, the name must be 1-63 characters long and match the regular expression
+   *     `[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?` which means the first character must be a lowercase
+   *     letter, and all following characters must be a dash, lowercase letter, or digit, except the
+   *     last character, which cannot be a dash.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Namespace createNamespace(
+      LocationName parent, Namespace namespace, String namespaceId) {
+    CreateNamespaceRequest request =
+<span class="fc" id="L212">        CreateNamespaceRequest.newBuilder()</span>
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L214">            .setNamespace(namespace)</span>
+<span class="fc" id="L215">            .setNamespaceId(namespaceId)</span>
+<span class="fc" id="L216">            .build();</span>
+<span class="fc" id="L217">    return createNamespace(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a namespace, and returns the new namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Namespace namespace = Namespace.newBuilder().build();
+   *   String namespaceId = &quot;namespaceId790852566&quot;;
+   *   Namespace response =
+   *       registrationServiceClient.createNamespace(parent, namespace, namespaceId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the project and location the namespace will be
+   *     created in.
+   * @param namespace Required. A namespace with initial fields set.
+   * @param namespaceId Required. The Resource ID must be 1-63 characters long, and comply with
+   *     &amp;lt;a href=&quot;https://www.ietf.org/rfc/rfc1035.txt&quot; target=&quot;_blank&quot;&amp;gt;RFC1035&amp;lt;/a&amp;gt;.
+   *     Specifically, the name must be 1-63 characters long and match the regular expression
+   *     `[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?` which means the first character must be a lowercase
+   *     letter, and all following characters must be a dash, lowercase letter, or digit, except the
+   *     last character, which cannot be a dash.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Namespace createNamespace(String parent, Namespace namespace, String namespaceId) {
+    CreateNamespaceRequest request =
+<span class="fc" id="L251">        CreateNamespaceRequest.newBuilder()</span>
+<span class="fc" id="L252">            .setParent(parent)</span>
+<span class="fc" id="L253">            .setNamespace(namespace)</span>
+<span class="fc" id="L254">            .setNamespaceId(namespaceId)</span>
+<span class="fc" id="L255">            .build();</span>
+<span class="fc" id="L256">    return createNamespace(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a namespace, and returns the new namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   CreateNamespaceRequest request =
+   *       CreateNamespaceRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setNamespaceId(&quot;namespaceId790852566&quot;)
+   *           .setNamespace(Namespace.newBuilder().build())
+   *           .build();
+   *   Namespace response = registrationServiceClient.createNamespace(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Namespace createNamespace(CreateNamespaceRequest request) {
+<span class="fc" id="L283">    return createNamespaceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a namespace, and returns the new namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   CreateNamespaceRequest request =
+   *       CreateNamespaceRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setNamespaceId(&quot;namespaceId790852566&quot;)
+   *           .setNamespace(Namespace.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Namespace&gt; future =
+   *       registrationServiceClient.createNamespaceCallable().futureCall(request);
+   *   // Do something.
+   *   Namespace response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateNamespaceRequest, Namespace&gt; createNamespaceCallable() {
+<span class="fc" id="L310">    return stub.createNamespaceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all namespaces.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Namespace element : registrationServiceClient.listNamespaces(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the project and location whose namespaces you'd
+   *     like to list.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNamespacesPagedResponse listNamespaces(LocationName parent) {
+    ListNamespacesRequest request =
+<span class="fc" id="L336">        ListNamespacesRequest.newBuilder()</span>
+<span class="pc bpc" id="L337" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L338">            .build();</span>
+<span class="fc" id="L339">    return listNamespaces(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all namespaces.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Namespace element : registrationServiceClient.listNamespaces(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the project and location whose namespaces you'd
+   *     like to list.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNamespacesPagedResponse listNamespaces(String parent) {
+<span class="fc" id="L364">    ListNamespacesRequest request = ListNamespacesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L365">    return listNamespaces(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all namespaces.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   ListNamespacesRequest request =
+   *       ListNamespacesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Namespace element : registrationServiceClient.listNamespaces(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNamespacesPagedResponse listNamespaces(ListNamespacesRequest request) {
+<span class="fc" id="L396">    return listNamespacesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all namespaces.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   ListNamespacesRequest request =
+   *       ListNamespacesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Namespace&gt; future =
+   *       registrationServiceClient.listNamespacesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Namespace element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListNamespacesRequest, ListNamespacesPagedResponse&gt;
+      listNamespacesPagedCallable() {
+<span class="fc" id="L428">    return stub.listNamespacesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all namespaces.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   ListNamespacesRequest request =
+   *       ListNamespacesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListNamespacesResponse response =
+   *         registrationServiceClient.listNamespacesCallable().call(request);
+   *     for (Namespace element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListNamespacesRequest, ListNamespacesResponse&gt;
+      listNamespacesCallable() {
+<span class="nc" id="L467">    return stub.listNamespacesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   NamespaceName name = NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;);
+   *   Namespace response = registrationServiceClient.getNamespace(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the namespace to retrieve.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Namespace getNamespace(NamespaceName name) {
+    GetNamespaceRequest request =
+<span class="pc bpc" id="L490" title="1 of 2 branches missed.">        GetNamespaceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L491">    return getNamespace(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   String name = NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;).toString();
+   *   Namespace response = registrationServiceClient.getNamespace(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the namespace to retrieve.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Namespace getNamespace(String name) {
+<span class="fc" id="L513">    GetNamespaceRequest request = GetNamespaceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L514">    return getNamespace(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   GetNamespaceRequest request =
+   *       GetNamespaceRequest.newBuilder()
+   *           .setName(NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;).toString())
+   *           .build();
+   *   Namespace response = registrationServiceClient.getNamespace(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Namespace getNamespace(GetNamespaceRequest request) {
+<span class="fc" id="L539">    return getNamespaceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   GetNamespaceRequest request =
+   *       GetNamespaceRequest.newBuilder()
+   *           .setName(NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Namespace&gt; future =
+   *       registrationServiceClient.getNamespaceCallable().futureCall(request);
+   *   // Do something.
+   *   Namespace response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetNamespaceRequest, Namespace&gt; getNamespaceCallable() {
+<span class="fc" id="L564">    return stub.getNamespaceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   Namespace namespace = Namespace.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Namespace response = registrationServiceClient.updateNamespace(namespace, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param namespace Required. The updated namespace.
+   * @param updateMask Required. List of fields to be updated in this request.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Namespace updateNamespace(Namespace namespace, FieldMask updateMask) {
+    UpdateNamespaceRequest request =
+<span class="fc" id="L589">        UpdateNamespaceRequest.newBuilder()</span>
+<span class="fc" id="L590">            .setNamespace(namespace)</span>
+<span class="fc" id="L591">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L592">            .build();</span>
+<span class="fc" id="L593">    return updateNamespace(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   UpdateNamespaceRequest request =
+   *       UpdateNamespaceRequest.newBuilder()
+   *           .setNamespace(Namespace.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Namespace response = registrationServiceClient.updateNamespace(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Namespace updateNamespace(UpdateNamespaceRequest request) {
+<span class="fc" id="L619">    return updateNamespaceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   UpdateNamespaceRequest request =
+   *       UpdateNamespaceRequest.newBuilder()
+   *           .setNamespace(Namespace.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Namespace&gt; future =
+   *       registrationServiceClient.updateNamespaceCallable().futureCall(request);
+   *   // Do something.
+   *   Namespace response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateNamespaceRequest, Namespace&gt; updateNamespaceCallable() {
+<span class="fc" id="L645">    return stub.updateNamespaceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a namespace. This also deletes all services and endpoints in the namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   NamespaceName name = NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;);
+   *   registrationServiceClient.deleteNamespace(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the namespace to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteNamespace(NamespaceName name) {
+    DeleteNamespaceRequest request =
+<span class="pc bpc" id="L668" title="1 of 2 branches missed.">        DeleteNamespaceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L669">    deleteNamespace(request);</span>
+<span class="fc" id="L670">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a namespace. This also deletes all services and endpoints in the namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   String name = NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;).toString();
+   *   registrationServiceClient.deleteNamespace(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the namespace to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteNamespace(String name) {
+<span class="fc" id="L691">    DeleteNamespaceRequest request = DeleteNamespaceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L692">    deleteNamespace(request);</span>
+<span class="fc" id="L693">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a namespace. This also deletes all services and endpoints in the namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   DeleteNamespaceRequest request =
+   *       DeleteNamespaceRequest.newBuilder()
+   *           .setName(NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;).toString())
+   *           .build();
+   *   registrationServiceClient.deleteNamespace(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteNamespace(DeleteNamespaceRequest request) {
+<span class="fc" id="L717">    deleteNamespaceCallable().call(request);</span>
+<span class="fc" id="L718">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a namespace. This also deletes all services and endpoints in the namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   DeleteNamespaceRequest request =
+   *       DeleteNamespaceRequest.newBuilder()
+   *           .setName(NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       registrationServiceClient.deleteNamespaceCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteNamespaceRequest, Empty&gt; deleteNamespaceCallable() {
+<span class="fc" id="L742">    return stub.deleteNamespaceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a service, and returns the new service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   NamespaceName parent = NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;);
+   *   Service service = Service.newBuilder().build();
+   *   String serviceId = &quot;serviceId-194185552&quot;;
+   *   Service response = registrationServiceClient.createService(parent, service, serviceId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the namespace this service will belong to.
+   * @param service Required. A service with initial fields set.
+   * @param serviceId Required. The Resource ID must be 1-63 characters long, and comply with &amp;lt;a
+   *     href=&quot;https://www.ietf.org/rfc/rfc1035.txt&quot; target=&quot;_blank&quot;&amp;gt;RFC1035&amp;lt;/a&amp;gt;.
+   *     Specifically, the name must be 1-63 characters long and match the regular expression
+   *     `[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?` which means the first character must be a lowercase
+   *     letter, and all following characters must be a dash, lowercase letter, or digit, except the
+   *     last character, which cannot be a dash.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service createService(NamespaceName parent, Service service, String serviceId) {
+    CreateServiceRequest request =
+<span class="fc" id="L774">        CreateServiceRequest.newBuilder()</span>
+<span class="pc bpc" id="L775" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L776">            .setService(service)</span>
+<span class="fc" id="L777">            .setServiceId(serviceId)</span>
+<span class="fc" id="L778">            .build();</span>
+<span class="fc" id="L779">    return createService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a service, and returns the new service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   String parent = NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;).toString();
+   *   Service service = Service.newBuilder().build();
+   *   String serviceId = &quot;serviceId-194185552&quot;;
+   *   Service response = registrationServiceClient.createService(parent, service, serviceId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the namespace this service will belong to.
+   * @param service Required. A service with initial fields set.
+   * @param serviceId Required. The Resource ID must be 1-63 characters long, and comply with &amp;lt;a
+   *     href=&quot;https://www.ietf.org/rfc/rfc1035.txt&quot; target=&quot;_blank&quot;&amp;gt;RFC1035&amp;lt;/a&amp;gt;.
+   *     Specifically, the name must be 1-63 characters long and match the regular expression
+   *     `[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?` which means the first character must be a lowercase
+   *     letter, and all following characters must be a dash, lowercase letter, or digit, except the
+   *     last character, which cannot be a dash.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service createService(String parent, Service service, String serviceId) {
+    CreateServiceRequest request =
+<span class="fc" id="L811">        CreateServiceRequest.newBuilder()</span>
+<span class="fc" id="L812">            .setParent(parent)</span>
+<span class="fc" id="L813">            .setService(service)</span>
+<span class="fc" id="L814">            .setServiceId(serviceId)</span>
+<span class="fc" id="L815">            .build();</span>
+<span class="fc" id="L816">    return createService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a service, and returns the new service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   CreateServiceRequest request =
+   *       CreateServiceRequest.newBuilder()
+   *           .setParent(NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;).toString())
+   *           .setServiceId(&quot;serviceId-194185552&quot;)
+   *           .setService(Service.newBuilder().build())
+   *           .build();
+   *   Service response = registrationServiceClient.createService(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service createService(CreateServiceRequest request) {
+<span class="fc" id="L843">    return createServiceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a service, and returns the new service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   CreateServiceRequest request =
+   *       CreateServiceRequest.newBuilder()
+   *           .setParent(NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;).toString())
+   *           .setServiceId(&quot;serviceId-194185552&quot;)
+   *           .setService(Service.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Service&gt; future =
+   *       registrationServiceClient.createServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Service response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateServiceRequest, Service&gt; createServiceCallable() {
+<span class="fc" id="L870">    return stub.createServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all services belonging to a namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   NamespaceName parent = NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;);
+   *   for (Service element : registrationServiceClient.listServices(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the namespace whose services you'd like to list.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServicesPagedResponse listServices(NamespaceName parent) {
+    ListServicesRequest request =
+<span class="fc" id="L895">        ListServicesRequest.newBuilder()</span>
+<span class="pc bpc" id="L896" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L897">            .build();</span>
+<span class="fc" id="L898">    return listServices(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all services belonging to a namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   String parent = NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;).toString();
+   *   for (Service element : registrationServiceClient.listServices(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the namespace whose services you'd like to list.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServicesPagedResponse listServices(String parent) {
+<span class="fc" id="L922">    ListServicesRequest request = ListServicesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L923">    return listServices(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all services belonging to a namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   ListServicesRequest request =
+   *       ListServicesRequest.newBuilder()
+   *           .setParent(NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Service element : registrationServiceClient.listServices(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServicesPagedResponse listServices(ListServicesRequest request) {
+<span class="fc" id="L954">    return listServicesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all services belonging to a namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   ListServicesRequest request =
+   *       ListServicesRequest.newBuilder()
+   *           .setParent(NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Service&gt; future =
+   *       registrationServiceClient.listServicesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Service element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListServicesRequest, ListServicesPagedResponse&gt;
+      listServicesPagedCallable() {
+<span class="fc" id="L986">    return stub.listServicesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all services belonging to a namespace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   ListServicesRequest request =
+   *       ListServicesRequest.newBuilder()
+   *           .setParent(NamespaceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListServicesResponse response =
+   *         registrationServiceClient.listServicesCallable().call(request);
+   *     for (Service element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListServicesRequest, ListServicesResponse&gt; listServicesCallable() {
+<span class="nc" id="L1024">    return stub.listServicesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   ServiceName name = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;);
+   *   Service response = registrationServiceClient.getService(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the service to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service getService(ServiceName name) {
+    GetServiceRequest request =
+<span class="pc bpc" id="L1047" title="1 of 2 branches missed.">        GetServiceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1048">    return getService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   String name =
+   *       ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   Service response = registrationServiceClient.getService(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the service to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service getService(String name) {
+<span class="fc" id="L1071">    GetServiceRequest request = GetServiceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1072">    return getService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   GetServiceRequest request =
+   *       GetServiceRequest.newBuilder()
+   *           .setName(
+   *               ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .build();
+   *   Service response = registrationServiceClient.getService(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service getService(GetServiceRequest request) {
+<span class="fc" id="L1098">    return getServiceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   GetServiceRequest request =
+   *       GetServiceRequest.newBuilder()
+   *           .setName(
+   *               ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Service&gt; future =
+   *       registrationServiceClient.getServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Service response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetServiceRequest, Service&gt; getServiceCallable() {
+<span class="fc" id="L1124">    return stub.getServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   Service service = Service.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Service response = registrationServiceClient.updateService(service, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param service Required. The updated service.
+   * @param updateMask Required. List of fields to be updated in this request.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service updateService(Service service, FieldMask updateMask) {
+    UpdateServiceRequest request =
+<span class="fc" id="L1149">        UpdateServiceRequest.newBuilder().setService(service).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L1150">    return updateService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   UpdateServiceRequest request =
+   *       UpdateServiceRequest.newBuilder()
+   *           .setService(Service.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Service response = registrationServiceClient.updateService(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service updateService(UpdateServiceRequest request) {
+<span class="fc" id="L1176">    return updateServiceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   UpdateServiceRequest request =
+   *       UpdateServiceRequest.newBuilder()
+   *           .setService(Service.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Service&gt; future =
+   *       registrationServiceClient.updateServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Service response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateServiceRequest, Service&gt; updateServiceCallable() {
+<span class="fc" id="L1202">    return stub.updateServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a service. This also deletes all endpoints associated with the service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   ServiceName name = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;);
+   *   registrationServiceClient.deleteService(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the service to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteService(ServiceName name) {
+    DeleteServiceRequest request =
+<span class="pc bpc" id="L1225" title="1 of 2 branches missed.">        DeleteServiceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1226">    deleteService(request);</span>
+<span class="fc" id="L1227">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a service. This also deletes all endpoints associated with the service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   String name =
+   *       ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   registrationServiceClient.deleteService(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the service to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteService(String name) {
+<span class="fc" id="L1249">    DeleteServiceRequest request = DeleteServiceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1250">    deleteService(request);</span>
+<span class="fc" id="L1251">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a service. This also deletes all endpoints associated with the service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   DeleteServiceRequest request =
+   *       DeleteServiceRequest.newBuilder()
+   *           .setName(
+   *               ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .build();
+   *   registrationServiceClient.deleteService(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteService(DeleteServiceRequest request) {
+<span class="fc" id="L1276">    deleteServiceCallable().call(request);</span>
+<span class="fc" id="L1277">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a service. This also deletes all endpoints associated with the service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   DeleteServiceRequest request =
+   *       DeleteServiceRequest.newBuilder()
+   *           .setName(
+   *               ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       registrationServiceClient.deleteServiceCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteServiceRequest, Empty&gt; deleteServiceCallable() {
+<span class="fc" id="L1302">    return stub.deleteServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an endpoint, and returns the new endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   ServiceName parent = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;);
+   *   Endpoint endpoint = Endpoint.newBuilder().build();
+   *   String endpointId = &quot;endpointId-1837754992&quot;;
+   *   Endpoint response = registrationServiceClient.createEndpoint(parent, endpoint, endpointId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the service that this endpoint provides.
+   * @param endpoint Required. A endpoint with initial fields set.
+   * @param endpointId Required. The Resource ID must be 1-63 characters long, and comply with &amp;lt;a
+   *     href=&quot;https://www.ietf.org/rfc/rfc1035.txt&quot; target=&quot;_blank&quot;&amp;gt;RFC1035&amp;lt;/a&amp;gt;.
+   *     Specifically, the name must be 1-63 characters long and match the regular expression
+   *     `[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?` which means the first character must be a lowercase
+   *     letter, and all following characters must be a dash, lowercase letter, or digit, except the
+   *     last character, which cannot be a dash.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Endpoint createEndpoint(ServiceName parent, Endpoint endpoint, String endpointId) {
+    CreateEndpointRequest request =
+<span class="fc" id="L1334">        CreateEndpointRequest.newBuilder()</span>
+<span class="pc bpc" id="L1335" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1336">            .setEndpoint(endpoint)</span>
+<span class="fc" id="L1337">            .setEndpointId(endpointId)</span>
+<span class="fc" id="L1338">            .build();</span>
+<span class="fc" id="L1339">    return createEndpoint(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an endpoint, and returns the new endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   String parent =
+   *       ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   Endpoint endpoint = Endpoint.newBuilder().build();
+   *   String endpointId = &quot;endpointId-1837754992&quot;;
+   *   Endpoint response = registrationServiceClient.createEndpoint(parent, endpoint, endpointId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the service that this endpoint provides.
+   * @param endpoint Required. A endpoint with initial fields set.
+   * @param endpointId Required. The Resource ID must be 1-63 characters long, and comply with &amp;lt;a
+   *     href=&quot;https://www.ietf.org/rfc/rfc1035.txt&quot; target=&quot;_blank&quot;&amp;gt;RFC1035&amp;lt;/a&amp;gt;.
+   *     Specifically, the name must be 1-63 characters long and match the regular expression
+   *     `[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?` which means the first character must be a lowercase
+   *     letter, and all following characters must be a dash, lowercase letter, or digit, except the
+   *     last character, which cannot be a dash.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Endpoint createEndpoint(String parent, Endpoint endpoint, String endpointId) {
+    CreateEndpointRequest request =
+<span class="fc" id="L1372">        CreateEndpointRequest.newBuilder()</span>
+<span class="fc" id="L1373">            .setParent(parent)</span>
+<span class="fc" id="L1374">            .setEndpoint(endpoint)</span>
+<span class="fc" id="L1375">            .setEndpointId(endpointId)</span>
+<span class="fc" id="L1376">            .build();</span>
+<span class="fc" id="L1377">    return createEndpoint(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an endpoint, and returns the new endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   CreateEndpointRequest request =
+   *       CreateEndpointRequest.newBuilder()
+   *           .setParent(
+   *               ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setEndpointId(&quot;endpointId-1837754992&quot;)
+   *           .setEndpoint(Endpoint.newBuilder().build())
+   *           .build();
+   *   Endpoint response = registrationServiceClient.createEndpoint(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Endpoint createEndpoint(CreateEndpointRequest request) {
+<span class="fc" id="L1405">    return createEndpointCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an endpoint, and returns the new endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   CreateEndpointRequest request =
+   *       CreateEndpointRequest.newBuilder()
+   *           .setParent(
+   *               ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setEndpointId(&quot;endpointId-1837754992&quot;)
+   *           .setEndpoint(Endpoint.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Endpoint&gt; future =
+   *       registrationServiceClient.createEndpointCallable().futureCall(request);
+   *   // Do something.
+   *   Endpoint response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateEndpointRequest, Endpoint&gt; createEndpointCallable() {
+<span class="fc" id="L1433">    return stub.createEndpointCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all endpoints.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   ServiceName parent = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;);
+   *   for (Endpoint element : registrationServiceClient.listEndpoints(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the service whose endpoints you'd like to list.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListEndpointsPagedResponse listEndpoints(ServiceName parent) {
+    ListEndpointsRequest request =
+<span class="fc" id="L1458">        ListEndpointsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1459" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1460">            .build();</span>
+<span class="fc" id="L1461">    return listEndpoints(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all endpoints.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   String parent =
+   *       ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   for (Endpoint element : registrationServiceClient.listEndpoints(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the service whose endpoints you'd like to list.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListEndpointsPagedResponse listEndpoints(String parent) {
+<span class="fc" id="L1486">    ListEndpointsRequest request = ListEndpointsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1487">    return listEndpoints(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all endpoints.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   ListEndpointsRequest request =
+   *       ListEndpointsRequest.newBuilder()
+   *           .setParent(
+   *               ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Endpoint element : registrationServiceClient.listEndpoints(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListEndpointsPagedResponse listEndpoints(ListEndpointsRequest request) {
+<span class="fc" id="L1519">    return listEndpointsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all endpoints.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   ListEndpointsRequest request =
+   *       ListEndpointsRequest.newBuilder()
+   *           .setParent(
+   *               ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Endpoint&gt; future =
+   *       registrationServiceClient.listEndpointsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Endpoint element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListEndpointsRequest, ListEndpointsPagedResponse&gt;
+      listEndpointsPagedCallable() {
+<span class="fc" id="L1552">    return stub.listEndpointsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all endpoints.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   ListEndpointsRequest request =
+   *       ListEndpointsRequest.newBuilder()
+   *           .setParent(
+   *               ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListEndpointsResponse response =
+   *         registrationServiceClient.listEndpointsCallable().call(request);
+   *     for (Endpoint element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListEndpointsRequest, ListEndpointsResponse&gt; listEndpointsCallable() {
+<span class="nc" id="L1591">    return stub.listEndpointsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   EndpointName name =
+   *       EndpointName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;, &quot;[ENDPOINT]&quot;);
+   *   Endpoint response = registrationServiceClient.getEndpoint(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the endpoint to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Endpoint getEndpoint(EndpointName name) {
+    GetEndpointRequest request =
+<span class="pc bpc" id="L1615" title="1 of 2 branches missed.">        GetEndpointRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1616">    return getEndpoint(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   String name =
+   *       EndpointName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;, &quot;[ENDPOINT]&quot;)
+   *           .toString();
+   *   Endpoint response = registrationServiceClient.getEndpoint(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the endpoint to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Endpoint getEndpoint(String name) {
+<span class="fc" id="L1640">    GetEndpointRequest request = GetEndpointRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1641">    return getEndpoint(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   GetEndpointRequest request =
+   *       GetEndpointRequest.newBuilder()
+   *           .setName(
+   *               EndpointName.of(
+   *                       &quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;, &quot;[ENDPOINT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   Endpoint response = registrationServiceClient.getEndpoint(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Endpoint getEndpoint(GetEndpointRequest request) {
+<span class="fc" id="L1669">    return getEndpointCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   GetEndpointRequest request =
+   *       GetEndpointRequest.newBuilder()
+   *           .setName(
+   *               EndpointName.of(
+   *                       &quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;, &quot;[ENDPOINT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;Endpoint&gt; future =
+   *       registrationServiceClient.getEndpointCallable().futureCall(request);
+   *   // Do something.
+   *   Endpoint response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetEndpointRequest, Endpoint&gt; getEndpointCallable() {
+<span class="fc" id="L1697">    return stub.getEndpointCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   Endpoint endpoint = Endpoint.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Endpoint response = registrationServiceClient.updateEndpoint(endpoint, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param endpoint Required. The updated endpoint.
+   * @param updateMask Required. List of fields to be updated in this request.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Endpoint updateEndpoint(Endpoint endpoint, FieldMask updateMask) {
+    UpdateEndpointRequest request =
+<span class="fc" id="L1722">        UpdateEndpointRequest.newBuilder().setEndpoint(endpoint).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L1723">    return updateEndpoint(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   UpdateEndpointRequest request =
+   *       UpdateEndpointRequest.newBuilder()
+   *           .setEndpoint(Endpoint.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Endpoint response = registrationServiceClient.updateEndpoint(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Endpoint updateEndpoint(UpdateEndpointRequest request) {
+<span class="fc" id="L1749">    return updateEndpointCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   UpdateEndpointRequest request =
+   *       UpdateEndpointRequest.newBuilder()
+   *           .setEndpoint(Endpoint.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Endpoint&gt; future =
+   *       registrationServiceClient.updateEndpointCallable().futureCall(request);
+   *   // Do something.
+   *   Endpoint response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateEndpointRequest, Endpoint&gt; updateEndpointCallable() {
+<span class="fc" id="L1775">    return stub.updateEndpointCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   EndpointName name =
+   *       EndpointName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;, &quot;[ENDPOINT]&quot;);
+   *   registrationServiceClient.deleteEndpoint(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the endpoint to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteEndpoint(EndpointName name) {
+    DeleteEndpointRequest request =
+<span class="pc bpc" id="L1799" title="1 of 2 branches missed.">        DeleteEndpointRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1800">    deleteEndpoint(request);</span>
+<span class="fc" id="L1801">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   String name =
+   *       EndpointName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;, &quot;[ENDPOINT]&quot;)
+   *           .toString();
+   *   registrationServiceClient.deleteEndpoint(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the endpoint to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteEndpoint(String name) {
+<span class="fc" id="L1824">    DeleteEndpointRequest request = DeleteEndpointRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1825">    deleteEndpoint(request);</span>
+<span class="fc" id="L1826">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   DeleteEndpointRequest request =
+   *       DeleteEndpointRequest.newBuilder()
+   *           .setName(
+   *               EndpointName.of(
+   *                       &quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;, &quot;[ENDPOINT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   registrationServiceClient.deleteEndpoint(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteEndpoint(DeleteEndpointRequest request) {
+<span class="fc" id="L1853">    deleteEndpointCallable().call(request);</span>
+<span class="fc" id="L1854">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an endpoint.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   DeleteEndpointRequest request =
+   *       DeleteEndpointRequest.newBuilder()
+   *           .setName(
+   *               EndpointName.of(
+   *                       &quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NAMESPACE]&quot;, &quot;[SERVICE]&quot;, &quot;[ENDPOINT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       registrationServiceClient.deleteEndpointCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteEndpointRequest, Empty&gt; deleteEndpointCallable() {
+<span class="fc" id="L1881">    return stub.deleteEndpointCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the IAM Policy for a resource (namespace or service only).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   Policy response = registrationServiceClient.getIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(GetIamPolicyRequest request) {
+<span class="fc" id="L1907">    return getIamPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the IAM Policy for a resource (namespace or service only).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future =
+   *       registrationServiceClient.getIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetIamPolicyRequest, Policy&gt; getIamPolicyCallable() {
+<span class="fc" id="L1933">    return stub.getIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the IAM Policy for a resource (namespace or service only).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Policy response = registrationServiceClient.setIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(SetIamPolicyRequest request) {
+<span class="fc" id="L1960">    return setIamPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the IAM Policy for a resource (namespace or service only).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future =
+   *       registrationServiceClient.setIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetIamPolicyRequest, Policy&gt; setIamPolicyCallable() {
+<span class="fc" id="L1987">    return stub.setIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Tests IAM permissions for a resource (namespace or service only).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   TestIamPermissionsResponse response = registrationServiceClient.testIamPermissions(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(TestIamPermissionsRequest request) {
+<span class="fc" id="L2013">    return testIamPermissionsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Tests IAM permissions for a resource (namespace or service only).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (RegistrationServiceClient registrationServiceClient = RegistrationServiceClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   ApiFuture&lt;TestIamPermissionsResponse&gt; future =
+   *       registrationServiceClient.testIamPermissionsCallable().futureCall(request);
+   *   // Do something.
+   *   TestIamPermissionsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+      testIamPermissionsCallable() {
+<span class="fc" id="L2040">    return stub.testIamPermissionsCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L2045">    stub.close();</span>
+<span class="fc" id="L2046">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L2050">    stub.shutdown();</span>
+<span class="nc" id="L2051">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L2055">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L2060">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L2065">    stub.shutdownNow();</span>
+<span class="nc" id="L2066">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L2070">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListNamespacesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListNamespacesRequest,
+          ListNamespacesResponse,
+          Namespace,
+          ListNamespacesPage,
+          ListNamespacesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListNamespacesPagedResponse&gt; createAsync(
+        PageContext&lt;ListNamespacesRequest, ListNamespacesResponse, Namespace&gt; context,
+        ApiFuture&lt;ListNamespacesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListNamespacesPage&gt; futurePage =
+<span class="fc" id="L2085">          ListNamespacesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2086">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2088">          input -&gt; new ListNamespacesPagedResponse(input),</span>
+<span class="fc" id="L2089">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListNamespacesPagedResponse(ListNamespacesPage page) {
+<span class="fc" id="L2093">      super(page, ListNamespacesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2094">    }</span>
+  }
+
+  public static class ListNamespacesPage
+      extends AbstractPage&lt;
+          ListNamespacesRequest, ListNamespacesResponse, Namespace, ListNamespacesPage&gt; {
+
+    private ListNamespacesPage(
+        PageContext&lt;ListNamespacesRequest, ListNamespacesResponse, Namespace&gt; context,
+        ListNamespacesResponse response) {
+<span class="fc" id="L2104">      super(context, response);</span>
+<span class="fc" id="L2105">    }</span>
+
+    private static ListNamespacesPage createEmptyPage() {
+<span class="fc" id="L2108">      return new ListNamespacesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListNamespacesPage createPage(
+        PageContext&lt;ListNamespacesRequest, ListNamespacesResponse, Namespace&gt; context,
+        ListNamespacesResponse response) {
+<span class="fc" id="L2115">      return new ListNamespacesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListNamespacesPage&gt; createPageAsync(
+        PageContext&lt;ListNamespacesRequest, ListNamespacesResponse, Namespace&gt; context,
+        ApiFuture&lt;ListNamespacesResponse&gt; futureResponse) {
+<span class="fc" id="L2122">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListNamespacesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListNamespacesRequest,
+          ListNamespacesResponse,
+          Namespace,
+          ListNamespacesPage,
+          ListNamespacesFixedSizeCollection&gt; {
+
+    private ListNamespacesFixedSizeCollection(List&lt;ListNamespacesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2135">      super(pages, collectionSize);</span>
+<span class="fc" id="L2136">    }</span>
+
+    private static ListNamespacesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2139">      return new ListNamespacesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListNamespacesFixedSizeCollection createCollection(
+        List&lt;ListNamespacesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2145">      return new ListNamespacesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListServicesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListServicesRequest,
+          ListServicesResponse,
+          Service,
+          ListServicesPage,
+          ListServicesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListServicesPagedResponse&gt; createAsync(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ApiFuture&lt;ListServicesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListServicesPage&gt; futurePage =
+<span class="fc" id="L2161">          ListServicesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2162">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2164">          input -&gt; new ListServicesPagedResponse(input),</span>
+<span class="fc" id="L2165">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListServicesPagedResponse(ListServicesPage page) {
+<span class="fc" id="L2169">      super(page, ListServicesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2170">    }</span>
+  }
+
+  public static class ListServicesPage
+      extends AbstractPage&lt;ListServicesRequest, ListServicesResponse, Service, ListServicesPage&gt; {
+
+    private ListServicesPage(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ListServicesResponse response) {
+<span class="fc" id="L2179">      super(context, response);</span>
+<span class="fc" id="L2180">    }</span>
+
+    private static ListServicesPage createEmptyPage() {
+<span class="fc" id="L2183">      return new ListServicesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListServicesPage createPage(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ListServicesResponse response) {
+<span class="fc" id="L2190">      return new ListServicesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListServicesPage&gt; createPageAsync(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ApiFuture&lt;ListServicesResponse&gt; futureResponse) {
+<span class="fc" id="L2197">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListServicesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListServicesRequest,
+          ListServicesResponse,
+          Service,
+          ListServicesPage,
+          ListServicesFixedSizeCollection&gt; {
+
+    private ListServicesFixedSizeCollection(List&lt;ListServicesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2210">      super(pages, collectionSize);</span>
+<span class="fc" id="L2211">    }</span>
+
+    private static ListServicesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2214">      return new ListServicesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListServicesFixedSizeCollection createCollection(
+        List&lt;ListServicesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2220">      return new ListServicesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListEndpointsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListEndpointsRequest,
+          ListEndpointsResponse,
+          Endpoint,
+          ListEndpointsPage,
+          ListEndpointsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListEndpointsPagedResponse&gt; createAsync(
+        PageContext&lt;ListEndpointsRequest, ListEndpointsResponse, Endpoint&gt; context,
+        ApiFuture&lt;ListEndpointsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListEndpointsPage&gt; futurePage =
+<span class="fc" id="L2236">          ListEndpointsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2237">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2239">          input -&gt; new ListEndpointsPagedResponse(input),</span>
+<span class="fc" id="L2240">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListEndpointsPagedResponse(ListEndpointsPage page) {
+<span class="fc" id="L2244">      super(page, ListEndpointsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2245">    }</span>
+  }
+
+  public static class ListEndpointsPage
+      extends AbstractPage&lt;
+          ListEndpointsRequest, ListEndpointsResponse, Endpoint, ListEndpointsPage&gt; {
+
+    private ListEndpointsPage(
+        PageContext&lt;ListEndpointsRequest, ListEndpointsResponse, Endpoint&gt; context,
+        ListEndpointsResponse response) {
+<span class="fc" id="L2255">      super(context, response);</span>
+<span class="fc" id="L2256">    }</span>
+
+    private static ListEndpointsPage createEmptyPage() {
+<span class="fc" id="L2259">      return new ListEndpointsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListEndpointsPage createPage(
+        PageContext&lt;ListEndpointsRequest, ListEndpointsResponse, Endpoint&gt; context,
+        ListEndpointsResponse response) {
+<span class="fc" id="L2266">      return new ListEndpointsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListEndpointsPage&gt; createPageAsync(
+        PageContext&lt;ListEndpointsRequest, ListEndpointsResponse, Endpoint&gt; context,
+        ApiFuture&lt;ListEndpointsResponse&gt; futureResponse) {
+<span class="fc" id="L2273">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListEndpointsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListEndpointsRequest,
+          ListEndpointsResponse,
+          Endpoint,
+          ListEndpointsPage,
+          ListEndpointsFixedSizeCollection&gt; {
+
+    private ListEndpointsFixedSizeCollection(List&lt;ListEndpointsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2286">      super(pages, collectionSize);</span>
+<span class="fc" id="L2287">    }</span>
+
+    private static ListEndpointsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2290">      return new ListEndpointsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListEndpointsFixedSizeCollection createCollection(
+        List&lt;ListEndpointsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2296">      return new ListEndpointsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

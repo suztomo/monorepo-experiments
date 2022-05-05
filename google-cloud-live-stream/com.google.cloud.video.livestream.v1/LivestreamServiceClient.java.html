@@ -1,0 +1,2491 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>LivestreamServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-live-stream</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.video.livestream.v1</a> &gt; <span class="el_source">LivestreamServiceClient.java</span></div><h1>LivestreamServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.video.livestream.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.video.livestream.v1.stub.LivestreamServiceStub;
+import com.google.cloud.video.livestream.v1.stub.LivestreamServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Using Live Stream API, you can generate live streams in the various
+ * renditions and streaming formats. The streaming format include HTTP Live Streaming (HLS) and
+ * Dynamic Adaptive Streaming over HTTP (DASH). You can send a source stream in the various ways,
+ * including Real-Time Messaging Protocol (RTMP) and Secure Reliable Transport (SRT).
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+ *   ChannelName name = ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;);
+ *   Channel response = livestreamServiceClient.getChannel(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the LivestreamServiceClient object to clean up resources
+ * such as threads. In the example above, try-with-resources is used, which automatically calls
+ * close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of LivestreamServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * LivestreamServiceSettings livestreamServiceSettings =
+ *     LivestreamServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * LivestreamServiceClient livestreamServiceClient =
+ *     LivestreamServiceClient.create(livestreamServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * LivestreamServiceSettings livestreamServiceSettings =
+ *     LivestreamServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * LivestreamServiceClient livestreamServiceClient =
+ *     LivestreamServiceClient.create(livestreamServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class LivestreamServiceClient implements BackgroundResource {
+  private final LivestreamServiceSettings settings;
+  private final LivestreamServiceStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of LivestreamServiceClient with default settings. */
+  public static final LivestreamServiceClient create() throws IOException {
+<span class="nc" id="L122">    return create(LivestreamServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of LivestreamServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final LivestreamServiceClient create(LivestreamServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L131">    return new LivestreamServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of LivestreamServiceClient, using the given stub for making calls. This
+   * is for advanced usage - prefer using create(LivestreamServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final LivestreamServiceClient create(LivestreamServiceStub stub) {
+<span class="nc" id="L140">    return new LivestreamServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of LivestreamServiceClient, using the given settings. This is protected
+   * so that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L148">  protected LivestreamServiceClient(LivestreamServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L149">    this.settings = settings;</span>
+<span class="fc" id="L150">    this.stub = ((LivestreamServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L151">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L152">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L155">  protected LivestreamServiceClient(LivestreamServiceStub stub) {</span>
+<span class="nc" id="L156">    this.settings = null;</span>
+<span class="nc" id="L157">    this.stub = stub;</span>
+<span class="nc" id="L158">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L159">  }</span>
+
+  public final LivestreamServiceSettings getSettings() {
+<span class="nc" id="L162">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public LivestreamServiceStub getStub() {
+<span class="nc" id="L167">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L175">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a channel with the provided unique ID in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Channel channel = Channel.newBuilder().build();
+   *   String channelId = &quot;channelId1461735806&quot;;
+   *   Channel response =
+   *       livestreamServiceClient.createChannelAsync(parent, channel, channelId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent location for the resource, in the form of:
+   *     `projects/{project}/locations/{location}`.
+   * @param channel Required. The channel resource to be created.
+   * @param channelId Required. The ID of the channel resource to be created. This value must be
+   *     1-63 characters, begin and end with `[a-z0-9]`, could contain dashes (-) in between.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Channel, OperationMetadata&gt; createChannelAsync(
+      LocationName parent, Channel channel, String channelId) {
+    CreateChannelRequest request =
+<span class="fc" id="L206">        CreateChannelRequest.newBuilder()</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L208">            .setChannel(channel)</span>
+<span class="fc" id="L209">            .setChannelId(channelId)</span>
+<span class="fc" id="L210">            .build();</span>
+<span class="fc" id="L211">    return createChannelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a channel with the provided unique ID in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Channel channel = Channel.newBuilder().build();
+   *   String channelId = &quot;channelId1461735806&quot;;
+   *   Channel response =
+   *       livestreamServiceClient.createChannelAsync(parent, channel, channelId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent location for the resource, in the form of:
+   *     `projects/{project}/locations/{location}`.
+   * @param channel Required. The channel resource to be created.
+   * @param channelId Required. The ID of the channel resource to be created. This value must be
+   *     1-63 characters, begin and end with `[a-z0-9]`, could contain dashes (-) in between.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Channel, OperationMetadata&gt; createChannelAsync(
+      String parent, Channel channel, String channelId) {
+    CreateChannelRequest request =
+<span class="fc" id="L242">        CreateChannelRequest.newBuilder()</span>
+<span class="fc" id="L243">            .setParent(parent)</span>
+<span class="fc" id="L244">            .setChannel(channel)</span>
+<span class="fc" id="L245">            .setChannelId(channelId)</span>
+<span class="fc" id="L246">            .build();</span>
+<span class="fc" id="L247">    return createChannelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a channel with the provided unique ID in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   CreateChannelRequest request =
+   *       CreateChannelRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setChannel(Channel.newBuilder().build())
+   *           .setChannelId(&quot;channelId1461735806&quot;)
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   Channel response = livestreamServiceClient.createChannelAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Channel, OperationMetadata&gt; createChannelAsync(
+      CreateChannelRequest request) {
+<span class="fc" id="L276">    return createChannelOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a channel with the provided unique ID in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   CreateChannelRequest request =
+   *       CreateChannelRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setChannel(Channel.newBuilder().build())
+   *           .setChannelId(&quot;channelId1461735806&quot;)
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Channel, OperationMetadata&gt; future =
+   *       livestreamServiceClient.createChannelOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Channel response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateChannelRequest, Channel, OperationMetadata&gt;
+      createChannelOperationCallable() {
+<span class="fc" id="L305">    return stub.createChannelOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a channel with the provided unique ID in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   CreateChannelRequest request =
+   *       CreateChannelRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setChannel(Channel.newBuilder().build())
+   *           .setChannelId(&quot;channelId1461735806&quot;)
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       livestreamServiceClient.createChannelCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateChannelRequest, Operation&gt; createChannelCallable() {
+<span class="nc" id="L333">    return stub.createChannelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all channels in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Channel element : livestreamServiceClient.listChannels(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent location for the resource, in the form of:
+   *     `projects/{project}/locations/{location}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListChannelsPagedResponse listChannels(LocationName parent) {
+    ListChannelsRequest request =
+<span class="fc" id="L359">        ListChannelsRequest.newBuilder()</span>
+<span class="pc bpc" id="L360" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L361">            .build();</span>
+<span class="fc" id="L362">    return listChannels(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all channels in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Channel element : livestreamServiceClient.listChannels(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent location for the resource, in the form of:
+   *     `projects/{project}/locations/{location}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListChannelsPagedResponse listChannels(String parent) {
+<span class="fc" id="L387">    ListChannelsRequest request = ListChannelsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L388">    return listChannels(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all channels in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ListChannelsRequest request =
+   *       ListChannelsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Channel element : livestreamServiceClient.listChannels(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListChannelsPagedResponse listChannels(ListChannelsRequest request) {
+<span class="fc" id="L419">    return listChannelsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all channels in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ListChannelsRequest request =
+   *       ListChannelsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Channel&gt; future =
+   *       livestreamServiceClient.listChannelsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Channel element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListChannelsRequest, ListChannelsPagedResponse&gt;
+      listChannelsPagedCallable() {
+<span class="fc" id="L451">    return stub.listChannelsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all channels in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ListChannelsRequest request =
+   *       ListChannelsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListChannelsResponse response =
+   *         livestreamServiceClient.listChannelsCallable().call(request);
+   *     for (Channel element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListChannelsRequest, ListChannelsResponse&gt; listChannelsCallable() {
+<span class="nc" id="L489">    return stub.listChannelsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ChannelName name = ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;);
+   *   Channel response = livestreamServiceClient.getChannel(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the channel resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Channel getChannel(ChannelName name) {
+    GetChannelRequest request =
+<span class="pc bpc" id="L513" title="1 of 2 branches missed.">        GetChannelRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L514">    return getChannel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   String name = ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString();
+   *   Channel response = livestreamServiceClient.getChannel(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the channel resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Channel getChannel(String name) {
+<span class="fc" id="L537">    GetChannelRequest request = GetChannelRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L538">    return getChannel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   GetChannelRequest request =
+   *       GetChannelRequest.newBuilder()
+   *           .setName(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .build();
+   *   Channel response = livestreamServiceClient.getChannel(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Channel getChannel(GetChannelRequest request) {
+<span class="fc" id="L563">    return getChannelCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   GetChannelRequest request =
+   *       GetChannelRequest.newBuilder()
+   *           .setName(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Channel&gt; future = livestreamServiceClient.getChannelCallable().futureCall(request);
+   *   // Do something.
+   *   Channel response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetChannelRequest, Channel&gt; getChannelCallable() {
+<span class="fc" id="L587">    return stub.getChannelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ChannelName name = ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;);
+   *   livestreamServiceClient.deleteChannelAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the channel resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteChannelAsync(ChannelName name) {
+    DeleteChannelRequest request =
+<span class="pc bpc" id="L611" title="1 of 2 branches missed.">        DeleteChannelRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L612">    return deleteChannelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   String name = ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString();
+   *   livestreamServiceClient.deleteChannelAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the channel resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteChannelAsync(String name) {
+<span class="fc" id="L635">    DeleteChannelRequest request = DeleteChannelRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L636">    return deleteChannelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   DeleteChannelRequest request =
+   *       DeleteChannelRequest.newBuilder()
+   *           .setName(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setForce(true)
+   *           .build();
+   *   livestreamServiceClient.deleteChannelAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteChannelAsync(
+      DeleteChannelRequest request) {
+<span class="fc" id="L664">    return deleteChannelOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   DeleteChannelRequest request =
+   *       DeleteChannelRequest.newBuilder()
+   *           .setName(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setForce(true)
+   *           .build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       livestreamServiceClient.deleteChannelOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteChannelRequest, Empty, OperationMetadata&gt;
+      deleteChannelOperationCallable() {
+<span class="fc" id="L692">    return stub.deleteChannelOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   DeleteChannelRequest request =
+   *       DeleteChannelRequest.newBuilder()
+   *           .setName(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setForce(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       livestreamServiceClient.deleteChannelCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteChannelRequest, Operation&gt; deleteChannelCallable() {
+<span class="nc" id="L719">    return stub.deleteChannelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   Channel channel = Channel.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Channel response = livestreamServiceClient.updateChannelAsync(channel, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param channel Required. The channel resource to be updated.
+   * @param updateMask Field mask is used to specify the fields to be overwritten in the Channel
+   *     resource by the update. You can only update the following fields:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;[`inputAttachments`](https://cloud.google.com/livestream/docs/reference/rest/v1/projects.locations.channels#inputattachment)
+   *       &lt;li&gt;[`output`](https://cloud.google.com/livestream/docs/reference/rest/v1/projects.locations.channels#output)
+   *       &lt;li&gt;[`elementaryStreams`](https://cloud.google.com/livestream/docs/reference/rest/v1/projects.locations.channels#ElementaryStream)
+   *       &lt;li&gt;[`muxStreams`](https://cloud.google.com/livestream/docs/reference/rest/v1/projects.locations.channels#muxstream)
+   *       &lt;li&gt;[`manifests`](https://cloud.google.com/livestream/docs/reference/rest/v1/projects.locations.channels#Manifest)
+   *       &lt;li&gt;[`spritesheets`](https://cloud.google.com/livestream/docs/reference/rest/v1/projects.locations.channels#spritesheet)
+   *     &lt;/ul&gt;
+   *     &lt;p&gt;The fields specified in the update_mask are relative to the resource, not the full
+   *     request. A field will be overwritten if it is in the mask.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Channel, OperationMetadata&gt; updateChannelAsync(
+      Channel channel, FieldMask updateMask) {
+    UpdateChannelRequest request =
+<span class="fc" id="L756">        UpdateChannelRequest.newBuilder().setChannel(channel).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L757">    return updateChannelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   UpdateChannelRequest request =
+   *       UpdateChannelRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setChannel(Channel.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   Channel response = livestreamServiceClient.updateChannelAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Channel, OperationMetadata&gt; updateChannelAsync(
+      UpdateChannelRequest request) {
+<span class="fc" id="L785">    return updateChannelOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   UpdateChannelRequest request =
+   *       UpdateChannelRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setChannel(Channel.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Channel, OperationMetadata&gt; future =
+   *       livestreamServiceClient.updateChannelOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Channel response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpdateChannelRequest, Channel, OperationMetadata&gt;
+      updateChannelOperationCallable() {
+<span class="fc" id="L813">    return stub.updateChannelOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   UpdateChannelRequest request =
+   *       UpdateChannelRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setChannel(Channel.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       livestreamServiceClient.updateChannelCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateChannelRequest, Operation&gt; updateChannelCallable() {
+<span class="nc" id="L840">    return stub.updateChannelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts the specified channel. Part of the video pipeline will be created only when the
+   * StartChannel request is received by the server.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ChannelName name = ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;);
+   *   ChannelOperationResponse response = livestreamServiceClient.startChannelAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the channel resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ChannelOperationResponse, OperationMetadata&gt; startChannelAsync(
+      ChannelName name) {
+    StartChannelRequest request =
+<span class="pc bpc" id="L866" title="1 of 2 branches missed.">        StartChannelRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L867">    return startChannelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts the specified channel. Part of the video pipeline will be created only when the
+   * StartChannel request is received by the server.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   String name = ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString();
+   *   ChannelOperationResponse response = livestreamServiceClient.startChannelAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the channel resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ChannelOperationResponse, OperationMetadata&gt; startChannelAsync(
+      String name) {
+<span class="fc" id="L892">    StartChannelRequest request = StartChannelRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L893">    return startChannelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts the specified channel. Part of the video pipeline will be created only when the
+   * StartChannel request is received by the server.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   StartChannelRequest request =
+   *       StartChannelRequest.newBuilder()
+   *           .setName(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ChannelOperationResponse response = livestreamServiceClient.startChannelAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ChannelOperationResponse, OperationMetadata&gt; startChannelAsync(
+      StartChannelRequest request) {
+<span class="fc" id="L921">    return startChannelOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts the specified channel. Part of the video pipeline will be created only when the
+   * StartChannel request is received by the server.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   StartChannelRequest request =
+   *       StartChannelRequest.newBuilder()
+   *           .setName(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;ChannelOperationResponse, OperationMetadata&gt; future =
+   *       livestreamServiceClient.startChannelOperationCallable().futureCall(request);
+   *   // Do something.
+   *   ChannelOperationResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;StartChannelRequest, ChannelOperationResponse, OperationMetadata&gt;
+      startChannelOperationCallable() {
+<span class="fc" id="L949">    return stub.startChannelOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts the specified channel. Part of the video pipeline will be created only when the
+   * StartChannel request is received by the server.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   StartChannelRequest request =
+   *       StartChannelRequest.newBuilder()
+   *           .setName(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       livestreamServiceClient.startChannelCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;StartChannelRequest, Operation&gt; startChannelCallable() {
+<span class="nc" id="L976">    return stub.startChannelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Stops the specified channel. Part of the video pipeline will be released when the StopChannel
+   * request is received by the server.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ChannelName name = ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;);
+   *   ChannelOperationResponse response = livestreamServiceClient.stopChannelAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the channel resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ChannelOperationResponse, OperationMetadata&gt; stopChannelAsync(
+      ChannelName name) {
+    StopChannelRequest request =
+<span class="pc bpc" id="L1002" title="1 of 2 branches missed.">        StopChannelRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1003">    return stopChannelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Stops the specified channel. Part of the video pipeline will be released when the StopChannel
+   * request is received by the server.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   String name = ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString();
+   *   ChannelOperationResponse response = livestreamServiceClient.stopChannelAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the channel resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ChannelOperationResponse, OperationMetadata&gt; stopChannelAsync(
+      String name) {
+<span class="fc" id="L1028">    StopChannelRequest request = StopChannelRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1029">    return stopChannelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Stops the specified channel. Part of the video pipeline will be released when the StopChannel
+   * request is received by the server.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   StopChannelRequest request =
+   *       StopChannelRequest.newBuilder()
+   *           .setName(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ChannelOperationResponse response = livestreamServiceClient.stopChannelAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ChannelOperationResponse, OperationMetadata&gt; stopChannelAsync(
+      StopChannelRequest request) {
+<span class="fc" id="L1057">    return stopChannelOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Stops the specified channel. Part of the video pipeline will be released when the StopChannel
+   * request is received by the server.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   StopChannelRequest request =
+   *       StopChannelRequest.newBuilder()
+   *           .setName(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;ChannelOperationResponse, OperationMetadata&gt; future =
+   *       livestreamServiceClient.stopChannelOperationCallable().futureCall(request);
+   *   // Do something.
+   *   ChannelOperationResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;StopChannelRequest, ChannelOperationResponse, OperationMetadata&gt;
+      stopChannelOperationCallable() {
+<span class="fc" id="L1085">    return stub.stopChannelOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Stops the specified channel. Part of the video pipeline will be released when the StopChannel
+   * request is received by the server.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   StopChannelRequest request =
+   *       StopChannelRequest.newBuilder()
+   *           .setName(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       livestreamServiceClient.stopChannelCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;StopChannelRequest, Operation&gt; stopChannelCallable() {
+<span class="nc" id="L1112">    return stub.stopChannelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an input with the provided unique ID in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Input input = Input.newBuilder().build();
+   *   String inputId = &quot;inputId1954846341&quot;;
+   *   Input response = livestreamServiceClient.createInputAsync(parent, input, inputId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent location for the resource, in the form of:
+   *     `projects/{project}/locations/{location}`.
+   * @param input Required. The input resource to be created.
+   * @param inputId Required. The ID of the input resource to be created. This value must be 1-63
+   *     characters, begin and end with `[a-z0-9]`, could contain dashes (-) in between.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Input, OperationMetadata&gt; createInputAsync(
+      LocationName parent, Input input, String inputId) {
+    CreateInputRequest request =
+<span class="fc" id="L1142">        CreateInputRequest.newBuilder()</span>
+<span class="pc bpc" id="L1143" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1144">            .setInput(input)</span>
+<span class="fc" id="L1145">            .setInputId(inputId)</span>
+<span class="fc" id="L1146">            .build();</span>
+<span class="fc" id="L1147">    return createInputAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an input with the provided unique ID in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Input input = Input.newBuilder().build();
+   *   String inputId = &quot;inputId1954846341&quot;;
+   *   Input response = livestreamServiceClient.createInputAsync(parent, input, inputId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent location for the resource, in the form of:
+   *     `projects/{project}/locations/{location}`.
+   * @param input Required. The input resource to be created.
+   * @param inputId Required. The ID of the input resource to be created. This value must be 1-63
+   *     characters, begin and end with `[a-z0-9]`, could contain dashes (-) in between.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Input, OperationMetadata&gt; createInputAsync(
+      String parent, Input input, String inputId) {
+    CreateInputRequest request =
+<span class="fc" id="L1177">        CreateInputRequest.newBuilder()</span>
+<span class="fc" id="L1178">            .setParent(parent)</span>
+<span class="fc" id="L1179">            .setInput(input)</span>
+<span class="fc" id="L1180">            .setInputId(inputId)</span>
+<span class="fc" id="L1181">            .build();</span>
+<span class="fc" id="L1182">    return createInputAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an input with the provided unique ID in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   CreateInputRequest request =
+   *       CreateInputRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setInput(Input.newBuilder().build())
+   *           .setInputId(&quot;inputId1954846341&quot;)
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   Input response = livestreamServiceClient.createInputAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Input, OperationMetadata&gt; createInputAsync(
+      CreateInputRequest request) {
+<span class="fc" id="L1211">    return createInputOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an input with the provided unique ID in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   CreateInputRequest request =
+   *       CreateInputRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setInput(Input.newBuilder().build())
+   *           .setInputId(&quot;inputId1954846341&quot;)
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Input, OperationMetadata&gt; future =
+   *       livestreamServiceClient.createInputOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Input response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateInputRequest, Input, OperationMetadata&gt;
+      createInputOperationCallable() {
+<span class="fc" id="L1240">    return stub.createInputOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an input with the provided unique ID in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   CreateInputRequest request =
+   *       CreateInputRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setInput(Input.newBuilder().build())
+   *           .setInputId(&quot;inputId1954846341&quot;)
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       livestreamServiceClient.createInputCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateInputRequest, Operation&gt; createInputCallable() {
+<span class="nc" id="L1268">    return stub.createInputCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all inputs in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Input element : livestreamServiceClient.listInputs(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent location for the resource, in the form of:
+   *     `projects/{project}/locations/{location}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListInputsPagedResponse listInputs(LocationName parent) {
+    ListInputsRequest request =
+<span class="pc bpc" id="L1294" title="1 of 2 branches missed.">        ListInputsRequest.newBuilder().setParent(parent == null ? null : parent.toString()).build();</span>
+<span class="fc" id="L1295">    return listInputs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all inputs in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Input element : livestreamServiceClient.listInputs(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent location for the resource, in the form of:
+   *     `projects/{project}/locations/{location}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListInputsPagedResponse listInputs(String parent) {
+<span class="fc" id="L1320">    ListInputsRequest request = ListInputsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1321">    return listInputs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all inputs in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ListInputsRequest request =
+   *       ListInputsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Input element : livestreamServiceClient.listInputs(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListInputsPagedResponse listInputs(ListInputsRequest request) {
+<span class="fc" id="L1352">    return listInputsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all inputs in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ListInputsRequest request =
+   *       ListInputsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Input&gt; future =
+   *       livestreamServiceClient.listInputsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Input element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListInputsRequest, ListInputsPagedResponse&gt; listInputsPagedCallable() {
+<span class="fc" id="L1383">    return stub.listInputsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all inputs in the specified region.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ListInputsRequest request =
+   *       ListInputsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListInputsResponse response = livestreamServiceClient.listInputsCallable().call(request);
+   *     for (Input element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListInputsRequest, ListInputsResponse&gt; listInputsCallable() {
+<span class="nc" id="L1420">    return stub.listInputsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the specified input.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   InputName name = InputName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INPUT]&quot;);
+   *   Input response = livestreamServiceClient.getInput(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the input resource, in the form of:
+   *     `projects/{project}/locations/{location}/inputs/{inputId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Input getInput(InputName name) {
+    GetInputRequest request =
+<span class="pc bpc" id="L1444" title="1 of 2 branches missed.">        GetInputRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1445">    return getInput(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the specified input.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   String name = InputName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INPUT]&quot;).toString();
+   *   Input response = livestreamServiceClient.getInput(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the input resource, in the form of:
+   *     `projects/{project}/locations/{location}/inputs/{inputId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Input getInput(String name) {
+<span class="fc" id="L1468">    GetInputRequest request = GetInputRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1469">    return getInput(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the specified input.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   GetInputRequest request =
+   *       GetInputRequest.newBuilder()
+   *           .setName(InputName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INPUT]&quot;).toString())
+   *           .build();
+   *   Input response = livestreamServiceClient.getInput(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Input getInput(GetInputRequest request) {
+<span class="fc" id="L1494">    return getInputCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the specified input.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   GetInputRequest request =
+   *       GetInputRequest.newBuilder()
+   *           .setName(InputName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INPUT]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Input&gt; future = livestreamServiceClient.getInputCallable().futureCall(request);
+   *   // Do something.
+   *   Input response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetInputRequest, Input&gt; getInputCallable() {
+<span class="fc" id="L1518">    return stub.getInputCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified input.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   InputName name = InputName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INPUT]&quot;);
+   *   livestreamServiceClient.deleteInputAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the input resource, in the form of:
+   *     `projects/{project}/locations/{location}/inputs/{inputId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteInputAsync(InputName name) {
+    DeleteInputRequest request =
+<span class="pc bpc" id="L1542" title="1 of 2 branches missed.">        DeleteInputRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1543">    return deleteInputAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified input.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   String name = InputName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INPUT]&quot;).toString();
+   *   livestreamServiceClient.deleteInputAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the input resource, in the form of:
+   *     `projects/{project}/locations/{location}/inputs/{inputId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteInputAsync(String name) {
+<span class="fc" id="L1566">    DeleteInputRequest request = DeleteInputRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1567">    return deleteInputAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified input.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   DeleteInputRequest request =
+   *       DeleteInputRequest.newBuilder()
+   *           .setName(InputName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INPUT]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   livestreamServiceClient.deleteInputAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteInputAsync(
+      DeleteInputRequest request) {
+<span class="fc" id="L1594">    return deleteInputOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified input.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   DeleteInputRequest request =
+   *       DeleteInputRequest.newBuilder()
+   *           .setName(InputName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INPUT]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       livestreamServiceClient.deleteInputOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteInputRequest, Empty, OperationMetadata&gt;
+      deleteInputOperationCallable() {
+<span class="fc" id="L1621">    return stub.deleteInputOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified input.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   DeleteInputRequest request =
+   *       DeleteInputRequest.newBuilder()
+   *           .setName(InputName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INPUT]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       livestreamServiceClient.deleteInputCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteInputRequest, Operation&gt; deleteInputCallable() {
+<span class="nc" id="L1647">    return stub.deleteInputCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the specified input.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   Input input = Input.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Input response = livestreamServiceClient.updateInputAsync(input, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param input Required. The input resource to be updated.
+   * @param updateMask Field mask is used to specify the fields to be overwritten in the Input
+   *     resource by the update. You can only update the following fields:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;[`preprocessingConfig`](https://cloud.google.com/livestream/docs/reference/rest/v1/projects.locations.inputs#PreprocessingConfig)
+   *       &lt;li&gt;[`securityRules`](https://cloud.google.com/livestream/docs/reference/rest/v1/projects.locations.inputs#SecurityRule)
+   *     &lt;/ul&gt;
+   *     &lt;p&gt;The fields specified in the update_mask are relative to the resource, not the full
+   *     request. A field will be overwritten if it is in the mask.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Input, OperationMetadata&gt; updateInputAsync(
+      Input input, FieldMask updateMask) {
+    UpdateInputRequest request =
+<span class="fc" id="L1680">        UpdateInputRequest.newBuilder().setInput(input).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L1681">    return updateInputAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the specified input.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   UpdateInputRequest request =
+   *       UpdateInputRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setInput(Input.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   Input response = livestreamServiceClient.updateInputAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Input, OperationMetadata&gt; updateInputAsync(
+      UpdateInputRequest request) {
+<span class="fc" id="L1709">    return updateInputOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the specified input.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   UpdateInputRequest request =
+   *       UpdateInputRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setInput(Input.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Input, OperationMetadata&gt; future =
+   *       livestreamServiceClient.updateInputOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Input response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpdateInputRequest, Input, OperationMetadata&gt;
+      updateInputOperationCallable() {
+<span class="fc" id="L1737">    return stub.updateInputOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the specified input.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   UpdateInputRequest request =
+   *       UpdateInputRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setInput(Input.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       livestreamServiceClient.updateInputCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateInputRequest, Operation&gt; updateInputCallable() {
+<span class="nc" id="L1764">    return stub.updateInputCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an event with the provided unique ID in the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ChannelName parent = ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;);
+   *   Event event = Event.newBuilder().build();
+   *   String eventId = &quot;eventId-1376502443&quot;;
+   *   Event response = livestreamServiceClient.createEvent(parent, event, eventId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent channel for the resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}`.
+   * @param event Required. The event resource to be created.
+   * @param eventId Required. The ID of the event resource to be created. This value must be 1-63
+   *     characters, begin and end with `[a-z0-9]`, could contain dashes (-) in between.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Event createEvent(ChannelName parent, Event event, String eventId) {
+    CreateEventRequest request =
+<span class="fc" id="L1793">        CreateEventRequest.newBuilder()</span>
+<span class="pc bpc" id="L1794" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1795">            .setEvent(event)</span>
+<span class="fc" id="L1796">            .setEventId(eventId)</span>
+<span class="fc" id="L1797">            .build();</span>
+<span class="fc" id="L1798">    return createEvent(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an event with the provided unique ID in the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   String parent = ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString();
+   *   Event event = Event.newBuilder().build();
+   *   String eventId = &quot;eventId-1376502443&quot;;
+   *   Event response = livestreamServiceClient.createEvent(parent, event, eventId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent channel for the resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}`.
+   * @param event Required. The event resource to be created.
+   * @param eventId Required. The ID of the event resource to be created. This value must be 1-63
+   *     characters, begin and end with `[a-z0-9]`, could contain dashes (-) in between.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Event createEvent(String parent, Event event, String eventId) {
+    CreateEventRequest request =
+<span class="fc" id="L1827">        CreateEventRequest.newBuilder()</span>
+<span class="fc" id="L1828">            .setParent(parent)</span>
+<span class="fc" id="L1829">            .setEvent(event)</span>
+<span class="fc" id="L1830">            .setEventId(eventId)</span>
+<span class="fc" id="L1831">            .build();</span>
+<span class="fc" id="L1832">    return createEvent(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an event with the provided unique ID in the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   CreateEventRequest request =
+   *       CreateEventRequest.newBuilder()
+   *           .setParent(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .setEvent(Event.newBuilder().build())
+   *           .setEventId(&quot;eventId-1376502443&quot;)
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   Event response = livestreamServiceClient.createEvent(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Event createEvent(CreateEventRequest request) {
+<span class="fc" id="L1860">    return createEventCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an event with the provided unique ID in the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   CreateEventRequest request =
+   *       CreateEventRequest.newBuilder()
+   *           .setParent(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .setEvent(Event.newBuilder().build())
+   *           .setEventId(&quot;eventId-1376502443&quot;)
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Event&gt; future = livestreamServiceClient.createEventCallable().futureCall(request);
+   *   // Do something.
+   *   Event response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateEventRequest, Event&gt; createEventCallable() {
+<span class="fc" id="L1887">    return stub.createEventCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all events in the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ChannelName parent = ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;);
+   *   for (Event element : livestreamServiceClient.listEvents(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent channel for the resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListEventsPagedResponse listEvents(ChannelName parent) {
+    ListEventsRequest request =
+<span class="pc bpc" id="L1913" title="1 of 2 branches missed.">        ListEventsRequest.newBuilder().setParent(parent == null ? null : parent.toString()).build();</span>
+<span class="fc" id="L1914">    return listEvents(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all events in the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   String parent = ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString();
+   *   for (Event element : livestreamServiceClient.listEvents(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent channel for the resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListEventsPagedResponse listEvents(String parent) {
+<span class="fc" id="L1939">    ListEventsRequest request = ListEventsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1940">    return listEvents(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all events in the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ListEventsRequest request =
+   *       ListEventsRequest.newBuilder()
+   *           .setParent(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Event element : livestreamServiceClient.listEvents(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListEventsPagedResponse listEvents(ListEventsRequest request) {
+<span class="fc" id="L1971">    return listEventsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all events in the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ListEventsRequest request =
+   *       ListEventsRequest.newBuilder()
+   *           .setParent(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Event&gt; future =
+   *       livestreamServiceClient.listEventsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Event element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListEventsRequest, ListEventsPagedResponse&gt; listEventsPagedCallable() {
+<span class="fc" id="L2002">    return stub.listEventsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns a list of all events in the specified channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   ListEventsRequest request =
+   *       ListEventsRequest.newBuilder()
+   *           .setParent(ChannelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListEventsResponse response = livestreamServiceClient.listEventsCallable().call(request);
+   *     for (Event element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListEventsRequest, ListEventsResponse&gt; listEventsCallable() {
+<span class="nc" id="L2039">    return stub.listEventsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the specified event.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   EventName name = EventName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;, &quot;[EVENT]&quot;);
+   *   Event response = livestreamServiceClient.getEvent(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the event resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}/events/{eventId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Event getEvent(EventName name) {
+    GetEventRequest request =
+<span class="pc bpc" id="L2063" title="1 of 2 branches missed.">        GetEventRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L2064">    return getEvent(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the specified event.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   String name = EventName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;, &quot;[EVENT]&quot;).toString();
+   *   Event response = livestreamServiceClient.getEvent(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the event resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}/events/{eventId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Event getEvent(String name) {
+<span class="fc" id="L2087">    GetEventRequest request = GetEventRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2088">    return getEvent(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the specified event.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   GetEventRequest request =
+   *       GetEventRequest.newBuilder()
+   *           .setName(EventName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;, &quot;[EVENT]&quot;).toString())
+   *           .build();
+   *   Event response = livestreamServiceClient.getEvent(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Event getEvent(GetEventRequest request) {
+<span class="fc" id="L2113">    return getEventCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the specified event.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   GetEventRequest request =
+   *       GetEventRequest.newBuilder()
+   *           .setName(EventName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;, &quot;[EVENT]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Event&gt; future = livestreamServiceClient.getEventCallable().futureCall(request);
+   *   // Do something.
+   *   Event response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetEventRequest, Event&gt; getEventCallable() {
+<span class="fc" id="L2137">    return stub.getEventCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified event.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   EventName name = EventName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;, &quot;[EVENT]&quot;);
+   *   livestreamServiceClient.deleteEvent(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the event resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}/events/{eventId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteEvent(EventName name) {
+    DeleteEventRequest request =
+<span class="pc bpc" id="L2161" title="1 of 2 branches missed.">        DeleteEventRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L2162">    deleteEvent(request);</span>
+<span class="fc" id="L2163">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified event.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   String name = EventName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;, &quot;[EVENT]&quot;).toString();
+   *   livestreamServiceClient.deleteEvent(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the event resource, in the form of:
+   *     `projects/{project}/locations/{location}/channels/{channelId}/events/{eventId}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteEvent(String name) {
+<span class="fc" id="L2185">    DeleteEventRequest request = DeleteEventRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2186">    deleteEvent(request);</span>
+<span class="fc" id="L2187">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified event.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   DeleteEventRequest request =
+   *       DeleteEventRequest.newBuilder()
+   *           .setName(EventName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;, &quot;[EVENT]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   livestreamServiceClient.deleteEvent(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteEvent(DeleteEventRequest request) {
+<span class="fc" id="L2212">    deleteEventCallable().call(request);</span>
+<span class="fc" id="L2213">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified event.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (LivestreamServiceClient livestreamServiceClient = LivestreamServiceClient.create()) {
+   *   DeleteEventRequest request =
+   *       DeleteEventRequest.newBuilder()
+   *           .setName(EventName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CHANNEL]&quot;, &quot;[EVENT]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = livestreamServiceClient.deleteEventCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteEventRequest, Empty&gt; deleteEventCallable() {
+<span class="fc" id="L2237">    return stub.deleteEventCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L2242">    stub.close();</span>
+<span class="fc" id="L2243">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L2247">    stub.shutdown();</span>
+<span class="nc" id="L2248">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L2252">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L2257">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L2262">    stub.shutdownNow();</span>
+<span class="nc" id="L2263">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L2267">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListChannelsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListChannelsRequest,
+          ListChannelsResponse,
+          Channel,
+          ListChannelsPage,
+          ListChannelsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListChannelsPagedResponse&gt; createAsync(
+        PageContext&lt;ListChannelsRequest, ListChannelsResponse, Channel&gt; context,
+        ApiFuture&lt;ListChannelsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListChannelsPage&gt; futurePage =
+<span class="fc" id="L2282">          ListChannelsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2283">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2285">          input -&gt; new ListChannelsPagedResponse(input),</span>
+<span class="fc" id="L2286">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListChannelsPagedResponse(ListChannelsPage page) {
+<span class="fc" id="L2290">      super(page, ListChannelsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2291">    }</span>
+  }
+
+  public static class ListChannelsPage
+      extends AbstractPage&lt;ListChannelsRequest, ListChannelsResponse, Channel, ListChannelsPage&gt; {
+
+    private ListChannelsPage(
+        PageContext&lt;ListChannelsRequest, ListChannelsResponse, Channel&gt; context,
+        ListChannelsResponse response) {
+<span class="fc" id="L2300">      super(context, response);</span>
+<span class="fc" id="L2301">    }</span>
+
+    private static ListChannelsPage createEmptyPage() {
+<span class="fc" id="L2304">      return new ListChannelsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListChannelsPage createPage(
+        PageContext&lt;ListChannelsRequest, ListChannelsResponse, Channel&gt; context,
+        ListChannelsResponse response) {
+<span class="fc" id="L2311">      return new ListChannelsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListChannelsPage&gt; createPageAsync(
+        PageContext&lt;ListChannelsRequest, ListChannelsResponse, Channel&gt; context,
+        ApiFuture&lt;ListChannelsResponse&gt; futureResponse) {
+<span class="fc" id="L2318">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListChannelsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListChannelsRequest,
+          ListChannelsResponse,
+          Channel,
+          ListChannelsPage,
+          ListChannelsFixedSizeCollection&gt; {
+
+    private ListChannelsFixedSizeCollection(List&lt;ListChannelsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2331">      super(pages, collectionSize);</span>
+<span class="fc" id="L2332">    }</span>
+
+    private static ListChannelsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2335">      return new ListChannelsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListChannelsFixedSizeCollection createCollection(
+        List&lt;ListChannelsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2341">      return new ListChannelsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListInputsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListInputsRequest,
+          ListInputsResponse,
+          Input,
+          ListInputsPage,
+          ListInputsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListInputsPagedResponse&gt; createAsync(
+        PageContext&lt;ListInputsRequest, ListInputsResponse, Input&gt; context,
+        ApiFuture&lt;ListInputsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListInputsPage&gt; futurePage =
+<span class="fc" id="L2357">          ListInputsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2358">      return ApiFutures.transform(</span>
+<span class="fc" id="L2359">          futurePage, input -&gt; new ListInputsPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListInputsPagedResponse(ListInputsPage page) {
+<span class="fc" id="L2363">      super(page, ListInputsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2364">    }</span>
+  }
+
+  public static class ListInputsPage
+      extends AbstractPage&lt;ListInputsRequest, ListInputsResponse, Input, ListInputsPage&gt; {
+
+    private ListInputsPage(
+        PageContext&lt;ListInputsRequest, ListInputsResponse, Input&gt; context,
+        ListInputsResponse response) {
+<span class="fc" id="L2373">      super(context, response);</span>
+<span class="fc" id="L2374">    }</span>
+
+    private static ListInputsPage createEmptyPage() {
+<span class="fc" id="L2377">      return new ListInputsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListInputsPage createPage(
+        PageContext&lt;ListInputsRequest, ListInputsResponse, Input&gt; context,
+        ListInputsResponse response) {
+<span class="fc" id="L2384">      return new ListInputsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListInputsPage&gt; createPageAsync(
+        PageContext&lt;ListInputsRequest, ListInputsResponse, Input&gt; context,
+        ApiFuture&lt;ListInputsResponse&gt; futureResponse) {
+<span class="fc" id="L2391">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListInputsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListInputsRequest,
+          ListInputsResponse,
+          Input,
+          ListInputsPage,
+          ListInputsFixedSizeCollection&gt; {
+
+    private ListInputsFixedSizeCollection(List&lt;ListInputsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2404">      super(pages, collectionSize);</span>
+<span class="fc" id="L2405">    }</span>
+
+    private static ListInputsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2408">      return new ListInputsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListInputsFixedSizeCollection createCollection(
+        List&lt;ListInputsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2414">      return new ListInputsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListEventsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListEventsRequest,
+          ListEventsResponse,
+          Event,
+          ListEventsPage,
+          ListEventsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListEventsPagedResponse&gt; createAsync(
+        PageContext&lt;ListEventsRequest, ListEventsResponse, Event&gt; context,
+        ApiFuture&lt;ListEventsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListEventsPage&gt; futurePage =
+<span class="fc" id="L2430">          ListEventsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2431">      return ApiFutures.transform(</span>
+<span class="fc" id="L2432">          futurePage, input -&gt; new ListEventsPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListEventsPagedResponse(ListEventsPage page) {
+<span class="fc" id="L2436">      super(page, ListEventsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2437">    }</span>
+  }
+
+  public static class ListEventsPage
+      extends AbstractPage&lt;ListEventsRequest, ListEventsResponse, Event, ListEventsPage&gt; {
+
+    private ListEventsPage(
+        PageContext&lt;ListEventsRequest, ListEventsResponse, Event&gt; context,
+        ListEventsResponse response) {
+<span class="fc" id="L2446">      super(context, response);</span>
+<span class="fc" id="L2447">    }</span>
+
+    private static ListEventsPage createEmptyPage() {
+<span class="fc" id="L2450">      return new ListEventsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListEventsPage createPage(
+        PageContext&lt;ListEventsRequest, ListEventsResponse, Event&gt; context,
+        ListEventsResponse response) {
+<span class="fc" id="L2457">      return new ListEventsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListEventsPage&gt; createPageAsync(
+        PageContext&lt;ListEventsRequest, ListEventsResponse, Event&gt; context,
+        ApiFuture&lt;ListEventsResponse&gt; futureResponse) {
+<span class="fc" id="L2464">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListEventsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListEventsRequest,
+          ListEventsResponse,
+          Event,
+          ListEventsPage,
+          ListEventsFixedSizeCollection&gt; {
+
+    private ListEventsFixedSizeCollection(List&lt;ListEventsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2477">      super(pages, collectionSize);</span>
+<span class="fc" id="L2478">    }</span>
+
+    private static ListEventsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2481">      return new ListEventsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListEventsFixedSizeCollection createCollection(
+        List&lt;ListEventsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2487">      return new ListEventsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

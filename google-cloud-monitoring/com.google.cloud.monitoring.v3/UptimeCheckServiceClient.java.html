@@ -1,0 +1,1210 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>UptimeCheckServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-monitoring</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.monitoring.v3</a> &gt; <span class="el_source">UptimeCheckServiceClient.java</span></div><h1>UptimeCheckServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.monitoring.v3;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.api.resourcenames.ResourceName;
+import com.google.cloud.monitoring.v3.stub.UptimeCheckServiceStub;
+import com.google.cloud.monitoring.v3.stub.UptimeCheckServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.monitoring.v3.CreateUptimeCheckConfigRequest;
+import com.google.monitoring.v3.DeleteUptimeCheckConfigRequest;
+import com.google.monitoring.v3.GetUptimeCheckConfigRequest;
+import com.google.monitoring.v3.ListUptimeCheckConfigsRequest;
+import com.google.monitoring.v3.ListUptimeCheckConfigsResponse;
+import com.google.monitoring.v3.ListUptimeCheckIpsRequest;
+import com.google.monitoring.v3.ListUptimeCheckIpsResponse;
+import com.google.monitoring.v3.OrganizationName;
+import com.google.monitoring.v3.ProjectName;
+import com.google.monitoring.v3.UpdateUptimeCheckConfigRequest;
+import com.google.monitoring.v3.UptimeCheckConfig;
+import com.google.monitoring.v3.UptimeCheckConfigName;
+import com.google.monitoring.v3.UptimeCheckIp;
+import com.google.protobuf.Empty;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: The UptimeCheckService API is used to manage (list, create, delete, edit)
+ * Uptime check configurations in the Stackdriver Monitoring product. An Uptime check is a piece of
+ * configuration that determines which resources and services to monitor for availability. These
+ * configurations can also be configured interactively by navigating to the [Cloud Console]
+ * (http://console.cloud.google.com), selecting the appropriate project, clicking on &quot;Monitoring&quot; on
+ * the left-hand side to navigate to Stackdriver, and then clicking on &quot;Uptime&quot;.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+ *   UptimeCheckConfigName name =
+ *       UptimeCheckConfigName.ofProjectUptimeCheckConfigName(
+ *           &quot;[PROJECT]&quot;, &quot;[UPTIME_CHECK_CONFIG]&quot;);
+ *   UptimeCheckConfig response = uptimeCheckServiceClient.getUptimeCheckConfig(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the UptimeCheckServiceClient object to clean up resources
+ * such as threads. In the example above, try-with-resources is used, which automatically calls
+ * close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of UptimeCheckServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * UptimeCheckServiceSettings uptimeCheckServiceSettings =
+ *     UptimeCheckServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * UptimeCheckServiceClient uptimeCheckServiceClient =
+ *     UptimeCheckServiceClient.create(uptimeCheckServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * UptimeCheckServiceSettings uptimeCheckServiceSettings =
+ *     UptimeCheckServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * UptimeCheckServiceClient uptimeCheckServiceClient =
+ *     UptimeCheckServiceClient.create(uptimeCheckServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class UptimeCheckServiceClient implements BackgroundResource {
+  private final UptimeCheckServiceSettings settings;
+  private final UptimeCheckServiceStub stub;
+
+  /** Constructs an instance of UptimeCheckServiceClient with default settings. */
+  public static final UptimeCheckServiceClient create() throws IOException {
+<span class="nc" id="L134">    return create(UptimeCheckServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of UptimeCheckServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final UptimeCheckServiceClient create(UptimeCheckServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L143">    return new UptimeCheckServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of UptimeCheckServiceClient, using the given stub for making calls. This
+   * is for advanced usage - prefer using create(UptimeCheckServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final UptimeCheckServiceClient create(UptimeCheckServiceStub stub) {
+<span class="nc" id="L152">    return new UptimeCheckServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of UptimeCheckServiceClient, using the given settings. This is protected
+   * so that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L160">  protected UptimeCheckServiceClient(UptimeCheckServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L161">    this.settings = settings;</span>
+<span class="fc" id="L162">    this.stub = ((UptimeCheckServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L163">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L166">  protected UptimeCheckServiceClient(UptimeCheckServiceStub stub) {</span>
+<span class="nc" id="L167">    this.settings = null;</span>
+<span class="nc" id="L168">    this.stub = stub;</span>
+<span class="nc" id="L169">  }</span>
+
+  public final UptimeCheckServiceSettings getSettings() {
+<span class="nc" id="L172">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public UptimeCheckServiceStub getStub() {
+<span class="nc" id="L177">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing valid Uptime check configurations for the project (leaving out any invalid
+   * configurations).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   ResourceName parent = ResourceName.of(&quot;[FOLDER]&quot;);
+   *   for (UptimeCheckConfig element :
+   *       uptimeCheckServiceClient.listUptimeCheckConfigs(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name)
+   *     whose Uptime check configurations are listed. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListUptimeCheckConfigsPagedResponse listUptimeCheckConfigs(ResourceName parent) {
+    ListUptimeCheckConfigsRequest request =
+<span class="fc" id="L206">        ListUptimeCheckConfigsRequest.newBuilder()</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L208">            .build();</span>
+<span class="fc" id="L209">    return listUptimeCheckConfigs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing valid Uptime check configurations for the project (leaving out any invalid
+   * configurations).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   OrganizationName parent = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   for (UptimeCheckConfig element :
+   *       uptimeCheckServiceClient.listUptimeCheckConfigs(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name)
+   *     whose Uptime check configurations are listed. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListUptimeCheckConfigsPagedResponse listUptimeCheckConfigs(OrganizationName parent) {
+    ListUptimeCheckConfigsRequest request =
+<span class="fc" id="L238">        ListUptimeCheckConfigsRequest.newBuilder()</span>
+<span class="pc bpc" id="L239" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L240">            .build();</span>
+<span class="fc" id="L241">    return listUptimeCheckConfigs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing valid Uptime check configurations for the project (leaving out any invalid
+   * configurations).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (UptimeCheckConfig element :
+   *       uptimeCheckServiceClient.listUptimeCheckConfigs(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name)
+   *     whose Uptime check configurations are listed. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListUptimeCheckConfigsPagedResponse listUptimeCheckConfigs(ProjectName parent) {
+    ListUptimeCheckConfigsRequest request =
+<span class="fc" id="L270">        ListUptimeCheckConfigsRequest.newBuilder()</span>
+<span class="pc bpc" id="L271" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L272">            .build();</span>
+<span class="fc" id="L273">    return listUptimeCheckConfigs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing valid Uptime check configurations for the project (leaving out any invalid
+   * configurations).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (UptimeCheckConfig element :
+   *       uptimeCheckServiceClient.listUptimeCheckConfigs(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name)
+   *     whose Uptime check configurations are listed. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListUptimeCheckConfigsPagedResponse listUptimeCheckConfigs(String parent) {
+    ListUptimeCheckConfigsRequest request =
+<span class="fc" id="L302">        ListUptimeCheckConfigsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L303">    return listUptimeCheckConfigs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing valid Uptime check configurations for the project (leaving out any invalid
+   * configurations).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   ListUptimeCheckConfigsRequest request =
+   *       ListUptimeCheckConfigsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (UptimeCheckConfig element :
+   *       uptimeCheckServiceClient.listUptimeCheckConfigs(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListUptimeCheckConfigsPagedResponse listUptimeCheckConfigs(
+      ListUptimeCheckConfigsRequest request) {
+<span class="fc" id="L335">    return listUptimeCheckConfigsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing valid Uptime check configurations for the project (leaving out any invalid
+   * configurations).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   ListUptimeCheckConfigsRequest request =
+   *       ListUptimeCheckConfigsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;UptimeCheckConfig&gt; future =
+   *       uptimeCheckServiceClient.listUptimeCheckConfigsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (UptimeCheckConfig element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListUptimeCheckConfigsRequest, ListUptimeCheckConfigsPagedResponse&gt;
+      listUptimeCheckConfigsPagedCallable() {
+<span class="fc" id="L366">    return stub.listUptimeCheckConfigsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the existing valid Uptime check configurations for the project (leaving out any invalid
+   * configurations).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   ListUptimeCheckConfigsRequest request =
+   *       ListUptimeCheckConfigsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListUptimeCheckConfigsResponse response =
+   *         uptimeCheckServiceClient.listUptimeCheckConfigsCallable().call(request);
+   *     for (UptimeCheckConfig element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListUptimeCheckConfigsRequest, ListUptimeCheckConfigsResponse&gt;
+      listUptimeCheckConfigsCallable() {
+<span class="nc" id="L404">    return stub.listUptimeCheckConfigsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single Uptime check configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   UptimeCheckConfigName name =
+   *       UptimeCheckConfigName.ofProjectUptimeCheckConfigName(
+   *           &quot;[PROJECT]&quot;, &quot;[UPTIME_CHECK_CONFIG]&quot;);
+   *   UptimeCheckConfig response = uptimeCheckServiceClient.getUptimeCheckConfig(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The Uptime check configuration to retrieve. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/uptimeCheckConfigs/[UPTIME_CHECK_ID]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UptimeCheckConfig getUptimeCheckConfig(UptimeCheckConfigName name) {
+    GetUptimeCheckConfigRequest request =
+<span class="fc" id="L430">        GetUptimeCheckConfigRequest.newBuilder()</span>
+<span class="pc bpc" id="L431" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L432">            .build();</span>
+<span class="fc" id="L433">    return getUptimeCheckConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single Uptime check configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   String name =
+   *       UptimeCheckConfigName.ofProjectUptimeCheckConfigName(&quot;[PROJECT]&quot;, &quot;[UPTIME_CHECK_CONFIG]&quot;)
+   *           .toString();
+   *   UptimeCheckConfig response = uptimeCheckServiceClient.getUptimeCheckConfig(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The Uptime check configuration to retrieve. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/uptimeCheckConfigs/[UPTIME_CHECK_ID]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UptimeCheckConfig getUptimeCheckConfig(String name) {
+    GetUptimeCheckConfigRequest request =
+<span class="fc" id="L459">        GetUptimeCheckConfigRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L460">    return getUptimeCheckConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single Uptime check configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   GetUptimeCheckConfigRequest request =
+   *       GetUptimeCheckConfigRequest.newBuilder()
+   *           .setName(
+   *               UptimeCheckConfigName.ofProjectUptimeCheckConfigName(
+   *                       &quot;[PROJECT]&quot;, &quot;[UPTIME_CHECK_CONFIG]&quot;)
+   *                   .toString())
+   *           .build();
+   *   UptimeCheckConfig response = uptimeCheckServiceClient.getUptimeCheckConfig(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UptimeCheckConfig getUptimeCheckConfig(GetUptimeCheckConfigRequest request) {
+<span class="fc" id="L488">    return getUptimeCheckConfigCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single Uptime check configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   GetUptimeCheckConfigRequest request =
+   *       GetUptimeCheckConfigRequest.newBuilder()
+   *           .setName(
+   *               UptimeCheckConfigName.ofProjectUptimeCheckConfigName(
+   *                       &quot;[PROJECT]&quot;, &quot;[UPTIME_CHECK_CONFIG]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;UptimeCheckConfig&gt; future =
+   *       uptimeCheckServiceClient.getUptimeCheckConfigCallable().futureCall(request);
+   *   // Do something.
+   *   UptimeCheckConfig response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetUptimeCheckConfigRequest, UptimeCheckConfig&gt;
+      getUptimeCheckConfigCallable() {
+<span class="fc" id="L517">    return stub.getUptimeCheckConfigCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Uptime check configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   ResourceName parent = ResourceName.of(&quot;[FOLDER]&quot;);
+   *   UptimeCheckConfig uptimeCheckConfig = UptimeCheckConfig.newBuilder().build();
+   *   UptimeCheckConfig response =
+   *       uptimeCheckServiceClient.createUptimeCheckConfig(parent, uptimeCheckConfig);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name)
+   *     in which to create the Uptime check. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @param uptimeCheckConfig Required. The new Uptime check configuration.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UptimeCheckConfig createUptimeCheckConfig(
+      ResourceName parent, UptimeCheckConfig uptimeCheckConfig) {
+    CreateUptimeCheckConfigRequest request =
+<span class="fc" id="L546">        CreateUptimeCheckConfigRequest.newBuilder()</span>
+<span class="pc bpc" id="L547" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L548">            .setUptimeCheckConfig(uptimeCheckConfig)</span>
+<span class="fc" id="L549">            .build();</span>
+<span class="fc" id="L550">    return createUptimeCheckConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Uptime check configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   OrganizationName parent = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   UptimeCheckConfig uptimeCheckConfig = UptimeCheckConfig.newBuilder().build();
+   *   UptimeCheckConfig response =
+   *       uptimeCheckServiceClient.createUptimeCheckConfig(parent, uptimeCheckConfig);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name)
+   *     in which to create the Uptime check. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @param uptimeCheckConfig Required. The new Uptime check configuration.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UptimeCheckConfig createUptimeCheckConfig(
+      OrganizationName parent, UptimeCheckConfig uptimeCheckConfig) {
+    CreateUptimeCheckConfigRequest request =
+<span class="fc" id="L579">        CreateUptimeCheckConfigRequest.newBuilder()</span>
+<span class="pc bpc" id="L580" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L581">            .setUptimeCheckConfig(uptimeCheckConfig)</span>
+<span class="fc" id="L582">            .build();</span>
+<span class="fc" id="L583">    return createUptimeCheckConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Uptime check configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   UptimeCheckConfig uptimeCheckConfig = UptimeCheckConfig.newBuilder().build();
+   *   UptimeCheckConfig response =
+   *       uptimeCheckServiceClient.createUptimeCheckConfig(parent, uptimeCheckConfig);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name)
+   *     in which to create the Uptime check. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @param uptimeCheckConfig Required. The new Uptime check configuration.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UptimeCheckConfig createUptimeCheckConfig(
+      ProjectName parent, UptimeCheckConfig uptimeCheckConfig) {
+    CreateUptimeCheckConfigRequest request =
+<span class="fc" id="L612">        CreateUptimeCheckConfigRequest.newBuilder()</span>
+<span class="pc bpc" id="L613" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L614">            .setUptimeCheckConfig(uptimeCheckConfig)</span>
+<span class="fc" id="L615">            .build();</span>
+<span class="fc" id="L616">    return createUptimeCheckConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Uptime check configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   UptimeCheckConfig uptimeCheckConfig = UptimeCheckConfig.newBuilder().build();
+   *   UptimeCheckConfig response =
+   *       uptimeCheckServiceClient.createUptimeCheckConfig(parent, uptimeCheckConfig);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name)
+   *     in which to create the Uptime check. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @param uptimeCheckConfig Required. The new Uptime check configuration.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UptimeCheckConfig createUptimeCheckConfig(
+      String parent, UptimeCheckConfig uptimeCheckConfig) {
+    CreateUptimeCheckConfigRequest request =
+<span class="fc" id="L645">        CreateUptimeCheckConfigRequest.newBuilder()</span>
+<span class="fc" id="L646">            .setParent(parent)</span>
+<span class="fc" id="L647">            .setUptimeCheckConfig(uptimeCheckConfig)</span>
+<span class="fc" id="L648">            .build();</span>
+<span class="fc" id="L649">    return createUptimeCheckConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Uptime check configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   CreateUptimeCheckConfigRequest request =
+   *       CreateUptimeCheckConfigRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setUptimeCheckConfig(UptimeCheckConfig.newBuilder().build())
+   *           .build();
+   *   UptimeCheckConfig response = uptimeCheckServiceClient.createUptimeCheckConfig(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UptimeCheckConfig createUptimeCheckConfig(CreateUptimeCheckConfigRequest request) {
+<span class="fc" id="L675">    return createUptimeCheckConfigCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Uptime check configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   CreateUptimeCheckConfigRequest request =
+   *       CreateUptimeCheckConfigRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setUptimeCheckConfig(UptimeCheckConfig.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;UptimeCheckConfig&gt; future =
+   *       uptimeCheckServiceClient.createUptimeCheckConfigCallable().futureCall(request);
+   *   // Do something.
+   *   UptimeCheckConfig response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateUptimeCheckConfigRequest, UptimeCheckConfig&gt;
+      createUptimeCheckConfigCallable() {
+<span class="fc" id="L702">    return stub.createUptimeCheckConfigCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an Uptime check configuration. You can either replace the entire configuration with a
+   * new one or replace only certain fields in the current configuration by specifying the fields to
+   * be updated via `updateMask`. Returns the updated configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   UptimeCheckConfig uptimeCheckConfig = UptimeCheckConfig.newBuilder().build();
+   *   UptimeCheckConfig response =
+   *       uptimeCheckServiceClient.updateUptimeCheckConfig(uptimeCheckConfig);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param uptimeCheckConfig Required. If an `updateMask` has been specified, this field gives the
+   *     values for the set of fields mentioned in the `updateMask`. If an `updateMask` has not been
+   *     given, this Uptime check configuration replaces the current configuration. If a field is
+   *     mentioned in `updateMask` but the corresonding field is omitted in this partial Uptime
+   *     check configuration, it has the effect of deleting/clearing the field from the
+   *     configuration on the server.
+   *     &lt;p&gt;The following fields can be updated: `display_name`, `http_check`, `tcp_check`,
+   *     `timeout`, `content_matchers`, and `selected_regions`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UptimeCheckConfig updateUptimeCheckConfig(UptimeCheckConfig uptimeCheckConfig) {
+    UpdateUptimeCheckConfigRequest request =
+<span class="fc" id="L735">        UpdateUptimeCheckConfigRequest.newBuilder().setUptimeCheckConfig(uptimeCheckConfig).build();</span>
+<span class="fc" id="L736">    return updateUptimeCheckConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an Uptime check configuration. You can either replace the entire configuration with a
+   * new one or replace only certain fields in the current configuration by specifying the fields to
+   * be updated via `updateMask`. Returns the updated configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   UpdateUptimeCheckConfigRequest request =
+   *       UpdateUptimeCheckConfigRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setUptimeCheckConfig(UptimeCheckConfig.newBuilder().build())
+   *           .build();
+   *   UptimeCheckConfig response = uptimeCheckServiceClient.updateUptimeCheckConfig(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UptimeCheckConfig updateUptimeCheckConfig(UpdateUptimeCheckConfigRequest request) {
+<span class="fc" id="L764">    return updateUptimeCheckConfigCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an Uptime check configuration. You can either replace the entire configuration with a
+   * new one or replace only certain fields in the current configuration by specifying the fields to
+   * be updated via `updateMask`. Returns the updated configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   UpdateUptimeCheckConfigRequest request =
+   *       UpdateUptimeCheckConfigRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setUptimeCheckConfig(UptimeCheckConfig.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;UptimeCheckConfig&gt; future =
+   *       uptimeCheckServiceClient.updateUptimeCheckConfigCallable().futureCall(request);
+   *   // Do something.
+   *   UptimeCheckConfig response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateUptimeCheckConfigRequest, UptimeCheckConfig&gt;
+      updateUptimeCheckConfigCallable() {
+<span class="fc" id="L793">    return stub.updateUptimeCheckConfigCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an Uptime check configuration. Note that this method will fail if the Uptime check
+   * configuration is referenced by an alert policy or other dependent configs that would be
+   * rendered invalid by the deletion.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   UptimeCheckConfigName name =
+   *       UptimeCheckConfigName.ofProjectUptimeCheckConfigName(
+   *           &quot;[PROJECT]&quot;, &quot;[UPTIME_CHECK_CONFIG]&quot;);
+   *   uptimeCheckServiceClient.deleteUptimeCheckConfig(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The Uptime check configuration to delete. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/uptimeCheckConfigs/[UPTIME_CHECK_ID]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteUptimeCheckConfig(UptimeCheckConfigName name) {
+    DeleteUptimeCheckConfigRequest request =
+<span class="fc" id="L821">        DeleteUptimeCheckConfigRequest.newBuilder()</span>
+<span class="pc bpc" id="L822" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L823">            .build();</span>
+<span class="fc" id="L824">    deleteUptimeCheckConfig(request);</span>
+<span class="fc" id="L825">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an Uptime check configuration. Note that this method will fail if the Uptime check
+   * configuration is referenced by an alert policy or other dependent configs that would be
+   * rendered invalid by the deletion.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   String name =
+   *       UptimeCheckConfigName.ofProjectUptimeCheckConfigName(&quot;[PROJECT]&quot;, &quot;[UPTIME_CHECK_CONFIG]&quot;)
+   *           .toString();
+   *   uptimeCheckServiceClient.deleteUptimeCheckConfig(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The Uptime check configuration to delete. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/uptimeCheckConfigs/[UPTIME_CHECK_ID]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteUptimeCheckConfig(String name) {
+    DeleteUptimeCheckConfigRequest request =
+<span class="fc" id="L852">        DeleteUptimeCheckConfigRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L853">    deleteUptimeCheckConfig(request);</span>
+<span class="fc" id="L854">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an Uptime check configuration. Note that this method will fail if the Uptime check
+   * configuration is referenced by an alert policy or other dependent configs that would be
+   * rendered invalid by the deletion.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   DeleteUptimeCheckConfigRequest request =
+   *       DeleteUptimeCheckConfigRequest.newBuilder()
+   *           .setName(
+   *               UptimeCheckConfigName.ofProjectUptimeCheckConfigName(
+   *                       &quot;[PROJECT]&quot;, &quot;[UPTIME_CHECK_CONFIG]&quot;)
+   *                   .toString())
+   *           .build();
+   *   uptimeCheckServiceClient.deleteUptimeCheckConfig(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteUptimeCheckConfig(DeleteUptimeCheckConfigRequest request) {
+<span class="fc" id="L883">    deleteUptimeCheckConfigCallable().call(request);</span>
+<span class="fc" id="L884">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an Uptime check configuration. Note that this method will fail if the Uptime check
+   * configuration is referenced by an alert policy or other dependent configs that would be
+   * rendered invalid by the deletion.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   DeleteUptimeCheckConfigRequest request =
+   *       DeleteUptimeCheckConfigRequest.newBuilder()
+   *           .setName(
+   *               UptimeCheckConfigName.ofProjectUptimeCheckConfigName(
+   *                       &quot;[PROJECT]&quot;, &quot;[UPTIME_CHECK_CONFIG]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       uptimeCheckServiceClient.deleteUptimeCheckConfigCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteUptimeCheckConfigRequest, Empty&gt;
+      deleteUptimeCheckConfigCallable() {
+<span class="fc" id="L914">    return stub.deleteUptimeCheckConfigCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the list of IP addresses that checkers run from
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   ListUptimeCheckIpsRequest request =
+   *       ListUptimeCheckIpsRequest.newBuilder()
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (UptimeCheckIp element :
+   *       uptimeCheckServiceClient.listUptimeCheckIps(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListUptimeCheckIpsPagedResponse listUptimeCheckIps(
+      ListUptimeCheckIpsRequest request) {
+<span class="fc" id="L944">    return listUptimeCheckIpsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the list of IP addresses that checkers run from
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   ListUptimeCheckIpsRequest request =
+   *       ListUptimeCheckIpsRequest.newBuilder()
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;UptimeCheckIp&gt; future =
+   *       uptimeCheckServiceClient.listUptimeCheckIpsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (UptimeCheckIp element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListUptimeCheckIpsRequest, ListUptimeCheckIpsPagedResponse&gt;
+      listUptimeCheckIpsPagedCallable() {
+<span class="fc" id="L973">    return stub.listUptimeCheckIpsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the list of IP addresses that checkers run from
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UptimeCheckServiceClient uptimeCheckServiceClient = UptimeCheckServiceClient.create()) {
+   *   ListUptimeCheckIpsRequest request =
+   *       ListUptimeCheckIpsRequest.newBuilder()
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListUptimeCheckIpsResponse response =
+   *         uptimeCheckServiceClient.listUptimeCheckIpsCallable().call(request);
+   *     for (UptimeCheckIp element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListUptimeCheckIpsRequest, ListUptimeCheckIpsResponse&gt;
+      listUptimeCheckIpsCallable() {
+<span class="nc" id="L1009">    return stub.listUptimeCheckIpsCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1014">    stub.close();</span>
+<span class="fc" id="L1015">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1019">    stub.shutdown();</span>
+<span class="nc" id="L1020">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1024">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1029">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1034">    stub.shutdownNow();</span>
+<span class="nc" id="L1035">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1039">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListUptimeCheckConfigsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListUptimeCheckConfigsRequest,
+          ListUptimeCheckConfigsResponse,
+          UptimeCheckConfig,
+          ListUptimeCheckConfigsPage,
+          ListUptimeCheckConfigsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListUptimeCheckConfigsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListUptimeCheckConfigsRequest, ListUptimeCheckConfigsResponse, UptimeCheckConfig&gt;
+            context,
+        ApiFuture&lt;ListUptimeCheckConfigsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListUptimeCheckConfigsPage&gt; futurePage =
+<span class="fc" id="L1056">          ListUptimeCheckConfigsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1057">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1059">          input -&gt; new ListUptimeCheckConfigsPagedResponse(input),</span>
+<span class="fc" id="L1060">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListUptimeCheckConfigsPagedResponse(ListUptimeCheckConfigsPage page) {
+<span class="fc" id="L1064">      super(page, ListUptimeCheckConfigsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1065">    }</span>
+  }
+
+  public static class ListUptimeCheckConfigsPage
+      extends AbstractPage&lt;
+          ListUptimeCheckConfigsRequest,
+          ListUptimeCheckConfigsResponse,
+          UptimeCheckConfig,
+          ListUptimeCheckConfigsPage&gt; {
+
+    private ListUptimeCheckConfigsPage(
+        PageContext&lt;
+                ListUptimeCheckConfigsRequest, ListUptimeCheckConfigsResponse, UptimeCheckConfig&gt;
+            context,
+        ListUptimeCheckConfigsResponse response) {
+<span class="fc" id="L1080">      super(context, response);</span>
+<span class="fc" id="L1081">    }</span>
+
+    private static ListUptimeCheckConfigsPage createEmptyPage() {
+<span class="fc" id="L1084">      return new ListUptimeCheckConfigsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListUptimeCheckConfigsPage createPage(
+        PageContext&lt;
+                ListUptimeCheckConfigsRequest, ListUptimeCheckConfigsResponse, UptimeCheckConfig&gt;
+            context,
+        ListUptimeCheckConfigsResponse response) {
+<span class="fc" id="L1093">      return new ListUptimeCheckConfigsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListUptimeCheckConfigsPage&gt; createPageAsync(
+        PageContext&lt;
+                ListUptimeCheckConfigsRequest, ListUptimeCheckConfigsResponse, UptimeCheckConfig&gt;
+            context,
+        ApiFuture&lt;ListUptimeCheckConfigsResponse&gt; futureResponse) {
+<span class="fc" id="L1102">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListUptimeCheckConfigsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListUptimeCheckConfigsRequest,
+          ListUptimeCheckConfigsResponse,
+          UptimeCheckConfig,
+          ListUptimeCheckConfigsPage,
+          ListUptimeCheckConfigsFixedSizeCollection&gt; {
+
+    private ListUptimeCheckConfigsFixedSizeCollection(
+        List&lt;ListUptimeCheckConfigsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1116">      super(pages, collectionSize);</span>
+<span class="fc" id="L1117">    }</span>
+
+    private static ListUptimeCheckConfigsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1120">      return new ListUptimeCheckConfigsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListUptimeCheckConfigsFixedSizeCollection createCollection(
+        List&lt;ListUptimeCheckConfigsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1126">      return new ListUptimeCheckConfigsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListUptimeCheckIpsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListUptimeCheckIpsRequest,
+          ListUptimeCheckIpsResponse,
+          UptimeCheckIp,
+          ListUptimeCheckIpsPage,
+          ListUptimeCheckIpsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListUptimeCheckIpsPagedResponse&gt; createAsync(
+        PageContext&lt;ListUptimeCheckIpsRequest, ListUptimeCheckIpsResponse, UptimeCheckIp&gt; context,
+        ApiFuture&lt;ListUptimeCheckIpsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListUptimeCheckIpsPage&gt; futurePage =
+<span class="fc" id="L1142">          ListUptimeCheckIpsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1143">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1145">          input -&gt; new ListUptimeCheckIpsPagedResponse(input),</span>
+<span class="fc" id="L1146">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListUptimeCheckIpsPagedResponse(ListUptimeCheckIpsPage page) {
+<span class="fc" id="L1150">      super(page, ListUptimeCheckIpsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1151">    }</span>
+  }
+
+  public static class ListUptimeCheckIpsPage
+      extends AbstractPage&lt;
+          ListUptimeCheckIpsRequest,
+          ListUptimeCheckIpsResponse,
+          UptimeCheckIp,
+          ListUptimeCheckIpsPage&gt; {
+
+    private ListUptimeCheckIpsPage(
+        PageContext&lt;ListUptimeCheckIpsRequest, ListUptimeCheckIpsResponse, UptimeCheckIp&gt; context,
+        ListUptimeCheckIpsResponse response) {
+<span class="fc" id="L1164">      super(context, response);</span>
+<span class="fc" id="L1165">    }</span>
+
+    private static ListUptimeCheckIpsPage createEmptyPage() {
+<span class="fc" id="L1168">      return new ListUptimeCheckIpsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListUptimeCheckIpsPage createPage(
+        PageContext&lt;ListUptimeCheckIpsRequest, ListUptimeCheckIpsResponse, UptimeCheckIp&gt; context,
+        ListUptimeCheckIpsResponse response) {
+<span class="fc" id="L1175">      return new ListUptimeCheckIpsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListUptimeCheckIpsPage&gt; createPageAsync(
+        PageContext&lt;ListUptimeCheckIpsRequest, ListUptimeCheckIpsResponse, UptimeCheckIp&gt; context,
+        ApiFuture&lt;ListUptimeCheckIpsResponse&gt; futureResponse) {
+<span class="fc" id="L1182">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListUptimeCheckIpsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListUptimeCheckIpsRequest,
+          ListUptimeCheckIpsResponse,
+          UptimeCheckIp,
+          ListUptimeCheckIpsPage,
+          ListUptimeCheckIpsFixedSizeCollection&gt; {
+
+    private ListUptimeCheckIpsFixedSizeCollection(
+        List&lt;ListUptimeCheckIpsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1196">      super(pages, collectionSize);</span>
+<span class="fc" id="L1197">    }</span>
+
+    private static ListUptimeCheckIpsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1200">      return new ListUptimeCheckIpsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListUptimeCheckIpsFixedSizeCollection createCollection(
+        List&lt;ListUptimeCheckIpsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1206">      return new ListUptimeCheckIpsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

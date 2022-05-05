@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>Debugger2Client.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-debugger-client</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.debugger.v2</a> &gt; <span class="el_source">Debugger2Client.java</span></div><h1>Debugger2Client.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.debugger.v2;
+
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.debugger.v2.stub.Debugger2Stub;
+import com.google.cloud.debugger.v2.stub.Debugger2StubSettings;
+import com.google.devtools.clouddebugger.v2.Breakpoint;
+import com.google.devtools.clouddebugger.v2.DeleteBreakpointRequest;
+import com.google.devtools.clouddebugger.v2.GetBreakpointRequest;
+import com.google.devtools.clouddebugger.v2.GetBreakpointResponse;
+import com.google.devtools.clouddebugger.v2.ListBreakpointsRequest;
+import com.google.devtools.clouddebugger.v2.ListBreakpointsResponse;
+import com.google.devtools.clouddebugger.v2.ListDebuggeesRequest;
+import com.google.devtools.clouddebugger.v2.ListDebuggeesResponse;
+import com.google.devtools.clouddebugger.v2.SetBreakpointRequest;
+import com.google.devtools.clouddebugger.v2.SetBreakpointResponse;
+import com.google.protobuf.Empty;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: The Debugger service provides the API that allows users to collect run-time
+ * information from a running application, without stopping or slowing it down and without modifying
+ * its state. An application may include one or more replicated processes performing the same work.
+ *
+ * &lt;p&gt;A debugged application is represented using the Debuggee concept. The Debugger service
+ * provides a way to query for available debuggees, but does not provide a way to create one. A
+ * debuggee is created using the Controller service, usually by running a debugger agent with the
+ * application.
+ *
+ * &lt;p&gt;The Debugger service enables the client to set one or more Breakpoints on a Debuggee and
+ * collect the results of the set Breakpoints.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+ *   String debuggeeId = &quot;debuggeeId-1833285553&quot;;
+ *   Breakpoint breakpoint = Breakpoint.newBuilder().build();
+ *   String clientVersion = &quot;clientVersion771880589&quot;;
+ *   SetBreakpointResponse response =
+ *       debugger2Client.setBreakpoint(debuggeeId, breakpoint, clientVersion);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the Debugger2Client object to clean up resources such as
+ * threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of Debugger2Settings to create().
+ * For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * Debugger2Settings debugger2Settings =
+ *     Debugger2Settings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * Debugger2Client debugger2Client = Debugger2Client.create(debugger2Settings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * Debugger2Settings debugger2Settings =
+ *     Debugger2Settings.newBuilder().setEndpoint(myEndpoint).build();
+ * Debugger2Client debugger2Client = Debugger2Client.create(debugger2Settings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class Debugger2Client implements BackgroundResource {
+  private final Debugger2Settings settings;
+  private final Debugger2Stub stub;
+
+  /** Constructs an instance of Debugger2Client with default settings. */
+  public static final Debugger2Client create() throws IOException {
+<span class="nc" id="L125">    return create(Debugger2Settings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of Debugger2Client, using the given settings. The channels are created
+   * based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final Debugger2Client create(Debugger2Settings settings) throws IOException {
+<span class="fc" id="L133">    return new Debugger2Client(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of Debugger2Client, using the given stub for making calls. This is for
+   * advanced usage - prefer using create(Debugger2Settings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final Debugger2Client create(Debugger2Stub stub) {
+<span class="nc" id="L142">    return new Debugger2Client(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of Debugger2Client, using the given settings. This is protected so that
+   * it is easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   */
+<span class="fc" id="L149">  protected Debugger2Client(Debugger2Settings settings) throws IOException {</span>
+<span class="fc" id="L150">    this.settings = settings;</span>
+<span class="fc" id="L151">    this.stub = ((Debugger2StubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L152">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L155">  protected Debugger2Client(Debugger2Stub stub) {</span>
+<span class="nc" id="L156">    this.settings = null;</span>
+<span class="nc" id="L157">    this.stub = stub;</span>
+<span class="nc" id="L158">  }</span>
+
+  public final Debugger2Settings getSettings() {
+<span class="nc" id="L161">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public Debugger2Stub getStub() {
+<span class="nc" id="L166">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the breakpoint to the debuggee.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   String debuggeeId = &quot;debuggeeId-1833285553&quot;;
+   *   Breakpoint breakpoint = Breakpoint.newBuilder().build();
+   *   String clientVersion = &quot;clientVersion771880589&quot;;
+   *   SetBreakpointResponse response =
+   *       debugger2Client.setBreakpoint(debuggeeId, breakpoint, clientVersion);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param debuggeeId Required. ID of the debuggee where the breakpoint is to be set.
+   * @param breakpoint Required. Breakpoint specification to set. The field `location` of the
+   *     breakpoint must be set.
+   * @param clientVersion Required. The client version making the call. Schema:
+   *     `domain/type/version` (e.g., `google.com/intellij/v1`).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SetBreakpointResponse setBreakpoint(
+      String debuggeeId, Breakpoint breakpoint, String clientVersion) {
+    SetBreakpointRequest request =
+<span class="fc" id="L197">        SetBreakpointRequest.newBuilder()</span>
+<span class="fc" id="L198">            .setDebuggeeId(debuggeeId)</span>
+<span class="fc" id="L199">            .setBreakpoint(breakpoint)</span>
+<span class="fc" id="L200">            .setClientVersion(clientVersion)</span>
+<span class="fc" id="L201">            .build();</span>
+<span class="fc" id="L202">    return setBreakpoint(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the breakpoint to the debuggee.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   SetBreakpointRequest request =
+   *       SetBreakpointRequest.newBuilder()
+   *           .setDebuggeeId(&quot;debuggeeId-1833285553&quot;)
+   *           .setBreakpoint(Breakpoint.newBuilder().build())
+   *           .setClientVersion(&quot;clientVersion771880589&quot;)
+   *           .build();
+   *   SetBreakpointResponse response = debugger2Client.setBreakpoint(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SetBreakpointResponse setBreakpoint(SetBreakpointRequest request) {
+<span class="fc" id="L229">    return setBreakpointCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the breakpoint to the debuggee.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   SetBreakpointRequest request =
+   *       SetBreakpointRequest.newBuilder()
+   *           .setDebuggeeId(&quot;debuggeeId-1833285553&quot;)
+   *           .setBreakpoint(Breakpoint.newBuilder().build())
+   *           .setClientVersion(&quot;clientVersion771880589&quot;)
+   *           .build();
+   *   ApiFuture&lt;SetBreakpointResponse&gt; future =
+   *       debugger2Client.setBreakpointCallable().futureCall(request);
+   *   // Do something.
+   *   SetBreakpointResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetBreakpointRequest, SetBreakpointResponse&gt; setBreakpointCallable() {
+<span class="fc" id="L256">    return stub.setBreakpointCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets breakpoint information.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   String debuggeeId = &quot;debuggeeId-1833285553&quot;;
+   *   String breakpointId = &quot;breakpointId570266860&quot;;
+   *   String clientVersion = &quot;clientVersion771880589&quot;;
+   *   GetBreakpointResponse response =
+   *       debugger2Client.getBreakpoint(debuggeeId, breakpointId, clientVersion);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param debuggeeId Required. ID of the debuggee whose breakpoint to get.
+   * @param breakpointId Required. ID of the breakpoint to get.
+   * @param clientVersion Required. The client version making the call. Schema:
+   *     `domain/type/version` (e.g., `google.com/intellij/v1`).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GetBreakpointResponse getBreakpoint(
+      String debuggeeId, String breakpointId, String clientVersion) {
+    GetBreakpointRequest request =
+<span class="fc" id="L286">        GetBreakpointRequest.newBuilder()</span>
+<span class="fc" id="L287">            .setDebuggeeId(debuggeeId)</span>
+<span class="fc" id="L288">            .setBreakpointId(breakpointId)</span>
+<span class="fc" id="L289">            .setClientVersion(clientVersion)</span>
+<span class="fc" id="L290">            .build();</span>
+<span class="fc" id="L291">    return getBreakpoint(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets breakpoint information.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   GetBreakpointRequest request =
+   *       GetBreakpointRequest.newBuilder()
+   *           .setDebuggeeId(&quot;debuggeeId-1833285553&quot;)
+   *           .setBreakpointId(&quot;breakpointId570266860&quot;)
+   *           .setClientVersion(&quot;clientVersion771880589&quot;)
+   *           .build();
+   *   GetBreakpointResponse response = debugger2Client.getBreakpoint(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GetBreakpointResponse getBreakpoint(GetBreakpointRequest request) {
+<span class="fc" id="L318">    return getBreakpointCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets breakpoint information.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   GetBreakpointRequest request =
+   *       GetBreakpointRequest.newBuilder()
+   *           .setDebuggeeId(&quot;debuggeeId-1833285553&quot;)
+   *           .setBreakpointId(&quot;breakpointId570266860&quot;)
+   *           .setClientVersion(&quot;clientVersion771880589&quot;)
+   *           .build();
+   *   ApiFuture&lt;GetBreakpointResponse&gt; future =
+   *       debugger2Client.getBreakpointCallable().futureCall(request);
+   *   // Do something.
+   *   GetBreakpointResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetBreakpointRequest, GetBreakpointResponse&gt; getBreakpointCallable() {
+<span class="fc" id="L345">    return stub.getBreakpointCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the breakpoint from the debuggee.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   String debuggeeId = &quot;debuggeeId-1833285553&quot;;
+   *   String breakpointId = &quot;breakpointId570266860&quot;;
+   *   String clientVersion = &quot;clientVersion771880589&quot;;
+   *   debugger2Client.deleteBreakpoint(debuggeeId, breakpointId, clientVersion);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param debuggeeId Required. ID of the debuggee whose breakpoint to delete.
+   * @param breakpointId Required. ID of the breakpoint to delete.
+   * @param clientVersion Required. The client version making the call. Schema:
+   *     `domain/type/version` (e.g., `google.com/intellij/v1`).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteBreakpoint(String debuggeeId, String breakpointId, String clientVersion) {
+    DeleteBreakpointRequest request =
+<span class="fc" id="L373">        DeleteBreakpointRequest.newBuilder()</span>
+<span class="fc" id="L374">            .setDebuggeeId(debuggeeId)</span>
+<span class="fc" id="L375">            .setBreakpointId(breakpointId)</span>
+<span class="fc" id="L376">            .setClientVersion(clientVersion)</span>
+<span class="fc" id="L377">            .build();</span>
+<span class="fc" id="L378">    deleteBreakpoint(request);</span>
+<span class="fc" id="L379">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the breakpoint from the debuggee.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   DeleteBreakpointRequest request =
+   *       DeleteBreakpointRequest.newBuilder()
+   *           .setDebuggeeId(&quot;debuggeeId-1833285553&quot;)
+   *           .setBreakpointId(&quot;breakpointId570266860&quot;)
+   *           .setClientVersion(&quot;clientVersion771880589&quot;)
+   *           .build();
+   *   debugger2Client.deleteBreakpoint(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteBreakpoint(DeleteBreakpointRequest request) {
+<span class="fc" id="L405">    deleteBreakpointCallable().call(request);</span>
+<span class="fc" id="L406">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the breakpoint from the debuggee.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   DeleteBreakpointRequest request =
+   *       DeleteBreakpointRequest.newBuilder()
+   *           .setDebuggeeId(&quot;debuggeeId-1833285553&quot;)
+   *           .setBreakpointId(&quot;breakpointId570266860&quot;)
+   *           .setClientVersion(&quot;clientVersion771880589&quot;)
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = debugger2Client.deleteBreakpointCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteBreakpointRequest, Empty&gt; deleteBreakpointCallable() {
+<span class="fc" id="L431">    return stub.deleteBreakpointCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all breakpoints for the debuggee.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   String debuggeeId = &quot;debuggeeId-1833285553&quot;;
+   *   String clientVersion = &quot;clientVersion771880589&quot;;
+   *   ListBreakpointsResponse response = debugger2Client.listBreakpoints(debuggeeId, clientVersion);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param debuggeeId Required. ID of the debuggee whose breakpoints to list.
+   * @param clientVersion Required. The client version making the call. Schema:
+   *     `domain/type/version` (e.g., `google.com/intellij/v1`).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBreakpointsResponse listBreakpoints(String debuggeeId, String clientVersion) {
+    ListBreakpointsRequest request =
+<span class="fc" id="L457">        ListBreakpointsRequest.newBuilder()</span>
+<span class="fc" id="L458">            .setDebuggeeId(debuggeeId)</span>
+<span class="fc" id="L459">            .setClientVersion(clientVersion)</span>
+<span class="fc" id="L460">            .build();</span>
+<span class="fc" id="L461">    return listBreakpoints(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all breakpoints for the debuggee.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   ListBreakpointsRequest request =
+   *       ListBreakpointsRequest.newBuilder()
+   *           .setDebuggeeId(&quot;debuggeeId-1833285553&quot;)
+   *           .setIncludeAllUsers(true)
+   *           .setIncludeInactive(true)
+   *           .setAction(ListBreakpointsRequest.BreakpointActionValue.newBuilder().build())
+   *           .setStripResults(true)
+   *           .setWaitToken(&quot;waitToken-984229500&quot;)
+   *           .setClientVersion(&quot;clientVersion771880589&quot;)
+   *           .build();
+   *   ListBreakpointsResponse response = debugger2Client.listBreakpoints(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBreakpointsResponse listBreakpoints(ListBreakpointsRequest request) {
+<span class="fc" id="L492">    return listBreakpointsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all breakpoints for the debuggee.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   ListBreakpointsRequest request =
+   *       ListBreakpointsRequest.newBuilder()
+   *           .setDebuggeeId(&quot;debuggeeId-1833285553&quot;)
+   *           .setIncludeAllUsers(true)
+   *           .setIncludeInactive(true)
+   *           .setAction(ListBreakpointsRequest.BreakpointActionValue.newBuilder().build())
+   *           .setStripResults(true)
+   *           .setWaitToken(&quot;waitToken-984229500&quot;)
+   *           .setClientVersion(&quot;clientVersion771880589&quot;)
+   *           .build();
+   *   ApiFuture&lt;ListBreakpointsResponse&gt; future =
+   *       debugger2Client.listBreakpointsCallable().futureCall(request);
+   *   // Do something.
+   *   ListBreakpointsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListBreakpointsRequest, ListBreakpointsResponse&gt;
+      listBreakpointsCallable() {
+<span class="fc" id="L524">    return stub.listBreakpointsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the debuggees that the user has access to.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   String project = &quot;project-309310695&quot;;
+   *   String clientVersion = &quot;clientVersion771880589&quot;;
+   *   ListDebuggeesResponse response = debugger2Client.listDebuggees(project, clientVersion);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param project Required. Project number of a Google Cloud project whose debuggees to list.
+   * @param clientVersion Required. The client version making the call. Schema:
+   *     `domain/type/version` (e.g., `google.com/intellij/v1`).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDebuggeesResponse listDebuggees(String project, String clientVersion) {
+    ListDebuggeesRequest request =
+<span class="fc" id="L550">        ListDebuggeesRequest.newBuilder()</span>
+<span class="fc" id="L551">            .setProject(project)</span>
+<span class="fc" id="L552">            .setClientVersion(clientVersion)</span>
+<span class="fc" id="L553">            .build();</span>
+<span class="fc" id="L554">    return listDebuggees(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the debuggees that the user has access to.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   ListDebuggeesRequest request =
+   *       ListDebuggeesRequest.newBuilder()
+   *           .setProject(&quot;project-309310695&quot;)
+   *           .setIncludeInactive(true)
+   *           .setClientVersion(&quot;clientVersion771880589&quot;)
+   *           .build();
+   *   ListDebuggeesResponse response = debugger2Client.listDebuggees(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDebuggeesResponse listDebuggees(ListDebuggeesRequest request) {
+<span class="fc" id="L581">    return listDebuggeesCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the debuggees that the user has access to.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (Debugger2Client debugger2Client = Debugger2Client.create()) {
+   *   ListDebuggeesRequest request =
+   *       ListDebuggeesRequest.newBuilder()
+   *           .setProject(&quot;project-309310695&quot;)
+   *           .setIncludeInactive(true)
+   *           .setClientVersion(&quot;clientVersion771880589&quot;)
+   *           .build();
+   *   ApiFuture&lt;ListDebuggeesResponse&gt; future =
+   *       debugger2Client.listDebuggeesCallable().futureCall(request);
+   *   // Do something.
+   *   ListDebuggeesResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListDebuggeesRequest, ListDebuggeesResponse&gt; listDebuggeesCallable() {
+<span class="fc" id="L608">    return stub.listDebuggeesCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L613">    stub.close();</span>
+<span class="fc" id="L614">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L618">    stub.shutdown();</span>
+<span class="nc" id="L619">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L623">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L628">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L633">    stub.shutdownNow();</span>
+<span class="nc" id="L634">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L638">    return stub.awaitTermination(duration, unit);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

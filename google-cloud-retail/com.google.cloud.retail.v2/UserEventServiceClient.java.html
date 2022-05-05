@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>UserEventServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-retail</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.retail.v2</a> &gt; <span class="el_source">UserEventServiceClient.java</span></div><h1>UserEventServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.retail.v2;
+
+import com.google.api.HttpBody;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.retail.v2.stub.UserEventServiceStub;
+import com.google.cloud.retail.v2.stub.UserEventServiceStubSettings;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Service for ingesting end user actions on the customer website.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (UserEventServiceClient userEventServiceClient = UserEventServiceClient.create()) {
+ *   WriteUserEventRequest request =
+ *       WriteUserEventRequest.newBuilder()
+ *           .setParent(&quot;parent-995424086&quot;)
+ *           .setUserEvent(UserEvent.newBuilder().build())
+ *           .build();
+ *   UserEvent response = userEventServiceClient.writeUserEvent(request);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the UserEventServiceClient object to clean up resources
+ * such as threads. In the example above, try-with-resources is used, which automatically calls
+ * close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of UserEventServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * UserEventServiceSettings userEventServiceSettings =
+ *     UserEventServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * UserEventServiceClient userEventServiceClient =
+ *     UserEventServiceClient.create(userEventServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * UserEventServiceSettings userEventServiceSettings =
+ *     UserEventServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * UserEventServiceClient userEventServiceClient =
+ *     UserEventServiceClient.create(userEventServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class UserEventServiceClient implements BackgroundResource {
+  private final UserEventServiceSettings settings;
+  private final UserEventServiceStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of UserEventServiceClient with default settings. */
+  public static final UserEventServiceClient create() throws IOException {
+<span class="nc" id="L114">    return create(UserEventServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of UserEventServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final UserEventServiceClient create(UserEventServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L123">    return new UserEventServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of UserEventServiceClient, using the given stub for making calls. This
+   * is for advanced usage - prefer using create(UserEventServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final UserEventServiceClient create(UserEventServiceStub stub) {
+<span class="nc" id="L132">    return new UserEventServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of UserEventServiceClient, using the given settings. This is protected
+   * so that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L140">  protected UserEventServiceClient(UserEventServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L141">    this.settings = settings;</span>
+<span class="fc" id="L142">    this.stub = ((UserEventServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L143">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L144">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L147">  protected UserEventServiceClient(UserEventServiceStub stub) {</span>
+<span class="nc" id="L148">    this.settings = null;</span>
+<span class="nc" id="L149">    this.stub = stub;</span>
+<span class="nc" id="L150">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L151">  }</span>
+
+  public final UserEventServiceSettings getSettings() {
+<span class="nc" id="L154">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public UserEventServiceStub getStub() {
+<span class="nc" id="L159">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L167">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Writes a single user event.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UserEventServiceClient userEventServiceClient = UserEventServiceClient.create()) {
+   *   WriteUserEventRequest request =
+   *       WriteUserEventRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setUserEvent(UserEvent.newBuilder().build())
+   *           .build();
+   *   UserEvent response = userEventServiceClient.writeUserEvent(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserEvent writeUserEvent(WriteUserEventRequest request) {
+<span class="fc" id="L193">    return writeUserEventCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Writes a single user event.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UserEventServiceClient userEventServiceClient = UserEventServiceClient.create()) {
+   *   WriteUserEventRequest request =
+   *       WriteUserEventRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setUserEvent(UserEvent.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;UserEvent&gt; future =
+   *       userEventServiceClient.writeUserEventCallable().futureCall(request);
+   *   // Do something.
+   *   UserEvent response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;WriteUserEventRequest, UserEvent&gt; writeUserEventCallable() {
+<span class="fc" id="L219">    return stub.writeUserEventCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Writes a single user event from the browser. This uses a GET request to due to browser
+   * restriction of POST-ing to a 3rd party domain.
+   *
+   * &lt;p&gt;This method is used only by the Retail API JavaScript pixel and Google Tag Manager. Users
+   * should not call this method directly.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UserEventServiceClient userEventServiceClient = UserEventServiceClient.create()) {
+   *   CollectUserEventRequest request =
+   *       CollectUserEventRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setUserEvent(&quot;userEvent315571599&quot;)
+   *           .setUri(&quot;uri116076&quot;)
+   *           .setEts(100772)
+   *           .build();
+   *   HttpBody response = userEventServiceClient.collectUserEvent(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final HttpBody collectUserEvent(CollectUserEventRequest request) {
+<span class="fc" id="L251">    return collectUserEventCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Writes a single user event from the browser. This uses a GET request to due to browser
+   * restriction of POST-ing to a 3rd party domain.
+   *
+   * &lt;p&gt;This method is used only by the Retail API JavaScript pixel and Google Tag Manager. Users
+   * should not call this method directly.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UserEventServiceClient userEventServiceClient = UserEventServiceClient.create()) {
+   *   CollectUserEventRequest request =
+   *       CollectUserEventRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setUserEvent(&quot;userEvent315571599&quot;)
+   *           .setUri(&quot;uri116076&quot;)
+   *           .setEts(100772)
+   *           .build();
+   *   ApiFuture&lt;HttpBody&gt; future =
+   *       userEventServiceClient.collectUserEventCallable().futureCall(request);
+   *   // Do something.
+   *   HttpBody response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CollectUserEventRequest, HttpBody&gt; collectUserEventCallable() {
+<span class="fc" id="L283">    return stub.collectUserEventCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes permanently all user events specified by the filter provided. Depending on the number
+   * of events specified by the filter, this operation could take hours or days to complete. To test
+   * a filter, use the list command first.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UserEventServiceClient userEventServiceClient = UserEventServiceClient.create()) {
+   *   PurgeUserEventsRequest request =
+   *       PurgeUserEventsRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setForce(true)
+   *           .build();
+   *   PurgeUserEventsResponse response = userEventServiceClient.purgeUserEventsAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;PurgeUserEventsResponse, PurgeMetadata&gt; purgeUserEventsAsync(
+      PurgeUserEventsRequest request) {
+<span class="fc" id="L313">    return purgeUserEventsOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes permanently all user events specified by the filter provided. Depending on the number
+   * of events specified by the filter, this operation could take hours or days to complete. To test
+   * a filter, use the list command first.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UserEventServiceClient userEventServiceClient = UserEventServiceClient.create()) {
+   *   PurgeUserEventsRequest request =
+   *       PurgeUserEventsRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setForce(true)
+   *           .build();
+   *   OperationFuture&lt;PurgeUserEventsResponse, PurgeMetadata&gt; future =
+   *       userEventServiceClient.purgeUserEventsOperationCallable().futureCall(request);
+   *   // Do something.
+   *   PurgeUserEventsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;PurgeUserEventsRequest, PurgeUserEventsResponse, PurgeMetadata&gt;
+      purgeUserEventsOperationCallable() {
+<span class="fc" id="L343">    return stub.purgeUserEventsOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes permanently all user events specified by the filter provided. Depending on the number
+   * of events specified by the filter, this operation could take hours or days to complete. To test
+   * a filter, use the list command first.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UserEventServiceClient userEventServiceClient = UserEventServiceClient.create()) {
+   *   PurgeUserEventsRequest request =
+   *       PurgeUserEventsRequest.newBuilder()
+   *           .setParent(&quot;parent-995424086&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setForce(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       userEventServiceClient.purgeUserEventsCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;PurgeUserEventsRequest, Operation&gt; purgeUserEventsCallable() {
+<span class="nc" id="L372">    return stub.purgeUserEventsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Bulk import of User events. Request processing might be synchronous. Events that already exist
+   * are skipped. Use this method for backfilling historical user events.
+   *
+   * &lt;p&gt;Operation.response is of type ImportResponse. Note that it is possible for a subset of the
+   * items to be successfully inserted. Operation.metadata is of type ImportMetadata.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UserEventServiceClient userEventServiceClient = UserEventServiceClient.create()) {
+   *   ImportUserEventsRequest request =
+   *       ImportUserEventsRequest.newBuilder()
+   *           .setParent(CatalogName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CATALOG]&quot;).toString())
+   *           .setInputConfig(UserEventInputConfig.newBuilder().build())
+   *           .setErrorsConfig(ImportErrorsConfig.newBuilder().build())
+   *           .build();
+   *   ImportUserEventsResponse response =
+   *       userEventServiceClient.importUserEventsAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ImportUserEventsResponse, ImportMetadata&gt; importUserEventsAsync(
+      ImportUserEventsRequest request) {
+<span class="fc" id="L405">    return importUserEventsOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Bulk import of User events. Request processing might be synchronous. Events that already exist
+   * are skipped. Use this method for backfilling historical user events.
+   *
+   * &lt;p&gt;Operation.response is of type ImportResponse. Note that it is possible for a subset of the
+   * items to be successfully inserted. Operation.metadata is of type ImportMetadata.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UserEventServiceClient userEventServiceClient = UserEventServiceClient.create()) {
+   *   ImportUserEventsRequest request =
+   *       ImportUserEventsRequest.newBuilder()
+   *           .setParent(CatalogName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CATALOG]&quot;).toString())
+   *           .setInputConfig(UserEventInputConfig.newBuilder().build())
+   *           .setErrorsConfig(ImportErrorsConfig.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;ImportUserEventsResponse, ImportMetadata&gt; future =
+   *       userEventServiceClient.importUserEventsOperationCallable().futureCall(request);
+   *   // Do something.
+   *   ImportUserEventsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;ImportUserEventsRequest, ImportUserEventsResponse, ImportMetadata&gt;
+      importUserEventsOperationCallable() {
+<span class="fc" id="L437">    return stub.importUserEventsOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Bulk import of User events. Request processing might be synchronous. Events that already exist
+   * are skipped. Use this method for backfilling historical user events.
+   *
+   * &lt;p&gt;Operation.response is of type ImportResponse. Note that it is possible for a subset of the
+   * items to be successfully inserted. Operation.metadata is of type ImportMetadata.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UserEventServiceClient userEventServiceClient = UserEventServiceClient.create()) {
+   *   ImportUserEventsRequest request =
+   *       ImportUserEventsRequest.newBuilder()
+   *           .setParent(CatalogName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CATALOG]&quot;).toString())
+   *           .setInputConfig(UserEventInputConfig.newBuilder().build())
+   *           .setErrorsConfig(ImportErrorsConfig.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       userEventServiceClient.importUserEventsCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ImportUserEventsRequest, Operation&gt; importUserEventsCallable() {
+<span class="nc" id="L468">    return stub.importUserEventsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts a user event rejoin operation with latest product catalog. Events will not be annotated
+   * with detailed product information if product is missing from the catalog at the time the user
+   * event is ingested, and these events are stored as unjoined events with a limited usage on
+   * training and serving. This method can be used to start a join operation on specified events
+   * with latest version of product catalog. It can also be used to correct events joined with the
+   * wrong product catalog. A rejoin operation can take hours or days to complete.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UserEventServiceClient userEventServiceClient = UserEventServiceClient.create()) {
+   *   RejoinUserEventsRequest request =
+   *       RejoinUserEventsRequest.newBuilder().setParent(&quot;parent-995424086&quot;).build();
+   *   RejoinUserEventsResponse response =
+   *       userEventServiceClient.rejoinUserEventsAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;RejoinUserEventsResponse, RejoinUserEventsMetadata&gt;
+      rejoinUserEventsAsync(RejoinUserEventsRequest request) {
+<span class="fc" id="L498">    return rejoinUserEventsOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts a user event rejoin operation with latest product catalog. Events will not be annotated
+   * with detailed product information if product is missing from the catalog at the time the user
+   * event is ingested, and these events are stored as unjoined events with a limited usage on
+   * training and serving. This method can be used to start a join operation on specified events
+   * with latest version of product catalog. It can also be used to correct events joined with the
+   * wrong product catalog. A rejoin operation can take hours or days to complete.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UserEventServiceClient userEventServiceClient = UserEventServiceClient.create()) {
+   *   RejoinUserEventsRequest request =
+   *       RejoinUserEventsRequest.newBuilder().setParent(&quot;parent-995424086&quot;).build();
+   *   OperationFuture&lt;RejoinUserEventsResponse, RejoinUserEventsMetadata&gt; future =
+   *       userEventServiceClient.rejoinUserEventsOperationCallable().futureCall(request);
+   *   // Do something.
+   *   RejoinUserEventsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          RejoinUserEventsRequest, RejoinUserEventsResponse, RejoinUserEventsMetadata&gt;
+      rejoinUserEventsOperationCallable() {
+<span class="fc" id="L528">    return stub.rejoinUserEventsOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts a user event rejoin operation with latest product catalog. Events will not be annotated
+   * with detailed product information if product is missing from the catalog at the time the user
+   * event is ingested, and these events are stored as unjoined events with a limited usage on
+   * training and serving. This method can be used to start a join operation on specified events
+   * with latest version of product catalog. It can also be used to correct events joined with the
+   * wrong product catalog. A rejoin operation can take hours or days to complete.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (UserEventServiceClient userEventServiceClient = UserEventServiceClient.create()) {
+   *   RejoinUserEventsRequest request =
+   *       RejoinUserEventsRequest.newBuilder().setParent(&quot;parent-995424086&quot;).build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       userEventServiceClient.rejoinUserEventsCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RejoinUserEventsRequest, Operation&gt; rejoinUserEventsCallable() {
+<span class="nc" id="L556">    return stub.rejoinUserEventsCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L561">    stub.close();</span>
+<span class="fc" id="L562">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L566">    stub.shutdown();</span>
+<span class="nc" id="L567">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L571">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L576">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L581">    stub.shutdownNow();</span>
+<span class="nc" id="L582">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L586">    return stub.awaitTermination(duration, unit);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

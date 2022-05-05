@@ -1,0 +1,1737 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>RecaptchaEnterpriseServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-recaptchaenterprise</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.recaptchaenterprise.v1</a> &gt; <span class="el_source">RecaptchaEnterpriseServiceClient.java</span></div><h1>RecaptchaEnterpriseServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.recaptchaenterprise.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.recaptchaenterprise.v1.stub.RecaptchaEnterpriseServiceStub;
+import com.google.cloud.recaptchaenterprise.v1.stub.RecaptchaEnterpriseServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.Empty;
+import com.google.recaptchaenterprise.v1.AnnotateAssessmentRequest;
+import com.google.recaptchaenterprise.v1.AnnotateAssessmentResponse;
+import com.google.recaptchaenterprise.v1.Assessment;
+import com.google.recaptchaenterprise.v1.AssessmentName;
+import com.google.recaptchaenterprise.v1.CreateAssessmentRequest;
+import com.google.recaptchaenterprise.v1.CreateKeyRequest;
+import com.google.recaptchaenterprise.v1.DeleteKeyRequest;
+import com.google.recaptchaenterprise.v1.GetKeyRequest;
+import com.google.recaptchaenterprise.v1.GetMetricsRequest;
+import com.google.recaptchaenterprise.v1.Key;
+import com.google.recaptchaenterprise.v1.ListKeysRequest;
+import com.google.recaptchaenterprise.v1.ListKeysResponse;
+import com.google.recaptchaenterprise.v1.ListRelatedAccountGroupMembershipsRequest;
+import com.google.recaptchaenterprise.v1.ListRelatedAccountGroupMembershipsResponse;
+import com.google.recaptchaenterprise.v1.ListRelatedAccountGroupsRequest;
+import com.google.recaptchaenterprise.v1.ListRelatedAccountGroupsResponse;
+import com.google.recaptchaenterprise.v1.Metrics;
+import com.google.recaptchaenterprise.v1.MetricsName;
+import com.google.recaptchaenterprise.v1.MigrateKeyRequest;
+import com.google.recaptchaenterprise.v1.ProjectName;
+import com.google.recaptchaenterprise.v1.RelatedAccountGroup;
+import com.google.recaptchaenterprise.v1.RelatedAccountGroupMembership;
+import com.google.recaptchaenterprise.v1.RelatedAccountGroupName;
+import com.google.recaptchaenterprise.v1.SearchRelatedAccountGroupMembershipsRequest;
+import com.google.recaptchaenterprise.v1.SearchRelatedAccountGroupMembershipsResponse;
+import com.google.recaptchaenterprise.v1.UpdateKeyRequest;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Service to determine the likelihood an event is legitimate.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+ *     RecaptchaEnterpriseServiceClient.create()) {
+ *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+ *   Assessment assessment = Assessment.newBuilder().build();
+ *   Assessment response = recaptchaEnterpriseServiceClient.createAssessment(parent, assessment);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the RecaptchaEnterpriseServiceClient object to clean up
+ * resources such as threads. In the example above, try-with-resources is used, which automatically
+ * calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of
+ * RecaptchaEnterpriseServiceSettings to create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * RecaptchaEnterpriseServiceSettings recaptchaEnterpriseServiceSettings =
+ *     RecaptchaEnterpriseServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+ *     RecaptchaEnterpriseServiceClient.create(recaptchaEnterpriseServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * RecaptchaEnterpriseServiceSettings recaptchaEnterpriseServiceSettings =
+ *     RecaptchaEnterpriseServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+ *     RecaptchaEnterpriseServiceClient.create(recaptchaEnterpriseServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class RecaptchaEnterpriseServiceClient implements BackgroundResource {
+  private final RecaptchaEnterpriseServiceSettings settings;
+  private final RecaptchaEnterpriseServiceStub stub;
+
+  /** Constructs an instance of RecaptchaEnterpriseServiceClient with default settings. */
+  public static final RecaptchaEnterpriseServiceClient create() throws IOException {
+<span class="nc" id="L136">    return create(RecaptchaEnterpriseServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of RecaptchaEnterpriseServiceClient, using the given settings. The
+   * channels are created based on the settings passed in, or defaults for any settings that are not
+   * set.
+   */
+  public static final RecaptchaEnterpriseServiceClient create(
+      RecaptchaEnterpriseServiceSettings settings) throws IOException {
+<span class="fc" id="L146">    return new RecaptchaEnterpriseServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of RecaptchaEnterpriseServiceClient, using the given stub for making
+   * calls. This is for advanced usage - prefer using create(RecaptchaEnterpriseServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final RecaptchaEnterpriseServiceClient create(RecaptchaEnterpriseServiceStub stub) {
+<span class="nc" id="L155">    return new RecaptchaEnterpriseServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of RecaptchaEnterpriseServiceClient, using the given settings. This is
+   * protected so that it is easy to make a subclass, but otherwise, the static factory methods
+   * should be preferred.
+   */
+  protected RecaptchaEnterpriseServiceClient(RecaptchaEnterpriseServiceSettings settings)
+<span class="fc" id="L164">      throws IOException {</span>
+<span class="fc" id="L165">    this.settings = settings;</span>
+<span class="fc" id="L166">    this.stub = ((RecaptchaEnterpriseServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L167">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L170">  protected RecaptchaEnterpriseServiceClient(RecaptchaEnterpriseServiceStub stub) {</span>
+<span class="nc" id="L171">    this.settings = null;</span>
+<span class="nc" id="L172">    this.stub = stub;</span>
+<span class="nc" id="L173">  }</span>
+
+  public final RecaptchaEnterpriseServiceSettings getSettings() {
+<span class="nc" id="L176">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public RecaptchaEnterpriseServiceStub getStub() {
+<span class="nc" id="L181">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an Assessment of the likelihood an event is legitimate.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   Assessment assessment = Assessment.newBuilder().build();
+   *   Assessment response = recaptchaEnterpriseServiceClient.createAssessment(parent, assessment);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the project in which the assessment will be created, in the
+   *     format &quot;projects/{project}&quot;.
+   * @param assessment Required. The assessment details.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Assessment createAssessment(ProjectName parent, Assessment assessment) {
+    CreateAssessmentRequest request =
+<span class="fc" id="L206">        CreateAssessmentRequest.newBuilder()</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L208">            .setAssessment(assessment)</span>
+<span class="fc" id="L209">            .build();</span>
+<span class="fc" id="L210">    return createAssessment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an Assessment of the likelihood an event is legitimate.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   Assessment assessment = Assessment.newBuilder().build();
+   *   Assessment response = recaptchaEnterpriseServiceClient.createAssessment(parent, assessment);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the project in which the assessment will be created, in the
+   *     format &quot;projects/{project}&quot;.
+   * @param assessment Required. The assessment details.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Assessment createAssessment(String parent, Assessment assessment) {
+    CreateAssessmentRequest request =
+<span class="fc" id="L235">        CreateAssessmentRequest.newBuilder().setParent(parent).setAssessment(assessment).build();</span>
+<span class="fc" id="L236">    return createAssessment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an Assessment of the likelihood an event is legitimate.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   CreateAssessmentRequest request =
+   *       CreateAssessmentRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setAssessment(Assessment.newBuilder().build())
+   *           .build();
+   *   Assessment response = recaptchaEnterpriseServiceClient.createAssessment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Assessment createAssessment(CreateAssessmentRequest request) {
+<span class="fc" id="L261">    return createAssessmentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an Assessment of the likelihood an event is legitimate.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   CreateAssessmentRequest request =
+   *       CreateAssessmentRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setAssessment(Assessment.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Assessment&gt; future =
+   *       recaptchaEnterpriseServiceClient.createAssessmentCallable().futureCall(request);
+   *   // Do something.
+   *   Assessment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateAssessmentRequest, Assessment&gt; createAssessmentCallable() {
+<span class="fc" id="L286">    return stub.createAssessmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Annotates a previously created Assessment to provide additional information on whether the
+   * event turned out to be authentic or fraudulent.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   AssessmentName name = AssessmentName.of(&quot;[PROJECT]&quot;, &quot;[ASSESSMENT]&quot;);
+   *   AnnotateAssessmentRequest.Annotation annotation =
+   *       AnnotateAssessmentRequest.Annotation.forNumber(0);
+   *   AnnotateAssessmentResponse response =
+   *       recaptchaEnterpriseServiceClient.annotateAssessment(name, annotation);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the Assessment, in the format
+   *     &quot;projects/{project}/assessments/{assessment}&quot;.
+   * @param annotation Optional. The annotation that will be assigned to the Event. This field can
+   *     be left empty to provide reasons that apply to an event without concluding whether the
+   *     event is legitimate or fraudulent.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AnnotateAssessmentResponse annotateAssessment(
+      AssessmentName name, AnnotateAssessmentRequest.Annotation annotation) {
+    AnnotateAssessmentRequest request =
+<span class="fc" id="L317">        AnnotateAssessmentRequest.newBuilder()</span>
+<span class="pc bpc" id="L318" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L319">            .setAnnotation(annotation)</span>
+<span class="fc" id="L320">            .build();</span>
+<span class="fc" id="L321">    return annotateAssessment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Annotates a previously created Assessment to provide additional information on whether the
+   * event turned out to be authentic or fraudulent.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   String name = AssessmentName.of(&quot;[PROJECT]&quot;, &quot;[ASSESSMENT]&quot;).toString();
+   *   AnnotateAssessmentRequest.Annotation annotation =
+   *       AnnotateAssessmentRequest.Annotation.forNumber(0);
+   *   AnnotateAssessmentResponse response =
+   *       recaptchaEnterpriseServiceClient.annotateAssessment(name, annotation);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the Assessment, in the format
+   *     &quot;projects/{project}/assessments/{assessment}&quot;.
+   * @param annotation Optional. The annotation that will be assigned to the Event. This field can
+   *     be left empty to provide reasons that apply to an event without concluding whether the
+   *     event is legitimate or fraudulent.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AnnotateAssessmentResponse annotateAssessment(
+      String name, AnnotateAssessmentRequest.Annotation annotation) {
+    AnnotateAssessmentRequest request =
+<span class="fc" id="L352">        AnnotateAssessmentRequest.newBuilder().setName(name).setAnnotation(annotation).build();</span>
+<span class="fc" id="L353">    return annotateAssessment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Annotates a previously created Assessment to provide additional information on whether the
+   * event turned out to be authentic or fraudulent.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   AnnotateAssessmentRequest request =
+   *       AnnotateAssessmentRequest.newBuilder()
+   *           .setName(AssessmentName.of(&quot;[PROJECT]&quot;, &quot;[ASSESSMENT]&quot;).toString())
+   *           .addAllReasons(new ArrayList&lt;AnnotateAssessmentRequest.Reason&gt;())
+   *           .setHashedAccountId(ByteString.EMPTY)
+   *           .build();
+   *   AnnotateAssessmentResponse response =
+   *       recaptchaEnterpriseServiceClient.annotateAssessment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AnnotateAssessmentResponse annotateAssessment(AnnotateAssessmentRequest request) {
+<span class="fc" id="L381">    return annotateAssessmentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Annotates a previously created Assessment to provide additional information on whether the
+   * event turned out to be authentic or fraudulent.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   AnnotateAssessmentRequest request =
+   *       AnnotateAssessmentRequest.newBuilder()
+   *           .setName(AssessmentName.of(&quot;[PROJECT]&quot;, &quot;[ASSESSMENT]&quot;).toString())
+   *           .addAllReasons(new ArrayList&lt;AnnotateAssessmentRequest.Reason&gt;())
+   *           .setHashedAccountId(ByteString.EMPTY)
+   *           .build();
+   *   ApiFuture&lt;AnnotateAssessmentResponse&gt; future =
+   *       recaptchaEnterpriseServiceClient.annotateAssessmentCallable().futureCall(request);
+   *   // Do something.
+   *   AnnotateAssessmentResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;AnnotateAssessmentRequest, AnnotateAssessmentResponse&gt;
+      annotateAssessmentCallable() {
+<span class="fc" id="L409">    return stub.annotateAssessmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new reCAPTCHA Enterprise key.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   CreateKeyRequest request =
+   *       CreateKeyRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setKey(Key.newBuilder().build())
+   *           .build();
+   *   Key response = recaptchaEnterpriseServiceClient.createKey(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Key createKey(CreateKeyRequest request) {
+<span class="fc" id="L434">    return createKeyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new reCAPTCHA Enterprise key.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   CreateKeyRequest request =
+   *       CreateKeyRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setKey(Key.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Key&gt; future =
+   *       recaptchaEnterpriseServiceClient.createKeyCallable().futureCall(request);
+   *   // Do something.
+   *   Key response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateKeyRequest, Key&gt; createKeyCallable() {
+<span class="fc" id="L459">    return stub.createKeyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the list of all keys that belong to a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   ListKeysRequest request =
+   *       ListKeysRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Key element : recaptchaEnterpriseServiceClient.listKeys(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListKeysPagedResponse listKeys(ListKeysRequest request) {
+<span class="fc" id="L487">    return listKeysPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the list of all keys that belong to a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   ListKeysRequest request =
+   *       ListKeysRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Key&gt; future =
+   *       recaptchaEnterpriseServiceClient.listKeysPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Key element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListKeysRequest, ListKeysPagedResponse&gt; listKeysPagedCallable() {
+<span class="fc" id="L515">    return stub.listKeysPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the list of all keys that belong to a project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   ListKeysRequest request =
+   *       ListKeysRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListKeysResponse response =
+   *         recaptchaEnterpriseServiceClient.listKeysCallable().call(request);
+   *     for (Key element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListKeysRequest, ListKeysResponse&gt; listKeysCallable() {
+<span class="nc" id="L550">    return stub.listKeysCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the specified key.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   GetKeyRequest request =
+   *       GetKeyRequest.newBuilder().setName(KeyName.of(&quot;[PROJECT]&quot;, &quot;[KEY]&quot;).toString()).build();
+   *   Key response = recaptchaEnterpriseServiceClient.getKey(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Key getKey(GetKeyRequest request) {
+<span class="fc" id="L572">    return getKeyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the specified key.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   GetKeyRequest request =
+   *       GetKeyRequest.newBuilder().setName(KeyName.of(&quot;[PROJECT]&quot;, &quot;[KEY]&quot;).toString()).build();
+   *   ApiFuture&lt;Key&gt; future = recaptchaEnterpriseServiceClient.getKeyCallable().futureCall(request);
+   *   // Do something.
+   *   Key response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetKeyRequest, Key&gt; getKeyCallable() {
+<span class="fc" id="L593">    return stub.getKeyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the specified key.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   UpdateKeyRequest request =
+   *       UpdateKeyRequest.newBuilder()
+   *           .setKey(Key.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Key response = recaptchaEnterpriseServiceClient.updateKey(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Key updateKey(UpdateKeyRequest request) {
+<span class="fc" id="L618">    return updateKeyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the specified key.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   UpdateKeyRequest request =
+   *       UpdateKeyRequest.newBuilder()
+   *           .setKey(Key.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Key&gt; future =
+   *       recaptchaEnterpriseServiceClient.updateKeyCallable().futureCall(request);
+   *   // Do something.
+   *   Key response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateKeyRequest, Key&gt; updateKeyCallable() {
+<span class="fc" id="L643">    return stub.updateKeyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified key.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   DeleteKeyRequest request =
+   *       DeleteKeyRequest.newBuilder()
+   *           .setName(KeyName.of(&quot;[PROJECT]&quot;, &quot;[KEY]&quot;).toString())
+   *           .build();
+   *   recaptchaEnterpriseServiceClient.deleteKey(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteKey(DeleteKeyRequest request) {
+<span class="fc" id="L667">    deleteKeyCallable().call(request);</span>
+<span class="fc" id="L668">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified key.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   DeleteKeyRequest request =
+   *       DeleteKeyRequest.newBuilder()
+   *           .setName(KeyName.of(&quot;[PROJECT]&quot;, &quot;[KEY]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       recaptchaEnterpriseServiceClient.deleteKeyCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteKeyRequest, Empty&gt; deleteKeyCallable() {
+<span class="fc" id="L691">    return stub.deleteKeyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Migrates an existing key from reCAPTCHA to reCAPTCHA Enterprise. Once a key is migrated, it can
+   * be used from either product. SiteVerify requests are billed as CreateAssessment calls. You must
+   * be authenticated as one of the current owners of the reCAPTCHA Site Key, and your user must
+   * have the reCAPTCHA Enterprise Admin IAM role in the destination project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   MigrateKeyRequest request =
+   *       MigrateKeyRequest.newBuilder()
+   *           .setName(KeyName.of(&quot;[PROJECT]&quot;, &quot;[KEY]&quot;).toString())
+   *           .build();
+   *   Key response = recaptchaEnterpriseServiceClient.migrateKey(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Key migrateKey(MigrateKeyRequest request) {
+<span class="fc" id="L718">    return migrateKeyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Migrates an existing key from reCAPTCHA to reCAPTCHA Enterprise. Once a key is migrated, it can
+   * be used from either product. SiteVerify requests are billed as CreateAssessment calls. You must
+   * be authenticated as one of the current owners of the reCAPTCHA Site Key, and your user must
+   * have the reCAPTCHA Enterprise Admin IAM role in the destination project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   MigrateKeyRequest request =
+   *       MigrateKeyRequest.newBuilder()
+   *           .setName(KeyName.of(&quot;[PROJECT]&quot;, &quot;[KEY]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Key&gt; future =
+   *       recaptchaEnterpriseServiceClient.migrateKeyCallable().futureCall(request);
+   *   // Do something.
+   *   Key response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;MigrateKeyRequest, Key&gt; migrateKeyCallable() {
+<span class="fc" id="L745">    return stub.migrateKeyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get some aggregated metrics for a Key. This data can be used to build dashboards.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   MetricsName name = MetricsName.of(&quot;[PROJECT]&quot;, &quot;[KEY]&quot;);
+   *   Metrics response = recaptchaEnterpriseServiceClient.getMetrics(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the requested metrics, in the format
+   *     &quot;projects/{project}/keys/{key}/metrics&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Metrics getMetrics(MetricsName name) {
+    GetMetricsRequest request =
+<span class="pc bpc" id="L768" title="1 of 2 branches missed.">        GetMetricsRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L769">    return getMetrics(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get some aggregated metrics for a Key. This data can be used to build dashboards.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   String name = MetricsName.of(&quot;[PROJECT]&quot;, &quot;[KEY]&quot;).toString();
+   *   Metrics response = recaptchaEnterpriseServiceClient.getMetrics(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the requested metrics, in the format
+   *     &quot;projects/{project}/keys/{key}/metrics&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Metrics getMetrics(String name) {
+<span class="fc" id="L791">    GetMetricsRequest request = GetMetricsRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L792">    return getMetrics(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get some aggregated metrics for a Key. This data can be used to build dashboards.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   GetMetricsRequest request =
+   *       GetMetricsRequest.newBuilder()
+   *           .setName(MetricsName.of(&quot;[PROJECT]&quot;, &quot;[KEY]&quot;).toString())
+   *           .build();
+   *   Metrics response = recaptchaEnterpriseServiceClient.getMetrics(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Metrics getMetrics(GetMetricsRequest request) {
+<span class="fc" id="L816">    return getMetricsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get some aggregated metrics for a Key. This data can be used to build dashboards.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   GetMetricsRequest request =
+   *       GetMetricsRequest.newBuilder()
+   *           .setName(MetricsName.of(&quot;[PROJECT]&quot;, &quot;[KEY]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Metrics&gt; future =
+   *       recaptchaEnterpriseServiceClient.getMetricsCallable().futureCall(request);
+   *   // Do something.
+   *   Metrics response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetMetricsRequest, Metrics&gt; getMetricsCallable() {
+<span class="fc" id="L840">    return stub.getMetricsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List groups of related accounts.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (RelatedAccountGroup element :
+   *       recaptchaEnterpriseServiceClient.listRelatedAccountGroups(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the project to list related account groups from, in the
+   *     format &quot;projects/{project}&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRelatedAccountGroupsPagedResponse listRelatedAccountGroups(ProjectName parent) {
+    ListRelatedAccountGroupsRequest request =
+<span class="fc" id="L866">        ListRelatedAccountGroupsRequest.newBuilder()</span>
+<span class="pc bpc" id="L867" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L868">            .build();</span>
+<span class="fc" id="L869">    return listRelatedAccountGroups(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List groups of related accounts.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (RelatedAccountGroup element :
+   *       recaptchaEnterpriseServiceClient.listRelatedAccountGroups(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the project to list related account groups from, in the
+   *     format &quot;projects/{project}&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRelatedAccountGroupsPagedResponse listRelatedAccountGroups(String parent) {
+    ListRelatedAccountGroupsRequest request =
+<span class="fc" id="L895">        ListRelatedAccountGroupsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L896">    return listRelatedAccountGroups(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List groups of related accounts.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   ListRelatedAccountGroupsRequest request =
+   *       ListRelatedAccountGroupsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (RelatedAccountGroup element :
+   *       recaptchaEnterpriseServiceClient.listRelatedAccountGroups(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRelatedAccountGroupsPagedResponse listRelatedAccountGroups(
+      ListRelatedAccountGroupsRequest request) {
+<span class="fc" id="L926">    return listRelatedAccountGroupsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List groups of related accounts.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   ListRelatedAccountGroupsRequest request =
+   *       ListRelatedAccountGroupsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;RelatedAccountGroup&gt; future =
+   *       recaptchaEnterpriseServiceClient
+   *           .listRelatedAccountGroupsPagedCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   for (RelatedAccountGroup element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRelatedAccountGroupsRequest, ListRelatedAccountGroupsPagedResponse&gt;
+      listRelatedAccountGroupsPagedCallable() {
+<span class="fc" id="L957">    return stub.listRelatedAccountGroupsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List groups of related accounts.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   ListRelatedAccountGroupsRequest request =
+   *       ListRelatedAccountGroupsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListRelatedAccountGroupsResponse response =
+   *         recaptchaEnterpriseServiceClient.listRelatedAccountGroupsCallable().call(request);
+   *     for (RelatedAccountGroup element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRelatedAccountGroupsRequest, ListRelatedAccountGroupsResponse&gt;
+      listRelatedAccountGroupsCallable() {
+<span class="nc" id="L993">    return stub.listRelatedAccountGroupsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the memberships in a group of related accounts.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   RelatedAccountGroupName parent =
+   *       RelatedAccountGroupName.of(&quot;[PROJECT]&quot;, &quot;[RELATEDACCOUNTGROUP]&quot;);
+   *   for (RelatedAccountGroupMembership element :
+   *       recaptchaEnterpriseServiceClient
+   *           .listRelatedAccountGroupMemberships(parent)
+   *           .iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name for the related account group in the format
+   *     `projects/{project}/relatedaccountgroups/{relatedaccountgroup}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRelatedAccountGroupMembershipsPagedResponse listRelatedAccountGroupMemberships(
+      RelatedAccountGroupName parent) {
+    ListRelatedAccountGroupMembershipsRequest request =
+<span class="fc" id="L1023">        ListRelatedAccountGroupMembershipsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1024" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1025">            .build();</span>
+<span class="fc" id="L1026">    return listRelatedAccountGroupMemberships(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the memberships in a group of related accounts.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   String parent = RelatedAccountGroupName.of(&quot;[PROJECT]&quot;, &quot;[RELATEDACCOUNTGROUP]&quot;).toString();
+   *   for (RelatedAccountGroupMembership element :
+   *       recaptchaEnterpriseServiceClient
+   *           .listRelatedAccountGroupMemberships(parent)
+   *           .iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name for the related account group in the format
+   *     `projects/{project}/relatedaccountgroups/{relatedaccountgroup}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRelatedAccountGroupMembershipsPagedResponse listRelatedAccountGroupMemberships(
+      String parent) {
+    ListRelatedAccountGroupMembershipsRequest request =
+<span class="fc" id="L1055">        ListRelatedAccountGroupMembershipsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1056">    return listRelatedAccountGroupMemberships(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the memberships in a group of related accounts.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   ListRelatedAccountGroupMembershipsRequest request =
+   *       ListRelatedAccountGroupMembershipsRequest.newBuilder()
+   *           .setParent(
+   *               RelatedAccountGroupName.of(&quot;[PROJECT]&quot;, &quot;[RELATEDACCOUNTGROUP]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (RelatedAccountGroupMembership element :
+   *       recaptchaEnterpriseServiceClient
+   *           .listRelatedAccountGroupMemberships(request)
+   *           .iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRelatedAccountGroupMembershipsPagedResponse listRelatedAccountGroupMemberships(
+      ListRelatedAccountGroupMembershipsRequest request) {
+<span class="fc" id="L1089">    return listRelatedAccountGroupMembershipsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the memberships in a group of related accounts.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   ListRelatedAccountGroupMembershipsRequest request =
+   *       ListRelatedAccountGroupMembershipsRequest.newBuilder()
+   *           .setParent(
+   *               RelatedAccountGroupName.of(&quot;[PROJECT]&quot;, &quot;[RELATEDACCOUNTGROUP]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;RelatedAccountGroupMembership&gt; future =
+   *       recaptchaEnterpriseServiceClient
+   *           .listRelatedAccountGroupMembershipsPagedCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   for (RelatedAccountGroupMembership element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          ListRelatedAccountGroupMembershipsRequest,
+          ListRelatedAccountGroupMembershipsPagedResponse&gt;
+      listRelatedAccountGroupMembershipsPagedCallable() {
+<span class="fc" id="L1123">    return stub.listRelatedAccountGroupMembershipsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the memberships in a group of related accounts.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   ListRelatedAccountGroupMembershipsRequest request =
+   *       ListRelatedAccountGroupMembershipsRequest.newBuilder()
+   *           .setParent(
+   *               RelatedAccountGroupName.of(&quot;[PROJECT]&quot;, &quot;[RELATEDACCOUNTGROUP]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListRelatedAccountGroupMembershipsResponse response =
+   *         recaptchaEnterpriseServiceClient
+   *             .listRelatedAccountGroupMembershipsCallable()
+   *             .call(request);
+   *     for (RelatedAccountGroupMembership element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          ListRelatedAccountGroupMembershipsRequest, ListRelatedAccountGroupMembershipsResponse&gt;
+      listRelatedAccountGroupMembershipsCallable() {
+<span class="nc" id="L1163">    return stub.listRelatedAccountGroupMembershipsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Search group memberships related to a given account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   RelatedAccountGroupName parent =
+   *       RelatedAccountGroupName.of(&quot;[PROJECT]&quot;, &quot;[RELATEDACCOUNTGROUP]&quot;);
+   *   ByteString hashedAccountId = ByteString.EMPTY;
+   *   for (RelatedAccountGroupMembership element :
+   *       recaptchaEnterpriseServiceClient
+   *           .searchRelatedAccountGroupMemberships(parent, hashedAccountId)
+   *           .iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the project to search related account group memberships
+   *     from, in the format &quot;projects/{project}&quot;.
+   * @param hashedAccountId Optional. The unique stable hashed user identifier we should search
+   *     connections to. The identifier should correspond to a `hashed_account_id` provided in a
+   *     previous CreateAssessment or AnnotateAssessment call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SearchRelatedAccountGroupMembershipsPagedResponse
+      searchRelatedAccountGroupMemberships(
+          RelatedAccountGroupName parent, ByteString hashedAccountId) {
+    SearchRelatedAccountGroupMembershipsRequest request =
+<span class="fc" id="L1198">        SearchRelatedAccountGroupMembershipsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1199" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1200">            .setHashedAccountId(hashedAccountId)</span>
+<span class="fc" id="L1201">            .build();</span>
+<span class="fc" id="L1202">    return searchRelatedAccountGroupMemberships(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Search group memberships related to a given account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   String parent = RelatedAccountGroupName.of(&quot;[PROJECT]&quot;, &quot;[RELATEDACCOUNTGROUP]&quot;).toString();
+   *   ByteString hashedAccountId = ByteString.EMPTY;
+   *   for (RelatedAccountGroupMembership element :
+   *       recaptchaEnterpriseServiceClient
+   *           .searchRelatedAccountGroupMemberships(parent, hashedAccountId)
+   *           .iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the project to search related account group memberships
+   *     from, in the format &quot;projects/{project}&quot;.
+   * @param hashedAccountId Optional. The unique stable hashed user identifier we should search
+   *     connections to. The identifier should correspond to a `hashed_account_id` provided in a
+   *     previous CreateAssessment or AnnotateAssessment call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SearchRelatedAccountGroupMembershipsPagedResponse
+      searchRelatedAccountGroupMemberships(String parent, ByteString hashedAccountId) {
+    SearchRelatedAccountGroupMembershipsRequest request =
+<span class="fc" id="L1235">        SearchRelatedAccountGroupMembershipsRequest.newBuilder()</span>
+<span class="fc" id="L1236">            .setParent(parent)</span>
+<span class="fc" id="L1237">            .setHashedAccountId(hashedAccountId)</span>
+<span class="fc" id="L1238">            .build();</span>
+<span class="fc" id="L1239">    return searchRelatedAccountGroupMemberships(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Search group memberships related to a given account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   SearchRelatedAccountGroupMembershipsRequest request =
+   *       SearchRelatedAccountGroupMembershipsRequest.newBuilder()
+   *           .setParent(
+   *               RelatedAccountGroupName.of(&quot;[PROJECT]&quot;, &quot;[RELATEDACCOUNTGROUP]&quot;).toString())
+   *           .setHashedAccountId(ByteString.EMPTY)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (RelatedAccountGroupMembership element :
+   *       recaptchaEnterpriseServiceClient
+   *           .searchRelatedAccountGroupMemberships(request)
+   *           .iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SearchRelatedAccountGroupMembershipsPagedResponse
+      searchRelatedAccountGroupMemberships(SearchRelatedAccountGroupMembershipsRequest request) {
+<span class="fc" id="L1273">    return searchRelatedAccountGroupMembershipsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Search group memberships related to a given account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   SearchRelatedAccountGroupMembershipsRequest request =
+   *       SearchRelatedAccountGroupMembershipsRequest.newBuilder()
+   *           .setParent(
+   *               RelatedAccountGroupName.of(&quot;[PROJECT]&quot;, &quot;[RELATEDACCOUNTGROUP]&quot;).toString())
+   *           .setHashedAccountId(ByteString.EMPTY)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;RelatedAccountGroupMembership&gt; future =
+   *       recaptchaEnterpriseServiceClient
+   *           .searchRelatedAccountGroupMembershipsPagedCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   for (RelatedAccountGroupMembership element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          SearchRelatedAccountGroupMembershipsRequest,
+          SearchRelatedAccountGroupMembershipsPagedResponse&gt;
+      searchRelatedAccountGroupMembershipsPagedCallable() {
+<span class="fc" id="L1308">    return stub.searchRelatedAccountGroupMembershipsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Search group memberships related to a given account.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (RecaptchaEnterpriseServiceClient recaptchaEnterpriseServiceClient =
+   *     RecaptchaEnterpriseServiceClient.create()) {
+   *   SearchRelatedAccountGroupMembershipsRequest request =
+   *       SearchRelatedAccountGroupMembershipsRequest.newBuilder()
+   *           .setParent(
+   *               RelatedAccountGroupName.of(&quot;[PROJECT]&quot;, &quot;[RELATEDACCOUNTGROUP]&quot;).toString())
+   *           .setHashedAccountId(ByteString.EMPTY)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     SearchRelatedAccountGroupMembershipsResponse response =
+   *         recaptchaEnterpriseServiceClient
+   *             .searchRelatedAccountGroupMembershipsCallable()
+   *             .call(request);
+   *     for (RelatedAccountGroupMembership element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          SearchRelatedAccountGroupMembershipsRequest, SearchRelatedAccountGroupMembershipsResponse&gt;
+      searchRelatedAccountGroupMembershipsCallable() {
+<span class="nc" id="L1349">    return stub.searchRelatedAccountGroupMembershipsCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1354">    stub.close();</span>
+<span class="fc" id="L1355">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1359">    stub.shutdown();</span>
+<span class="nc" id="L1360">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1364">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1369">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1374">    stub.shutdownNow();</span>
+<span class="nc" id="L1375">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1379">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListKeysPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListKeysRequest, ListKeysResponse, Key, ListKeysPage, ListKeysFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListKeysPagedResponse&gt; createAsync(
+        PageContext&lt;ListKeysRequest, ListKeysResponse, Key&gt; context,
+        ApiFuture&lt;ListKeysResponse&gt; futureResponse) {
+      ApiFuture&lt;ListKeysPage&gt; futurePage =
+<span class="fc" id="L1390">          ListKeysPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1391">      return ApiFutures.transform(</span>
+<span class="fc" id="L1392">          futurePage, input -&gt; new ListKeysPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListKeysPagedResponse(ListKeysPage page) {
+<span class="fc" id="L1396">      super(page, ListKeysFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1397">    }</span>
+  }
+
+  public static class ListKeysPage
+      extends AbstractPage&lt;ListKeysRequest, ListKeysResponse, Key, ListKeysPage&gt; {
+
+    private ListKeysPage(
+        PageContext&lt;ListKeysRequest, ListKeysResponse, Key&gt; context, ListKeysResponse response) {
+<span class="fc" id="L1405">      super(context, response);</span>
+<span class="fc" id="L1406">    }</span>
+
+    private static ListKeysPage createEmptyPage() {
+<span class="fc" id="L1409">      return new ListKeysPage(null, null);</span>
+    }
+
+    @Override
+    protected ListKeysPage createPage(
+        PageContext&lt;ListKeysRequest, ListKeysResponse, Key&gt; context, ListKeysResponse response) {
+<span class="fc" id="L1415">      return new ListKeysPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListKeysPage&gt; createPageAsync(
+        PageContext&lt;ListKeysRequest, ListKeysResponse, Key&gt; context,
+        ApiFuture&lt;ListKeysResponse&gt; futureResponse) {
+<span class="fc" id="L1422">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListKeysFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListKeysRequest, ListKeysResponse, Key, ListKeysPage, ListKeysFixedSizeCollection&gt; {
+
+    private ListKeysFixedSizeCollection(List&lt;ListKeysPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1431">      super(pages, collectionSize);</span>
+<span class="fc" id="L1432">    }</span>
+
+    private static ListKeysFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1435">      return new ListKeysFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListKeysFixedSizeCollection createCollection(
+        List&lt;ListKeysPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1441">      return new ListKeysFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListRelatedAccountGroupsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListRelatedAccountGroupsRequest,
+          ListRelatedAccountGroupsResponse,
+          RelatedAccountGroup,
+          ListRelatedAccountGroupsPage,
+          ListRelatedAccountGroupsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListRelatedAccountGroupsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListRelatedAccountGroupsRequest,
+                ListRelatedAccountGroupsResponse,
+                RelatedAccountGroup&gt;
+            context,
+        ApiFuture&lt;ListRelatedAccountGroupsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListRelatedAccountGroupsPage&gt; futurePage =
+<span class="fc" id="L1461">          ListRelatedAccountGroupsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1462">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1464">          input -&gt; new ListRelatedAccountGroupsPagedResponse(input),</span>
+<span class="fc" id="L1465">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListRelatedAccountGroupsPagedResponse(ListRelatedAccountGroupsPage page) {
+<span class="fc" id="L1469">      super(page, ListRelatedAccountGroupsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1470">    }</span>
+  }
+
+  public static class ListRelatedAccountGroupsPage
+      extends AbstractPage&lt;
+          ListRelatedAccountGroupsRequest,
+          ListRelatedAccountGroupsResponse,
+          RelatedAccountGroup,
+          ListRelatedAccountGroupsPage&gt; {
+
+    private ListRelatedAccountGroupsPage(
+        PageContext&lt;
+                ListRelatedAccountGroupsRequest,
+                ListRelatedAccountGroupsResponse,
+                RelatedAccountGroup&gt;
+            context,
+        ListRelatedAccountGroupsResponse response) {
+<span class="fc" id="L1487">      super(context, response);</span>
+<span class="fc" id="L1488">    }</span>
+
+    private static ListRelatedAccountGroupsPage createEmptyPage() {
+<span class="fc" id="L1491">      return new ListRelatedAccountGroupsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListRelatedAccountGroupsPage createPage(
+        PageContext&lt;
+                ListRelatedAccountGroupsRequest,
+                ListRelatedAccountGroupsResponse,
+                RelatedAccountGroup&gt;
+            context,
+        ListRelatedAccountGroupsResponse response) {
+<span class="fc" id="L1502">      return new ListRelatedAccountGroupsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListRelatedAccountGroupsPage&gt; createPageAsync(
+        PageContext&lt;
+                ListRelatedAccountGroupsRequest,
+                ListRelatedAccountGroupsResponse,
+                RelatedAccountGroup&gt;
+            context,
+        ApiFuture&lt;ListRelatedAccountGroupsResponse&gt; futureResponse) {
+<span class="fc" id="L1513">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListRelatedAccountGroupsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListRelatedAccountGroupsRequest,
+          ListRelatedAccountGroupsResponse,
+          RelatedAccountGroup,
+          ListRelatedAccountGroupsPage,
+          ListRelatedAccountGroupsFixedSizeCollection&gt; {
+
+    private ListRelatedAccountGroupsFixedSizeCollection(
+        List&lt;ListRelatedAccountGroupsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1527">      super(pages, collectionSize);</span>
+<span class="fc" id="L1528">    }</span>
+
+    private static ListRelatedAccountGroupsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1531">      return new ListRelatedAccountGroupsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListRelatedAccountGroupsFixedSizeCollection createCollection(
+        List&lt;ListRelatedAccountGroupsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1537">      return new ListRelatedAccountGroupsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListRelatedAccountGroupMembershipsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListRelatedAccountGroupMembershipsRequest,
+          ListRelatedAccountGroupMembershipsResponse,
+          RelatedAccountGroupMembership,
+          ListRelatedAccountGroupMembershipsPage,
+          ListRelatedAccountGroupMembershipsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListRelatedAccountGroupMembershipsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListRelatedAccountGroupMembershipsRequest,
+                ListRelatedAccountGroupMembershipsResponse,
+                RelatedAccountGroupMembership&gt;
+            context,
+        ApiFuture&lt;ListRelatedAccountGroupMembershipsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListRelatedAccountGroupMembershipsPage&gt; futurePage =
+<span class="fc" id="L1557">          ListRelatedAccountGroupMembershipsPage.createEmptyPage()</span>
+<span class="fc" id="L1558">              .createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1559">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1561">          input -&gt; new ListRelatedAccountGroupMembershipsPagedResponse(input),</span>
+<span class="fc" id="L1562">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListRelatedAccountGroupMembershipsPagedResponse(
+        ListRelatedAccountGroupMembershipsPage page) {
+<span class="fc" id="L1567">      super(page, ListRelatedAccountGroupMembershipsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1568">    }</span>
+  }
+
+  public static class ListRelatedAccountGroupMembershipsPage
+      extends AbstractPage&lt;
+          ListRelatedAccountGroupMembershipsRequest,
+          ListRelatedAccountGroupMembershipsResponse,
+          RelatedAccountGroupMembership,
+          ListRelatedAccountGroupMembershipsPage&gt; {
+
+    private ListRelatedAccountGroupMembershipsPage(
+        PageContext&lt;
+                ListRelatedAccountGroupMembershipsRequest,
+                ListRelatedAccountGroupMembershipsResponse,
+                RelatedAccountGroupMembership&gt;
+            context,
+        ListRelatedAccountGroupMembershipsResponse response) {
+<span class="fc" id="L1585">      super(context, response);</span>
+<span class="fc" id="L1586">    }</span>
+
+    private static ListRelatedAccountGroupMembershipsPage createEmptyPage() {
+<span class="fc" id="L1589">      return new ListRelatedAccountGroupMembershipsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListRelatedAccountGroupMembershipsPage createPage(
+        PageContext&lt;
+                ListRelatedAccountGroupMembershipsRequest,
+                ListRelatedAccountGroupMembershipsResponse,
+                RelatedAccountGroupMembership&gt;
+            context,
+        ListRelatedAccountGroupMembershipsResponse response) {
+<span class="fc" id="L1600">      return new ListRelatedAccountGroupMembershipsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListRelatedAccountGroupMembershipsPage&gt; createPageAsync(
+        PageContext&lt;
+                ListRelatedAccountGroupMembershipsRequest,
+                ListRelatedAccountGroupMembershipsResponse,
+                RelatedAccountGroupMembership&gt;
+            context,
+        ApiFuture&lt;ListRelatedAccountGroupMembershipsResponse&gt; futureResponse) {
+<span class="fc" id="L1611">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListRelatedAccountGroupMembershipsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListRelatedAccountGroupMembershipsRequest,
+          ListRelatedAccountGroupMembershipsResponse,
+          RelatedAccountGroupMembership,
+          ListRelatedAccountGroupMembershipsPage,
+          ListRelatedAccountGroupMembershipsFixedSizeCollection&gt; {
+
+    private ListRelatedAccountGroupMembershipsFixedSizeCollection(
+        List&lt;ListRelatedAccountGroupMembershipsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1625">      super(pages, collectionSize);</span>
+<span class="fc" id="L1626">    }</span>
+
+    private static ListRelatedAccountGroupMembershipsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1629">      return new ListRelatedAccountGroupMembershipsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListRelatedAccountGroupMembershipsFixedSizeCollection createCollection(
+        List&lt;ListRelatedAccountGroupMembershipsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1635">      return new ListRelatedAccountGroupMembershipsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class SearchRelatedAccountGroupMembershipsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          SearchRelatedAccountGroupMembershipsRequest,
+          SearchRelatedAccountGroupMembershipsResponse,
+          RelatedAccountGroupMembership,
+          SearchRelatedAccountGroupMembershipsPage,
+          SearchRelatedAccountGroupMembershipsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;SearchRelatedAccountGroupMembershipsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                SearchRelatedAccountGroupMembershipsRequest,
+                SearchRelatedAccountGroupMembershipsResponse,
+                RelatedAccountGroupMembership&gt;
+            context,
+        ApiFuture&lt;SearchRelatedAccountGroupMembershipsResponse&gt; futureResponse) {
+      ApiFuture&lt;SearchRelatedAccountGroupMembershipsPage&gt; futurePage =
+<span class="fc" id="L1655">          SearchRelatedAccountGroupMembershipsPage.createEmptyPage()</span>
+<span class="fc" id="L1656">              .createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1657">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1659">          input -&gt; new SearchRelatedAccountGroupMembershipsPagedResponse(input),</span>
+<span class="fc" id="L1660">          MoreExecutors.directExecutor());</span>
+    }
+
+    private SearchRelatedAccountGroupMembershipsPagedResponse(
+        SearchRelatedAccountGroupMembershipsPage page) {
+<span class="fc" id="L1665">      super(page, SearchRelatedAccountGroupMembershipsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1666">    }</span>
+  }
+
+  public static class SearchRelatedAccountGroupMembershipsPage
+      extends AbstractPage&lt;
+          SearchRelatedAccountGroupMembershipsRequest,
+          SearchRelatedAccountGroupMembershipsResponse,
+          RelatedAccountGroupMembership,
+          SearchRelatedAccountGroupMembershipsPage&gt; {
+
+    private SearchRelatedAccountGroupMembershipsPage(
+        PageContext&lt;
+                SearchRelatedAccountGroupMembershipsRequest,
+                SearchRelatedAccountGroupMembershipsResponse,
+                RelatedAccountGroupMembership&gt;
+            context,
+        SearchRelatedAccountGroupMembershipsResponse response) {
+<span class="fc" id="L1683">      super(context, response);</span>
+<span class="fc" id="L1684">    }</span>
+
+    private static SearchRelatedAccountGroupMembershipsPage createEmptyPage() {
+<span class="fc" id="L1687">      return new SearchRelatedAccountGroupMembershipsPage(null, null);</span>
+    }
+
+    @Override
+    protected SearchRelatedAccountGroupMembershipsPage createPage(
+        PageContext&lt;
+                SearchRelatedAccountGroupMembershipsRequest,
+                SearchRelatedAccountGroupMembershipsResponse,
+                RelatedAccountGroupMembership&gt;
+            context,
+        SearchRelatedAccountGroupMembershipsResponse response) {
+<span class="fc" id="L1698">      return new SearchRelatedAccountGroupMembershipsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;SearchRelatedAccountGroupMembershipsPage&gt; createPageAsync(
+        PageContext&lt;
+                SearchRelatedAccountGroupMembershipsRequest,
+                SearchRelatedAccountGroupMembershipsResponse,
+                RelatedAccountGroupMembership&gt;
+            context,
+        ApiFuture&lt;SearchRelatedAccountGroupMembershipsResponse&gt; futureResponse) {
+<span class="fc" id="L1709">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class SearchRelatedAccountGroupMembershipsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          SearchRelatedAccountGroupMembershipsRequest,
+          SearchRelatedAccountGroupMembershipsResponse,
+          RelatedAccountGroupMembership,
+          SearchRelatedAccountGroupMembershipsPage,
+          SearchRelatedAccountGroupMembershipsFixedSizeCollection&gt; {
+
+    private SearchRelatedAccountGroupMembershipsFixedSizeCollection(
+        List&lt;SearchRelatedAccountGroupMembershipsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1723">      super(pages, collectionSize);</span>
+<span class="fc" id="L1724">    }</span>
+
+    private static SearchRelatedAccountGroupMembershipsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1727">      return new SearchRelatedAccountGroupMembershipsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected SearchRelatedAccountGroupMembershipsFixedSizeCollection createCollection(
+        List&lt;SearchRelatedAccountGroupMembershipsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1733">      return new SearchRelatedAccountGroupMembershipsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

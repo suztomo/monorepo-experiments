@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ValueConverter.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-aiplatform</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.aiplatform.util</a> &gt; <span class="el_source">ValueConverter.java</span></div><h1>ValueConverter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2020 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.aiplatform.util;
+
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
+import com.google.protobuf.Value;
+import com.google.protobuf.util.JsonFormat;
+
+/**
+ * Exposes utility methods for converting AI Platform messages to and from
+ * {@com.google.protobuf.Value} objects.
+ */
+<span class="nc" id="L28">public class ValueConverter {</span>
+
+  /** An empty {@com.google.protobuf.Value} message. */
+<span class="fc" id="L31">  public static final Value EMPTY_VALUE = Value.newBuilder().build();</span>
+
+  /**
+   * Converts a message type to a {@com.google.protobuf.Value}.
+   *
+   * @param message the message to convert
+   * @return the message as a {@com.google.protobuf.Value}
+   * @throws InvalidProtocolBufferException
+   */
+  public static Value toValue(Message message) throws InvalidProtocolBufferException {
+<span class="fc" id="L41">    String jsonString = JsonFormat.printer().print(message);</span>
+<span class="fc" id="L42">    Value.Builder value = Value.newBuilder();</span>
+<span class="fc" id="L43">    JsonFormat.parser().merge(jsonString, value);</span>
+<span class="fc" id="L44">    return value.build();</span>
+  }
+
+  /**
+   * Converts a {@com.google.protobuf.Value} to a {@com.google.protobuf.Message} of the provided
+   * {@com.google.protobuf.Message.Builder}.
+   *
+   * @param messageBuilder a builder for the message type
+   * @param value the Value to convert to a message
+   * @return the value as a message
+   * @throws InvalidProtocolBufferException
+   */
+  public static Message fromValue(Message.Builder messageBuilder, Value value)
+      throws InvalidProtocolBufferException {
+<span class="fc" id="L58">    String valueString = JsonFormat.printer().print(value);</span>
+<span class="fc" id="L59">    JsonFormat.parser().merge(valueString, messageBuilder);</span>
+<span class="fc" id="L60">    return messageBuilder.build();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

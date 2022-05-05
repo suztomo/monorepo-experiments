@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>TraceServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-trace</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.trace.v1</a> &gt; <span class="el_source">TraceServiceClient.java</span></div><h1>TraceServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.trace.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.trace.v1.stub.TraceServiceStub;
+import com.google.cloud.trace.v1.stub.TraceServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.devtools.cloudtrace.v1.GetTraceRequest;
+import com.google.devtools.cloudtrace.v1.ListTracesRequest;
+import com.google.devtools.cloudtrace.v1.ListTracesResponse;
+import com.google.devtools.cloudtrace.v1.PatchTracesRequest;
+import com.google.devtools.cloudtrace.v1.Trace;
+import com.google.devtools.cloudtrace.v1.Traces;
+import com.google.protobuf.Empty;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: This file describes an API for collecting and viewing traces and spans
+ * within a trace. A Trace is a collection of spans corresponding to a single operation or set of
+ * operations for an application. A span is an individual timed event which forms a node of the
+ * trace tree. Spans for a single trace may span multiple services.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (TraceServiceClient traceServiceClient = TraceServiceClient.create()) {
+ *   String projectId = &quot;projectId-894832108&quot;;
+ *   String traceId = &quot;traceId-1067401920&quot;;
+ *   Trace response = traceServiceClient.getTrace(projectId, traceId);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the TraceServiceClient object to clean up resources such
+ * as threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of TraceServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * TraceServiceSettings traceServiceSettings =
+ *     TraceServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * TraceServiceClient traceServiceClient = TraceServiceClient.create(traceServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * TraceServiceSettings traceServiceSettings =
+ *     TraceServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * TraceServiceClient traceServiceClient = TraceServiceClient.create(traceServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class TraceServiceClient implements BackgroundResource {
+  private final TraceServiceSettings settings;
+  private final TraceServiceStub stub;
+
+  /** Constructs an instance of TraceServiceClient with default settings. */
+  public static final TraceServiceClient create() throws IOException {
+<span class="nc" id="L120">    return create(TraceServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of TraceServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final TraceServiceClient create(TraceServiceSettings settings) throws IOException {
+<span class="fc" id="L128">    return new TraceServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of TraceServiceClient, using the given stub for making calls. This is
+   * for advanced usage - prefer using create(TraceServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final TraceServiceClient create(TraceServiceStub stub) {
+<span class="nc" id="L137">    return new TraceServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of TraceServiceClient, using the given settings. This is protected so
+   * that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L145">  protected TraceServiceClient(TraceServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L146">    this.settings = settings;</span>
+<span class="fc" id="L147">    this.stub = ((TraceServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L148">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L151">  protected TraceServiceClient(TraceServiceStub stub) {</span>
+<span class="nc" id="L152">    this.settings = null;</span>
+<span class="nc" id="L153">    this.stub = stub;</span>
+<span class="nc" id="L154">  }</span>
+
+  public final TraceServiceSettings getSettings() {
+<span class="nc" id="L157">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public TraceServiceStub getStub() {
+<span class="nc" id="L162">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns of a list of traces that match the specified filter conditions.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TraceServiceClient traceServiceClient = TraceServiceClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   for (Trace element : traceServiceClient.listTraces(projectId).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. ID of the Cloud project where the trace data is stored.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTracesPagedResponse listTraces(String projectId) {
+<span class="fc" id="L186">    ListTracesRequest request = ListTracesRequest.newBuilder().setProjectId(projectId).build();</span>
+<span class="fc" id="L187">    return listTraces(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns of a list of traces that match the specified filter conditions.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TraceServiceClient traceServiceClient = TraceServiceClient.create()) {
+   *   ListTracesRequest request =
+   *       ListTracesRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setStartTime(Timestamp.newBuilder().build())
+   *           .setEndTime(Timestamp.newBuilder().build())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Trace element : traceServiceClient.listTraces(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTracesPagedResponse listTraces(ListTracesRequest request) {
+<span class="fc" id="L220">    return listTracesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns of a list of traces that match the specified filter conditions.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TraceServiceClient traceServiceClient = TraceServiceClient.create()) {
+   *   ListTracesRequest request =
+   *       ListTracesRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setStartTime(Timestamp.newBuilder().build())
+   *           .setEndTime(Timestamp.newBuilder().build())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Trace&gt; future = traceServiceClient.listTracesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Trace element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTracesRequest, ListTracesPagedResponse&gt; listTracesPagedCallable() {
+<span class="fc" id="L252">    return stub.listTracesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns of a list of traces that match the specified filter conditions.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TraceServiceClient traceServiceClient = TraceServiceClient.create()) {
+   *   ListTracesRequest request =
+   *       ListTracesRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setStartTime(Timestamp.newBuilder().build())
+   *           .setEndTime(Timestamp.newBuilder().build())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListTracesResponse response = traceServiceClient.listTracesCallable().call(request);
+   *     for (Trace element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTracesRequest, ListTracesResponse&gt; listTracesCallable() {
+<span class="nc" id="L291">    return stub.listTracesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single trace by its ID.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TraceServiceClient traceServiceClient = TraceServiceClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   String traceId = &quot;traceId-1067401920&quot;;
+   *   Trace response = traceServiceClient.getTrace(projectId, traceId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. ID of the Cloud project where the trace data is stored.
+   * @param traceId Required. ID of the trace to return.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Trace getTrace(String projectId, String traceId) {
+    GetTraceRequest request =
+<span class="fc" id="L316">        GetTraceRequest.newBuilder().setProjectId(projectId).setTraceId(traceId).build();</span>
+<span class="fc" id="L317">    return getTrace(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single trace by its ID.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TraceServiceClient traceServiceClient = TraceServiceClient.create()) {
+   *   GetTraceRequest request =
+   *       GetTraceRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTraceId(&quot;traceId-1067401920&quot;)
+   *           .build();
+   *   Trace response = traceServiceClient.getTrace(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Trace getTrace(GetTraceRequest request) {
+<span class="fc" id="L343">    return getTraceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single trace by its ID.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TraceServiceClient traceServiceClient = TraceServiceClient.create()) {
+   *   GetTraceRequest request =
+   *       GetTraceRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTraceId(&quot;traceId-1067401920&quot;)
+   *           .build();
+   *   ApiFuture&lt;Trace&gt; future = traceServiceClient.getTraceCallable().futureCall(request);
+   *   // Do something.
+   *   Trace response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetTraceRequest, Trace&gt; getTraceCallable() {
+<span class="fc" id="L368">    return stub.getTraceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sends new traces to Stackdriver Trace or updates existing traces. If the ID of a trace that you
+   * send matches that of an existing trace, any fields in the existing trace and its spans are
+   * overwritten by the provided values, and any new fields provided are merged with the existing
+   * trace data. If the ID does not match, a new trace is created.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TraceServiceClient traceServiceClient = TraceServiceClient.create()) {
+   *   String projectId = &quot;projectId-894832108&quot;;
+   *   Traces traces = Traces.newBuilder().build();
+   *   traceServiceClient.patchTraces(projectId, traces);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param projectId Required. ID of the Cloud project where the trace data is stored.
+   * @param traces Required. The body of the message.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void patchTraces(String projectId, Traces traces) {
+    PatchTracesRequest request =
+<span class="fc" id="L396">        PatchTracesRequest.newBuilder().setProjectId(projectId).setTraces(traces).build();</span>
+<span class="fc" id="L397">    patchTraces(request);</span>
+<span class="fc" id="L398">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sends new traces to Stackdriver Trace or updates existing traces. If the ID of a trace that you
+   * send matches that of an existing trace, any fields in the existing trace and its spans are
+   * overwritten by the provided values, and any new fields provided are merged with the existing
+   * trace data. If the ID does not match, a new trace is created.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TraceServiceClient traceServiceClient = TraceServiceClient.create()) {
+   *   PatchTracesRequest request =
+   *       PatchTracesRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTraces(Traces.newBuilder().build())
+   *           .build();
+   *   traceServiceClient.patchTraces(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void patchTraces(PatchTracesRequest request) {
+<span class="fc" id="L426">    patchTracesCallable().call(request);</span>
+<span class="fc" id="L427">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sends new traces to Stackdriver Trace or updates existing traces. If the ID of a trace that you
+   * send matches that of an existing trace, any fields in the existing trace and its spans are
+   * overwritten by the provided values, and any new fields provided are merged with the existing
+   * trace data. If the ID does not match, a new trace is created.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TraceServiceClient traceServiceClient = TraceServiceClient.create()) {
+   *   PatchTracesRequest request =
+   *       PatchTracesRequest.newBuilder()
+   *           .setProjectId(&quot;projectId-894832108&quot;)
+   *           .setTraces(Traces.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = traceServiceClient.patchTracesCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;PatchTracesRequest, Empty&gt; patchTracesCallable() {
+<span class="fc" id="L454">    return stub.patchTracesCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L459">    stub.close();</span>
+<span class="fc" id="L460">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L464">    stub.shutdown();</span>
+<span class="nc" id="L465">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L469">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L474">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L479">    stub.shutdownNow();</span>
+<span class="nc" id="L480">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L484">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListTracesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListTracesRequest,
+          ListTracesResponse,
+          Trace,
+          ListTracesPage,
+          ListTracesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListTracesPagedResponse&gt; createAsync(
+        PageContext&lt;ListTracesRequest, ListTracesResponse, Trace&gt; context,
+        ApiFuture&lt;ListTracesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListTracesPage&gt; futurePage =
+<span class="fc" id="L499">          ListTracesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L500">      return ApiFutures.transform(</span>
+<span class="fc" id="L501">          futurePage, input -&gt; new ListTracesPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListTracesPagedResponse(ListTracesPage page) {
+<span class="fc" id="L505">      super(page, ListTracesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L506">    }</span>
+  }
+
+  public static class ListTracesPage
+      extends AbstractPage&lt;ListTracesRequest, ListTracesResponse, Trace, ListTracesPage&gt; {
+
+    private ListTracesPage(
+        PageContext&lt;ListTracesRequest, ListTracesResponse, Trace&gt; context,
+        ListTracesResponse response) {
+<span class="fc" id="L515">      super(context, response);</span>
+<span class="fc" id="L516">    }</span>
+
+    private static ListTracesPage createEmptyPage() {
+<span class="fc" id="L519">      return new ListTracesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListTracesPage createPage(
+        PageContext&lt;ListTracesRequest, ListTracesResponse, Trace&gt; context,
+        ListTracesResponse response) {
+<span class="fc" id="L526">      return new ListTracesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListTracesPage&gt; createPageAsync(
+        PageContext&lt;ListTracesRequest, ListTracesResponse, Trace&gt; context,
+        ApiFuture&lt;ListTracesResponse&gt; futureResponse) {
+<span class="fc" id="L533">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListTracesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListTracesRequest,
+          ListTracesResponse,
+          Trace,
+          ListTracesPage,
+          ListTracesFixedSizeCollection&gt; {
+
+    private ListTracesFixedSizeCollection(List&lt;ListTracesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L546">      super(pages, collectionSize);</span>
+<span class="fc" id="L547">    }</span>
+
+    private static ListTracesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L550">      return new ListTracesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListTracesFixedSizeCollection createCollection(
+        List&lt;ListTracesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L556">      return new ListTracesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,2393 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DataTransferServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-bigquerydatatransfer</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.bigquery.datatransfer.v1</a> &gt; <span class="el_source">DataTransferServiceClient.java</span></div><h1>DataTransferServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.bigquery.datatransfer.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.bigquery.datatransfer.v1.stub.DataTransferServiceStub;
+import com.google.cloud.bigquery.datatransfer.v1.stub.DataTransferServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import com.google.protobuf.Timestamp;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: This API allows users to manage their data transfers into BigQuery.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+ *   DataSourceName name = DataSourceName.ofProjectDataSourceName(&quot;[PROJECT]&quot;, &quot;[DATA_SOURCE]&quot;);
+ *   DataSource response = dataTransferServiceClient.getDataSource(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the DataTransferServiceClient object to clean up resources
+ * such as threads. In the example above, try-with-resources is used, which automatically calls
+ * close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of DataTransferServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * DataTransferServiceSettings dataTransferServiceSettings =
+ *     DataTransferServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * DataTransferServiceClient dataTransferServiceClient =
+ *     DataTransferServiceClient.create(dataTransferServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * DataTransferServiceSettings dataTransferServiceSettings =
+ *     DataTransferServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * DataTransferServiceClient dataTransferServiceClient =
+ *     DataTransferServiceClient.create(dataTransferServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class DataTransferServiceClient implements BackgroundResource {
+  private final DataTransferServiceSettings settings;
+  private final DataTransferServiceStub stub;
+
+  /** Constructs an instance of DataTransferServiceClient with default settings. */
+  public static final DataTransferServiceClient create() throws IOException {
+<span class="nc" id="L115">    return create(DataTransferServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of DataTransferServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final DataTransferServiceClient create(DataTransferServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L124">    return new DataTransferServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of DataTransferServiceClient, using the given stub for making calls.
+   * This is for advanced usage - prefer using create(DataTransferServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final DataTransferServiceClient create(DataTransferServiceStub stub) {
+<span class="nc" id="L133">    return new DataTransferServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of DataTransferServiceClient, using the given settings. This is
+   * protected so that it is easy to make a subclass, but otherwise, the static factory methods
+   * should be preferred.
+   */
+<span class="fc" id="L141">  protected DataTransferServiceClient(DataTransferServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L142">    this.settings = settings;</span>
+<span class="fc" id="L143">    this.stub = ((DataTransferServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L144">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L147">  protected DataTransferServiceClient(DataTransferServiceStub stub) {</span>
+<span class="nc" id="L148">    this.settings = null;</span>
+<span class="nc" id="L149">    this.stub = stub;</span>
+<span class="nc" id="L150">  }</span>
+
+  public final DataTransferServiceSettings getSettings() {
+<span class="nc" id="L153">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public DataTransferServiceStub getStub() {
+<span class="nc" id="L158">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves a supported data source and returns its settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   DataSourceName name = DataSourceName.ofProjectDataSourceName(&quot;[PROJECT]&quot;, &quot;[DATA_SOURCE]&quot;);
+   *   DataSource response = dataTransferServiceClient.getDataSource(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The field will contain name of the resource requested, for example:
+   *     `projects/{project_id}/dataSources/{data_source_id}` or
+   *     `projects/{project_id}/locations/{location_id}/dataSources/{data_source_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final DataSource getDataSource(DataSourceName name) {
+    GetDataSourceRequest request =
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">        GetDataSourceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L184">    return getDataSource(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves a supported data source and returns its settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   String name = DataSourceName.ofProjectDataSourceName(&quot;[PROJECT]&quot;, &quot;[DATA_SOURCE]&quot;).toString();
+   *   DataSource response = dataTransferServiceClient.getDataSource(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The field will contain name of the resource requested, for example:
+   *     `projects/{project_id}/dataSources/{data_source_id}` or
+   *     `projects/{project_id}/locations/{location_id}/dataSources/{data_source_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final DataSource getDataSource(String name) {
+<span class="fc" id="L208">    GetDataSourceRequest request = GetDataSourceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L209">    return getDataSource(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves a supported data source and returns its settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   GetDataSourceRequest request =
+   *       GetDataSourceRequest.newBuilder()
+   *           .setName(
+   *               DataSourceName.ofProjectDataSourceName(&quot;[PROJECT]&quot;, &quot;[DATA_SOURCE]&quot;).toString())
+   *           .build();
+   *   DataSource response = dataTransferServiceClient.getDataSource(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final DataSource getDataSource(GetDataSourceRequest request) {
+<span class="fc" id="L235">    return getDataSourceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves a supported data source and returns its settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   GetDataSourceRequest request =
+   *       GetDataSourceRequest.newBuilder()
+   *           .setName(
+   *               DataSourceName.ofProjectDataSourceName(&quot;[PROJECT]&quot;, &quot;[DATA_SOURCE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;DataSource&gt; future =
+   *       dataTransferServiceClient.getDataSourceCallable().futureCall(request);
+   *   // Do something.
+   *   DataSource response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetDataSourceRequest, DataSource&gt; getDataSourceCallable() {
+<span class="fc" id="L261">    return stub.getDataSourceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists supported data sources and returns their settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (DataSource element : dataTransferServiceClient.listDataSources(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The BigQuery project id for which data sources should be returned. Must
+   *     be in the form: `projects/{project_id}` or `projects/{project_id}/locations/{location_id}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDataSourcesPagedResponse listDataSources(LocationName parent) {
+    ListDataSourcesRequest request =
+<span class="fc" id="L287">        ListDataSourcesRequest.newBuilder()</span>
+<span class="pc bpc" id="L288" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L289">            .build();</span>
+<span class="fc" id="L290">    return listDataSources(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists supported data sources and returns their settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (DataSource element : dataTransferServiceClient.listDataSources(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The BigQuery project id for which data sources should be returned. Must
+   *     be in the form: `projects/{project_id}` or `projects/{project_id}/locations/{location_id}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDataSourcesPagedResponse listDataSources(ProjectName parent) {
+    ListDataSourcesRequest request =
+<span class="fc" id="L316">        ListDataSourcesRequest.newBuilder()</span>
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L318">            .build();</span>
+<span class="fc" id="L319">    return listDataSources(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists supported data sources and returns their settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (DataSource element : dataTransferServiceClient.listDataSources(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The BigQuery project id for which data sources should be returned. Must
+   *     be in the form: `projects/{project_id}` or `projects/{project_id}/locations/{location_id}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDataSourcesPagedResponse listDataSources(String parent) {
+<span class="fc" id="L344">    ListDataSourcesRequest request = ListDataSourcesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L345">    return listDataSources(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists supported data sources and returns their settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ListDataSourcesRequest request =
+   *       ListDataSourcesRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   for (DataSource element : dataTransferServiceClient.listDataSources(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDataSourcesPagedResponse listDataSources(ListDataSourcesRequest request) {
+<span class="fc" id="L374">    return listDataSourcesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists supported data sources and returns their settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ListDataSourcesRequest request =
+   *       ListDataSourcesRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   ApiFuture&lt;DataSource&gt; future =
+   *       dataTransferServiceClient.listDataSourcesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (DataSource element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListDataSourcesRequest, ListDataSourcesPagedResponse&gt;
+      listDataSourcesPagedCallable() {
+<span class="fc" id="L404">    return stub.listDataSourcesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists supported data sources and returns their settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ListDataSourcesRequest request =
+   *       ListDataSourcesRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   while (true) {
+   *     ListDataSourcesResponse response =
+   *         dataTransferServiceClient.listDataSourcesCallable().call(request);
+   *     for (DataSource element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListDataSourcesRequest, ListDataSourcesResponse&gt;
+      listDataSourcesCallable() {
+<span class="nc" id="L441">    return stub.listDataSourcesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new data transfer configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   TransferConfig transferConfig = TransferConfig.newBuilder().build();
+   *   TransferConfig response =
+   *       dataTransferServiceClient.createTransferConfig(parent, transferConfig);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The BigQuery project id where the transfer configuration should be
+   *     created. Must be in the format projects/{project_id}/locations/{location_id} or
+   *     projects/{project_id}. If specified location and location of the destination bigquery
+   *     dataset do not match - the request will fail.
+   * @param transferConfig Required. Data transfer configuration to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TransferConfig createTransferConfig(
+      LocationName parent, TransferConfig transferConfig) {
+    CreateTransferConfigRequest request =
+<span class="fc" id="L471">        CreateTransferConfigRequest.newBuilder()</span>
+<span class="pc bpc" id="L472" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L473">            .setTransferConfig(transferConfig)</span>
+<span class="fc" id="L474">            .build();</span>
+<span class="fc" id="L475">    return createTransferConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new data transfer configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   TransferConfig transferConfig = TransferConfig.newBuilder().build();
+   *   TransferConfig response =
+   *       dataTransferServiceClient.createTransferConfig(parent, transferConfig);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The BigQuery project id where the transfer configuration should be
+   *     created. Must be in the format projects/{project_id}/locations/{location_id} or
+   *     projects/{project_id}. If specified location and location of the destination bigquery
+   *     dataset do not match - the request will fail.
+   * @param transferConfig Required. Data transfer configuration to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TransferConfig createTransferConfig(
+      ProjectName parent, TransferConfig transferConfig) {
+    CreateTransferConfigRequest request =
+<span class="fc" id="L505">        CreateTransferConfigRequest.newBuilder()</span>
+<span class="pc bpc" id="L506" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L507">            .setTransferConfig(transferConfig)</span>
+<span class="fc" id="L508">            .build();</span>
+<span class="fc" id="L509">    return createTransferConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new data transfer configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   TransferConfig transferConfig = TransferConfig.newBuilder().build();
+   *   TransferConfig response =
+   *       dataTransferServiceClient.createTransferConfig(parent, transferConfig);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The BigQuery project id where the transfer configuration should be
+   *     created. Must be in the format projects/{project_id}/locations/{location_id} or
+   *     projects/{project_id}. If specified location and location of the destination bigquery
+   *     dataset do not match - the request will fail.
+   * @param transferConfig Required. Data transfer configuration to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TransferConfig createTransferConfig(String parent, TransferConfig transferConfig) {
+    CreateTransferConfigRequest request =
+<span class="fc" id="L538">        CreateTransferConfigRequest.newBuilder()</span>
+<span class="fc" id="L539">            .setParent(parent)</span>
+<span class="fc" id="L540">            .setTransferConfig(transferConfig)</span>
+<span class="fc" id="L541">            .build();</span>
+<span class="fc" id="L542">    return createTransferConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new data transfer configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   CreateTransferConfigRequest request =
+   *       CreateTransferConfigRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setTransferConfig(TransferConfig.newBuilder().build())
+   *           .setAuthorizationCode(&quot;authorizationCode742596102&quot;)
+   *           .setVersionInfo(&quot;versionInfo688769446&quot;)
+   *           .setServiceAccountName(&quot;serviceAccountName2137368675&quot;)
+   *           .build();
+   *   TransferConfig response = dataTransferServiceClient.createTransferConfig(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TransferConfig createTransferConfig(CreateTransferConfigRequest request) {
+<span class="fc" id="L571">    return createTransferConfigCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new data transfer configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   CreateTransferConfigRequest request =
+   *       CreateTransferConfigRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setTransferConfig(TransferConfig.newBuilder().build())
+   *           .setAuthorizationCode(&quot;authorizationCode742596102&quot;)
+   *           .setVersionInfo(&quot;versionInfo688769446&quot;)
+   *           .setServiceAccountName(&quot;serviceAccountName2137368675&quot;)
+   *           .build();
+   *   ApiFuture&lt;TransferConfig&gt; future =
+   *       dataTransferServiceClient.createTransferConfigCallable().futureCall(request);
+   *   // Do something.
+   *   TransferConfig response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateTransferConfigRequest, TransferConfig&gt;
+      createTransferConfigCallable() {
+<span class="fc" id="L601">    return stub.createTransferConfigCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a data transfer configuration. All fields must be set, even if they are not updated.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   TransferConfig transferConfig = TransferConfig.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   TransferConfig response =
+   *       dataTransferServiceClient.updateTransferConfig(transferConfig, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param transferConfig Required. Data transfer configuration to create.
+   * @param updateMask Required. Required list of fields to be updated in this request.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TransferConfig updateTransferConfig(
+      TransferConfig transferConfig, FieldMask updateMask) {
+    UpdateTransferConfigRequest request =
+<span class="fc" id="L628">        UpdateTransferConfigRequest.newBuilder()</span>
+<span class="fc" id="L629">            .setTransferConfig(transferConfig)</span>
+<span class="fc" id="L630">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L631">            .build();</span>
+<span class="fc" id="L632">    return updateTransferConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a data transfer configuration. All fields must be set, even if they are not updated.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   UpdateTransferConfigRequest request =
+   *       UpdateTransferConfigRequest.newBuilder()
+   *           .setTransferConfig(TransferConfig.newBuilder().build())
+   *           .setAuthorizationCode(&quot;authorizationCode742596102&quot;)
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setVersionInfo(&quot;versionInfo688769446&quot;)
+   *           .setServiceAccountName(&quot;serviceAccountName2137368675&quot;)
+   *           .build();
+   *   TransferConfig response = dataTransferServiceClient.updateTransferConfig(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TransferConfig updateTransferConfig(UpdateTransferConfigRequest request) {
+<span class="fc" id="L661">    return updateTransferConfigCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a data transfer configuration. All fields must be set, even if they are not updated.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   UpdateTransferConfigRequest request =
+   *       UpdateTransferConfigRequest.newBuilder()
+   *           .setTransferConfig(TransferConfig.newBuilder().build())
+   *           .setAuthorizationCode(&quot;authorizationCode742596102&quot;)
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setVersionInfo(&quot;versionInfo688769446&quot;)
+   *           .setServiceAccountName(&quot;serviceAccountName2137368675&quot;)
+   *           .build();
+   *   ApiFuture&lt;TransferConfig&gt; future =
+   *       dataTransferServiceClient.updateTransferConfigCallable().futureCall(request);
+   *   // Do something.
+   *   TransferConfig response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateTransferConfigRequest, TransferConfig&gt;
+      updateTransferConfigCallable() {
+<span class="fc" id="L691">    return stub.updateTransferConfigCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a data transfer configuration, including any associated transfer runs and logs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   TransferConfigName name =
+   *       TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;);
+   *   dataTransferServiceClient.deleteTransferConfig(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The field will contain name of the resource requested, for example:
+   *     `projects/{project_id}/transferConfigs/{config_id}` or
+   *     `projects/{project_id}/locations/{location_id}/transferConfigs/{config_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteTransferConfig(TransferConfigName name) {
+    DeleteTransferConfigRequest request =
+<span class="fc" id="L717">        DeleteTransferConfigRequest.newBuilder()</span>
+<span class="pc bpc" id="L718" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L719">            .build();</span>
+<span class="fc" id="L720">    deleteTransferConfig(request);</span>
+<span class="fc" id="L721">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a data transfer configuration, including any associated transfer runs and logs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   String name =
+   *       TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *           .toString();
+   *   dataTransferServiceClient.deleteTransferConfig(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The field will contain name of the resource requested, for example:
+   *     `projects/{project_id}/transferConfigs/{config_id}` or
+   *     `projects/{project_id}/locations/{location_id}/transferConfigs/{config_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteTransferConfig(String name) {
+    DeleteTransferConfigRequest request =
+<span class="fc" id="L747">        DeleteTransferConfigRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L748">    deleteTransferConfig(request);</span>
+<span class="fc" id="L749">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a data transfer configuration, including any associated transfer runs and logs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   DeleteTransferConfigRequest request =
+   *       DeleteTransferConfigRequest.newBuilder()
+   *           .setName(
+   *               TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *                   .toString())
+   *           .build();
+   *   dataTransferServiceClient.deleteTransferConfig(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteTransferConfig(DeleteTransferConfigRequest request) {
+<span class="fc" id="L775">    deleteTransferConfigCallable().call(request);</span>
+<span class="fc" id="L776">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a data transfer configuration, including any associated transfer runs and logs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   DeleteTransferConfigRequest request =
+   *       DeleteTransferConfigRequest.newBuilder()
+   *           .setName(
+   *               TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       dataTransferServiceClient.deleteTransferConfigCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteTransferConfigRequest, Empty&gt; deleteTransferConfigCallable() {
+<span class="fc" id="L802">    return stub.deleteTransferConfigCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about a data transfer config.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   TransferConfigName name =
+   *       TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;);
+   *   TransferConfig response = dataTransferServiceClient.getTransferConfig(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The field will contain name of the resource requested, for example:
+   *     `projects/{project_id}/transferConfigs/{config_id}` or
+   *     `projects/{project_id}/locations/{location_id}/transferConfigs/{config_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TransferConfig getTransferConfig(TransferConfigName name) {
+    GetTransferConfigRequest request =
+<span class="fc" id="L828">        GetTransferConfigRequest.newBuilder()</span>
+<span class="pc bpc" id="L829" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L830">            .build();</span>
+<span class="fc" id="L831">    return getTransferConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about a data transfer config.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   String name =
+   *       TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *           .toString();
+   *   TransferConfig response = dataTransferServiceClient.getTransferConfig(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The field will contain name of the resource requested, for example:
+   *     `projects/{project_id}/transferConfigs/{config_id}` or
+   *     `projects/{project_id}/locations/{location_id}/transferConfigs/{config_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TransferConfig getTransferConfig(String name) {
+<span class="fc" id="L857">    GetTransferConfigRequest request = GetTransferConfigRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L858">    return getTransferConfig(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about a data transfer config.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   GetTransferConfigRequest request =
+   *       GetTransferConfigRequest.newBuilder()
+   *           .setName(
+   *               TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *                   .toString())
+   *           .build();
+   *   TransferConfig response = dataTransferServiceClient.getTransferConfig(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TransferConfig getTransferConfig(GetTransferConfigRequest request) {
+<span class="fc" id="L885">    return getTransferConfigCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about a data transfer config.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   GetTransferConfigRequest request =
+   *       GetTransferConfigRequest.newBuilder()
+   *           .setName(
+   *               TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;TransferConfig&gt; future =
+   *       dataTransferServiceClient.getTransferConfigCallable().futureCall(request);
+   *   // Do something.
+   *   TransferConfig response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetTransferConfigRequest, TransferConfig&gt; getTransferConfigCallable() {
+<span class="fc" id="L912">    return stub.getTransferConfigCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about all transfer configs owned by a project in the specified location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (TransferConfig element :
+   *       dataTransferServiceClient.listTransferConfigs(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The BigQuery project id for which data sources should be returned:
+   *     `projects/{project_id}` or `projects/{project_id}/locations/{location_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTransferConfigsPagedResponse listTransferConfigs(LocationName parent) {
+    ListTransferConfigsRequest request =
+<span class="fc" id="L939">        ListTransferConfigsRequest.newBuilder()</span>
+<span class="pc bpc" id="L940" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L941">            .build();</span>
+<span class="fc" id="L942">    return listTransferConfigs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about all transfer configs owned by a project in the specified location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (TransferConfig element :
+   *       dataTransferServiceClient.listTransferConfigs(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The BigQuery project id for which data sources should be returned:
+   *     `projects/{project_id}` or `projects/{project_id}/locations/{location_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTransferConfigsPagedResponse listTransferConfigs(ProjectName parent) {
+    ListTransferConfigsRequest request =
+<span class="fc" id="L969">        ListTransferConfigsRequest.newBuilder()</span>
+<span class="pc bpc" id="L970" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L971">            .build();</span>
+<span class="fc" id="L972">    return listTransferConfigs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about all transfer configs owned by a project in the specified location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (TransferConfig element :
+   *       dataTransferServiceClient.listTransferConfigs(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The BigQuery project id for which data sources should be returned:
+   *     `projects/{project_id}` or `projects/{project_id}/locations/{location_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTransferConfigsPagedResponse listTransferConfigs(String parent) {
+    ListTransferConfigsRequest request =
+<span class="fc" id="L999">        ListTransferConfigsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1000">    return listTransferConfigs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about all transfer configs owned by a project in the specified location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ListTransferConfigsRequest request =
+   *       ListTransferConfigsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .addAllDataSourceIds(new ArrayList&lt;String&gt;())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   for (TransferConfig element :
+   *       dataTransferServiceClient.listTransferConfigs(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTransferConfigsPagedResponse listTransferConfigs(
+      ListTransferConfigsRequest request) {
+<span class="fc" id="L1032">    return listTransferConfigsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about all transfer configs owned by a project in the specified location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ListTransferConfigsRequest request =
+   *       ListTransferConfigsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .addAllDataSourceIds(new ArrayList&lt;String&gt;())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   ApiFuture&lt;TransferConfig&gt; future =
+   *       dataTransferServiceClient.listTransferConfigsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (TransferConfig element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTransferConfigsRequest, ListTransferConfigsPagedResponse&gt;
+      listTransferConfigsPagedCallable() {
+<span class="fc" id="L1063">    return stub.listTransferConfigsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about all transfer configs owned by a project in the specified location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ListTransferConfigsRequest request =
+   *       ListTransferConfigsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .addAllDataSourceIds(new ArrayList&lt;String&gt;())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   while (true) {
+   *     ListTransferConfigsResponse response =
+   *         dataTransferServiceClient.listTransferConfigsCallable().call(request);
+   *     for (TransferConfig element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTransferConfigsRequest, ListTransferConfigsResponse&gt;
+      listTransferConfigsCallable() {
+<span class="nc" id="L1101">    return stub.listTransferConfigsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates transfer runs for a time range [start_time, end_time]. For each date - or whatever
+   * granularity the data source supports - in the range, one transfer run is created. Note that
+   * runs are created per UTC time in the time range. DEPRECATED: use StartManualTransferRuns
+   * instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   TransferConfigName parent =
+   *       TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;);
+   *   Timestamp startTime = Timestamp.newBuilder().build();
+   *   Timestamp endTime = Timestamp.newBuilder().build();
+   *   ScheduleTransferRunsResponse response =
+   *       dataTransferServiceClient.scheduleTransferRuns(parent, startTime, endTime);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Transfer configuration name in the form:
+   *     `projects/{project_id}/transferConfigs/{config_id}` or
+   *     `projects/{project_id}/locations/{location_id}/transferConfigs/{config_id}`.
+   * @param startTime Required. Start time of the range of transfer runs. For example,
+   *     `&quot;2017-05-25T00:00:00+00:00&quot;`.
+   * @param endTime Required. End time of the range of transfer runs. For example,
+   *     `&quot;2017-05-30T00:00:00+00:00&quot;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final ScheduleTransferRunsResponse scheduleTransferRuns(
+      TransferConfigName parent, Timestamp startTime, Timestamp endTime) {
+    ScheduleTransferRunsRequest request =
+<span class="fc" id="L1140">        ScheduleTransferRunsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1141" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1142">            .setStartTime(startTime)</span>
+<span class="fc" id="L1143">            .setEndTime(endTime)</span>
+<span class="fc" id="L1144">            .build();</span>
+<span class="fc" id="L1145">    return scheduleTransferRuns(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates transfer runs for a time range [start_time, end_time]. For each date - or whatever
+   * granularity the data source supports - in the range, one transfer run is created. Note that
+   * runs are created per UTC time in the time range. DEPRECATED: use StartManualTransferRuns
+   * instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   String parent =
+   *       TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *           .toString();
+   *   Timestamp startTime = Timestamp.newBuilder().build();
+   *   Timestamp endTime = Timestamp.newBuilder().build();
+   *   ScheduleTransferRunsResponse response =
+   *       dataTransferServiceClient.scheduleTransferRuns(parent, startTime, endTime);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Transfer configuration name in the form:
+   *     `projects/{project_id}/transferConfigs/{config_id}` or
+   *     `projects/{project_id}/locations/{location_id}/transferConfigs/{config_id}`.
+   * @param startTime Required. Start time of the range of transfer runs. For example,
+   *     `&quot;2017-05-25T00:00:00+00:00&quot;`.
+   * @param endTime Required. End time of the range of transfer runs. For example,
+   *     `&quot;2017-05-30T00:00:00+00:00&quot;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final ScheduleTransferRunsResponse scheduleTransferRuns(
+      String parent, Timestamp startTime, Timestamp endTime) {
+    ScheduleTransferRunsRequest request =
+<span class="fc" id="L1185">        ScheduleTransferRunsRequest.newBuilder()</span>
+<span class="fc" id="L1186">            .setParent(parent)</span>
+<span class="fc" id="L1187">            .setStartTime(startTime)</span>
+<span class="fc" id="L1188">            .setEndTime(endTime)</span>
+<span class="fc" id="L1189">            .build();</span>
+<span class="fc" id="L1190">    return scheduleTransferRuns(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates transfer runs for a time range [start_time, end_time]. For each date - or whatever
+   * granularity the data source supports - in the range, one transfer run is created. Note that
+   * runs are created per UTC time in the time range. DEPRECATED: use StartManualTransferRuns
+   * instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ScheduleTransferRunsRequest request =
+   *       ScheduleTransferRunsRequest.newBuilder()
+   *           .setParent(
+   *               TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *                   .toString())
+   *           .setStartTime(Timestamp.newBuilder().build())
+   *           .setEndTime(Timestamp.newBuilder().build())
+   *           .build();
+   *   ScheduleTransferRunsResponse response =
+   *       dataTransferServiceClient.scheduleTransferRuns(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final ScheduleTransferRunsResponse scheduleTransferRuns(
+      ScheduleTransferRunsRequest request) {
+<span class="fc" id="L1226">    return scheduleTransferRunsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates transfer runs for a time range [start_time, end_time]. For each date - or whatever
+   * granularity the data source supports - in the range, one transfer run is created. Note that
+   * runs are created per UTC time in the time range. DEPRECATED: use StartManualTransferRuns
+   * instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ScheduleTransferRunsRequest request =
+   *       ScheduleTransferRunsRequest.newBuilder()
+   *           .setParent(
+   *               TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *                   .toString())
+   *           .setStartTime(Timestamp.newBuilder().build())
+   *           .setEndTime(Timestamp.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;ScheduleTransferRunsResponse&gt; future =
+   *       dataTransferServiceClient.scheduleTransferRunsCallable().futureCall(request);
+   *   // Do something.
+   *   ScheduleTransferRunsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final UnaryCallable&lt;ScheduleTransferRunsRequest, ScheduleTransferRunsResponse&gt;
+      scheduleTransferRunsCallable() {
+<span class="fc" id="L1262">    return stub.scheduleTransferRunsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Start manual transfer runs to be executed now with schedule_time equal to current time. The
+   * transfer runs can be created for a time range where the run_time is between start_time
+   * (inclusive) and end_time (exclusive), or for a specific run_time.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   StartManualTransferRunsRequest request =
+   *       StartManualTransferRunsRequest.newBuilder()
+   *           .setParent(
+   *               TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *                   .toString())
+   *           .build();
+   *   StartManualTransferRunsResponse response =
+   *       dataTransferServiceClient.startManualTransferRuns(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final StartManualTransferRunsResponse startManualTransferRuns(
+      StartManualTransferRunsRequest request) {
+<span class="fc" id="L1293">    return startManualTransferRunsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Start manual transfer runs to be executed now with schedule_time equal to current time. The
+   * transfer runs can be created for a time range where the run_time is between start_time
+   * (inclusive) and end_time (exclusive), or for a specific run_time.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   StartManualTransferRunsRequest request =
+   *       StartManualTransferRunsRequest.newBuilder()
+   *           .setParent(
+   *               TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;StartManualTransferRunsResponse&gt; future =
+   *       dataTransferServiceClient.startManualTransferRunsCallable().futureCall(request);
+   *   // Do something.
+   *   StartManualTransferRunsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;StartManualTransferRunsRequest, StartManualTransferRunsResponse&gt;
+      startManualTransferRunsCallable() {
+<span class="fc" id="L1323">    return stub.startManualTransferRunsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about the particular transfer run.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   RunName name =
+   *       RunName.ofProjectTransferConfigRunName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;, &quot;[RUN]&quot;);
+   *   TransferRun response = dataTransferServiceClient.getTransferRun(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The field will contain name of the resource requested, for example:
+   *     `projects/{project_id}/transferConfigs/{config_id}/runs/{run_id}` or
+   *     `projects/{project_id}/locations/{location_id}/transferConfigs/{config_id}/runs/{run_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TransferRun getTransferRun(RunName name) {
+    GetTransferRunRequest request =
+<span class="pc bpc" id="L1349" title="1 of 2 branches missed.">        GetTransferRunRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1350">    return getTransferRun(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about the particular transfer run.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   String name =
+   *       RunName.ofProjectTransferConfigRunName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;, &quot;[RUN]&quot;)
+   *           .toString();
+   *   TransferRun response = dataTransferServiceClient.getTransferRun(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The field will contain name of the resource requested, for example:
+   *     `projects/{project_id}/transferConfigs/{config_id}/runs/{run_id}` or
+   *     `projects/{project_id}/locations/{location_id}/transferConfigs/{config_id}/runs/{run_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TransferRun getTransferRun(String name) {
+<span class="fc" id="L1376">    GetTransferRunRequest request = GetTransferRunRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1377">    return getTransferRun(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about the particular transfer run.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   GetTransferRunRequest request =
+   *       GetTransferRunRequest.newBuilder()
+   *           .setName(
+   *               RunName.ofProjectTransferConfigRunName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;, &quot;[RUN]&quot;)
+   *                   .toString())
+   *           .build();
+   *   TransferRun response = dataTransferServiceClient.getTransferRun(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TransferRun getTransferRun(GetTransferRunRequest request) {
+<span class="fc" id="L1404">    return getTransferRunCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about the particular transfer run.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   GetTransferRunRequest request =
+   *       GetTransferRunRequest.newBuilder()
+   *           .setName(
+   *               RunName.ofProjectTransferConfigRunName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;, &quot;[RUN]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;TransferRun&gt; future =
+   *       dataTransferServiceClient.getTransferRunCallable().futureCall(request);
+   *   // Do something.
+   *   TransferRun response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetTransferRunRequest, TransferRun&gt; getTransferRunCallable() {
+<span class="fc" id="L1431">    return stub.getTransferRunCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified transfer run.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   RunName name =
+   *       RunName.ofProjectTransferConfigRunName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;, &quot;[RUN]&quot;);
+   *   dataTransferServiceClient.deleteTransferRun(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The field will contain name of the resource requested, for example:
+   *     `projects/{project_id}/transferConfigs/{config_id}/runs/{run_id}` or
+   *     `projects/{project_id}/locations/{location_id}/transferConfigs/{config_id}/runs/{run_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteTransferRun(RunName name) {
+    DeleteTransferRunRequest request =
+<span class="fc" id="L1457">        DeleteTransferRunRequest.newBuilder()</span>
+<span class="pc bpc" id="L1458" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1459">            .build();</span>
+<span class="fc" id="L1460">    deleteTransferRun(request);</span>
+<span class="fc" id="L1461">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified transfer run.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   String name =
+   *       RunName.ofProjectTransferConfigRunName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;, &quot;[RUN]&quot;)
+   *           .toString();
+   *   dataTransferServiceClient.deleteTransferRun(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The field will contain name of the resource requested, for example:
+   *     `projects/{project_id}/transferConfigs/{config_id}/runs/{run_id}` or
+   *     `projects/{project_id}/locations/{location_id}/transferConfigs/{config_id}/runs/{run_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteTransferRun(String name) {
+<span class="fc" id="L1486">    DeleteTransferRunRequest request = DeleteTransferRunRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1487">    deleteTransferRun(request);</span>
+<span class="fc" id="L1488">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified transfer run.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   DeleteTransferRunRequest request =
+   *       DeleteTransferRunRequest.newBuilder()
+   *           .setName(
+   *               RunName.ofProjectTransferConfigRunName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;, &quot;[RUN]&quot;)
+   *                   .toString())
+   *           .build();
+   *   dataTransferServiceClient.deleteTransferRun(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteTransferRun(DeleteTransferRunRequest request) {
+<span class="fc" id="L1514">    deleteTransferRunCallable().call(request);</span>
+<span class="fc" id="L1515">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified transfer run.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   DeleteTransferRunRequest request =
+   *       DeleteTransferRunRequest.newBuilder()
+   *           .setName(
+   *               RunName.ofProjectTransferConfigRunName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;, &quot;[RUN]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       dataTransferServiceClient.deleteTransferRunCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteTransferRunRequest, Empty&gt; deleteTransferRunCallable() {
+<span class="fc" id="L1541">    return stub.deleteTransferRunCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about running and completed transfer runs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   TransferConfigName parent =
+   *       TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;);
+   *   for (TransferRun element : dataTransferServiceClient.listTransferRuns(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Name of transfer configuration for which transfer runs should be
+   *     retrieved. Format of transfer configuration resource name is:
+   *     `projects/{project_id}/transferConfigs/{config_id}` or
+   *     `projects/{project_id}/locations/{location_id}/transferConfigs/{config_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTransferRunsPagedResponse listTransferRuns(TransferConfigName parent) {
+    ListTransferRunsRequest request =
+<span class="fc" id="L1570">        ListTransferRunsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1571" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1572">            .build();</span>
+<span class="fc" id="L1573">    return listTransferRuns(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about running and completed transfer runs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   String parent =
+   *       TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *           .toString();
+   *   for (TransferRun element : dataTransferServiceClient.listTransferRuns(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Name of transfer configuration for which transfer runs should be
+   *     retrieved. Format of transfer configuration resource name is:
+   *     `projects/{project_id}/transferConfigs/{config_id}` or
+   *     `projects/{project_id}/locations/{location_id}/transferConfigs/{config_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTransferRunsPagedResponse listTransferRuns(String parent) {
+    ListTransferRunsRequest request =
+<span class="fc" id="L1603">        ListTransferRunsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1604">    return listTransferRuns(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about running and completed transfer runs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ListTransferRunsRequest request =
+   *       ListTransferRunsRequest.newBuilder()
+   *           .setParent(
+   *               TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *                   .toString())
+   *           .addAllStates(new ArrayList&lt;TransferState&gt;())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   for (TransferRun element : dataTransferServiceClient.listTransferRuns(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTransferRunsPagedResponse listTransferRuns(ListTransferRunsRequest request) {
+<span class="fc" id="L1636">    return listTransferRunsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about running and completed transfer runs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ListTransferRunsRequest request =
+   *       ListTransferRunsRequest.newBuilder()
+   *           .setParent(
+   *               TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *                   .toString())
+   *           .addAllStates(new ArrayList&lt;TransferState&gt;())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   ApiFuture&lt;TransferRun&gt; future =
+   *       dataTransferServiceClient.listTransferRunsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (TransferRun element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTransferRunsRequest, ListTransferRunsPagedResponse&gt;
+      listTransferRunsPagedCallable() {
+<span class="fc" id="L1669">    return stub.listTransferRunsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about running and completed transfer runs.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ListTransferRunsRequest request =
+   *       ListTransferRunsRequest.newBuilder()
+   *           .setParent(
+   *               TransferConfigName.ofProjectTransferConfigName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;)
+   *                   .toString())
+   *           .addAllStates(new ArrayList&lt;TransferState&gt;())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   while (true) {
+   *     ListTransferRunsResponse response =
+   *         dataTransferServiceClient.listTransferRunsCallable().call(request);
+   *     for (TransferRun element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTransferRunsRequest, ListTransferRunsResponse&gt;
+      listTransferRunsCallable() {
+<span class="nc" id="L1709">    return stub.listTransferRunsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns log messages for the transfer run.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   RunName parent =
+   *       RunName.ofProjectTransferConfigRunName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;, &quot;[RUN]&quot;);
+   *   for (TransferMessage element :
+   *       dataTransferServiceClient.listTransferLogs(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Transfer run name in the form:
+   *     `projects/{project_id}/transferConfigs/{config_id}/runs/{run_id}` or
+   *     `projects/{project_id}/locations/{location_id}/transferConfigs/{config_id}/runs/{run_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTransferLogsPagedResponse listTransferLogs(RunName parent) {
+    ListTransferLogsRequest request =
+<span class="fc" id="L1738">        ListTransferLogsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1739" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1740">            .build();</span>
+<span class="fc" id="L1741">    return listTransferLogs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns log messages for the transfer run.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   String parent =
+   *       RunName.ofProjectTransferConfigRunName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;, &quot;[RUN]&quot;)
+   *           .toString();
+   *   for (TransferMessage element :
+   *       dataTransferServiceClient.listTransferLogs(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Transfer run name in the form:
+   *     `projects/{project_id}/transferConfigs/{config_id}/runs/{run_id}` or
+   *     `projects/{project_id}/locations/{location_id}/transferConfigs/{config_id}/runs/{run_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTransferLogsPagedResponse listTransferLogs(String parent) {
+    ListTransferLogsRequest request =
+<span class="fc" id="L1771">        ListTransferLogsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1772">    return listTransferLogs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns log messages for the transfer run.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ListTransferLogsRequest request =
+   *       ListTransferLogsRequest.newBuilder()
+   *           .setParent(
+   *               RunName.ofProjectTransferConfigRunName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;, &quot;[RUN]&quot;)
+   *                   .toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .addAllMessageTypes(new ArrayList&lt;TransferMessage.MessageSeverity&gt;())
+   *           .build();
+   *   for (TransferMessage element :
+   *       dataTransferServiceClient.listTransferLogs(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTransferLogsPagedResponse listTransferLogs(ListTransferLogsRequest request) {
+<span class="fc" id="L1805">    return listTransferLogsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns log messages for the transfer run.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ListTransferLogsRequest request =
+   *       ListTransferLogsRequest.newBuilder()
+   *           .setParent(
+   *               RunName.ofProjectTransferConfigRunName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;, &quot;[RUN]&quot;)
+   *                   .toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .addAllMessageTypes(new ArrayList&lt;TransferMessage.MessageSeverity&gt;())
+   *           .build();
+   *   ApiFuture&lt;TransferMessage&gt; future =
+   *       dataTransferServiceClient.listTransferLogsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (TransferMessage element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTransferLogsRequest, ListTransferLogsPagedResponse&gt;
+      listTransferLogsPagedCallable() {
+<span class="fc" id="L1838">    return stub.listTransferLogsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns log messages for the transfer run.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   ListTransferLogsRequest request =
+   *       ListTransferLogsRequest.newBuilder()
+   *           .setParent(
+   *               RunName.ofProjectTransferConfigRunName(&quot;[PROJECT]&quot;, &quot;[TRANSFER_CONFIG]&quot;, &quot;[RUN]&quot;)
+   *                   .toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .addAllMessageTypes(new ArrayList&lt;TransferMessage.MessageSeverity&gt;())
+   *           .build();
+   *   while (true) {
+   *     ListTransferLogsResponse response =
+   *         dataTransferServiceClient.listTransferLogsCallable().call(request);
+   *     for (TransferMessage element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTransferLogsRequest, ListTransferLogsResponse&gt;
+      listTransferLogsCallable() {
+<span class="nc" id="L1878">    return stub.listTransferLogsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns true if valid credentials exist for the given data source and requesting user.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   DataSourceName name = DataSourceName.ofProjectDataSourceName(&quot;[PROJECT]&quot;, &quot;[DATA_SOURCE]&quot;);
+   *   CheckValidCredsResponse response = dataTransferServiceClient.checkValidCreds(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The data source in the form:
+   *     `projects/{project_id}/dataSources/{data_source_id}` or
+   *     `projects/{project_id}/locations/{location_id}/dataSources/{data_source_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CheckValidCredsResponse checkValidCreds(DataSourceName name) {
+    CheckValidCredsRequest request =
+<span class="pc bpc" id="L1903" title="1 of 2 branches missed.">        CheckValidCredsRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1904">    return checkValidCreds(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns true if valid credentials exist for the given data source and requesting user.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   String name = DataSourceName.ofProjectDataSourceName(&quot;[PROJECT]&quot;, &quot;[DATA_SOURCE]&quot;).toString();
+   *   CheckValidCredsResponse response = dataTransferServiceClient.checkValidCreds(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The data source in the form:
+   *     `projects/{project_id}/dataSources/{data_source_id}` or
+   *     `projects/{project_id}/locations/{location_id}/dataSources/{data_source_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CheckValidCredsResponse checkValidCreds(String name) {
+<span class="fc" id="L1928">    CheckValidCredsRequest request = CheckValidCredsRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1929">    return checkValidCreds(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns true if valid credentials exist for the given data source and requesting user.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   CheckValidCredsRequest request =
+   *       CheckValidCredsRequest.newBuilder()
+   *           .setName(
+   *               DataSourceName.ofProjectDataSourceName(&quot;[PROJECT]&quot;, &quot;[DATA_SOURCE]&quot;).toString())
+   *           .build();
+   *   CheckValidCredsResponse response = dataTransferServiceClient.checkValidCreds(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CheckValidCredsResponse checkValidCreds(CheckValidCredsRequest request) {
+<span class="fc" id="L1955">    return checkValidCredsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns true if valid credentials exist for the given data source and requesting user.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   CheckValidCredsRequest request =
+   *       CheckValidCredsRequest.newBuilder()
+   *           .setName(
+   *               DataSourceName.ofProjectDataSourceName(&quot;[PROJECT]&quot;, &quot;[DATA_SOURCE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;CheckValidCredsResponse&gt; future =
+   *       dataTransferServiceClient.checkValidCredsCallable().futureCall(request);
+   *   // Do something.
+   *   CheckValidCredsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CheckValidCredsRequest, CheckValidCredsResponse&gt;
+      checkValidCredsCallable() {
+<span class="fc" id="L1982">    return stub.checkValidCredsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enroll data sources in a user project. This allows users to create transfer configurations for
+   * these data sources. They will also appear in the ListDataSources RPC and as such, will appear
+   * in the BigQuery UI 'https://bigquery.cloud.google.com' (and the documents can be found at
+   * https://cloud.google.com/bigquery/bigquery-web-ui and
+   * https://cloud.google.com/bigquery/docs/working-with-transfers).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   EnrollDataSourcesRequest request =
+   *       EnrollDataSourcesRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .addAllDataSourceIds(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   dataTransferServiceClient.enrollDataSources(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void enrollDataSources(EnrollDataSourcesRequest request) {
+<span class="fc" id="L2012">    enrollDataSourcesCallable().call(request);</span>
+<span class="fc" id="L2013">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enroll data sources in a user project. This allows users to create transfer configurations for
+   * these data sources. They will also appear in the ListDataSources RPC and as such, will appear
+   * in the BigQuery UI 'https://bigquery.cloud.google.com' (and the documents can be found at
+   * https://cloud.google.com/bigquery/bigquery-web-ui and
+   * https://cloud.google.com/bigquery/docs/working-with-transfers).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DataTransferServiceClient dataTransferServiceClient = DataTransferServiceClient.create()) {
+   *   EnrollDataSourcesRequest request =
+   *       EnrollDataSourcesRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .addAllDataSourceIds(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       dataTransferServiceClient.enrollDataSourcesCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;EnrollDataSourcesRequest, Empty&gt; enrollDataSourcesCallable() {
+<span class="fc" id="L2042">    return stub.enrollDataSourcesCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L2047">    stub.close();</span>
+<span class="fc" id="L2048">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L2052">    stub.shutdown();</span>
+<span class="nc" id="L2053">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L2057">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L2062">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L2067">    stub.shutdownNow();</span>
+<span class="nc" id="L2068">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L2072">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListDataSourcesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListDataSourcesRequest,
+          ListDataSourcesResponse,
+          DataSource,
+          ListDataSourcesPage,
+          ListDataSourcesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListDataSourcesPagedResponse&gt; createAsync(
+        PageContext&lt;ListDataSourcesRequest, ListDataSourcesResponse, DataSource&gt; context,
+        ApiFuture&lt;ListDataSourcesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListDataSourcesPage&gt; futurePage =
+<span class="fc" id="L2087">          ListDataSourcesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2088">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2090">          input -&gt; new ListDataSourcesPagedResponse(input),</span>
+<span class="fc" id="L2091">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListDataSourcesPagedResponse(ListDataSourcesPage page) {
+<span class="fc" id="L2095">      super(page, ListDataSourcesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2096">    }</span>
+  }
+
+  public static class ListDataSourcesPage
+      extends AbstractPage&lt;
+          ListDataSourcesRequest, ListDataSourcesResponse, DataSource, ListDataSourcesPage&gt; {
+
+    private ListDataSourcesPage(
+        PageContext&lt;ListDataSourcesRequest, ListDataSourcesResponse, DataSource&gt; context,
+        ListDataSourcesResponse response) {
+<span class="fc" id="L2106">      super(context, response);</span>
+<span class="fc" id="L2107">    }</span>
+
+    private static ListDataSourcesPage createEmptyPage() {
+<span class="fc" id="L2110">      return new ListDataSourcesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListDataSourcesPage createPage(
+        PageContext&lt;ListDataSourcesRequest, ListDataSourcesResponse, DataSource&gt; context,
+        ListDataSourcesResponse response) {
+<span class="fc" id="L2117">      return new ListDataSourcesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListDataSourcesPage&gt; createPageAsync(
+        PageContext&lt;ListDataSourcesRequest, ListDataSourcesResponse, DataSource&gt; context,
+        ApiFuture&lt;ListDataSourcesResponse&gt; futureResponse) {
+<span class="fc" id="L2124">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListDataSourcesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListDataSourcesRequest,
+          ListDataSourcesResponse,
+          DataSource,
+          ListDataSourcesPage,
+          ListDataSourcesFixedSizeCollection&gt; {
+
+    private ListDataSourcesFixedSizeCollection(
+        List&lt;ListDataSourcesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2138">      super(pages, collectionSize);</span>
+<span class="fc" id="L2139">    }</span>
+
+    private static ListDataSourcesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2142">      return new ListDataSourcesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListDataSourcesFixedSizeCollection createCollection(
+        List&lt;ListDataSourcesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2148">      return new ListDataSourcesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListTransferConfigsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListTransferConfigsRequest,
+          ListTransferConfigsResponse,
+          TransferConfig,
+          ListTransferConfigsPage,
+          ListTransferConfigsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListTransferConfigsPagedResponse&gt; createAsync(
+        PageContext&lt;ListTransferConfigsRequest, ListTransferConfigsResponse, TransferConfig&gt;
+            context,
+        ApiFuture&lt;ListTransferConfigsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListTransferConfigsPage&gt; futurePage =
+<span class="fc" id="L2165">          ListTransferConfigsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2166">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2168">          input -&gt; new ListTransferConfigsPagedResponse(input),</span>
+<span class="fc" id="L2169">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListTransferConfigsPagedResponse(ListTransferConfigsPage page) {
+<span class="fc" id="L2173">      super(page, ListTransferConfigsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2174">    }</span>
+  }
+
+  public static class ListTransferConfigsPage
+      extends AbstractPage&lt;
+          ListTransferConfigsRequest,
+          ListTransferConfigsResponse,
+          TransferConfig,
+          ListTransferConfigsPage&gt; {
+
+    private ListTransferConfigsPage(
+        PageContext&lt;ListTransferConfigsRequest, ListTransferConfigsResponse, TransferConfig&gt;
+            context,
+        ListTransferConfigsResponse response) {
+<span class="fc" id="L2188">      super(context, response);</span>
+<span class="fc" id="L2189">    }</span>
+
+    private static ListTransferConfigsPage createEmptyPage() {
+<span class="fc" id="L2192">      return new ListTransferConfigsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListTransferConfigsPage createPage(
+        PageContext&lt;ListTransferConfigsRequest, ListTransferConfigsResponse, TransferConfig&gt;
+            context,
+        ListTransferConfigsResponse response) {
+<span class="fc" id="L2200">      return new ListTransferConfigsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListTransferConfigsPage&gt; createPageAsync(
+        PageContext&lt;ListTransferConfigsRequest, ListTransferConfigsResponse, TransferConfig&gt;
+            context,
+        ApiFuture&lt;ListTransferConfigsResponse&gt; futureResponse) {
+<span class="fc" id="L2208">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListTransferConfigsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListTransferConfigsRequest,
+          ListTransferConfigsResponse,
+          TransferConfig,
+          ListTransferConfigsPage,
+          ListTransferConfigsFixedSizeCollection&gt; {
+
+    private ListTransferConfigsFixedSizeCollection(
+        List&lt;ListTransferConfigsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2222">      super(pages, collectionSize);</span>
+<span class="fc" id="L2223">    }</span>
+
+    private static ListTransferConfigsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2226">      return new ListTransferConfigsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListTransferConfigsFixedSizeCollection createCollection(
+        List&lt;ListTransferConfigsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2232">      return new ListTransferConfigsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListTransferRunsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListTransferRunsRequest,
+          ListTransferRunsResponse,
+          TransferRun,
+          ListTransferRunsPage,
+          ListTransferRunsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListTransferRunsPagedResponse&gt; createAsync(
+        PageContext&lt;ListTransferRunsRequest, ListTransferRunsResponse, TransferRun&gt; context,
+        ApiFuture&lt;ListTransferRunsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListTransferRunsPage&gt; futurePage =
+<span class="fc" id="L2248">          ListTransferRunsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2249">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2251">          input -&gt; new ListTransferRunsPagedResponse(input),</span>
+<span class="fc" id="L2252">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListTransferRunsPagedResponse(ListTransferRunsPage page) {
+<span class="fc" id="L2256">      super(page, ListTransferRunsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2257">    }</span>
+  }
+
+  public static class ListTransferRunsPage
+      extends AbstractPage&lt;
+          ListTransferRunsRequest, ListTransferRunsResponse, TransferRun, ListTransferRunsPage&gt; {
+
+    private ListTransferRunsPage(
+        PageContext&lt;ListTransferRunsRequest, ListTransferRunsResponse, TransferRun&gt; context,
+        ListTransferRunsResponse response) {
+<span class="fc" id="L2267">      super(context, response);</span>
+<span class="fc" id="L2268">    }</span>
+
+    private static ListTransferRunsPage createEmptyPage() {
+<span class="fc" id="L2271">      return new ListTransferRunsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListTransferRunsPage createPage(
+        PageContext&lt;ListTransferRunsRequest, ListTransferRunsResponse, TransferRun&gt; context,
+        ListTransferRunsResponse response) {
+<span class="fc" id="L2278">      return new ListTransferRunsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListTransferRunsPage&gt; createPageAsync(
+        PageContext&lt;ListTransferRunsRequest, ListTransferRunsResponse, TransferRun&gt; context,
+        ApiFuture&lt;ListTransferRunsResponse&gt; futureResponse) {
+<span class="fc" id="L2285">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListTransferRunsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListTransferRunsRequest,
+          ListTransferRunsResponse,
+          TransferRun,
+          ListTransferRunsPage,
+          ListTransferRunsFixedSizeCollection&gt; {
+
+    private ListTransferRunsFixedSizeCollection(
+        List&lt;ListTransferRunsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2299">      super(pages, collectionSize);</span>
+<span class="fc" id="L2300">    }</span>
+
+    private static ListTransferRunsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2303">      return new ListTransferRunsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListTransferRunsFixedSizeCollection createCollection(
+        List&lt;ListTransferRunsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2309">      return new ListTransferRunsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListTransferLogsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListTransferLogsRequest,
+          ListTransferLogsResponse,
+          TransferMessage,
+          ListTransferLogsPage,
+          ListTransferLogsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListTransferLogsPagedResponse&gt; createAsync(
+        PageContext&lt;ListTransferLogsRequest, ListTransferLogsResponse, TransferMessage&gt; context,
+        ApiFuture&lt;ListTransferLogsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListTransferLogsPage&gt; futurePage =
+<span class="fc" id="L2325">          ListTransferLogsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2326">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2328">          input -&gt; new ListTransferLogsPagedResponse(input),</span>
+<span class="fc" id="L2329">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListTransferLogsPagedResponse(ListTransferLogsPage page) {
+<span class="fc" id="L2333">      super(page, ListTransferLogsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2334">    }</span>
+  }
+
+  public static class ListTransferLogsPage
+      extends AbstractPage&lt;
+          ListTransferLogsRequest,
+          ListTransferLogsResponse,
+          TransferMessage,
+          ListTransferLogsPage&gt; {
+
+    private ListTransferLogsPage(
+        PageContext&lt;ListTransferLogsRequest, ListTransferLogsResponse, TransferMessage&gt; context,
+        ListTransferLogsResponse response) {
+<span class="fc" id="L2347">      super(context, response);</span>
+<span class="fc" id="L2348">    }</span>
+
+    private static ListTransferLogsPage createEmptyPage() {
+<span class="fc" id="L2351">      return new ListTransferLogsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListTransferLogsPage createPage(
+        PageContext&lt;ListTransferLogsRequest, ListTransferLogsResponse, TransferMessage&gt; context,
+        ListTransferLogsResponse response) {
+<span class="fc" id="L2358">      return new ListTransferLogsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListTransferLogsPage&gt; createPageAsync(
+        PageContext&lt;ListTransferLogsRequest, ListTransferLogsResponse, TransferMessage&gt; context,
+        ApiFuture&lt;ListTransferLogsResponse&gt; futureResponse) {
+<span class="fc" id="L2365">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListTransferLogsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListTransferLogsRequest,
+          ListTransferLogsResponse,
+          TransferMessage,
+          ListTransferLogsPage,
+          ListTransferLogsFixedSizeCollection&gt; {
+
+    private ListTransferLogsFixedSizeCollection(
+        List&lt;ListTransferLogsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2379">      super(pages, collectionSize);</span>
+<span class="fc" id="L2380">    }</span>
+
+    private static ListTransferLogsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2383">      return new ListTransferLogsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListTransferLogsFixedSizeCollection createCollection(
+        List&lt;ListTransferLogsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2389">      return new ListTransferLogsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

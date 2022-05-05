@@ -1,0 +1,2636 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>OsConfigZonalServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-os-config</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.osconfig.v1</a> &gt; <span class="el_source">OsConfigZonalServiceClient.java</span></div><h1>OsConfigZonalServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.osconfig.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.osconfig.v1.stub.OsConfigZonalServiceStub;
+import com.google.cloud.osconfig.v1.stub.OsConfigZonalServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Zonal OS Config API
+ *
+ * &lt;p&gt;The OS Config service is the server-side component that allows users to manage package
+ * installations and patch jobs for Compute Engine VM instances.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+ *     OsConfigZonalServiceClient.create()) {
+ *   OSPolicyAssignmentName name =
+ *       OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;);
+ *   OSPolicyAssignment response = osConfigZonalServiceClient.getOSPolicyAssignment(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the OsConfigZonalServiceClient object to clean up
+ * resources such as threads. In the example above, try-with-resources is used, which automatically
+ * calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of OsConfigZonalServiceSettings
+ * to create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * OsConfigZonalServiceSettings osConfigZonalServiceSettings =
+ *     OsConfigZonalServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * OsConfigZonalServiceClient osConfigZonalServiceClient =
+ *     OsConfigZonalServiceClient.create(osConfigZonalServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * OsConfigZonalServiceSettings osConfigZonalServiceSettings =
+ *     OsConfigZonalServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * OsConfigZonalServiceClient osConfigZonalServiceClient =
+ *     OsConfigZonalServiceClient.create(osConfigZonalServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class OsConfigZonalServiceClient implements BackgroundResource {
+  private final OsConfigZonalServiceSettings settings;
+  private final OsConfigZonalServiceStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of OsConfigZonalServiceClient with default settings. */
+  public static final OsConfigZonalServiceClient create() throws IOException {
+<span class="nc" id="L124">    return create(OsConfigZonalServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of OsConfigZonalServiceClient, using the given settings. The channels
+   * are created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final OsConfigZonalServiceClient create(OsConfigZonalServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L133">    return new OsConfigZonalServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of OsConfigZonalServiceClient, using the given stub for making calls.
+   * This is for advanced usage - prefer using create(OsConfigZonalServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final OsConfigZonalServiceClient create(OsConfigZonalServiceStub stub) {
+<span class="nc" id="L142">    return new OsConfigZonalServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of OsConfigZonalServiceClient, using the given settings. This is
+   * protected so that it is easy to make a subclass, but otherwise, the static factory methods
+   * should be preferred.
+   */
+<span class="fc" id="L150">  protected OsConfigZonalServiceClient(OsConfigZonalServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L151">    this.settings = settings;</span>
+<span class="fc" id="L152">    this.stub = ((OsConfigZonalServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L153">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L154">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L157">  protected OsConfigZonalServiceClient(OsConfigZonalServiceStub stub) {</span>
+<span class="nc" id="L158">    this.settings = null;</span>
+<span class="nc" id="L159">    this.stub = stub;</span>
+<span class="nc" id="L160">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L161">  }</span>
+
+  public final OsConfigZonalServiceSettings getSettings() {
+<span class="nc" id="L164">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public OsConfigZonalServiceStub getStub() {
+<span class="nc" id="L169">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L177">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create an OS policy assignment.
+   *
+   * &lt;p&gt;This method also creates the first revision of the OS policy assignment.
+   *
+   * &lt;p&gt;This method returns a long running operation (LRO) that contains the rollout details. The
+   * rollout can be cancelled by cancelling the LRO.
+   *
+   * &lt;p&gt;For more information, see [Method:
+   * projects.locations.osPolicyAssignments.operations.cancel](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments.operations/cancel).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   OSPolicyAssignment osPolicyAssignment = OSPolicyAssignment.newBuilder().build();
+   *   String osPolicyAssignmentId = &quot;osPolicyAssignmentId-44079074&quot;;
+   *   OSPolicyAssignment response =
+   *       osConfigZonalServiceClient
+   *           .createOSPolicyAssignmentAsync(parent, osPolicyAssignment, osPolicyAssignmentId)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name in the form:
+   *     projects/{project}/locations/{location}
+   * @param osPolicyAssignment Required. The OS policy assignment to be created.
+   * @param osPolicyAssignmentId Required. The logical name of the OS policy assignment in the
+   *     project with the following restrictions:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;Must contain only lowercase letters, numbers, and hyphens.
+   *       &lt;li&gt;Must start with a letter.
+   *       &lt;li&gt;Must be between 1-63 characters.
+   *       &lt;li&gt;Must end with a number or a letter.
+   *       &lt;li&gt;Must be unique within the project.
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;OSPolicyAssignment, OSPolicyAssignmentOperationMetadata&gt;
+      createOSPolicyAssignmentAsync(
+          LocationName parent, OSPolicyAssignment osPolicyAssignment, String osPolicyAssignmentId) {
+    CreateOSPolicyAssignmentRequest request =
+<span class="fc" id="L228">        CreateOSPolicyAssignmentRequest.newBuilder()</span>
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L230">            .setOsPolicyAssignment(osPolicyAssignment)</span>
+<span class="fc" id="L231">            .setOsPolicyAssignmentId(osPolicyAssignmentId)</span>
+<span class="fc" id="L232">            .build();</span>
+<span class="fc" id="L233">    return createOSPolicyAssignmentAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create an OS policy assignment.
+   *
+   * &lt;p&gt;This method also creates the first revision of the OS policy assignment.
+   *
+   * &lt;p&gt;This method returns a long running operation (LRO) that contains the rollout details. The
+   * rollout can be cancelled by cancelling the LRO.
+   *
+   * &lt;p&gt;For more information, see [Method:
+   * projects.locations.osPolicyAssignments.operations.cancel](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments.operations/cancel).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   OSPolicyAssignment osPolicyAssignment = OSPolicyAssignment.newBuilder().build();
+   *   String osPolicyAssignmentId = &quot;osPolicyAssignmentId-44079074&quot;;
+   *   OSPolicyAssignment response =
+   *       osConfigZonalServiceClient
+   *           .createOSPolicyAssignmentAsync(parent, osPolicyAssignment, osPolicyAssignmentId)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name in the form:
+   *     projects/{project}/locations/{location}
+   * @param osPolicyAssignment Required. The OS policy assignment to be created.
+   * @param osPolicyAssignmentId Required. The logical name of the OS policy assignment in the
+   *     project with the following restrictions:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;Must contain only lowercase letters, numbers, and hyphens.
+   *       &lt;li&gt;Must start with a letter.
+   *       &lt;li&gt;Must be between 1-63 characters.
+   *       &lt;li&gt;Must end with a number or a letter.
+   *       &lt;li&gt;Must be unique within the project.
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;OSPolicyAssignment, OSPolicyAssignmentOperationMetadata&gt;
+      createOSPolicyAssignmentAsync(
+          String parent, OSPolicyAssignment osPolicyAssignment, String osPolicyAssignmentId) {
+    CreateOSPolicyAssignmentRequest request =
+<span class="fc" id="L284">        CreateOSPolicyAssignmentRequest.newBuilder()</span>
+<span class="fc" id="L285">            .setParent(parent)</span>
+<span class="fc" id="L286">            .setOsPolicyAssignment(osPolicyAssignment)</span>
+<span class="fc" id="L287">            .setOsPolicyAssignmentId(osPolicyAssignmentId)</span>
+<span class="fc" id="L288">            .build();</span>
+<span class="fc" id="L289">    return createOSPolicyAssignmentAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create an OS policy assignment.
+   *
+   * &lt;p&gt;This method also creates the first revision of the OS policy assignment.
+   *
+   * &lt;p&gt;This method returns a long running operation (LRO) that contains the rollout details. The
+   * rollout can be cancelled by cancelling the LRO.
+   *
+   * &lt;p&gt;For more information, see [Method:
+   * projects.locations.osPolicyAssignments.operations.cancel](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments.operations/cancel).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   CreateOSPolicyAssignmentRequest request =
+   *       CreateOSPolicyAssignmentRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setOsPolicyAssignment(OSPolicyAssignment.newBuilder().build())
+   *           .setOsPolicyAssignmentId(&quot;osPolicyAssignmentId-44079074&quot;)
+   *           .build();
+   *   OSPolicyAssignment response =
+   *       osConfigZonalServiceClient.createOSPolicyAssignmentAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;OSPolicyAssignment, OSPolicyAssignmentOperationMetadata&gt;
+      createOSPolicyAssignmentAsync(CreateOSPolicyAssignmentRequest request) {
+<span class="fc" id="L327">    return createOSPolicyAssignmentOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create an OS policy assignment.
+   *
+   * &lt;p&gt;This method also creates the first revision of the OS policy assignment.
+   *
+   * &lt;p&gt;This method returns a long running operation (LRO) that contains the rollout details. The
+   * rollout can be cancelled by cancelling the LRO.
+   *
+   * &lt;p&gt;For more information, see [Method:
+   * projects.locations.osPolicyAssignments.operations.cancel](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments.operations/cancel).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   CreateOSPolicyAssignmentRequest request =
+   *       CreateOSPolicyAssignmentRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setOsPolicyAssignment(OSPolicyAssignment.newBuilder().build())
+   *           .setOsPolicyAssignmentId(&quot;osPolicyAssignmentId-44079074&quot;)
+   *           .build();
+   *   OperationFuture&lt;OSPolicyAssignment, OSPolicyAssignmentOperationMetadata&gt; future =
+   *       osConfigZonalServiceClient
+   *           .createOSPolicyAssignmentOperationCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   OSPolicyAssignment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          CreateOSPolicyAssignmentRequest, OSPolicyAssignment, OSPolicyAssignmentOperationMetadata&gt;
+      createOSPolicyAssignmentOperationCallable() {
+<span class="fc" id="L367">    return stub.createOSPolicyAssignmentOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create an OS policy assignment.
+   *
+   * &lt;p&gt;This method also creates the first revision of the OS policy assignment.
+   *
+   * &lt;p&gt;This method returns a long running operation (LRO) that contains the rollout details. The
+   * rollout can be cancelled by cancelling the LRO.
+   *
+   * &lt;p&gt;For more information, see [Method:
+   * projects.locations.osPolicyAssignments.operations.cancel](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments.operations/cancel).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   CreateOSPolicyAssignmentRequest request =
+   *       CreateOSPolicyAssignmentRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setOsPolicyAssignment(OSPolicyAssignment.newBuilder().build())
+   *           .setOsPolicyAssignmentId(&quot;osPolicyAssignmentId-44079074&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       osConfigZonalServiceClient.createOSPolicyAssignmentCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateOSPolicyAssignmentRequest, Operation&gt;
+      createOSPolicyAssignmentCallable() {
+<span class="nc" id="L404">    return stub.createOSPolicyAssignmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update an existing OS policy assignment.
+   *
+   * &lt;p&gt;This method creates a new revision of the OS policy assignment.
+   *
+   * &lt;p&gt;This method returns a long running operation (LRO) that contains the rollout details. The
+   * rollout can be cancelled by cancelling the LRO.
+   *
+   * &lt;p&gt;For more information, see [Method:
+   * projects.locations.osPolicyAssignments.operations.cancel](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments.operations/cancel).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   OSPolicyAssignment osPolicyAssignment = OSPolicyAssignment.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   OSPolicyAssignment response =
+   *       osConfigZonalServiceClient
+   *           .updateOSPolicyAssignmentAsync(osPolicyAssignment, updateMask)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param osPolicyAssignment Required. The updated OS policy assignment.
+   * @param updateMask Optional. Field mask that controls which fields of the assignment should be
+   *     updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;OSPolicyAssignment, OSPolicyAssignmentOperationMetadata&gt;
+      updateOSPolicyAssignmentAsync(OSPolicyAssignment osPolicyAssignment, FieldMask updateMask) {
+    UpdateOSPolicyAssignmentRequest request =
+<span class="fc" id="L443">        UpdateOSPolicyAssignmentRequest.newBuilder()</span>
+<span class="fc" id="L444">            .setOsPolicyAssignment(osPolicyAssignment)</span>
+<span class="fc" id="L445">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L446">            .build();</span>
+<span class="fc" id="L447">    return updateOSPolicyAssignmentAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update an existing OS policy assignment.
+   *
+   * &lt;p&gt;This method creates a new revision of the OS policy assignment.
+   *
+   * &lt;p&gt;This method returns a long running operation (LRO) that contains the rollout details. The
+   * rollout can be cancelled by cancelling the LRO.
+   *
+   * &lt;p&gt;For more information, see [Method:
+   * projects.locations.osPolicyAssignments.operations.cancel](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments.operations/cancel).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   UpdateOSPolicyAssignmentRequest request =
+   *       UpdateOSPolicyAssignmentRequest.newBuilder()
+   *           .setOsPolicyAssignment(OSPolicyAssignment.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   OSPolicyAssignment response =
+   *       osConfigZonalServiceClient.updateOSPolicyAssignmentAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;OSPolicyAssignment, OSPolicyAssignmentOperationMetadata&gt;
+      updateOSPolicyAssignmentAsync(UpdateOSPolicyAssignmentRequest request) {
+<span class="fc" id="L484">    return updateOSPolicyAssignmentOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update an existing OS policy assignment.
+   *
+   * &lt;p&gt;This method creates a new revision of the OS policy assignment.
+   *
+   * &lt;p&gt;This method returns a long running operation (LRO) that contains the rollout details. The
+   * rollout can be cancelled by cancelling the LRO.
+   *
+   * &lt;p&gt;For more information, see [Method:
+   * projects.locations.osPolicyAssignments.operations.cancel](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments.operations/cancel).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   UpdateOSPolicyAssignmentRequest request =
+   *       UpdateOSPolicyAssignmentRequest.newBuilder()
+   *           .setOsPolicyAssignment(OSPolicyAssignment.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;OSPolicyAssignment, OSPolicyAssignmentOperationMetadata&gt; future =
+   *       osConfigZonalServiceClient
+   *           .updateOSPolicyAssignmentOperationCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   OSPolicyAssignment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          UpdateOSPolicyAssignmentRequest, OSPolicyAssignment, OSPolicyAssignmentOperationMetadata&gt;
+      updateOSPolicyAssignmentOperationCallable() {
+<span class="fc" id="L523">    return stub.updateOSPolicyAssignmentOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Update an existing OS policy assignment.
+   *
+   * &lt;p&gt;This method creates a new revision of the OS policy assignment.
+   *
+   * &lt;p&gt;This method returns a long running operation (LRO) that contains the rollout details. The
+   * rollout can be cancelled by cancelling the LRO.
+   *
+   * &lt;p&gt;For more information, see [Method:
+   * projects.locations.osPolicyAssignments.operations.cancel](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments.operations/cancel).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   UpdateOSPolicyAssignmentRequest request =
+   *       UpdateOSPolicyAssignmentRequest.newBuilder()
+   *           .setOsPolicyAssignment(OSPolicyAssignment.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       osConfigZonalServiceClient.updateOSPolicyAssignmentCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateOSPolicyAssignmentRequest, Operation&gt;
+      updateOSPolicyAssignmentCallable() {
+<span class="nc" id="L559">    return stub.updateOSPolicyAssignmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieve an existing OS policy assignment.
+   *
+   * &lt;p&gt;This method always returns the latest revision. In order to retrieve a previous revision of
+   * the assignment, also provide the revision ID in the `name` parameter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   OSPolicyAssignmentName name =
+   *       OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;);
+   *   OSPolicyAssignment response = osConfigZonalServiceClient.getOSPolicyAssignment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of OS policy assignment.
+   *     &lt;p&gt;Format:
+   *     `projects/{project}/locations/{location}/osPolicyAssignments/{os_policy_assignment}{@literal @}{revisionId}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OSPolicyAssignment getOSPolicyAssignment(OSPolicyAssignmentName name) {
+    GetOSPolicyAssignmentRequest request =
+<span class="fc" id="L589">        GetOSPolicyAssignmentRequest.newBuilder()</span>
+<span class="pc bpc" id="L590" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L591">            .build();</span>
+<span class="fc" id="L592">    return getOSPolicyAssignment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieve an existing OS policy assignment.
+   *
+   * &lt;p&gt;This method always returns the latest revision. In order to retrieve a previous revision of
+   * the assignment, also provide the revision ID in the `name` parameter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   String name =
+   *       OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;).toString();
+   *   OSPolicyAssignment response = osConfigZonalServiceClient.getOSPolicyAssignment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of OS policy assignment.
+   *     &lt;p&gt;Format:
+   *     `projects/{project}/locations/{location}/osPolicyAssignments/{os_policy_assignment}{@literal @}{revisionId}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OSPolicyAssignment getOSPolicyAssignment(String name) {
+    GetOSPolicyAssignmentRequest request =
+<span class="fc" id="L622">        GetOSPolicyAssignmentRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L623">    return getOSPolicyAssignment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieve an existing OS policy assignment.
+   *
+   * &lt;p&gt;This method always returns the latest revision. In order to retrieve a previous revision of
+   * the assignment, also provide the revision ID in the `name` parameter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   GetOSPolicyAssignmentRequest request =
+   *       GetOSPolicyAssignmentRequest.newBuilder()
+   *           .setName(
+   *               OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   OSPolicyAssignment response = osConfigZonalServiceClient.getOSPolicyAssignment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OSPolicyAssignment getOSPolicyAssignment(GetOSPolicyAssignmentRequest request) {
+<span class="fc" id="L654">    return getOSPolicyAssignmentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieve an existing OS policy assignment.
+   *
+   * &lt;p&gt;This method always returns the latest revision. In order to retrieve a previous revision of
+   * the assignment, also provide the revision ID in the `name` parameter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   GetOSPolicyAssignmentRequest request =
+   *       GetOSPolicyAssignmentRequest.newBuilder()
+   *           .setName(
+   *               OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;OSPolicyAssignment&gt; future =
+   *       osConfigZonalServiceClient.getOSPolicyAssignmentCallable().futureCall(request);
+   *   // Do something.
+   *   OSPolicyAssignment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetOSPolicyAssignmentRequest, OSPolicyAssignment&gt;
+      getOSPolicyAssignmentCallable() {
+<span class="fc" id="L686">    return stub.getOSPolicyAssignmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the OS policy assignments under the parent resource.
+   *
+   * &lt;p&gt;For each OS policy assignment, the latest revision is returned.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (OSPolicyAssignment element :
+   *       osConfigZonalServiceClient.listOSPolicyAssignments(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListOSPolicyAssignmentsPagedResponse listOSPolicyAssignments(LocationName parent) {
+    ListOSPolicyAssignmentsRequest request =
+<span class="fc" id="L715">        ListOSPolicyAssignmentsRequest.newBuilder()</span>
+<span class="pc bpc" id="L716" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L717">            .build();</span>
+<span class="fc" id="L718">    return listOSPolicyAssignments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the OS policy assignments under the parent resource.
+   *
+   * &lt;p&gt;For each OS policy assignment, the latest revision is returned.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (OSPolicyAssignment element :
+   *       osConfigZonalServiceClient.listOSPolicyAssignments(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListOSPolicyAssignmentsPagedResponse listOSPolicyAssignments(String parent) {
+    ListOSPolicyAssignmentsRequest request =
+<span class="fc" id="L747">        ListOSPolicyAssignmentsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L748">    return listOSPolicyAssignments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the OS policy assignments under the parent resource.
+   *
+   * &lt;p&gt;For each OS policy assignment, the latest revision is returned.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListOSPolicyAssignmentsRequest request =
+   *       ListOSPolicyAssignmentsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (OSPolicyAssignment element :
+   *       osConfigZonalServiceClient.listOSPolicyAssignments(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListOSPolicyAssignmentsPagedResponse listOSPolicyAssignments(
+      ListOSPolicyAssignmentsRequest request) {
+<span class="fc" id="L782">    return listOSPolicyAssignmentsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the OS policy assignments under the parent resource.
+   *
+   * &lt;p&gt;For each OS policy assignment, the latest revision is returned.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListOSPolicyAssignmentsRequest request =
+   *       ListOSPolicyAssignmentsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;OSPolicyAssignment&gt; future =
+   *       osConfigZonalServiceClient.listOSPolicyAssignmentsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (OSPolicyAssignment element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListOSPolicyAssignmentsRequest, ListOSPolicyAssignmentsPagedResponse&gt;
+      listOSPolicyAssignmentsPagedCallable() {
+<span class="fc" id="L815">    return stub.listOSPolicyAssignmentsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the OS policy assignments under the parent resource.
+   *
+   * &lt;p&gt;For each OS policy assignment, the latest revision is returned.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListOSPolicyAssignmentsRequest request =
+   *       ListOSPolicyAssignmentsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListOSPolicyAssignmentsResponse response =
+   *         osConfigZonalServiceClient.listOSPolicyAssignmentsCallable().call(request);
+   *     for (OSPolicyAssignment element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListOSPolicyAssignmentsRequest, ListOSPolicyAssignmentsResponse&gt;
+      listOSPolicyAssignmentsCallable() {
+<span class="nc" id="L855">    return stub.listOSPolicyAssignmentsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the OS policy assignment revisions for a given OS policy assignment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   OSPolicyAssignmentName name =
+   *       OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;);
+   *   for (OSPolicyAssignment element :
+   *       osConfigZonalServiceClient.listOSPolicyAssignmentRevisions(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the OS policy assignment to list revisions for.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListOSPolicyAssignmentRevisionsPagedResponse listOSPolicyAssignmentRevisions(
+      OSPolicyAssignmentName name) {
+    ListOSPolicyAssignmentRevisionsRequest request =
+<span class="fc" id="L884">        ListOSPolicyAssignmentRevisionsRequest.newBuilder()</span>
+<span class="pc bpc" id="L885" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L886">            .build();</span>
+<span class="fc" id="L887">    return listOSPolicyAssignmentRevisions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the OS policy assignment revisions for a given OS policy assignment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   String name =
+   *       OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;).toString();
+   *   for (OSPolicyAssignment element :
+   *       osConfigZonalServiceClient.listOSPolicyAssignmentRevisions(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the OS policy assignment to list revisions for.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListOSPolicyAssignmentRevisionsPagedResponse listOSPolicyAssignmentRevisions(
+      String name) {
+    ListOSPolicyAssignmentRevisionsRequest request =
+<span class="fc" id="L916">        ListOSPolicyAssignmentRevisionsRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L917">    return listOSPolicyAssignmentRevisions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the OS policy assignment revisions for a given OS policy assignment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListOSPolicyAssignmentRevisionsRequest request =
+   *       ListOSPolicyAssignmentRevisionsRequest.newBuilder()
+   *           .setName(
+   *               OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (OSPolicyAssignment element :
+   *       osConfigZonalServiceClient.listOSPolicyAssignmentRevisions(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListOSPolicyAssignmentRevisionsPagedResponse listOSPolicyAssignmentRevisions(
+      ListOSPolicyAssignmentRevisionsRequest request) {
+<span class="fc" id="L951">    return listOSPolicyAssignmentRevisionsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the OS policy assignment revisions for a given OS policy assignment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListOSPolicyAssignmentRevisionsRequest request =
+   *       ListOSPolicyAssignmentRevisionsRequest.newBuilder()
+   *           .setName(
+   *               OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;OSPolicyAssignment&gt; future =
+   *       osConfigZonalServiceClient
+   *           .listOSPolicyAssignmentRevisionsPagedCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   for (OSPolicyAssignment element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          ListOSPolicyAssignmentRevisionsRequest, ListOSPolicyAssignmentRevisionsPagedResponse&gt;
+      listOSPolicyAssignmentRevisionsPagedCallable() {
+<span class="fc" id="L987">    return stub.listOSPolicyAssignmentRevisionsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List the OS policy assignment revisions for a given OS policy assignment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListOSPolicyAssignmentRevisionsRequest request =
+   *       ListOSPolicyAssignmentRevisionsRequest.newBuilder()
+   *           .setName(
+   *               OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListOSPolicyAssignmentRevisionsResponse response =
+   *         osConfigZonalServiceClient.listOSPolicyAssignmentRevisionsCallable().call(request);
+   *     for (OSPolicyAssignment element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          ListOSPolicyAssignmentRevisionsRequest, ListOSPolicyAssignmentRevisionsResponse&gt;
+      listOSPolicyAssignmentRevisionsCallable() {
+<span class="nc" id="L1028">    return stub.listOSPolicyAssignmentRevisionsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete the OS policy assignment.
+   *
+   * &lt;p&gt;This method creates a new revision of the OS policy assignment.
+   *
+   * &lt;p&gt;This method returns a long running operation (LRO) that contains the rollout details. The
+   * rollout can be cancelled by cancelling the LRO.
+   *
+   * &lt;p&gt;If the LRO completes and is not cancelled, all revisions associated with the OS policy
+   * assignment are deleted.
+   *
+   * &lt;p&gt;For more information, see [Method:
+   * projects.locations.osPolicyAssignments.operations.cancel](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments.operations/cancel).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   OSPolicyAssignmentName name =
+   *       OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;);
+   *   osConfigZonalServiceClient.deleteOSPolicyAssignmentAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the OS policy assignment to be deleted
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OSPolicyAssignmentOperationMetadata&gt;
+      deleteOSPolicyAssignmentAsync(OSPolicyAssignmentName name) {
+    DeleteOSPolicyAssignmentRequest request =
+<span class="fc" id="L1065">        DeleteOSPolicyAssignmentRequest.newBuilder()</span>
+<span class="pc bpc" id="L1066" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1067">            .build();</span>
+<span class="fc" id="L1068">    return deleteOSPolicyAssignmentAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete the OS policy assignment.
+   *
+   * &lt;p&gt;This method creates a new revision of the OS policy assignment.
+   *
+   * &lt;p&gt;This method returns a long running operation (LRO) that contains the rollout details. The
+   * rollout can be cancelled by cancelling the LRO.
+   *
+   * &lt;p&gt;If the LRO completes and is not cancelled, all revisions associated with the OS policy
+   * assignment are deleted.
+   *
+   * &lt;p&gt;For more information, see [Method:
+   * projects.locations.osPolicyAssignments.operations.cancel](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments.operations/cancel).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   String name =
+   *       OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;).toString();
+   *   osConfigZonalServiceClient.deleteOSPolicyAssignmentAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the OS policy assignment to be deleted
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OSPolicyAssignmentOperationMetadata&gt;
+      deleteOSPolicyAssignmentAsync(String name) {
+    DeleteOSPolicyAssignmentRequest request =
+<span class="fc" id="L1105">        DeleteOSPolicyAssignmentRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1106">    return deleteOSPolicyAssignmentAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete the OS policy assignment.
+   *
+   * &lt;p&gt;This method creates a new revision of the OS policy assignment.
+   *
+   * &lt;p&gt;This method returns a long running operation (LRO) that contains the rollout details. The
+   * rollout can be cancelled by cancelling the LRO.
+   *
+   * &lt;p&gt;If the LRO completes and is not cancelled, all revisions associated with the OS policy
+   * assignment are deleted.
+   *
+   * &lt;p&gt;For more information, see [Method:
+   * projects.locations.osPolicyAssignments.operations.cancel](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments.operations/cancel).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   DeleteOSPolicyAssignmentRequest request =
+   *       DeleteOSPolicyAssignmentRequest.newBuilder()
+   *           .setName(
+   *               OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   osConfigZonalServiceClient.deleteOSPolicyAssignmentAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OSPolicyAssignmentOperationMetadata&gt;
+      deleteOSPolicyAssignmentAsync(DeleteOSPolicyAssignmentRequest request) {
+<span class="fc" id="L1146">    return deleteOSPolicyAssignmentOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete the OS policy assignment.
+   *
+   * &lt;p&gt;This method creates a new revision of the OS policy assignment.
+   *
+   * &lt;p&gt;This method returns a long running operation (LRO) that contains the rollout details. The
+   * rollout can be cancelled by cancelling the LRO.
+   *
+   * &lt;p&gt;If the LRO completes and is not cancelled, all revisions associated with the OS policy
+   * assignment are deleted.
+   *
+   * &lt;p&gt;For more information, see [Method:
+   * projects.locations.osPolicyAssignments.operations.cancel](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments.operations/cancel).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   DeleteOSPolicyAssignmentRequest request =
+   *       DeleteOSPolicyAssignmentRequest.newBuilder()
+   *           .setName(
+   *               OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   OperationFuture&lt;Empty, OSPolicyAssignmentOperationMetadata&gt; future =
+   *       osConfigZonalServiceClient
+   *           .deleteOSPolicyAssignmentOperationCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          DeleteOSPolicyAssignmentRequest, Empty, OSPolicyAssignmentOperationMetadata&gt;
+      deleteOSPolicyAssignmentOperationCallable() {
+<span class="fc" id="L1189">    return stub.deleteOSPolicyAssignmentOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Delete the OS policy assignment.
+   *
+   * &lt;p&gt;This method creates a new revision of the OS policy assignment.
+   *
+   * &lt;p&gt;This method returns a long running operation (LRO) that contains the rollout details. The
+   * rollout can be cancelled by cancelling the LRO.
+   *
+   * &lt;p&gt;If the LRO completes and is not cancelled, all revisions associated with the OS policy
+   * assignment are deleted.
+   *
+   * &lt;p&gt;For more information, see [Method:
+   * projects.locations.osPolicyAssignments.operations.cancel](https://cloud.google.com/compute/docs/osconfig/rest/v1/projects.locations.osPolicyAssignments.operations/cancel).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   DeleteOSPolicyAssignmentRequest request =
+   *       DeleteOSPolicyAssignmentRequest.newBuilder()
+   *           .setName(
+   *               OSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[OS_POLICY_ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       osConfigZonalServiceClient.deleteOSPolicyAssignmentCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteOSPolicyAssignmentRequest, Operation&gt;
+      deleteOSPolicyAssignmentCallable() {
+<span class="nc" id="L1229">    return stub.deleteOSPolicyAssignmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the OS policy asssignment report for the specified Compute Engine VM instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   OSPolicyAssignmentReportName name =
+   *       OSPolicyAssignmentReportName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;, &quot;[ASSIGNMENT]&quot;);
+   *   OSPolicyAssignmentReport response =
+   *       osConfigZonalServiceClient.getOSPolicyAssignmentReport(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. API resource name for OS policy assignment report.
+   *     &lt;p&gt;Format:
+   *     `/projects/{project}/locations/{location}/instances/{instance}/osPolicyAssignments/{assignment}/report`
+   *     &lt;p&gt;For `{project}`, either `project-number` or `project-id` can be provided. For
+   *     `{instance_id}`, either Compute Engine `instance-id` or `instance-name` can be provided.
+   *     For `{assignment_id}`, the OSPolicyAssignment id must be provided.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OSPolicyAssignmentReport getOSPolicyAssignmentReport(
+      OSPolicyAssignmentReportName name) {
+    GetOSPolicyAssignmentReportRequest request =
+<span class="fc" id="L1261">        GetOSPolicyAssignmentReportRequest.newBuilder()</span>
+<span class="pc bpc" id="L1262" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1263">            .build();</span>
+<span class="fc" id="L1264">    return getOSPolicyAssignmentReport(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the OS policy asssignment report for the specified Compute Engine VM instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   String name =
+   *       OSPolicyAssignmentReportName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;, &quot;[ASSIGNMENT]&quot;)
+   *           .toString();
+   *   OSPolicyAssignmentReport response =
+   *       osConfigZonalServiceClient.getOSPolicyAssignmentReport(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. API resource name for OS policy assignment report.
+   *     &lt;p&gt;Format:
+   *     `/projects/{project}/locations/{location}/instances/{instance}/osPolicyAssignments/{assignment}/report`
+   *     &lt;p&gt;For `{project}`, either `project-number` or `project-id` can be provided. For
+   *     `{instance_id}`, either Compute Engine `instance-id` or `instance-name` can be provided.
+   *     For `{assignment_id}`, the OSPolicyAssignment id must be provided.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OSPolicyAssignmentReport getOSPolicyAssignmentReport(String name) {
+    GetOSPolicyAssignmentReportRequest request =
+<span class="fc" id="L1296">        GetOSPolicyAssignmentReportRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1297">    return getOSPolicyAssignmentReport(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the OS policy asssignment report for the specified Compute Engine VM instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   GetOSPolicyAssignmentReportRequest request =
+   *       GetOSPolicyAssignmentReportRequest.newBuilder()
+   *           .setName(
+   *               OSPolicyAssignmentReportName.of(
+   *                       &quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;, &quot;[ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   OSPolicyAssignmentReport response =
+   *       osConfigZonalServiceClient.getOSPolicyAssignmentReport(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OSPolicyAssignmentReport getOSPolicyAssignmentReport(
+      GetOSPolicyAssignmentReportRequest request) {
+<span class="fc" id="L1328">    return getOSPolicyAssignmentReportCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the OS policy asssignment report for the specified Compute Engine VM instance.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   GetOSPolicyAssignmentReportRequest request =
+   *       GetOSPolicyAssignmentReportRequest.newBuilder()
+   *           .setName(
+   *               OSPolicyAssignmentReportName.of(
+   *                       &quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;, &quot;[ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;OSPolicyAssignmentReport&gt; future =
+   *       osConfigZonalServiceClient.getOSPolicyAssignmentReportCallable().futureCall(request);
+   *   // Do something.
+   *   OSPolicyAssignmentReport response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetOSPolicyAssignmentReportRequest, OSPolicyAssignmentReport&gt;
+      getOSPolicyAssignmentReportCallable() {
+<span class="fc" id="L1358">    return stub.getOSPolicyAssignmentReportCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List OS policy asssignment reports for all Compute Engine VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   InstanceOSPolicyAssignmentName parent =
+   *       InstanceOSPolicyAssignmentName.of(
+   *           &quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;, &quot;[ASSIGNMENT]&quot;);
+   *   for (OSPolicyAssignmentReport element :
+   *       osConfigZonalServiceClient.listOSPolicyAssignmentReports(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   *     &lt;p&gt;Format:
+   *     `projects/{project}/locations/{location}/instances/{instance}/osPolicyAssignments/{assignment}/reports`
+   *     &lt;p&gt;For `{project}`, either `project-number` or `project-id` can be provided. For
+   *     `{instance}`, either `instance-name`, `instance-id`, or `-` can be provided. If '-' is
+   *     provided, the response will include OSPolicyAssignmentReports for all instances in the
+   *     project/location. For `{assignment}`, either `assignment-id` or `-` can be provided. If '-'
+   *     is provided, the response will include OSPolicyAssignmentReports for all
+   *     OSPolicyAssignments in the project/location. Either {instance} or {assignment} must be `-`.
+   *     &lt;p&gt;For example:
+   *     `projects/{project}/locations/{location}/instances/{instance}/osPolicyAssignments/-/reports`
+   *     returns all reports for the instance
+   *     `projects/{project}/locations/{location}/instances/-/osPolicyAssignments/{assignment-id}/reports`
+   *     returns all the reports for the given assignment across all instances.
+   *     `projects/{project}/locations/{location}/instances/-/osPolicyAssignments/-/reports` returns
+   *     all the reports for all assignments across all instances.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListOSPolicyAssignmentReportsPagedResponse listOSPolicyAssignmentReports(
+      InstanceOSPolicyAssignmentName parent) {
+    ListOSPolicyAssignmentReportsRequest request =
+<span class="fc" id="L1403">        ListOSPolicyAssignmentReportsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1404" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1405">            .build();</span>
+<span class="fc" id="L1406">    return listOSPolicyAssignmentReports(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List OS policy asssignment reports for all Compute Engine VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   String parent =
+   *       InstanceOSPolicyAssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;, &quot;[ASSIGNMENT]&quot;)
+   *           .toString();
+   *   for (OSPolicyAssignmentReport element :
+   *       osConfigZonalServiceClient.listOSPolicyAssignmentReports(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   *     &lt;p&gt;Format:
+   *     `projects/{project}/locations/{location}/instances/{instance}/osPolicyAssignments/{assignment}/reports`
+   *     &lt;p&gt;For `{project}`, either `project-number` or `project-id` can be provided. For
+   *     `{instance}`, either `instance-name`, `instance-id`, or `-` can be provided. If '-' is
+   *     provided, the response will include OSPolicyAssignmentReports for all instances in the
+   *     project/location. For `{assignment}`, either `assignment-id` or `-` can be provided. If '-'
+   *     is provided, the response will include OSPolicyAssignmentReports for all
+   *     OSPolicyAssignments in the project/location. Either {instance} or {assignment} must be `-`.
+   *     &lt;p&gt;For example:
+   *     `projects/{project}/locations/{location}/instances/{instance}/osPolicyAssignments/-/reports`
+   *     returns all reports for the instance
+   *     `projects/{project}/locations/{location}/instances/-/osPolicyAssignments/{assignment-id}/reports`
+   *     returns all the reports for the given assignment across all instances.
+   *     `projects/{project}/locations/{location}/instances/-/osPolicyAssignments/-/reports` returns
+   *     all the reports for all assignments across all instances.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListOSPolicyAssignmentReportsPagedResponse listOSPolicyAssignmentReports(
+      String parent) {
+    ListOSPolicyAssignmentReportsRequest request =
+<span class="fc" id="L1451">        ListOSPolicyAssignmentReportsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1452">    return listOSPolicyAssignmentReports(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List OS policy asssignment reports for all Compute Engine VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListOSPolicyAssignmentReportsRequest request =
+   *       ListOSPolicyAssignmentReportsRequest.newBuilder()
+   *           .setParent(
+   *               InstanceOSPolicyAssignmentName.of(
+   *                       &quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;, &quot;[ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (OSPolicyAssignmentReport element :
+   *       osConfigZonalServiceClient.listOSPolicyAssignmentReports(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListOSPolicyAssignmentReportsPagedResponse listOSPolicyAssignmentReports(
+      ListOSPolicyAssignmentReportsRequest request) {
+<span class="fc" id="L1488">    return listOSPolicyAssignmentReportsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List OS policy asssignment reports for all Compute Engine VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListOSPolicyAssignmentReportsRequest request =
+   *       ListOSPolicyAssignmentReportsRequest.newBuilder()
+   *           .setParent(
+   *               InstanceOSPolicyAssignmentName.of(
+   *                       &quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;, &quot;[ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;OSPolicyAssignmentReport&gt; future =
+   *       osConfigZonalServiceClient
+   *           .listOSPolicyAssignmentReportsPagedCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   for (OSPolicyAssignmentReport element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          ListOSPolicyAssignmentReportsRequest, ListOSPolicyAssignmentReportsPagedResponse&gt;
+      listOSPolicyAssignmentReportsPagedCallable() {
+<span class="fc" id="L1526">    return stub.listOSPolicyAssignmentReportsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List OS policy asssignment reports for all Compute Engine VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListOSPolicyAssignmentReportsRequest request =
+   *       ListOSPolicyAssignmentReportsRequest.newBuilder()
+   *           .setParent(
+   *               InstanceOSPolicyAssignmentName.of(
+   *                       &quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;, &quot;[ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListOSPolicyAssignmentReportsResponse response =
+   *         osConfigZonalServiceClient.listOSPolicyAssignmentReportsCallable().call(request);
+   *     for (OSPolicyAssignmentReport element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          ListOSPolicyAssignmentReportsRequest, ListOSPolicyAssignmentReportsResponse&gt;
+      listOSPolicyAssignmentReportsCallable() {
+<span class="nc" id="L1569">    return stub.listOSPolicyAssignmentReportsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get inventory data for the specified VM instance. If the VM has no associated inventory, the
+   * message `NOT_FOUND` is returned.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   InventoryName name = InventoryName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;);
+   *   Inventory response = osConfigZonalServiceClient.getInventory(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. API resource name for inventory resource.
+   *     &lt;p&gt;Format: `projects/{project}/locations/{location}/instances/{instance}/inventory`
+   *     &lt;p&gt;For `{project}`, either `project-number` or `project-id` can be provided. For
+   *     `{instance}`, either Compute Engine `instance-id` or `instance-name` can be provided.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Inventory getInventory(InventoryName name) {
+    GetInventoryRequest request =
+<span class="pc bpc" id="L1597" title="1 of 2 branches missed.">        GetInventoryRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1598">    return getInventory(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get inventory data for the specified VM instance. If the VM has no associated inventory, the
+   * message `NOT_FOUND` is returned.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   String name = InventoryName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString();
+   *   Inventory response = osConfigZonalServiceClient.getInventory(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. API resource name for inventory resource.
+   *     &lt;p&gt;Format: `projects/{project}/locations/{location}/instances/{instance}/inventory`
+   *     &lt;p&gt;For `{project}`, either `project-number` or `project-id` can be provided. For
+   *     `{instance}`, either Compute Engine `instance-id` or `instance-name` can be provided.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Inventory getInventory(String name) {
+<span class="fc" id="L1625">    GetInventoryRequest request = GetInventoryRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1626">    return getInventory(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get inventory data for the specified VM instance. If the VM has no associated inventory, the
+   * message `NOT_FOUND` is returned.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   GetInventoryRequest request =
+   *       GetInventoryRequest.newBuilder()
+   *           .setName(InventoryName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .setView(InventoryView.forNumber(0))
+   *           .build();
+   *   Inventory response = osConfigZonalServiceClient.getInventory(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Inventory getInventory(GetInventoryRequest request) {
+<span class="fc" id="L1654">    return getInventoryCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get inventory data for the specified VM instance. If the VM has no associated inventory, the
+   * message `NOT_FOUND` is returned.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   GetInventoryRequest request =
+   *       GetInventoryRequest.newBuilder()
+   *           .setName(InventoryName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .setView(InventoryView.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;Inventory&gt; future =
+   *       osConfigZonalServiceClient.getInventoryCallable().futureCall(request);
+   *   // Do something.
+   *   Inventory response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetInventoryRequest, Inventory&gt; getInventoryCallable() {
+<span class="fc" id="L1682">    return stub.getInventoryCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List inventory data for all VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   InstanceName parent =
+   *       InstanceName.ofProjectZoneInstanceName(&quot;[PROJECT]&quot;, &quot;[ZONE]&quot;, &quot;[INSTANCE]&quot;);
+   *   for (Inventory element : osConfigZonalServiceClient.listInventories(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   *     &lt;p&gt;Format: `projects/{project}/locations/{location}/instances/-`
+   *     &lt;p&gt;For `{project}`, either `project-number` or `project-id` can be provided.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListInventoriesPagedResponse listInventories(InstanceName parent) {
+    ListInventoriesRequest request =
+<span class="fc" id="L1711">        ListInventoriesRequest.newBuilder()</span>
+<span class="pc bpc" id="L1712" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1713">            .build();</span>
+<span class="fc" id="L1714">    return listInventories(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List inventory data for all VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   String parent =
+   *       InstanceName.ofProjectZoneInstanceName(&quot;[PROJECT]&quot;, &quot;[ZONE]&quot;, &quot;[INSTANCE]&quot;).toString();
+   *   for (Inventory element : osConfigZonalServiceClient.listInventories(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   *     &lt;p&gt;Format: `projects/{project}/locations/{location}/instances/-`
+   *     &lt;p&gt;For `{project}`, either `project-number` or `project-id` can be provided.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListInventoriesPagedResponse listInventories(String parent) {
+<span class="fc" id="L1742">    ListInventoriesRequest request = ListInventoriesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1743">    return listInventories(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List inventory data for all VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListInventoriesRequest request =
+   *       ListInventoriesRequest.newBuilder()
+   *           .setParent(
+   *               InstanceName.ofProjectZoneInstanceName(&quot;[PROJECT]&quot;, &quot;[ZONE]&quot;, &quot;[INSTANCE]&quot;)
+   *                   .toString())
+   *           .setView(InventoryView.forNumber(0))
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   for (Inventory element : osConfigZonalServiceClient.listInventories(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListInventoriesPagedResponse listInventories(ListInventoriesRequest request) {
+<span class="fc" id="L1777">    return listInventoriesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List inventory data for all VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListInventoriesRequest request =
+   *       ListInventoriesRequest.newBuilder()
+   *           .setParent(
+   *               InstanceName.ofProjectZoneInstanceName(&quot;[PROJECT]&quot;, &quot;[ZONE]&quot;, &quot;[INSTANCE]&quot;)
+   *                   .toString())
+   *           .setView(InventoryView.forNumber(0))
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;Inventory&gt; future =
+   *       osConfigZonalServiceClient.listInventoriesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Inventory element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListInventoriesRequest, ListInventoriesPagedResponse&gt;
+      listInventoriesPagedCallable() {
+<span class="fc" id="L1812">    return stub.listInventoriesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List inventory data for all VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListInventoriesRequest request =
+   *       ListInventoriesRequest.newBuilder()
+   *           .setParent(
+   *               InstanceName.ofProjectZoneInstanceName(&quot;[PROJECT]&quot;, &quot;[ZONE]&quot;, &quot;[INSTANCE]&quot;)
+   *                   .toString())
+   *           .setView(InventoryView.forNumber(0))
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListInventoriesResponse response =
+   *         osConfigZonalServiceClient.listInventoriesCallable().call(request);
+   *     for (Inventory element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListInventoriesRequest, ListInventoriesResponse&gt;
+      listInventoriesCallable() {
+<span class="nc" id="L1854">    return stub.listInventoriesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the vulnerability report for the specified VM instance. Only VMs with inventory data have
+   * vulnerability reports associated with them.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   VulnerabilityReportName name =
+   *       VulnerabilityReportName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;);
+   *   VulnerabilityReport response = osConfigZonalServiceClient.getVulnerabilityReport(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. API resource name for vulnerability resource.
+   *     &lt;p&gt;Format:
+   *     `projects/{project}/locations/{location}/instances/{instance}/vulnerabilityReport`
+   *     &lt;p&gt;For `{project}`, either `project-number` or `project-id` can be provided. For
+   *     `{instance}`, either Compute Engine `instance-id` or `instance-name` can be provided.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final VulnerabilityReport getVulnerabilityReport(VulnerabilityReportName name) {
+    GetVulnerabilityReportRequest request =
+<span class="fc" id="L1884">        GetVulnerabilityReportRequest.newBuilder()</span>
+<span class="pc bpc" id="L1885" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1886">            .build();</span>
+<span class="fc" id="L1887">    return getVulnerabilityReport(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the vulnerability report for the specified VM instance. Only VMs with inventory data have
+   * vulnerability reports associated with them.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   String name = VulnerabilityReportName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString();
+   *   VulnerabilityReport response = osConfigZonalServiceClient.getVulnerabilityReport(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. API resource name for vulnerability resource.
+   *     &lt;p&gt;Format:
+   *     `projects/{project}/locations/{location}/instances/{instance}/vulnerabilityReport`
+   *     &lt;p&gt;For `{project}`, either `project-number` or `project-id` can be provided. For
+   *     `{instance}`, either Compute Engine `instance-id` or `instance-name` can be provided.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final VulnerabilityReport getVulnerabilityReport(String name) {
+    GetVulnerabilityReportRequest request =
+<span class="fc" id="L1916">        GetVulnerabilityReportRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1917">    return getVulnerabilityReport(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the vulnerability report for the specified VM instance. Only VMs with inventory data have
+   * vulnerability reports associated with them.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   GetVulnerabilityReportRequest request =
+   *       GetVulnerabilityReportRequest.newBuilder()
+   *           .setName(
+   *               VulnerabilityReportName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   VulnerabilityReport response = osConfigZonalServiceClient.getVulnerabilityReport(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final VulnerabilityReport getVulnerabilityReport(GetVulnerabilityReportRequest request) {
+<span class="fc" id="L1945">    return getVulnerabilityReportCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the vulnerability report for the specified VM instance. Only VMs with inventory data have
+   * vulnerability reports associated with them.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   GetVulnerabilityReportRequest request =
+   *       GetVulnerabilityReportRequest.newBuilder()
+   *           .setName(
+   *               VulnerabilityReportName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[INSTANCE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;VulnerabilityReport&gt; future =
+   *       osConfigZonalServiceClient.getVulnerabilityReportCallable().futureCall(request);
+   *   // Do something.
+   *   VulnerabilityReport response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetVulnerabilityReportRequest, VulnerabilityReport&gt;
+      getVulnerabilityReportCallable() {
+<span class="fc" id="L1974">    return stub.getVulnerabilityReportCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List vulnerability reports for all VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   InstanceName parent =
+   *       InstanceName.ofProjectZoneInstanceName(&quot;[PROJECT]&quot;, &quot;[ZONE]&quot;, &quot;[INSTANCE]&quot;);
+   *   for (VulnerabilityReport element :
+   *       osConfigZonalServiceClient.listVulnerabilityReports(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   *     &lt;p&gt;Format: `projects/{project}/locations/{location}/instances/-`
+   *     &lt;p&gt;For `{project}`, either `project-number` or `project-id` can be provided.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListVulnerabilityReportsPagedResponse listVulnerabilityReports(InstanceName parent) {
+    ListVulnerabilityReportsRequest request =
+<span class="fc" id="L2004">        ListVulnerabilityReportsRequest.newBuilder()</span>
+<span class="pc bpc" id="L2005" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L2006">            .build();</span>
+<span class="fc" id="L2007">    return listVulnerabilityReports(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List vulnerability reports for all VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   String parent =
+   *       InstanceName.ofProjectZoneInstanceName(&quot;[PROJECT]&quot;, &quot;[ZONE]&quot;, &quot;[INSTANCE]&quot;).toString();
+   *   for (VulnerabilityReport element :
+   *       osConfigZonalServiceClient.listVulnerabilityReports(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   *     &lt;p&gt;Format: `projects/{project}/locations/{location}/instances/-`
+   *     &lt;p&gt;For `{project}`, either `project-number` or `project-id` can be provided.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListVulnerabilityReportsPagedResponse listVulnerabilityReports(String parent) {
+    ListVulnerabilityReportsRequest request =
+<span class="fc" id="L2037">        ListVulnerabilityReportsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L2038">    return listVulnerabilityReports(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List vulnerability reports for all VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListVulnerabilityReportsRequest request =
+   *       ListVulnerabilityReportsRequest.newBuilder()
+   *           .setParent(
+   *               InstanceName.ofProjectZoneInstanceName(&quot;[PROJECT]&quot;, &quot;[ZONE]&quot;, &quot;[INSTANCE]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   for (VulnerabilityReport element :
+   *       osConfigZonalServiceClient.listVulnerabilityReports(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListVulnerabilityReportsPagedResponse listVulnerabilityReports(
+      ListVulnerabilityReportsRequest request) {
+<span class="fc" id="L2073">    return listVulnerabilityReportsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List vulnerability reports for all VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListVulnerabilityReportsRequest request =
+   *       ListVulnerabilityReportsRequest.newBuilder()
+   *           .setParent(
+   *               InstanceName.ofProjectZoneInstanceName(&quot;[PROJECT]&quot;, &quot;[ZONE]&quot;, &quot;[INSTANCE]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;VulnerabilityReport&gt; future =
+   *       osConfigZonalServiceClient.listVulnerabilityReportsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (VulnerabilityReport element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListVulnerabilityReportsRequest, ListVulnerabilityReportsPagedResponse&gt;
+      listVulnerabilityReportsPagedCallable() {
+<span class="fc" id="L2107">    return stub.listVulnerabilityReportsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List vulnerability reports for all VM instances in the specified zone.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OsConfigZonalServiceClient osConfigZonalServiceClient =
+   *     OsConfigZonalServiceClient.create()) {
+   *   ListVulnerabilityReportsRequest request =
+   *       ListVulnerabilityReportsRequest.newBuilder()
+   *           .setParent(
+   *               InstanceName.ofProjectZoneInstanceName(&quot;[PROJECT]&quot;, &quot;[ZONE]&quot;, &quot;[INSTANCE]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListVulnerabilityReportsResponse response =
+   *         osConfigZonalServiceClient.listVulnerabilityReportsCallable().call(request);
+   *     for (VulnerabilityReport element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListVulnerabilityReportsRequest, ListVulnerabilityReportsResponse&gt;
+      listVulnerabilityReportsCallable() {
+<span class="nc" id="L2148">    return stub.listVulnerabilityReportsCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L2153">    stub.close();</span>
+<span class="fc" id="L2154">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L2158">    stub.shutdown();</span>
+<span class="nc" id="L2159">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L2163">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L2168">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L2173">    stub.shutdownNow();</span>
+<span class="nc" id="L2174">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L2178">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListOSPolicyAssignmentsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListOSPolicyAssignmentsRequest,
+          ListOSPolicyAssignmentsResponse,
+          OSPolicyAssignment,
+          ListOSPolicyAssignmentsPage,
+          ListOSPolicyAssignmentsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListOSPolicyAssignmentsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListOSPolicyAssignmentsRequest, ListOSPolicyAssignmentsResponse, OSPolicyAssignment&gt;
+            context,
+        ApiFuture&lt;ListOSPolicyAssignmentsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListOSPolicyAssignmentsPage&gt; futurePage =
+<span class="fc" id="L2195">          ListOSPolicyAssignmentsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2196">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2198">          input -&gt; new ListOSPolicyAssignmentsPagedResponse(input),</span>
+<span class="fc" id="L2199">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListOSPolicyAssignmentsPagedResponse(ListOSPolicyAssignmentsPage page) {
+<span class="fc" id="L2203">      super(page, ListOSPolicyAssignmentsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2204">    }</span>
+  }
+
+  public static class ListOSPolicyAssignmentsPage
+      extends AbstractPage&lt;
+          ListOSPolicyAssignmentsRequest,
+          ListOSPolicyAssignmentsResponse,
+          OSPolicyAssignment,
+          ListOSPolicyAssignmentsPage&gt; {
+
+    private ListOSPolicyAssignmentsPage(
+        PageContext&lt;
+                ListOSPolicyAssignmentsRequest, ListOSPolicyAssignmentsResponse, OSPolicyAssignment&gt;
+            context,
+        ListOSPolicyAssignmentsResponse response) {
+<span class="fc" id="L2219">      super(context, response);</span>
+<span class="fc" id="L2220">    }</span>
+
+    private static ListOSPolicyAssignmentsPage createEmptyPage() {
+<span class="fc" id="L2223">      return new ListOSPolicyAssignmentsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListOSPolicyAssignmentsPage createPage(
+        PageContext&lt;
+                ListOSPolicyAssignmentsRequest, ListOSPolicyAssignmentsResponse, OSPolicyAssignment&gt;
+            context,
+        ListOSPolicyAssignmentsResponse response) {
+<span class="fc" id="L2232">      return new ListOSPolicyAssignmentsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListOSPolicyAssignmentsPage&gt; createPageAsync(
+        PageContext&lt;
+                ListOSPolicyAssignmentsRequest, ListOSPolicyAssignmentsResponse, OSPolicyAssignment&gt;
+            context,
+        ApiFuture&lt;ListOSPolicyAssignmentsResponse&gt; futureResponse) {
+<span class="fc" id="L2241">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListOSPolicyAssignmentsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListOSPolicyAssignmentsRequest,
+          ListOSPolicyAssignmentsResponse,
+          OSPolicyAssignment,
+          ListOSPolicyAssignmentsPage,
+          ListOSPolicyAssignmentsFixedSizeCollection&gt; {
+
+    private ListOSPolicyAssignmentsFixedSizeCollection(
+        List&lt;ListOSPolicyAssignmentsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2255">      super(pages, collectionSize);</span>
+<span class="fc" id="L2256">    }</span>
+
+    private static ListOSPolicyAssignmentsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2259">      return new ListOSPolicyAssignmentsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListOSPolicyAssignmentsFixedSizeCollection createCollection(
+        List&lt;ListOSPolicyAssignmentsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2265">      return new ListOSPolicyAssignmentsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListOSPolicyAssignmentRevisionsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListOSPolicyAssignmentRevisionsRequest,
+          ListOSPolicyAssignmentRevisionsResponse,
+          OSPolicyAssignment,
+          ListOSPolicyAssignmentRevisionsPage,
+          ListOSPolicyAssignmentRevisionsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListOSPolicyAssignmentRevisionsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListOSPolicyAssignmentRevisionsRequest,
+                ListOSPolicyAssignmentRevisionsResponse,
+                OSPolicyAssignment&gt;
+            context,
+        ApiFuture&lt;ListOSPolicyAssignmentRevisionsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListOSPolicyAssignmentRevisionsPage&gt; futurePage =
+<span class="fc" id="L2285">          ListOSPolicyAssignmentRevisionsPage.createEmptyPage()</span>
+<span class="fc" id="L2286">              .createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2287">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2289">          input -&gt; new ListOSPolicyAssignmentRevisionsPagedResponse(input),</span>
+<span class="fc" id="L2290">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListOSPolicyAssignmentRevisionsPagedResponse(ListOSPolicyAssignmentRevisionsPage page) {
+<span class="fc" id="L2294">      super(page, ListOSPolicyAssignmentRevisionsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2295">    }</span>
+  }
+
+  public static class ListOSPolicyAssignmentRevisionsPage
+      extends AbstractPage&lt;
+          ListOSPolicyAssignmentRevisionsRequest,
+          ListOSPolicyAssignmentRevisionsResponse,
+          OSPolicyAssignment,
+          ListOSPolicyAssignmentRevisionsPage&gt; {
+
+    private ListOSPolicyAssignmentRevisionsPage(
+        PageContext&lt;
+                ListOSPolicyAssignmentRevisionsRequest,
+                ListOSPolicyAssignmentRevisionsResponse,
+                OSPolicyAssignment&gt;
+            context,
+        ListOSPolicyAssignmentRevisionsResponse response) {
+<span class="fc" id="L2312">      super(context, response);</span>
+<span class="fc" id="L2313">    }</span>
+
+    private static ListOSPolicyAssignmentRevisionsPage createEmptyPage() {
+<span class="fc" id="L2316">      return new ListOSPolicyAssignmentRevisionsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListOSPolicyAssignmentRevisionsPage createPage(
+        PageContext&lt;
+                ListOSPolicyAssignmentRevisionsRequest,
+                ListOSPolicyAssignmentRevisionsResponse,
+                OSPolicyAssignment&gt;
+            context,
+        ListOSPolicyAssignmentRevisionsResponse response) {
+<span class="fc" id="L2327">      return new ListOSPolicyAssignmentRevisionsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListOSPolicyAssignmentRevisionsPage&gt; createPageAsync(
+        PageContext&lt;
+                ListOSPolicyAssignmentRevisionsRequest,
+                ListOSPolicyAssignmentRevisionsResponse,
+                OSPolicyAssignment&gt;
+            context,
+        ApiFuture&lt;ListOSPolicyAssignmentRevisionsResponse&gt; futureResponse) {
+<span class="fc" id="L2338">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListOSPolicyAssignmentRevisionsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListOSPolicyAssignmentRevisionsRequest,
+          ListOSPolicyAssignmentRevisionsResponse,
+          OSPolicyAssignment,
+          ListOSPolicyAssignmentRevisionsPage,
+          ListOSPolicyAssignmentRevisionsFixedSizeCollection&gt; {
+
+    private ListOSPolicyAssignmentRevisionsFixedSizeCollection(
+        List&lt;ListOSPolicyAssignmentRevisionsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2352">      super(pages, collectionSize);</span>
+<span class="fc" id="L2353">    }</span>
+
+    private static ListOSPolicyAssignmentRevisionsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2356">      return new ListOSPolicyAssignmentRevisionsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListOSPolicyAssignmentRevisionsFixedSizeCollection createCollection(
+        List&lt;ListOSPolicyAssignmentRevisionsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2362">      return new ListOSPolicyAssignmentRevisionsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListOSPolicyAssignmentReportsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListOSPolicyAssignmentReportsRequest,
+          ListOSPolicyAssignmentReportsResponse,
+          OSPolicyAssignmentReport,
+          ListOSPolicyAssignmentReportsPage,
+          ListOSPolicyAssignmentReportsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListOSPolicyAssignmentReportsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListOSPolicyAssignmentReportsRequest,
+                ListOSPolicyAssignmentReportsResponse,
+                OSPolicyAssignmentReport&gt;
+            context,
+        ApiFuture&lt;ListOSPolicyAssignmentReportsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListOSPolicyAssignmentReportsPage&gt; futurePage =
+<span class="fc" id="L2382">          ListOSPolicyAssignmentReportsPage.createEmptyPage()</span>
+<span class="fc" id="L2383">              .createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2384">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2386">          input -&gt; new ListOSPolicyAssignmentReportsPagedResponse(input),</span>
+<span class="fc" id="L2387">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListOSPolicyAssignmentReportsPagedResponse(ListOSPolicyAssignmentReportsPage page) {
+<span class="fc" id="L2391">      super(page, ListOSPolicyAssignmentReportsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2392">    }</span>
+  }
+
+  public static class ListOSPolicyAssignmentReportsPage
+      extends AbstractPage&lt;
+          ListOSPolicyAssignmentReportsRequest,
+          ListOSPolicyAssignmentReportsResponse,
+          OSPolicyAssignmentReport,
+          ListOSPolicyAssignmentReportsPage&gt; {
+
+    private ListOSPolicyAssignmentReportsPage(
+        PageContext&lt;
+                ListOSPolicyAssignmentReportsRequest,
+                ListOSPolicyAssignmentReportsResponse,
+                OSPolicyAssignmentReport&gt;
+            context,
+        ListOSPolicyAssignmentReportsResponse response) {
+<span class="fc" id="L2409">      super(context, response);</span>
+<span class="fc" id="L2410">    }</span>
+
+    private static ListOSPolicyAssignmentReportsPage createEmptyPage() {
+<span class="fc" id="L2413">      return new ListOSPolicyAssignmentReportsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListOSPolicyAssignmentReportsPage createPage(
+        PageContext&lt;
+                ListOSPolicyAssignmentReportsRequest,
+                ListOSPolicyAssignmentReportsResponse,
+                OSPolicyAssignmentReport&gt;
+            context,
+        ListOSPolicyAssignmentReportsResponse response) {
+<span class="fc" id="L2424">      return new ListOSPolicyAssignmentReportsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListOSPolicyAssignmentReportsPage&gt; createPageAsync(
+        PageContext&lt;
+                ListOSPolicyAssignmentReportsRequest,
+                ListOSPolicyAssignmentReportsResponse,
+                OSPolicyAssignmentReport&gt;
+            context,
+        ApiFuture&lt;ListOSPolicyAssignmentReportsResponse&gt; futureResponse) {
+<span class="fc" id="L2435">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListOSPolicyAssignmentReportsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListOSPolicyAssignmentReportsRequest,
+          ListOSPolicyAssignmentReportsResponse,
+          OSPolicyAssignmentReport,
+          ListOSPolicyAssignmentReportsPage,
+          ListOSPolicyAssignmentReportsFixedSizeCollection&gt; {
+
+    private ListOSPolicyAssignmentReportsFixedSizeCollection(
+        List&lt;ListOSPolicyAssignmentReportsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2449">      super(pages, collectionSize);</span>
+<span class="fc" id="L2450">    }</span>
+
+    private static ListOSPolicyAssignmentReportsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2453">      return new ListOSPolicyAssignmentReportsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListOSPolicyAssignmentReportsFixedSizeCollection createCollection(
+        List&lt;ListOSPolicyAssignmentReportsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2459">      return new ListOSPolicyAssignmentReportsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListInventoriesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListInventoriesRequest,
+          ListInventoriesResponse,
+          Inventory,
+          ListInventoriesPage,
+          ListInventoriesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListInventoriesPagedResponse&gt; createAsync(
+        PageContext&lt;ListInventoriesRequest, ListInventoriesResponse, Inventory&gt; context,
+        ApiFuture&lt;ListInventoriesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListInventoriesPage&gt; futurePage =
+<span class="fc" id="L2475">          ListInventoriesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2476">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2478">          input -&gt; new ListInventoriesPagedResponse(input),</span>
+<span class="fc" id="L2479">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListInventoriesPagedResponse(ListInventoriesPage page) {
+<span class="fc" id="L2483">      super(page, ListInventoriesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2484">    }</span>
+  }
+
+  public static class ListInventoriesPage
+      extends AbstractPage&lt;
+          ListInventoriesRequest, ListInventoriesResponse, Inventory, ListInventoriesPage&gt; {
+
+    private ListInventoriesPage(
+        PageContext&lt;ListInventoriesRequest, ListInventoriesResponse, Inventory&gt; context,
+        ListInventoriesResponse response) {
+<span class="fc" id="L2494">      super(context, response);</span>
+<span class="fc" id="L2495">    }</span>
+
+    private static ListInventoriesPage createEmptyPage() {
+<span class="fc" id="L2498">      return new ListInventoriesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListInventoriesPage createPage(
+        PageContext&lt;ListInventoriesRequest, ListInventoriesResponse, Inventory&gt; context,
+        ListInventoriesResponse response) {
+<span class="fc" id="L2505">      return new ListInventoriesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListInventoriesPage&gt; createPageAsync(
+        PageContext&lt;ListInventoriesRequest, ListInventoriesResponse, Inventory&gt; context,
+        ApiFuture&lt;ListInventoriesResponse&gt; futureResponse) {
+<span class="fc" id="L2512">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListInventoriesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListInventoriesRequest,
+          ListInventoriesResponse,
+          Inventory,
+          ListInventoriesPage,
+          ListInventoriesFixedSizeCollection&gt; {
+
+    private ListInventoriesFixedSizeCollection(
+        List&lt;ListInventoriesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2526">      super(pages, collectionSize);</span>
+<span class="fc" id="L2527">    }</span>
+
+    private static ListInventoriesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2530">      return new ListInventoriesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListInventoriesFixedSizeCollection createCollection(
+        List&lt;ListInventoriesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2536">      return new ListInventoriesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListVulnerabilityReportsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListVulnerabilityReportsRequest,
+          ListVulnerabilityReportsResponse,
+          VulnerabilityReport,
+          ListVulnerabilityReportsPage,
+          ListVulnerabilityReportsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListVulnerabilityReportsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListVulnerabilityReportsRequest,
+                ListVulnerabilityReportsResponse,
+                VulnerabilityReport&gt;
+            context,
+        ApiFuture&lt;ListVulnerabilityReportsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListVulnerabilityReportsPage&gt; futurePage =
+<span class="fc" id="L2556">          ListVulnerabilityReportsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2557">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2559">          input -&gt; new ListVulnerabilityReportsPagedResponse(input),</span>
+<span class="fc" id="L2560">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListVulnerabilityReportsPagedResponse(ListVulnerabilityReportsPage page) {
+<span class="fc" id="L2564">      super(page, ListVulnerabilityReportsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2565">    }</span>
+  }
+
+  public static class ListVulnerabilityReportsPage
+      extends AbstractPage&lt;
+          ListVulnerabilityReportsRequest,
+          ListVulnerabilityReportsResponse,
+          VulnerabilityReport,
+          ListVulnerabilityReportsPage&gt; {
+
+    private ListVulnerabilityReportsPage(
+        PageContext&lt;
+                ListVulnerabilityReportsRequest,
+                ListVulnerabilityReportsResponse,
+                VulnerabilityReport&gt;
+            context,
+        ListVulnerabilityReportsResponse response) {
+<span class="fc" id="L2582">      super(context, response);</span>
+<span class="fc" id="L2583">    }</span>
+
+    private static ListVulnerabilityReportsPage createEmptyPage() {
+<span class="fc" id="L2586">      return new ListVulnerabilityReportsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListVulnerabilityReportsPage createPage(
+        PageContext&lt;
+                ListVulnerabilityReportsRequest,
+                ListVulnerabilityReportsResponse,
+                VulnerabilityReport&gt;
+            context,
+        ListVulnerabilityReportsResponse response) {
+<span class="fc" id="L2597">      return new ListVulnerabilityReportsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListVulnerabilityReportsPage&gt; createPageAsync(
+        PageContext&lt;
+                ListVulnerabilityReportsRequest,
+                ListVulnerabilityReportsResponse,
+                VulnerabilityReport&gt;
+            context,
+        ApiFuture&lt;ListVulnerabilityReportsResponse&gt; futureResponse) {
+<span class="fc" id="L2608">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListVulnerabilityReportsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListVulnerabilityReportsRequest,
+          ListVulnerabilityReportsResponse,
+          VulnerabilityReport,
+          ListVulnerabilityReportsPage,
+          ListVulnerabilityReportsFixedSizeCollection&gt; {
+
+    private ListVulnerabilityReportsFixedSizeCollection(
+        List&lt;ListVulnerabilityReportsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2622">      super(pages, collectionSize);</span>
+<span class="fc" id="L2623">    }</span>
+
+    private static ListVulnerabilityReportsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2626">      return new ListVulnerabilityReportsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListVulnerabilityReportsFixedSizeCollection createCollection(
+        List&lt;ListVulnerabilityReportsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2632">      return new ListVulnerabilityReportsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

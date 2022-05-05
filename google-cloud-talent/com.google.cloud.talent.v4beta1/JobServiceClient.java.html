@@ -1,0 +1,1919 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>JobServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-talent</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.talent.v4beta1</a> &gt; <span class="el_source">JobServiceClient.java</span></div><h1>JobServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.talent.v4beta1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.talent.v4beta1.stub.JobServiceStub;
+import com.google.cloud.talent.v4beta1.stub.JobServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: A service handles job management, including job CRUD, enumeration and
+ * search.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+ *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+ *   Job job = Job.newBuilder().build();
+ *   Job response = jobServiceClient.createJob(parent, job);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the JobServiceClient object to clean up resources such as
+ * threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of JobServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * JobServiceSettings jobServiceSettings =
+ *     JobServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * JobServiceClient jobServiceClient = JobServiceClient.create(jobServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * JobServiceSettings jobServiceSettings =
+ *     JobServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * JobServiceClient jobServiceClient = JobServiceClient.create(jobServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@BetaApi
+@Generated(&quot;by gapic-generator-java&quot;)
+public class JobServiceClient implements BackgroundResource {
+  private final JobServiceSettings settings;
+  private final JobServiceStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of JobServiceClient with default settings. */
+  public static final JobServiceClient create() throws IOException {
+<span class="nc" id="L118">    return create(JobServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of JobServiceClient, using the given settings. The channels are created
+   * based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final JobServiceClient create(JobServiceSettings settings) throws IOException {
+<span class="fc" id="L126">    return new JobServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of JobServiceClient, using the given stub for making calls. This is for
+   * advanced usage - prefer using create(JobServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final JobServiceClient create(JobServiceStub stub) {
+<span class="nc" id="L135">    return new JobServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of JobServiceClient, using the given settings. This is protected so that
+   * it is easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   */
+<span class="fc" id="L142">  protected JobServiceClient(JobServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L143">    this.settings = settings;</span>
+<span class="fc" id="L144">    this.stub = ((JobServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L145">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L146">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L149">  protected JobServiceClient(JobServiceStub stub) {</span>
+<span class="nc" id="L150">    this.settings = null;</span>
+<span class="nc" id="L151">    this.stub = stub;</span>
+<span class="nc" id="L152">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L153">  }</span>
+
+  public final JobServiceSettings getSettings() {
+<span class="nc" id="L156">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public JobServiceStub getStub() {
+<span class="nc" id="L161">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L169">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new job.
+   *
+   * &lt;p&gt;Typically, the job becomes searchable within 10 seconds, but it may take up to 5 minutes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   Job job = Job.newBuilder().build();
+   *   Job response = jobServiceClient.createJob(parent, job);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param job Required. The Job to be created.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Job createJob(ProjectName parent, Job job) {
+    CreateJobRequest request =
+<span class="fc" id="L199">        CreateJobRequest.newBuilder()</span>
+<span class="pc bpc" id="L200" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L201">            .setJob(job)</span>
+<span class="fc" id="L202">            .build();</span>
+<span class="fc" id="L203">    return createJob(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new job.
+   *
+   * &lt;p&gt;Typically, the job becomes searchable within 10 seconds, but it may take up to 5 minutes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   TenantName parent = TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;);
+   *   Job job = Job.newBuilder().build();
+   *   Job response = jobServiceClient.createJob(parent, job);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param job Required. The Job to be created.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Job createJob(TenantName parent, Job job) {
+    CreateJobRequest request =
+<span class="fc" id="L233">        CreateJobRequest.newBuilder()</span>
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L235">            .setJob(job)</span>
+<span class="fc" id="L236">            .build();</span>
+<span class="fc" id="L237">    return createJob(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new job.
+   *
+   * &lt;p&gt;Typically, the job becomes searchable within 10 seconds, but it may take up to 5 minutes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   String parent = TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString();
+   *   Job job = Job.newBuilder().build();
+   *   Job response = jobServiceClient.createJob(parent, job);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param job Required. The Job to be created.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Job createJob(String parent, Job job) {
+<span class="fc" id="L266">    CreateJobRequest request = CreateJobRequest.newBuilder().setParent(parent).setJob(job).build();</span>
+<span class="fc" id="L267">    return createJob(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new job.
+   *
+   * &lt;p&gt;Typically, the job becomes searchable within 10 seconds, but it may take up to 5 minutes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   CreateJobRequest request =
+   *       CreateJobRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .setJob(Job.newBuilder().build())
+   *           .build();
+   *   Job response = jobServiceClient.createJob(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Job createJob(CreateJobRequest request) {
+<span class="fc" id="L295">    return createJobCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new job.
+   *
+   * &lt;p&gt;Typically, the job becomes searchable within 10 seconds, but it may take up to 5 minutes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   CreateJobRequest request =
+   *       CreateJobRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .setJob(Job.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Job&gt; future = jobServiceClient.createJobCallable().futureCall(request);
+   *   // Do something.
+   *   Job response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateJobRequest, Job&gt; createJobCallable() {
+<span class="fc" id="L322">    return stub.createJobCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Begins executing a batch create jobs operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   List&lt;Job&gt; jobs = new ArrayList&lt;&gt;();
+   *   JobOperationResult response = jobServiceClient.batchCreateJobsAsync(parent, jobs).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified, a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param jobs Required. The jobs to be created.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;JobOperationResult, BatchOperationMetadata&gt; batchCreateJobsAsync(
+      ProjectName parent, List&lt;Job&gt; jobs) {
+    BatchCreateJobsRequest request =
+<span class="fc" id="L351">        BatchCreateJobsRequest.newBuilder()</span>
+<span class="pc bpc" id="L352" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L353">            .addAllJobs(jobs)</span>
+<span class="fc" id="L354">            .build();</span>
+<span class="fc" id="L355">    return batchCreateJobsAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Begins executing a batch create jobs operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   TenantName parent = TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;);
+   *   List&lt;Job&gt; jobs = new ArrayList&lt;&gt;();
+   *   JobOperationResult response = jobServiceClient.batchCreateJobsAsync(parent, jobs).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified, a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param jobs Required. The jobs to be created.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;JobOperationResult, BatchOperationMetadata&gt; batchCreateJobsAsync(
+      TenantName parent, List&lt;Job&gt; jobs) {
+    BatchCreateJobsRequest request =
+<span class="fc" id="L384">        BatchCreateJobsRequest.newBuilder()</span>
+<span class="pc bpc" id="L385" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L386">            .addAllJobs(jobs)</span>
+<span class="fc" id="L387">            .build();</span>
+<span class="fc" id="L388">    return batchCreateJobsAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Begins executing a batch create jobs operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   String parent = TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString();
+   *   List&lt;Job&gt; jobs = new ArrayList&lt;&gt;();
+   *   JobOperationResult response = jobServiceClient.batchCreateJobsAsync(parent, jobs).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified, a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param jobs Required. The jobs to be created.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;JobOperationResult, BatchOperationMetadata&gt; batchCreateJobsAsync(
+      String parent, List&lt;Job&gt; jobs) {
+    BatchCreateJobsRequest request =
+<span class="fc" id="L417">        BatchCreateJobsRequest.newBuilder().setParent(parent).addAllJobs(jobs).build();</span>
+<span class="fc" id="L418">    return batchCreateJobsAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Begins executing a batch create jobs operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   BatchCreateJobsRequest request =
+   *       BatchCreateJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .addAllJobs(new ArrayList&lt;Job&gt;())
+   *           .build();
+   *   JobOperationResult response = jobServiceClient.batchCreateJobsAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;JobOperationResult, BatchOperationMetadata&gt; batchCreateJobsAsync(
+      BatchCreateJobsRequest request) {
+<span class="fc" id="L445">    return batchCreateJobsOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Begins executing a batch create jobs operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   BatchCreateJobsRequest request =
+   *       BatchCreateJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .addAllJobs(new ArrayList&lt;Job&gt;())
+   *           .build();
+   *   OperationFuture&lt;JobOperationResult, BatchOperationMetadata&gt; future =
+   *       jobServiceClient.batchCreateJobsOperationCallable().futureCall(request);
+   *   // Do something.
+   *   JobOperationResult response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;BatchCreateJobsRequest, JobOperationResult, BatchOperationMetadata&gt;
+      batchCreateJobsOperationCallable() {
+<span class="fc" id="L472">    return stub.batchCreateJobsOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Begins executing a batch create jobs operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   BatchCreateJobsRequest request =
+   *       BatchCreateJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .addAllJobs(new ArrayList&lt;Job&gt;())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = jobServiceClient.batchCreateJobsCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;BatchCreateJobsRequest, Operation&gt; batchCreateJobsCallable() {
+<span class="nc" id="L497">    return stub.batchCreateJobsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves the specified job, whose status is OPEN or recently EXPIRED within the last 90 days.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   JobName name = JobName.ofProjectTenantJobName(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;, &quot;[JOB]&quot;);
+   *   Job response = jobServiceClient.getJob(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the job to retrieve.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}/jobs/{job_id}&quot;. For example,
+   *     &quot;projects/foo/tenants/bar/jobs/baz&quot;.
+   *     &lt;p&gt;If tenant id is unspecified, the default tenant is used. For example,
+   *     &quot;projects/foo/jobs/bar&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Job getJob(JobName name) {
+    GetJobRequest request =
+<span class="pc bpc" id="L524" title="1 of 2 branches missed.">        GetJobRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L525">    return getJob(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves the specified job, whose status is OPEN or recently EXPIRED within the last 90 days.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   String name = JobName.ofProjectTenantJobName(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;, &quot;[JOB]&quot;).toString();
+   *   Job response = jobServiceClient.getJob(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the job to retrieve.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}/jobs/{job_id}&quot;. For example,
+   *     &quot;projects/foo/tenants/bar/jobs/baz&quot;.
+   *     &lt;p&gt;If tenant id is unspecified, the default tenant is used. For example,
+   *     &quot;projects/foo/jobs/bar&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Job getJob(String name) {
+<span class="fc" id="L551">    GetJobRequest request = GetJobRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L552">    return getJob(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves the specified job, whose status is OPEN or recently EXPIRED within the last 90 days.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   GetJobRequest request =
+   *       GetJobRequest.newBuilder()
+   *           .setName(JobName.ofProjectTenantJobName(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;, &quot;[JOB]&quot;).toString())
+   *           .build();
+   *   Job response = jobServiceClient.getJob(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Job getJob(GetJobRequest request) {
+<span class="fc" id="L577">    return getJobCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves the specified job, whose status is OPEN or recently EXPIRED within the last 90 days.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   GetJobRequest request =
+   *       GetJobRequest.newBuilder()
+   *           .setName(JobName.ofProjectTenantJobName(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;, &quot;[JOB]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Job&gt; future = jobServiceClient.getJobCallable().futureCall(request);
+   *   // Do something.
+   *   Job response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetJobRequest, Job&gt; getJobCallable() {
+<span class="fc" id="L601">    return stub.getJobCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates specified job.
+   *
+   * &lt;p&gt;Typically, updated contents become visible in search results within 10 seconds, but it may
+   * take up to 5 minutes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   Job job = Job.newBuilder().build();
+   *   Job response = jobServiceClient.updateJob(job);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param job Required. The Job to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Job updateJob(Job job) {
+<span class="fc" id="L626">    UpdateJobRequest request = UpdateJobRequest.newBuilder().setJob(job).build();</span>
+<span class="fc" id="L627">    return updateJob(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates specified job.
+   *
+   * &lt;p&gt;Typically, updated contents become visible in search results within 10 seconds, but it may
+   * take up to 5 minutes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   UpdateJobRequest request =
+   *       UpdateJobRequest.newBuilder()
+   *           .setJob(Job.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Job response = jobServiceClient.updateJob(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Job updateJob(UpdateJobRequest request) {
+<span class="fc" id="L656">    return updateJobCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates specified job.
+   *
+   * &lt;p&gt;Typically, updated contents become visible in search results within 10 seconds, but it may
+   * take up to 5 minutes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   UpdateJobRequest request =
+   *       UpdateJobRequest.newBuilder()
+   *           .setJob(Job.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Job&gt; future = jobServiceClient.updateJobCallable().futureCall(request);
+   *   // Do something.
+   *   Job response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateJobRequest, Job&gt; updateJobCallable() {
+<span class="fc" id="L684">    return stub.updateJobCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Begins executing a batch update jobs operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   List&lt;Job&gt; jobs = new ArrayList&lt;&gt;();
+   *   JobOperationResult response = jobServiceClient.batchUpdateJobsAsync(parent, jobs).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified, a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param jobs Required. The jobs to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;JobOperationResult, BatchOperationMetadata&gt; batchUpdateJobsAsync(
+      ProjectName parent, List&lt;Job&gt; jobs) {
+    BatchUpdateJobsRequest request =
+<span class="fc" id="L713">        BatchUpdateJobsRequest.newBuilder()</span>
+<span class="pc bpc" id="L714" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L715">            .addAllJobs(jobs)</span>
+<span class="fc" id="L716">            .build();</span>
+<span class="fc" id="L717">    return batchUpdateJobsAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Begins executing a batch update jobs operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   TenantName parent = TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;);
+   *   List&lt;Job&gt; jobs = new ArrayList&lt;&gt;();
+   *   JobOperationResult response = jobServiceClient.batchUpdateJobsAsync(parent, jobs).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified, a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param jobs Required. The jobs to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;JobOperationResult, BatchOperationMetadata&gt; batchUpdateJobsAsync(
+      TenantName parent, List&lt;Job&gt; jobs) {
+    BatchUpdateJobsRequest request =
+<span class="fc" id="L746">        BatchUpdateJobsRequest.newBuilder()</span>
+<span class="pc bpc" id="L747" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L748">            .addAllJobs(jobs)</span>
+<span class="fc" id="L749">            .build();</span>
+<span class="fc" id="L750">    return batchUpdateJobsAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Begins executing a batch update jobs operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   String parent = TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString();
+   *   List&lt;Job&gt; jobs = new ArrayList&lt;&gt;();
+   *   JobOperationResult response = jobServiceClient.batchUpdateJobsAsync(parent, jobs).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified, a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param jobs Required. The jobs to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;JobOperationResult, BatchOperationMetadata&gt; batchUpdateJobsAsync(
+      String parent, List&lt;Job&gt; jobs) {
+    BatchUpdateJobsRequest request =
+<span class="fc" id="L779">        BatchUpdateJobsRequest.newBuilder().setParent(parent).addAllJobs(jobs).build();</span>
+<span class="fc" id="L780">    return batchUpdateJobsAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Begins executing a batch update jobs operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   BatchUpdateJobsRequest request =
+   *       BatchUpdateJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .addAllJobs(new ArrayList&lt;Job&gt;())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   JobOperationResult response = jobServiceClient.batchUpdateJobsAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;JobOperationResult, BatchOperationMetadata&gt; batchUpdateJobsAsync(
+      BatchUpdateJobsRequest request) {
+<span class="fc" id="L808">    return batchUpdateJobsOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Begins executing a batch update jobs operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   BatchUpdateJobsRequest request =
+   *       BatchUpdateJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .addAllJobs(new ArrayList&lt;Job&gt;())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;JobOperationResult, BatchOperationMetadata&gt; future =
+   *       jobServiceClient.batchUpdateJobsOperationCallable().futureCall(request);
+   *   // Do something.
+   *   JobOperationResult response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;BatchUpdateJobsRequest, JobOperationResult, BatchOperationMetadata&gt;
+      batchUpdateJobsOperationCallable() {
+<span class="fc" id="L836">    return stub.batchUpdateJobsOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Begins executing a batch update jobs operation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   BatchUpdateJobsRequest request =
+   *       BatchUpdateJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .addAllJobs(new ArrayList&lt;Job&gt;())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = jobServiceClient.batchUpdateJobsCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;BatchUpdateJobsRequest, Operation&gt; batchUpdateJobsCallable() {
+<span class="nc" id="L862">    return stub.batchUpdateJobsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified job.
+   *
+   * &lt;p&gt;Typically, the job becomes unsearchable within 10 seconds, but it may take up to 5 minutes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   JobName name = JobName.ofProjectTenantJobName(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;, &quot;[JOB]&quot;);
+   *   jobServiceClient.deleteJob(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the job to be deleted.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}/jobs/{job_id}&quot;. For example,
+   *     &quot;projects/foo/tenants/bar/jobs/baz&quot;.
+   *     &lt;p&gt;If tenant id is unspecified, the default tenant is used. For example,
+   *     &quot;projects/foo/jobs/bar&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteJob(JobName name) {
+    DeleteJobRequest request =
+<span class="pc bpc" id="L891" title="1 of 2 branches missed.">        DeleteJobRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L892">    deleteJob(request);</span>
+<span class="fc" id="L893">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified job.
+   *
+   * &lt;p&gt;Typically, the job becomes unsearchable within 10 seconds, but it may take up to 5 minutes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   String name = JobName.ofProjectTenantJobName(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;, &quot;[JOB]&quot;).toString();
+   *   jobServiceClient.deleteJob(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the job to be deleted.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}/jobs/{job_id}&quot;. For example,
+   *     &quot;projects/foo/tenants/bar/jobs/baz&quot;.
+   *     &lt;p&gt;If tenant id is unspecified, the default tenant is used. For example,
+   *     &quot;projects/foo/jobs/bar&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteJob(String name) {
+<span class="fc" id="L920">    DeleteJobRequest request = DeleteJobRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L921">    deleteJob(request);</span>
+<span class="fc" id="L922">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified job.
+   *
+   * &lt;p&gt;Typically, the job becomes unsearchable within 10 seconds, but it may take up to 5 minutes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   DeleteJobRequest request =
+   *       DeleteJobRequest.newBuilder()
+   *           .setName(JobName.ofProjectTenantJobName(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;, &quot;[JOB]&quot;).toString())
+   *           .build();
+   *   jobServiceClient.deleteJob(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteJob(DeleteJobRequest request) {
+<span class="fc" id="L948">    deleteJobCallable().call(request);</span>
+<span class="fc" id="L949">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes the specified job.
+   *
+   * &lt;p&gt;Typically, the job becomes unsearchable within 10 seconds, but it may take up to 5 minutes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   DeleteJobRequest request =
+   *       DeleteJobRequest.newBuilder()
+   *           .setName(JobName.ofProjectTenantJobName(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;, &quot;[JOB]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = jobServiceClient.deleteJobCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteJobRequest, Empty&gt; deleteJobCallable() {
+<span class="fc" id="L974">    return stub.deleteJobCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a list of [Job][google.cloud.talent.v4beta1.Job]s by filter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   String filter = &quot;filter-1274492040&quot;;
+   *   jobServiceClient.batchDeleteJobs(parent, filter);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified, a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param filter Required. The filter string specifies the jobs to be deleted.
+   *     &lt;p&gt;Supported operator: =, AND
+   *     &lt;p&gt;The fields eligible for filtering are:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`companyName` (Required)
+   *       &lt;li&gt;`requisitionId` (Required)
+   *     &lt;/ul&gt;
+   *     &lt;p&gt;Sample Query: companyName = &quot;projects/foo/companies/bar&quot; AND requisitionId = &quot;req-1&quot;
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void batchDeleteJobs(ProjectName parent, String filter) {
+    BatchDeleteJobsRequest request =
+<span class="fc" id="L1009">        BatchDeleteJobsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1010" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1011">            .setFilter(filter)</span>
+<span class="fc" id="L1012">            .build();</span>
+<span class="fc" id="L1013">    batchDeleteJobs(request);</span>
+<span class="fc" id="L1014">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a list of [Job][google.cloud.talent.v4beta1.Job]s by filter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   TenantName parent = TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;);
+   *   String filter = &quot;filter-1274492040&quot;;
+   *   jobServiceClient.batchDeleteJobs(parent, filter);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified, a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param filter Required. The filter string specifies the jobs to be deleted.
+   *     &lt;p&gt;Supported operator: =, AND
+   *     &lt;p&gt;The fields eligible for filtering are:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`companyName` (Required)
+   *       &lt;li&gt;`requisitionId` (Required)
+   *     &lt;/ul&gt;
+   *     &lt;p&gt;Sample Query: companyName = &quot;projects/foo/companies/bar&quot; AND requisitionId = &quot;req-1&quot;
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void batchDeleteJobs(TenantName parent, String filter) {
+    BatchDeleteJobsRequest request =
+<span class="fc" id="L1048">        BatchDeleteJobsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1049" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1050">            .setFilter(filter)</span>
+<span class="fc" id="L1051">            .build();</span>
+<span class="fc" id="L1052">    batchDeleteJobs(request);</span>
+<span class="fc" id="L1053">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a list of [Job][google.cloud.talent.v4beta1.Job]s by filter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   String parent = TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString();
+   *   String filter = &quot;filter-1274492040&quot;;
+   *   jobServiceClient.batchDeleteJobs(parent, filter);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified, a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param filter Required. The filter string specifies the jobs to be deleted.
+   *     &lt;p&gt;Supported operator: =, AND
+   *     &lt;p&gt;The fields eligible for filtering are:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`companyName` (Required)
+   *       &lt;li&gt;`requisitionId` (Required)
+   *     &lt;/ul&gt;
+   *     &lt;p&gt;Sample Query: companyName = &quot;projects/foo/companies/bar&quot; AND requisitionId = &quot;req-1&quot;
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void batchDeleteJobs(String parent, String filter) {
+    BatchDeleteJobsRequest request =
+<span class="fc" id="L1087">        BatchDeleteJobsRequest.newBuilder().setParent(parent).setFilter(filter).build();</span>
+<span class="fc" id="L1088">    batchDeleteJobs(request);</span>
+<span class="fc" id="L1089">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a list of [Job][google.cloud.talent.v4beta1.Job]s by filter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   BatchDeleteJobsRequest request =
+   *       BatchDeleteJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   jobServiceClient.batchDeleteJobs(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void batchDeleteJobs(BatchDeleteJobsRequest request) {
+<span class="fc" id="L1114">    batchDeleteJobsCallable().call(request);</span>
+<span class="fc" id="L1115">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a list of [Job][google.cloud.talent.v4beta1.Job]s by filter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   BatchDeleteJobsRequest request =
+   *       BatchDeleteJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = jobServiceClient.batchDeleteJobsCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;BatchDeleteJobsRequest, Empty&gt; batchDeleteJobsCallable() {
+<span class="fc" id="L1139">    return stub.batchDeleteJobsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists jobs by filter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   String filter = &quot;filter-1274492040&quot;;
+   *   for (Job element : jobServiceClient.listJobs(parent, filter).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified, a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param filter Required. The filter string specifies the jobs to be enumerated.
+   *     &lt;p&gt;Supported operator: =, AND
+   *     &lt;p&gt;The fields eligible for filtering are:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`companyName` (Required)
+   *       &lt;li&gt;`requisitionId`
+   *       &lt;li&gt;`status` Available values: OPEN, EXPIRED, ALL. Defaults to OPEN if no value is
+   *           specified.
+   *     &lt;/ul&gt;
+   *     &lt;p&gt;Sample Query:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;companyName = &quot;projects/foo/tenants/bar/companies/baz&quot;
+   *       &lt;li&gt;companyName = &quot;projects/foo/tenants/bar/companies/baz&quot; AND requisitionId = &quot;req-1&quot;
+   *       &lt;li&gt;companyName = &quot;projects/foo/tenants/bar/companies/baz&quot; AND status = &quot;EXPIRED&quot;
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListJobsPagedResponse listJobs(ProjectName parent, String filter) {
+    ListJobsRequest request =
+<span class="fc" id="L1184">        ListJobsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1185" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1186">            .setFilter(filter)</span>
+<span class="fc" id="L1187">            .build();</span>
+<span class="fc" id="L1188">    return listJobs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists jobs by filter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   TenantName parent = TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;);
+   *   String filter = &quot;filter-1274492040&quot;;
+   *   for (Job element : jobServiceClient.listJobs(parent, filter).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified, a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param filter Required. The filter string specifies the jobs to be enumerated.
+   *     &lt;p&gt;Supported operator: =, AND
+   *     &lt;p&gt;The fields eligible for filtering are:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`companyName` (Required)
+   *       &lt;li&gt;`requisitionId`
+   *       &lt;li&gt;`status` Available values: OPEN, EXPIRED, ALL. Defaults to OPEN if no value is
+   *           specified.
+   *     &lt;/ul&gt;
+   *     &lt;p&gt;Sample Query:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;companyName = &quot;projects/foo/tenants/bar/companies/baz&quot;
+   *       &lt;li&gt;companyName = &quot;projects/foo/tenants/bar/companies/baz&quot; AND requisitionId = &quot;req-1&quot;
+   *       &lt;li&gt;companyName = &quot;projects/foo/tenants/bar/companies/baz&quot; AND status = &quot;EXPIRED&quot;
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListJobsPagedResponse listJobs(TenantName parent, String filter) {
+    ListJobsRequest request =
+<span class="fc" id="L1233">        ListJobsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1234" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1235">            .setFilter(filter)</span>
+<span class="fc" id="L1236">            .build();</span>
+<span class="fc" id="L1237">    return listJobs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists jobs by filter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   String parent = TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString();
+   *   String filter = &quot;filter-1274492040&quot;;
+   *   for (Job element : jobServiceClient.listJobs(parent, filter).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the tenant under which the job is created.
+   *     &lt;p&gt;The format is &quot;projects/{project_id}/tenants/{tenant_id}&quot;. For example,
+   *     &quot;projects/foo/tenant/bar&quot;. If tenant id is unspecified, a default tenant is created. For
+   *     example, &quot;projects/foo&quot;.
+   * @param filter Required. The filter string specifies the jobs to be enumerated.
+   *     &lt;p&gt;Supported operator: =, AND
+   *     &lt;p&gt;The fields eligible for filtering are:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`companyName` (Required)
+   *       &lt;li&gt;`requisitionId`
+   *       &lt;li&gt;`status` Available values: OPEN, EXPIRED, ALL. Defaults to OPEN if no value is
+   *           specified.
+   *     &lt;/ul&gt;
+   *     &lt;p&gt;Sample Query:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;companyName = &quot;projects/foo/tenants/bar/companies/baz&quot;
+   *       &lt;li&gt;companyName = &quot;projects/foo/tenants/bar/companies/baz&quot; AND requisitionId = &quot;req-1&quot;
+   *       &lt;li&gt;companyName = &quot;projects/foo/tenants/bar/companies/baz&quot; AND status = &quot;EXPIRED&quot;
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListJobsPagedResponse listJobs(String parent, String filter) {
+    ListJobsRequest request =
+<span class="fc" id="L1282">        ListJobsRequest.newBuilder().setParent(parent).setFilter(filter).build();</span>
+<span class="fc" id="L1283">    return listJobs(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists jobs by filter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   ListJobsRequest request =
+   *       ListJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .setJobView(JobView.forNumber(0))
+   *           .build();
+   *   for (Job element : jobServiceClient.listJobs(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListJobsPagedResponse listJobs(ListJobsRequest request) {
+<span class="fc" id="L1314">    return listJobsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists jobs by filter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   ListJobsRequest request =
+   *       ListJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .setJobView(JobView.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;Job&gt; future = jobServiceClient.listJobsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Job element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListJobsRequest, ListJobsPagedResponse&gt; listJobsPagedCallable() {
+<span class="fc" id="L1344">    return stub.listJobsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists jobs by filter.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   ListJobsRequest request =
+   *       ListJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .setJobView(JobView.forNumber(0))
+   *           .build();
+   *   while (true) {
+   *     ListJobsResponse response = jobServiceClient.listJobsCallable().call(request);
+   *     for (Job element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListJobsRequest, ListJobsResponse&gt; listJobsCallable() {
+<span class="nc" id="L1381">    return stub.listJobsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Searches for jobs using the provided
+   * [SearchJobsRequest][google.cloud.talent.v4beta1.SearchJobsRequest].
+   *
+   * &lt;p&gt;This call constrains the [visibility][google.cloud.talent.v4beta1.Job.visibility] of jobs
+   * present in the database, and only returns jobs that the caller has permission to search
+   * against.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   SearchJobsRequest request =
+   *       SearchJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .setRequestMetadata(RequestMetadata.newBuilder().build())
+   *           .setJobQuery(JobQuery.newBuilder().build())
+   *           .setEnableBroadening(true)
+   *           .setRequirePreciseResultSize(true)
+   *           .addAllHistogramQueries(new ArrayList&lt;HistogramQuery&gt;())
+   *           .setJobView(JobView.forNumber(0))
+   *           .setOffset(-1019779949)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setCustomRankingInfo(SearchJobsRequest.CustomRankingInfo.newBuilder().build())
+   *           .setDisableKeywordMatch(true)
+   *           .build();
+   *   for (SearchJobsResponse.MatchingJob element :
+   *       jobServiceClient.searchJobs(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SearchJobsPagedResponse searchJobs(SearchJobsRequest request) {
+<span class="fc" id="L1426">    return searchJobsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Searches for jobs using the provided
+   * [SearchJobsRequest][google.cloud.talent.v4beta1.SearchJobsRequest].
+   *
+   * &lt;p&gt;This call constrains the [visibility][google.cloud.talent.v4beta1.Job.visibility] of jobs
+   * present in the database, and only returns jobs that the caller has permission to search
+   * against.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   SearchJobsRequest request =
+   *       SearchJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .setRequestMetadata(RequestMetadata.newBuilder().build())
+   *           .setJobQuery(JobQuery.newBuilder().build())
+   *           .setEnableBroadening(true)
+   *           .setRequirePreciseResultSize(true)
+   *           .addAllHistogramQueries(new ArrayList&lt;HistogramQuery&gt;())
+   *           .setJobView(JobView.forNumber(0))
+   *           .setOffset(-1019779949)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setCustomRankingInfo(SearchJobsRequest.CustomRankingInfo.newBuilder().build())
+   *           .setDisableKeywordMatch(true)
+   *           .build();
+   *   ApiFuture&lt;SearchJobsResponse.MatchingJob&gt; future =
+   *       jobServiceClient.searchJobsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (SearchJobsResponse.MatchingJob element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SearchJobsRequest, SearchJobsPagedResponse&gt; searchJobsPagedCallable() {
+<span class="fc" id="L1470">    return stub.searchJobsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Searches for jobs using the provided
+   * [SearchJobsRequest][google.cloud.talent.v4beta1.SearchJobsRequest].
+   *
+   * &lt;p&gt;This call constrains the [visibility][google.cloud.talent.v4beta1.Job.visibility] of jobs
+   * present in the database, and only returns jobs that the caller has permission to search
+   * against.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   SearchJobsRequest request =
+   *       SearchJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .setRequestMetadata(RequestMetadata.newBuilder().build())
+   *           .setJobQuery(JobQuery.newBuilder().build())
+   *           .setEnableBroadening(true)
+   *           .setRequirePreciseResultSize(true)
+   *           .addAllHistogramQueries(new ArrayList&lt;HistogramQuery&gt;())
+   *           .setJobView(JobView.forNumber(0))
+   *           .setOffset(-1019779949)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setCustomRankingInfo(SearchJobsRequest.CustomRankingInfo.newBuilder().build())
+   *           .setDisableKeywordMatch(true)
+   *           .build();
+   *   while (true) {
+   *     SearchJobsResponse response = jobServiceClient.searchJobsCallable().call(request);
+   *     for (SearchJobsResponse.MatchingJob element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SearchJobsRequest, SearchJobsResponse&gt; searchJobsCallable() {
+<span class="nc" id="L1520">    return stub.searchJobsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Searches for jobs using the provided
+   * [SearchJobsRequest][google.cloud.talent.v4beta1.SearchJobsRequest].
+   *
+   * &lt;p&gt;This API call is intended for the use case of targeting passive job seekers (for example,
+   * job seekers who have signed up to receive email alerts about potential job opportunities), and
+   * has different algorithmic adjustments that are targeted to passive job seekers.
+   *
+   * &lt;p&gt;This call constrains the [visibility][google.cloud.talent.v4beta1.Job.visibility] of jobs
+   * present in the database, and only returns jobs the caller has permission to search against.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   SearchJobsRequest request =
+   *       SearchJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .setRequestMetadata(RequestMetadata.newBuilder().build())
+   *           .setJobQuery(JobQuery.newBuilder().build())
+   *           .setEnableBroadening(true)
+   *           .setRequirePreciseResultSize(true)
+   *           .addAllHistogramQueries(new ArrayList&lt;HistogramQuery&gt;())
+   *           .setJobView(JobView.forNumber(0))
+   *           .setOffset(-1019779949)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setCustomRankingInfo(SearchJobsRequest.CustomRankingInfo.newBuilder().build())
+   *           .setDisableKeywordMatch(true)
+   *           .build();
+   *   for (SearchJobsResponse.MatchingJob element :
+   *       jobServiceClient.searchJobsForAlert(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SearchJobsForAlertPagedResponse searchJobsForAlert(SearchJobsRequest request) {
+<span class="fc" id="L1568">    return searchJobsForAlertPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Searches for jobs using the provided
+   * [SearchJobsRequest][google.cloud.talent.v4beta1.SearchJobsRequest].
+   *
+   * &lt;p&gt;This API call is intended for the use case of targeting passive job seekers (for example,
+   * job seekers who have signed up to receive email alerts about potential job opportunities), and
+   * has different algorithmic adjustments that are targeted to passive job seekers.
+   *
+   * &lt;p&gt;This call constrains the [visibility][google.cloud.talent.v4beta1.Job.visibility] of jobs
+   * present in the database, and only returns jobs the caller has permission to search against.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   SearchJobsRequest request =
+   *       SearchJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .setRequestMetadata(RequestMetadata.newBuilder().build())
+   *           .setJobQuery(JobQuery.newBuilder().build())
+   *           .setEnableBroadening(true)
+   *           .setRequirePreciseResultSize(true)
+   *           .addAllHistogramQueries(new ArrayList&lt;HistogramQuery&gt;())
+   *           .setJobView(JobView.forNumber(0))
+   *           .setOffset(-1019779949)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setCustomRankingInfo(SearchJobsRequest.CustomRankingInfo.newBuilder().build())
+   *           .setDisableKeywordMatch(true)
+   *           .build();
+   *   ApiFuture&lt;SearchJobsResponse.MatchingJob&gt; future =
+   *       jobServiceClient.searchJobsForAlertPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (SearchJobsResponse.MatchingJob element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SearchJobsRequest, SearchJobsForAlertPagedResponse&gt;
+      searchJobsForAlertPagedCallable() {
+<span class="fc" id="L1616">    return stub.searchJobsForAlertPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Searches for jobs using the provided
+   * [SearchJobsRequest][google.cloud.talent.v4beta1.SearchJobsRequest].
+   *
+   * &lt;p&gt;This API call is intended for the use case of targeting passive job seekers (for example,
+   * job seekers who have signed up to receive email alerts about potential job opportunities), and
+   * has different algorithmic adjustments that are targeted to passive job seekers.
+   *
+   * &lt;p&gt;This call constrains the [visibility][google.cloud.talent.v4beta1.Job.visibility] of jobs
+   * present in the database, and only returns jobs the caller has permission to search against.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (JobServiceClient jobServiceClient = JobServiceClient.create()) {
+   *   SearchJobsRequest request =
+   *       SearchJobsRequest.newBuilder()
+   *           .setParent(TenantName.of(&quot;[PROJECT]&quot;, &quot;[TENANT]&quot;).toString())
+   *           .setRequestMetadata(RequestMetadata.newBuilder().build())
+   *           .setJobQuery(JobQuery.newBuilder().build())
+   *           .setEnableBroadening(true)
+   *           .setRequirePreciseResultSize(true)
+   *           .addAllHistogramQueries(new ArrayList&lt;HistogramQuery&gt;())
+   *           .setJobView(JobView.forNumber(0))
+   *           .setOffset(-1019779949)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setCustomRankingInfo(SearchJobsRequest.CustomRankingInfo.newBuilder().build())
+   *           .setDisableKeywordMatch(true)
+   *           .build();
+   *   while (true) {
+   *     SearchJobsResponse response = jobServiceClient.searchJobsForAlertCallable().call(request);
+   *     for (SearchJobsResponse.MatchingJob element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SearchJobsRequest, SearchJobsResponse&gt; searchJobsForAlertCallable() {
+<span class="nc" id="L1669">    return stub.searchJobsForAlertCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1674">    stub.close();</span>
+<span class="fc" id="L1675">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1679">    stub.shutdown();</span>
+<span class="nc" id="L1680">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1684">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1689">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1694">    stub.shutdownNow();</span>
+<span class="nc" id="L1695">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1699">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListJobsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListJobsRequest, ListJobsResponse, Job, ListJobsPage, ListJobsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListJobsPagedResponse&gt; createAsync(
+        PageContext&lt;ListJobsRequest, ListJobsResponse, Job&gt; context,
+        ApiFuture&lt;ListJobsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListJobsPage&gt; futurePage =
+<span class="fc" id="L1710">          ListJobsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1711">      return ApiFutures.transform(</span>
+<span class="fc" id="L1712">          futurePage, input -&gt; new ListJobsPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListJobsPagedResponse(ListJobsPage page) {
+<span class="fc" id="L1716">      super(page, ListJobsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1717">    }</span>
+  }
+
+  public static class ListJobsPage
+      extends AbstractPage&lt;ListJobsRequest, ListJobsResponse, Job, ListJobsPage&gt; {
+
+    private ListJobsPage(
+        PageContext&lt;ListJobsRequest, ListJobsResponse, Job&gt; context, ListJobsResponse response) {
+<span class="fc" id="L1725">      super(context, response);</span>
+<span class="fc" id="L1726">    }</span>
+
+    private static ListJobsPage createEmptyPage() {
+<span class="fc" id="L1729">      return new ListJobsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListJobsPage createPage(
+        PageContext&lt;ListJobsRequest, ListJobsResponse, Job&gt; context, ListJobsResponse response) {
+<span class="fc" id="L1735">      return new ListJobsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListJobsPage&gt; createPageAsync(
+        PageContext&lt;ListJobsRequest, ListJobsResponse, Job&gt; context,
+        ApiFuture&lt;ListJobsResponse&gt; futureResponse) {
+<span class="fc" id="L1742">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListJobsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListJobsRequest, ListJobsResponse, Job, ListJobsPage, ListJobsFixedSizeCollection&gt; {
+
+    private ListJobsFixedSizeCollection(List&lt;ListJobsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1751">      super(pages, collectionSize);</span>
+<span class="fc" id="L1752">    }</span>
+
+    private static ListJobsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1755">      return new ListJobsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListJobsFixedSizeCollection createCollection(
+        List&lt;ListJobsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1761">      return new ListJobsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class SearchJobsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          SearchJobsRequest,
+          SearchJobsResponse,
+          SearchJobsResponse.MatchingJob,
+          SearchJobsPage,
+          SearchJobsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;SearchJobsPagedResponse&gt; createAsync(
+        PageContext&lt;SearchJobsRequest, SearchJobsResponse, SearchJobsResponse.MatchingJob&gt; context,
+        ApiFuture&lt;SearchJobsResponse&gt; futureResponse) {
+      ApiFuture&lt;SearchJobsPage&gt; futurePage =
+<span class="fc" id="L1777">          SearchJobsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1778">      return ApiFutures.transform(</span>
+<span class="fc" id="L1779">          futurePage, input -&gt; new SearchJobsPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private SearchJobsPagedResponse(SearchJobsPage page) {
+<span class="fc" id="L1783">      super(page, SearchJobsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1784">    }</span>
+  }
+
+  public static class SearchJobsPage
+      extends AbstractPage&lt;
+          SearchJobsRequest, SearchJobsResponse, SearchJobsResponse.MatchingJob, SearchJobsPage&gt; {
+
+    private SearchJobsPage(
+        PageContext&lt;SearchJobsRequest, SearchJobsResponse, SearchJobsResponse.MatchingJob&gt; context,
+        SearchJobsResponse response) {
+<span class="fc" id="L1794">      super(context, response);</span>
+<span class="fc" id="L1795">    }</span>
+
+    private static SearchJobsPage createEmptyPage() {
+<span class="fc" id="L1798">      return new SearchJobsPage(null, null);</span>
+    }
+
+    @Override
+    protected SearchJobsPage createPage(
+        PageContext&lt;SearchJobsRequest, SearchJobsResponse, SearchJobsResponse.MatchingJob&gt; context,
+        SearchJobsResponse response) {
+<span class="fc" id="L1805">      return new SearchJobsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;SearchJobsPage&gt; createPageAsync(
+        PageContext&lt;SearchJobsRequest, SearchJobsResponse, SearchJobsResponse.MatchingJob&gt; context,
+        ApiFuture&lt;SearchJobsResponse&gt; futureResponse) {
+<span class="fc" id="L1812">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class SearchJobsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          SearchJobsRequest,
+          SearchJobsResponse,
+          SearchJobsResponse.MatchingJob,
+          SearchJobsPage,
+          SearchJobsFixedSizeCollection&gt; {
+
+    private SearchJobsFixedSizeCollection(List&lt;SearchJobsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1825">      super(pages, collectionSize);</span>
+<span class="fc" id="L1826">    }</span>
+
+    private static SearchJobsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1829">      return new SearchJobsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected SearchJobsFixedSizeCollection createCollection(
+        List&lt;SearchJobsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1835">      return new SearchJobsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class SearchJobsForAlertPagedResponse
+      extends AbstractPagedListResponse&lt;
+          SearchJobsRequest,
+          SearchJobsResponse,
+          SearchJobsResponse.MatchingJob,
+          SearchJobsForAlertPage,
+          SearchJobsForAlertFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;SearchJobsForAlertPagedResponse&gt; createAsync(
+        PageContext&lt;SearchJobsRequest, SearchJobsResponse, SearchJobsResponse.MatchingJob&gt; context,
+        ApiFuture&lt;SearchJobsResponse&gt; futureResponse) {
+      ApiFuture&lt;SearchJobsForAlertPage&gt; futurePage =
+<span class="fc" id="L1851">          SearchJobsForAlertPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1852">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1854">          input -&gt; new SearchJobsForAlertPagedResponse(input),</span>
+<span class="fc" id="L1855">          MoreExecutors.directExecutor());</span>
+    }
+
+    private SearchJobsForAlertPagedResponse(SearchJobsForAlertPage page) {
+<span class="fc" id="L1859">      super(page, SearchJobsForAlertFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1860">    }</span>
+  }
+
+  public static class SearchJobsForAlertPage
+      extends AbstractPage&lt;
+          SearchJobsRequest,
+          SearchJobsResponse,
+          SearchJobsResponse.MatchingJob,
+          SearchJobsForAlertPage&gt; {
+
+    private SearchJobsForAlertPage(
+        PageContext&lt;SearchJobsRequest, SearchJobsResponse, SearchJobsResponse.MatchingJob&gt; context,
+        SearchJobsResponse response) {
+<span class="fc" id="L1873">      super(context, response);</span>
+<span class="fc" id="L1874">    }</span>
+
+    private static SearchJobsForAlertPage createEmptyPage() {
+<span class="fc" id="L1877">      return new SearchJobsForAlertPage(null, null);</span>
+    }
+
+    @Override
+    protected SearchJobsForAlertPage createPage(
+        PageContext&lt;SearchJobsRequest, SearchJobsResponse, SearchJobsResponse.MatchingJob&gt; context,
+        SearchJobsResponse response) {
+<span class="fc" id="L1884">      return new SearchJobsForAlertPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;SearchJobsForAlertPage&gt; createPageAsync(
+        PageContext&lt;SearchJobsRequest, SearchJobsResponse, SearchJobsResponse.MatchingJob&gt; context,
+        ApiFuture&lt;SearchJobsResponse&gt; futureResponse) {
+<span class="fc" id="L1891">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class SearchJobsForAlertFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          SearchJobsRequest,
+          SearchJobsResponse,
+          SearchJobsResponse.MatchingJob,
+          SearchJobsForAlertPage,
+          SearchJobsForAlertFixedSizeCollection&gt; {
+
+    private SearchJobsForAlertFixedSizeCollection(
+        List&lt;SearchJobsForAlertPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1905">      super(pages, collectionSize);</span>
+<span class="fc" id="L1906">    }</span>
+
+    private static SearchJobsForAlertFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1909">      return new SearchJobsForAlertFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected SearchJobsForAlertFixedSizeCollection createCollection(
+        List&lt;SearchJobsForAlertPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1915">      return new SearchJobsForAlertFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,1455 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>OrgPolicyClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-orgpolicy</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.orgpolicy.v2</a> &gt; <span class="el_source">OrgPolicyClient.java</span></div><h1>OrgPolicyClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.orgpolicy.v2;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.orgpolicy.v2.stub.OrgPolicyStub;
+import com.google.cloud.orgpolicy.v2.stub.OrgPolicyStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Empty;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: An interface for managing organization policies.
+ *
+ * &lt;p&gt;The Cloud Org Policy service provides a simple mechanism for organizations to restrict the
+ * allowed configurations across their entire Cloud Resource hierarchy.
+ *
+ * &lt;p&gt;You can use a `policy` to configure restrictions in Cloud resources. For example, you can
+ * enforce a `policy` that restricts which Google Cloud Platform APIs can be activated in a certain
+ * part of your resource hierarchy, or prevents serial port access to VM instances in a particular
+ * folder.
+ *
+ * &lt;p&gt;`Policies` are inherited down through the resource hierarchy. A `policy` applied to a parent
+ * resource automatically applies to all its child resources unless overridden with a `policy` lower
+ * in the hierarchy.
+ *
+ * &lt;p&gt;A `constraint` defines an aspect of a resource's configuration that can be controlled by an
+ * organization's policy administrator. `Policies` are a collection of `constraints` that defines
+ * their allowable configuration on a particular resource and its child resources.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+ *   PolicyName name = PolicyName.ofProjectPolicyName(&quot;[PROJECT]&quot;, &quot;[POLICY]&quot;);
+ *   Policy response = orgPolicyClient.getPolicy(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the OrgPolicyClient object to clean up resources such as
+ * threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of OrgPolicySettings to create().
+ * For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * OrgPolicySettings orgPolicySettings =
+ *     OrgPolicySettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * OrgPolicyClient orgPolicyClient = OrgPolicyClient.create(orgPolicySettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * OrgPolicySettings orgPolicySettings =
+ *     OrgPolicySettings.newBuilder().setEndpoint(myEndpoint).build();
+ * OrgPolicyClient orgPolicyClient = OrgPolicyClient.create(orgPolicySettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class OrgPolicyClient implements BackgroundResource {
+  private final OrgPolicySettings settings;
+  private final OrgPolicyStub stub;
+
+  /** Constructs an instance of OrgPolicyClient with default settings. */
+  public static final OrgPolicyClient create() throws IOException {
+<span class="nc" id="L126">    return create(OrgPolicySettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of OrgPolicyClient, using the given settings. The channels are created
+   * based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final OrgPolicyClient create(OrgPolicySettings settings) throws IOException {
+<span class="fc" id="L134">    return new OrgPolicyClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of OrgPolicyClient, using the given stub for making calls. This is for
+   * advanced usage - prefer using create(OrgPolicySettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final OrgPolicyClient create(OrgPolicyStub stub) {
+<span class="nc" id="L143">    return new OrgPolicyClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of OrgPolicyClient, using the given settings. This is protected so that
+   * it is easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   */
+<span class="fc" id="L150">  protected OrgPolicyClient(OrgPolicySettings settings) throws IOException {</span>
+<span class="fc" id="L151">    this.settings = settings;</span>
+<span class="fc" id="L152">    this.stub = ((OrgPolicyStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L153">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L156">  protected OrgPolicyClient(OrgPolicyStub stub) {</span>
+<span class="nc" id="L157">    this.settings = null;</span>
+<span class="nc" id="L158">    this.stub = stub;</span>
+<span class="nc" id="L159">  }</span>
+
+  public final OrgPolicySettings getSettings() {
+<span class="nc" id="L162">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public OrgPolicyStub getStub() {
+<span class="nc" id="L167">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists `Constraints` that could be applied on the specified resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   FolderName parent = FolderName.of(&quot;[FOLDER]&quot;);
+   *   for (Constraint element : orgPolicyClient.listConstraints(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The Cloud resource that parents the constraint. Must be in one of the
+   *     following forms:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`projects/{project_number}`
+   *       &lt;li&gt;`projects/{project_id}`
+   *       &lt;li&gt;`folders/{folder_id}`
+   *       &lt;li&gt;`organizations/{organization_id}`
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListConstraintsPagedResponse listConstraints(FolderName parent) {
+    ListConstraintsRequest request =
+<span class="fc" id="L200">        ListConstraintsRequest.newBuilder()</span>
+<span class="pc bpc" id="L201" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L202">            .build();</span>
+<span class="fc" id="L203">    return listConstraints(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists `Constraints` that could be applied on the specified resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   OrganizationName parent = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   for (Constraint element : orgPolicyClient.listConstraints(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The Cloud resource that parents the constraint. Must be in one of the
+   *     following forms:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`projects/{project_number}`
+   *       &lt;li&gt;`projects/{project_id}`
+   *       &lt;li&gt;`folders/{folder_id}`
+   *       &lt;li&gt;`organizations/{organization_id}`
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListConstraintsPagedResponse listConstraints(OrganizationName parent) {
+    ListConstraintsRequest request =
+<span class="fc" id="L236">        ListConstraintsRequest.newBuilder()</span>
+<span class="pc bpc" id="L237" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L238">            .build();</span>
+<span class="fc" id="L239">    return listConstraints(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists `Constraints` that could be applied on the specified resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (Constraint element : orgPolicyClient.listConstraints(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The Cloud resource that parents the constraint. Must be in one of the
+   *     following forms:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`projects/{project_number}`
+   *       &lt;li&gt;`projects/{project_id}`
+   *       &lt;li&gt;`folders/{folder_id}`
+   *       &lt;li&gt;`organizations/{organization_id}`
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListConstraintsPagedResponse listConstraints(ProjectName parent) {
+    ListConstraintsRequest request =
+<span class="fc" id="L272">        ListConstraintsRequest.newBuilder()</span>
+<span class="pc bpc" id="L273" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L274">            .build();</span>
+<span class="fc" id="L275">    return listConstraints(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists `Constraints` that could be applied on the specified resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (Constraint element : orgPolicyClient.listConstraints(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The Cloud resource that parents the constraint. Must be in one of the
+   *     following forms:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`projects/{project_number}`
+   *       &lt;li&gt;`projects/{project_id}`
+   *       &lt;li&gt;`folders/{folder_id}`
+   *       &lt;li&gt;`organizations/{organization_id}`
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListConstraintsPagedResponse listConstraints(String parent) {
+<span class="fc" id="L307">    ListConstraintsRequest request = ListConstraintsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L308">    return listConstraints(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists `Constraints` that could be applied on the specified resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   ListConstraintsRequest request =
+   *       ListConstraintsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Constraint element : orgPolicyClient.listConstraints(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListConstraintsPagedResponse listConstraints(ListConstraintsRequest request) {
+<span class="fc" id="L337">    return listConstraintsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists `Constraints` that could be applied on the specified resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   ListConstraintsRequest request =
+   *       ListConstraintsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Constraint&gt; future =
+   *       orgPolicyClient.listConstraintsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Constraint element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListConstraintsRequest, ListConstraintsPagedResponse&gt;
+      listConstraintsPagedCallable() {
+<span class="fc" id="L367">    return stub.listConstraintsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists `Constraints` that could be applied on the specified resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   ListConstraintsRequest request =
+   *       ListConstraintsRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListConstraintsResponse response = orgPolicyClient.listConstraintsCallable().call(request);
+   *     for (Constraint element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListConstraintsRequest, ListConstraintsResponse&gt;
+      listConstraintsCallable() {
+<span class="nc" id="L403">    return stub.listConstraintsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves all of the `Policies` that exist on a particular resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   FolderName parent = FolderName.of(&quot;[FOLDER]&quot;);
+   *   for (Policy element : orgPolicyClient.listPolicies(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The target Cloud resource that parents the set of constraints and
+   *     policies that will be returned from this call. Must be in one of the following forms:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`projects/{project_number}`
+   *       &lt;li&gt;`projects/{project_id}`
+   *       &lt;li&gt;`folders/{folder_id}`
+   *       &lt;li&gt;`organizations/{organization_id}`
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPoliciesPagedResponse listPolicies(FolderName parent) {
+    ListPoliciesRequest request =
+<span class="fc" id="L436">        ListPoliciesRequest.newBuilder()</span>
+<span class="pc bpc" id="L437" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L438">            .build();</span>
+<span class="fc" id="L439">    return listPolicies(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves all of the `Policies` that exist on a particular resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   OrganizationName parent = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   for (Policy element : orgPolicyClient.listPolicies(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The target Cloud resource that parents the set of constraints and
+   *     policies that will be returned from this call. Must be in one of the following forms:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`projects/{project_number}`
+   *       &lt;li&gt;`projects/{project_id}`
+   *       &lt;li&gt;`folders/{folder_id}`
+   *       &lt;li&gt;`organizations/{organization_id}`
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPoliciesPagedResponse listPolicies(OrganizationName parent) {
+    ListPoliciesRequest request =
+<span class="fc" id="L472">        ListPoliciesRequest.newBuilder()</span>
+<span class="pc bpc" id="L473" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L474">            .build();</span>
+<span class="fc" id="L475">    return listPolicies(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves all of the `Policies` that exist on a particular resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (Policy element : orgPolicyClient.listPolicies(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The target Cloud resource that parents the set of constraints and
+   *     policies that will be returned from this call. Must be in one of the following forms:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`projects/{project_number}`
+   *       &lt;li&gt;`projects/{project_id}`
+   *       &lt;li&gt;`folders/{folder_id}`
+   *       &lt;li&gt;`organizations/{organization_id}`
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPoliciesPagedResponse listPolicies(ProjectName parent) {
+    ListPoliciesRequest request =
+<span class="fc" id="L508">        ListPoliciesRequest.newBuilder()</span>
+<span class="pc bpc" id="L509" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L510">            .build();</span>
+<span class="fc" id="L511">    return listPolicies(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves all of the `Policies` that exist on a particular resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (Policy element : orgPolicyClient.listPolicies(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The target Cloud resource that parents the set of constraints and
+   *     policies that will be returned from this call. Must be in one of the following forms:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`projects/{project_number}`
+   *       &lt;li&gt;`projects/{project_id}`
+   *       &lt;li&gt;`folders/{folder_id}`
+   *       &lt;li&gt;`organizations/{organization_id}`
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPoliciesPagedResponse listPolicies(String parent) {
+<span class="fc" id="L543">    ListPoliciesRequest request = ListPoliciesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L544">    return listPolicies(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves all of the `Policies` that exist on a particular resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   ListPoliciesRequest request =
+   *       ListPoliciesRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Policy element : orgPolicyClient.listPolicies(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPoliciesPagedResponse listPolicies(ListPoliciesRequest request) {
+<span class="fc" id="L573">    return listPoliciesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves all of the `Policies` that exist on a particular resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   ListPoliciesRequest request =
+   *       ListPoliciesRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = orgPolicyClient.listPoliciesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Policy element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListPoliciesRequest, ListPoliciesPagedResponse&gt;
+      listPoliciesPagedCallable() {
+<span class="fc" id="L602">    return stub.listPoliciesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves all of the `Policies` that exist on a particular resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   ListPoliciesRequest request =
+   *       ListPoliciesRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListPoliciesResponse response = orgPolicyClient.listPoliciesCallable().call(request);
+   *     for (Policy element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListPoliciesRequest, ListPoliciesResponse&gt; listPoliciesCallable() {
+<span class="nc" id="L637">    return stub.listPoliciesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a `Policy` on a resource.
+   *
+   * &lt;p&gt;If no `Policy` is set on the resource, NOT_FOUND is returned. The `etag` value can be used
+   * with `UpdatePolicy()` to update a `Policy` during read-modify-write.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   PolicyName name = PolicyName.ofProjectPolicyName(&quot;[PROJECT]&quot;, &quot;[POLICY]&quot;);
+   *   Policy response = orgPolicyClient.getPolicy(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the policy. See `Policy` for naming requirements.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getPolicy(PolicyName name) {
+    GetPolicyRequest request =
+<span class="pc bpc" id="L663" title="1 of 2 branches missed.">        GetPolicyRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L664">    return getPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a `Policy` on a resource.
+   *
+   * &lt;p&gt;If no `Policy` is set on the resource, NOT_FOUND is returned. The `etag` value can be used
+   * with `UpdatePolicy()` to update a `Policy` during read-modify-write.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   String name = PolicyName.ofProjectPolicyName(&quot;[PROJECT]&quot;, &quot;[POLICY]&quot;).toString();
+   *   Policy response = orgPolicyClient.getPolicy(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the policy. See `Policy` for naming requirements.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getPolicy(String name) {
+<span class="fc" id="L689">    GetPolicyRequest request = GetPolicyRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L690">    return getPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a `Policy` on a resource.
+   *
+   * &lt;p&gt;If no `Policy` is set on the resource, NOT_FOUND is returned. The `etag` value can be used
+   * with `UpdatePolicy()` to update a `Policy` during read-modify-write.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   GetPolicyRequest request =
+   *       GetPolicyRequest.newBuilder()
+   *           .setName(PolicyName.ofProjectPolicyName(&quot;[PROJECT]&quot;, &quot;[POLICY]&quot;).toString())
+   *           .build();
+   *   Policy response = orgPolicyClient.getPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getPolicy(GetPolicyRequest request) {
+<span class="fc" id="L718">    return getPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a `Policy` on a resource.
+   *
+   * &lt;p&gt;If no `Policy` is set on the resource, NOT_FOUND is returned. The `etag` value can be used
+   * with `UpdatePolicy()` to update a `Policy` during read-modify-write.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   GetPolicyRequest request =
+   *       GetPolicyRequest.newBuilder()
+   *           .setName(PolicyName.ofProjectPolicyName(&quot;[PROJECT]&quot;, &quot;[POLICY]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = orgPolicyClient.getPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetPolicyRequest, Policy&gt; getPolicyCallable() {
+<span class="fc" id="L745">    return stub.getPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the effective `Policy` on a resource. This is the result of merging `Policies` in the
+   * resource hierarchy and evaluating conditions. The returned `Policy` will not have an `etag` or
+   * `condition` set because it is a computed `Policy` across multiple resources. Subtrees of
+   * Resource Manager resource hierarchy with 'under:' prefix will not be expanded.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   PolicyName name = PolicyName.ofProjectPolicyName(&quot;[PROJECT]&quot;, &quot;[POLICY]&quot;);
+   *   Policy response = orgPolicyClient.getEffectivePolicy(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The effective policy to compute. See `Policy` for naming rules.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getEffectivePolicy(PolicyName name) {
+    GetEffectivePolicyRequest request =
+<span class="fc" id="L771">        GetEffectivePolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L772" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L773">            .build();</span>
+<span class="fc" id="L774">    return getEffectivePolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the effective `Policy` on a resource. This is the result of merging `Policies` in the
+   * resource hierarchy and evaluating conditions. The returned `Policy` will not have an `etag` or
+   * `condition` set because it is a computed `Policy` across multiple resources. Subtrees of
+   * Resource Manager resource hierarchy with 'under:' prefix will not be expanded.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   String name = PolicyName.ofProjectPolicyName(&quot;[PROJECT]&quot;, &quot;[POLICY]&quot;).toString();
+   *   Policy response = orgPolicyClient.getEffectivePolicy(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The effective policy to compute. See `Policy` for naming rules.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getEffectivePolicy(String name) {
+    GetEffectivePolicyRequest request =
+<span class="fc" id="L800">        GetEffectivePolicyRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L801">    return getEffectivePolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the effective `Policy` on a resource. This is the result of merging `Policies` in the
+   * resource hierarchy and evaluating conditions. The returned `Policy` will not have an `etag` or
+   * `condition` set because it is a computed `Policy` across multiple resources. Subtrees of
+   * Resource Manager resource hierarchy with 'under:' prefix will not be expanded.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   GetEffectivePolicyRequest request =
+   *       GetEffectivePolicyRequest.newBuilder()
+   *           .setName(PolicyName.ofProjectPolicyName(&quot;[PROJECT]&quot;, &quot;[POLICY]&quot;).toString())
+   *           .build();
+   *   Policy response = orgPolicyClient.getEffectivePolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getEffectivePolicy(GetEffectivePolicyRequest request) {
+<span class="fc" id="L829">    return getEffectivePolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the effective `Policy` on a resource. This is the result of merging `Policies` in the
+   * resource hierarchy and evaluating conditions. The returned `Policy` will not have an `etag` or
+   * `condition` set because it is a computed `Policy` across multiple resources. Subtrees of
+   * Resource Manager resource hierarchy with 'under:' prefix will not be expanded.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   GetEffectivePolicyRequest request =
+   *       GetEffectivePolicyRequest.newBuilder()
+   *           .setName(PolicyName.ofProjectPolicyName(&quot;[PROJECT]&quot;, &quot;[POLICY]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = orgPolicyClient.getEffectivePolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetEffectivePolicyRequest, Policy&gt; getEffectivePolicyCallable() {
+<span class="fc" id="L856">    return stub.getEffectivePolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Policy.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the constraint does not
+   * exist. Returns a `google.rpc.Status` with `google.rpc.Code.ALREADY_EXISTS` if the policy
+   * already exists on the given Cloud resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   FolderName parent = FolderName.of(&quot;[FOLDER]&quot;);
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = orgPolicyClient.createPolicy(parent, policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The Cloud resource that will parent the new Policy. Must be in one of
+   *     the following forms:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`projects/{project_number}`
+   *       &lt;li&gt;`projects/{project_id}`
+   *       &lt;li&gt;`folders/{folder_id}`
+   *       &lt;li&gt;`organizations/{organization_id}`
+   *     &lt;/ul&gt;
+   *
+   * @param policy Required. `Policy` to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy createPolicy(FolderName parent, Policy policy) {
+    CreatePolicyRequest request =
+<span class="fc" id="L893">        CreatePolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L894" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L895">            .setPolicy(policy)</span>
+<span class="fc" id="L896">            .build();</span>
+<span class="fc" id="L897">    return createPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Policy.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the constraint does not
+   * exist. Returns a `google.rpc.Status` with `google.rpc.Code.ALREADY_EXISTS` if the policy
+   * already exists on the given Cloud resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   OrganizationName parent = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = orgPolicyClient.createPolicy(parent, policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The Cloud resource that will parent the new Policy. Must be in one of
+   *     the following forms:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`projects/{project_number}`
+   *       &lt;li&gt;`projects/{project_id}`
+   *       &lt;li&gt;`folders/{folder_id}`
+   *       &lt;li&gt;`organizations/{organization_id}`
+   *     &lt;/ul&gt;
+   *
+   * @param policy Required. `Policy` to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy createPolicy(OrganizationName parent, Policy policy) {
+    CreatePolicyRequest request =
+<span class="fc" id="L934">        CreatePolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L935" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L936">            .setPolicy(policy)</span>
+<span class="fc" id="L937">            .build();</span>
+<span class="fc" id="L938">    return createPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Policy.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the constraint does not
+   * exist. Returns a `google.rpc.Status` with `google.rpc.Code.ALREADY_EXISTS` if the policy
+   * already exists on the given Cloud resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = orgPolicyClient.createPolicy(parent, policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The Cloud resource that will parent the new Policy. Must be in one of
+   *     the following forms:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`projects/{project_number}`
+   *       &lt;li&gt;`projects/{project_id}`
+   *       &lt;li&gt;`folders/{folder_id}`
+   *       &lt;li&gt;`organizations/{organization_id}`
+   *     &lt;/ul&gt;
+   *
+   * @param policy Required. `Policy` to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy createPolicy(ProjectName parent, Policy policy) {
+    CreatePolicyRequest request =
+<span class="fc" id="L975">        CreatePolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L976" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L977">            .setPolicy(policy)</span>
+<span class="fc" id="L978">            .build();</span>
+<span class="fc" id="L979">    return createPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Policy.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the constraint does not
+   * exist. Returns a `google.rpc.Status` with `google.rpc.Code.ALREADY_EXISTS` if the policy
+   * already exists on the given Cloud resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = orgPolicyClient.createPolicy(parent, policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The Cloud resource that will parent the new Policy. Must be in one of
+   *     the following forms:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`projects/{project_number}`
+   *       &lt;li&gt;`projects/{project_id}`
+   *       &lt;li&gt;`folders/{folder_id}`
+   *       &lt;li&gt;`organizations/{organization_id}`
+   *     &lt;/ul&gt;
+   *
+   * @param policy Required. `Policy` to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy createPolicy(String parent, Policy policy) {
+    CreatePolicyRequest request =
+<span class="fc" id="L1016">        CreatePolicyRequest.newBuilder().setParent(parent).setPolicy(policy).build();</span>
+<span class="fc" id="L1017">    return createPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Policy.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the constraint does not
+   * exist. Returns a `google.rpc.Status` with `google.rpc.Code.ALREADY_EXISTS` if the policy
+   * already exists on the given Cloud resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   CreatePolicyRequest request =
+   *       CreatePolicyRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .build();
+   *   Policy response = orgPolicyClient.createPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy createPolicy(CreatePolicyRequest request) {
+<span class="fc" id="L1047">    return createPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Policy.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the constraint does not
+   * exist. Returns a `google.rpc.Status` with `google.rpc.Code.ALREADY_EXISTS` if the policy
+   * already exists on the given Cloud resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   CreatePolicyRequest request =
+   *       CreatePolicyRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = orgPolicyClient.createPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreatePolicyRequest, Policy&gt; createPolicyCallable() {
+<span class="fc" id="L1076">    return stub.createPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a Policy.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the constraint or the
+   * policy do not exist. Returns a `google.rpc.Status` with `google.rpc.Code.ABORTED` if the etag
+   * supplied in the request does not match the persisted etag of the policy
+   *
+   * &lt;p&gt;Note: the supplied policy will perform a full overwrite of all fields.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = orgPolicyClient.updatePolicy(policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param policy Required. `Policy` to update.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy updatePolicy(Policy policy) {
+<span class="fc" id="L1104">    UpdatePolicyRequest request = UpdatePolicyRequest.newBuilder().setPolicy(policy).build();</span>
+<span class="fc" id="L1105">    return updatePolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a Policy.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the constraint or the
+   * policy do not exist. Returns a `google.rpc.Status` with `google.rpc.Code.ABORTED` if the etag
+   * supplied in the request does not match the persisted etag of the policy
+   *
+   * &lt;p&gt;Note: the supplied policy will perform a full overwrite of all fields.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   UpdatePolicyRequest request =
+   *       UpdatePolicyRequest.newBuilder().setPolicy(Policy.newBuilder().build()).build();
+   *   Policy response = orgPolicyClient.updatePolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy updatePolicy(UpdatePolicyRequest request) {
+<span class="fc" id="L1134">    return updatePolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a Policy.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the constraint or the
+   * policy do not exist. Returns a `google.rpc.Status` with `google.rpc.Code.ABORTED` if the etag
+   * supplied in the request does not match the persisted etag of the policy
+   *
+   * &lt;p&gt;Note: the supplied policy will perform a full overwrite of all fields.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   UpdatePolicyRequest request =
+   *       UpdatePolicyRequest.newBuilder().setPolicy(Policy.newBuilder().build()).build();
+   *   ApiFuture&lt;Policy&gt; future = orgPolicyClient.updatePolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdatePolicyRequest, Policy&gt; updatePolicyCallable() {
+<span class="fc" id="L1162">    return stub.updatePolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Policy.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the constraint or Org
+   * Policy does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   PolicyName name = PolicyName.ofProjectPolicyName(&quot;[PROJECT]&quot;, &quot;[POLICY]&quot;);
+   *   orgPolicyClient.deletePolicy(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Name of the policy to delete. See `Policy` for naming rules.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deletePolicy(PolicyName name) {
+    DeletePolicyRequest request =
+<span class="pc bpc" id="L1188" title="1 of 2 branches missed.">        DeletePolicyRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1189">    deletePolicy(request);</span>
+<span class="fc" id="L1190">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Policy.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the constraint or Org
+   * Policy does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   String name = PolicyName.ofProjectPolicyName(&quot;[PROJECT]&quot;, &quot;[POLICY]&quot;).toString();
+   *   orgPolicyClient.deletePolicy(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Name of the policy to delete. See `Policy` for naming rules.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deletePolicy(String name) {
+<span class="fc" id="L1214">    DeletePolicyRequest request = DeletePolicyRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1215">    deletePolicy(request);</span>
+<span class="fc" id="L1216">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Policy.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the constraint or Org
+   * Policy does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   DeletePolicyRequest request =
+   *       DeletePolicyRequest.newBuilder()
+   *           .setName(PolicyName.ofProjectPolicyName(&quot;[PROJECT]&quot;, &quot;[POLICY]&quot;).toString())
+   *           .build();
+   *   orgPolicyClient.deletePolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deletePolicy(DeletePolicyRequest request) {
+<span class="fc" id="L1243">    deletePolicyCallable().call(request);</span>
+<span class="fc" id="L1244">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Policy.
+   *
+   * &lt;p&gt;Returns a `google.rpc.Status` with `google.rpc.Code.NOT_FOUND` if the constraint or Org
+   * Policy does not exist.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (OrgPolicyClient orgPolicyClient = OrgPolicyClient.create()) {
+   *   DeletePolicyRequest request =
+   *       DeletePolicyRequest.newBuilder()
+   *           .setName(PolicyName.ofProjectPolicyName(&quot;[PROJECT]&quot;, &quot;[POLICY]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = orgPolicyClient.deletePolicyCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeletePolicyRequest, Empty&gt; deletePolicyCallable() {
+<span class="fc" id="L1270">    return stub.deletePolicyCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1275">    stub.close();</span>
+<span class="fc" id="L1276">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1280">    stub.shutdown();</span>
+<span class="nc" id="L1281">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1285">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1290">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1295">    stub.shutdownNow();</span>
+<span class="nc" id="L1296">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1300">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListConstraintsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListConstraintsRequest,
+          ListConstraintsResponse,
+          Constraint,
+          ListConstraintsPage,
+          ListConstraintsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListConstraintsPagedResponse&gt; createAsync(
+        PageContext&lt;ListConstraintsRequest, ListConstraintsResponse, Constraint&gt; context,
+        ApiFuture&lt;ListConstraintsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListConstraintsPage&gt; futurePage =
+<span class="fc" id="L1315">          ListConstraintsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1316">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1318">          input -&gt; new ListConstraintsPagedResponse(input),</span>
+<span class="fc" id="L1319">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListConstraintsPagedResponse(ListConstraintsPage page) {
+<span class="fc" id="L1323">      super(page, ListConstraintsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1324">    }</span>
+  }
+
+  public static class ListConstraintsPage
+      extends AbstractPage&lt;
+          ListConstraintsRequest, ListConstraintsResponse, Constraint, ListConstraintsPage&gt; {
+
+    private ListConstraintsPage(
+        PageContext&lt;ListConstraintsRequest, ListConstraintsResponse, Constraint&gt; context,
+        ListConstraintsResponse response) {
+<span class="fc" id="L1334">      super(context, response);</span>
+<span class="fc" id="L1335">    }</span>
+
+    private static ListConstraintsPage createEmptyPage() {
+<span class="fc" id="L1338">      return new ListConstraintsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListConstraintsPage createPage(
+        PageContext&lt;ListConstraintsRequest, ListConstraintsResponse, Constraint&gt; context,
+        ListConstraintsResponse response) {
+<span class="fc" id="L1345">      return new ListConstraintsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListConstraintsPage&gt; createPageAsync(
+        PageContext&lt;ListConstraintsRequest, ListConstraintsResponse, Constraint&gt; context,
+        ApiFuture&lt;ListConstraintsResponse&gt; futureResponse) {
+<span class="fc" id="L1352">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListConstraintsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListConstraintsRequest,
+          ListConstraintsResponse,
+          Constraint,
+          ListConstraintsPage,
+          ListConstraintsFixedSizeCollection&gt; {
+
+    private ListConstraintsFixedSizeCollection(
+        List&lt;ListConstraintsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1366">      super(pages, collectionSize);</span>
+<span class="fc" id="L1367">    }</span>
+
+    private static ListConstraintsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1370">      return new ListConstraintsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListConstraintsFixedSizeCollection createCollection(
+        List&lt;ListConstraintsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1376">      return new ListConstraintsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListPoliciesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListPoliciesRequest,
+          ListPoliciesResponse,
+          Policy,
+          ListPoliciesPage,
+          ListPoliciesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListPoliciesPagedResponse&gt; createAsync(
+        PageContext&lt;ListPoliciesRequest, ListPoliciesResponse, Policy&gt; context,
+        ApiFuture&lt;ListPoliciesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListPoliciesPage&gt; futurePage =
+<span class="fc" id="L1392">          ListPoliciesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1393">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1395">          input -&gt; new ListPoliciesPagedResponse(input),</span>
+<span class="fc" id="L1396">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListPoliciesPagedResponse(ListPoliciesPage page) {
+<span class="fc" id="L1400">      super(page, ListPoliciesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1401">    }</span>
+  }
+
+  public static class ListPoliciesPage
+      extends AbstractPage&lt;ListPoliciesRequest, ListPoliciesResponse, Policy, ListPoliciesPage&gt; {
+
+    private ListPoliciesPage(
+        PageContext&lt;ListPoliciesRequest, ListPoliciesResponse, Policy&gt; context,
+        ListPoliciesResponse response) {
+<span class="fc" id="L1410">      super(context, response);</span>
+<span class="fc" id="L1411">    }</span>
+
+    private static ListPoliciesPage createEmptyPage() {
+<span class="fc" id="L1414">      return new ListPoliciesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListPoliciesPage createPage(
+        PageContext&lt;ListPoliciesRequest, ListPoliciesResponse, Policy&gt; context,
+        ListPoliciesResponse response) {
+<span class="fc" id="L1421">      return new ListPoliciesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListPoliciesPage&gt; createPageAsync(
+        PageContext&lt;ListPoliciesRequest, ListPoliciesResponse, Policy&gt; context,
+        ApiFuture&lt;ListPoliciesResponse&gt; futureResponse) {
+<span class="fc" id="L1428">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListPoliciesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListPoliciesRequest,
+          ListPoliciesResponse,
+          Policy,
+          ListPoliciesPage,
+          ListPoliciesFixedSizeCollection&gt; {
+
+    private ListPoliciesFixedSizeCollection(List&lt;ListPoliciesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1441">      super(pages, collectionSize);</span>
+<span class="fc" id="L1442">    }</span>
+
+    private static ListPoliciesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1445">      return new ListPoliciesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListPoliciesFixedSizeCollection createCollection(
+        List&lt;ListPoliciesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1451">      return new ListPoliciesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

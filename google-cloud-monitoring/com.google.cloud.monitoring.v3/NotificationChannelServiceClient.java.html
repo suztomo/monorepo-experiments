@@ -1,0 +1,2086 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>NotificationChannelServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-monitoring</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.monitoring.v3</a> &gt; <span class="el_source">NotificationChannelServiceClient.java</span></div><h1>NotificationChannelServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.monitoring.v3;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.api.resourcenames.ResourceName;
+import com.google.cloud.monitoring.v3.stub.NotificationChannelServiceStub;
+import com.google.cloud.monitoring.v3.stub.NotificationChannelServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.monitoring.v3.CreateNotificationChannelRequest;
+import com.google.monitoring.v3.DeleteNotificationChannelRequest;
+import com.google.monitoring.v3.GetNotificationChannelDescriptorRequest;
+import com.google.monitoring.v3.GetNotificationChannelRequest;
+import com.google.monitoring.v3.GetNotificationChannelVerificationCodeRequest;
+import com.google.monitoring.v3.GetNotificationChannelVerificationCodeResponse;
+import com.google.monitoring.v3.ListNotificationChannelDescriptorsRequest;
+import com.google.monitoring.v3.ListNotificationChannelDescriptorsResponse;
+import com.google.monitoring.v3.ListNotificationChannelsRequest;
+import com.google.monitoring.v3.ListNotificationChannelsResponse;
+import com.google.monitoring.v3.NotificationChannel;
+import com.google.monitoring.v3.NotificationChannelDescriptor;
+import com.google.monitoring.v3.NotificationChannelDescriptorName;
+import com.google.monitoring.v3.NotificationChannelName;
+import com.google.monitoring.v3.OrganizationName;
+import com.google.monitoring.v3.ProjectName;
+import com.google.monitoring.v3.SendNotificationChannelVerificationCodeRequest;
+import com.google.monitoring.v3.UpdateNotificationChannelRequest;
+import com.google.monitoring.v3.VerifyNotificationChannelRequest;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: The Notification Channel API provides access to configuration that controls
+ * how messages related to incidents are sent.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (NotificationChannelServiceClient notificationChannelServiceClient =
+ *     NotificationChannelServiceClient.create()) {
+ *   NotificationChannelDescriptorName name =
+ *       NotificationChannelDescriptorName.ofProjectChannelDescriptorName(
+ *           &quot;[PROJECT]&quot;, &quot;[CHANNEL_DESCRIPTOR]&quot;);
+ *   NotificationChannelDescriptor response =
+ *       notificationChannelServiceClient.getNotificationChannelDescriptor(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the NotificationChannelServiceClient object to clean up
+ * resources such as threads. In the example above, try-with-resources is used, which automatically
+ * calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of
+ * NotificationChannelServiceSettings to create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * NotificationChannelServiceSettings notificationChannelServiceSettings =
+ *     NotificationChannelServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * NotificationChannelServiceClient notificationChannelServiceClient =
+ *     NotificationChannelServiceClient.create(notificationChannelServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * NotificationChannelServiceSettings notificationChannelServiceSettings =
+ *     NotificationChannelServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * NotificationChannelServiceClient notificationChannelServiceClient =
+ *     NotificationChannelServiceClient.create(notificationChannelServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class NotificationChannelServiceClient implements BackgroundResource {
+  private final NotificationChannelServiceSettings settings;
+  private final NotificationChannelServiceStub stub;
+
+  /** Constructs an instance of NotificationChannelServiceClient with default settings. */
+  public static final NotificationChannelServiceClient create() throws IOException {
+<span class="nc" id="L139">    return create(NotificationChannelServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of NotificationChannelServiceClient, using the given settings. The
+   * channels are created based on the settings passed in, or defaults for any settings that are not
+   * set.
+   */
+  public static final NotificationChannelServiceClient create(
+      NotificationChannelServiceSettings settings) throws IOException {
+<span class="fc" id="L149">    return new NotificationChannelServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of NotificationChannelServiceClient, using the given stub for making
+   * calls. This is for advanced usage - prefer using create(NotificationChannelServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final NotificationChannelServiceClient create(NotificationChannelServiceStub stub) {
+<span class="nc" id="L158">    return new NotificationChannelServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of NotificationChannelServiceClient, using the given settings. This is
+   * protected so that it is easy to make a subclass, but otherwise, the static factory methods
+   * should be preferred.
+   */
+  protected NotificationChannelServiceClient(NotificationChannelServiceSettings settings)
+<span class="fc" id="L167">      throws IOException {</span>
+<span class="fc" id="L168">    this.settings = settings;</span>
+<span class="fc" id="L169">    this.stub = ((NotificationChannelServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L170">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L173">  protected NotificationChannelServiceClient(NotificationChannelServiceStub stub) {</span>
+<span class="nc" id="L174">    this.settings = null;</span>
+<span class="nc" id="L175">    this.stub = stub;</span>
+<span class="nc" id="L176">  }</span>
+
+  public final NotificationChannelServiceSettings getSettings() {
+<span class="nc" id="L179">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public NotificationChannelServiceStub getStub() {
+<span class="nc" id="L184">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the descriptors for supported channel types. The use of descriptors makes it possible for
+   * new channel types to be dynamically added.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   ResourceName name = ResourceName.of(&quot;[FOLDER]&quot;);
+   *   for (NotificationChannelDescriptor element :
+   *       notificationChannelServiceClient.listNotificationChannelDescriptors(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The REST resource name of the parent from which to retrieve the
+   *     notification channel descriptors. The expected syntax is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;Note that this [names](https://cloud.google.com/monitoring/api/v3#project_name) the
+   *     parent container in which to look for the descriptors; to retrieve a single descriptor by
+   *     name, use the
+   *     [GetNotificationChannelDescriptor][google.monitoring.v3.NotificationChannelService.GetNotificationChannelDescriptor]
+   *     operation, instead.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNotificationChannelDescriptorsPagedResponse listNotificationChannelDescriptors(
+      ResourceName name) {
+    ListNotificationChannelDescriptorsRequest request =
+<span class="fc" id="L220">        ListNotificationChannelDescriptorsRequest.newBuilder()</span>
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L222">            .build();</span>
+<span class="fc" id="L223">    return listNotificationChannelDescriptors(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the descriptors for supported channel types. The use of descriptors makes it possible for
+   * new channel types to be dynamically added.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   OrganizationName name = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   for (NotificationChannelDescriptor element :
+   *       notificationChannelServiceClient.listNotificationChannelDescriptors(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The REST resource name of the parent from which to retrieve the
+   *     notification channel descriptors. The expected syntax is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;Note that this [names](https://cloud.google.com/monitoring/api/v3#project_name) the
+   *     parent container in which to look for the descriptors; to retrieve a single descriptor by
+   *     name, use the
+   *     [GetNotificationChannelDescriptor][google.monitoring.v3.NotificationChannelService.GetNotificationChannelDescriptor]
+   *     operation, instead.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNotificationChannelDescriptorsPagedResponse listNotificationChannelDescriptors(
+      OrganizationName name) {
+    ListNotificationChannelDescriptorsRequest request =
+<span class="fc" id="L259">        ListNotificationChannelDescriptorsRequest.newBuilder()</span>
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L261">            .build();</span>
+<span class="fc" id="L262">    return listNotificationChannelDescriptors(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the descriptors for supported channel types. The use of descriptors makes it possible for
+   * new channel types to be dynamically added.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   ProjectName name = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (NotificationChannelDescriptor element :
+   *       notificationChannelServiceClient.listNotificationChannelDescriptors(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The REST resource name of the parent from which to retrieve the
+   *     notification channel descriptors. The expected syntax is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;Note that this [names](https://cloud.google.com/monitoring/api/v3#project_name) the
+   *     parent container in which to look for the descriptors; to retrieve a single descriptor by
+   *     name, use the
+   *     [GetNotificationChannelDescriptor][google.monitoring.v3.NotificationChannelService.GetNotificationChannelDescriptor]
+   *     operation, instead.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNotificationChannelDescriptorsPagedResponse listNotificationChannelDescriptors(
+      ProjectName name) {
+    ListNotificationChannelDescriptorsRequest request =
+<span class="fc" id="L298">        ListNotificationChannelDescriptorsRequest.newBuilder()</span>
+<span class="pc bpc" id="L299" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L300">            .build();</span>
+<span class="fc" id="L301">    return listNotificationChannelDescriptors(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the descriptors for supported channel types. The use of descriptors makes it possible for
+   * new channel types to be dynamically added.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   String name = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (NotificationChannelDescriptor element :
+   *       notificationChannelServiceClient.listNotificationChannelDescriptors(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The REST resource name of the parent from which to retrieve the
+   *     notification channel descriptors. The expected syntax is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;Note that this [names](https://cloud.google.com/monitoring/api/v3#project_name) the
+   *     parent container in which to look for the descriptors; to retrieve a single descriptor by
+   *     name, use the
+   *     [GetNotificationChannelDescriptor][google.monitoring.v3.NotificationChannelService.GetNotificationChannelDescriptor]
+   *     operation, instead.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNotificationChannelDescriptorsPagedResponse listNotificationChannelDescriptors(
+      String name) {
+    ListNotificationChannelDescriptorsRequest request =
+<span class="fc" id="L337">        ListNotificationChannelDescriptorsRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L338">    return listNotificationChannelDescriptors(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the descriptors for supported channel types. The use of descriptors makes it possible for
+   * new channel types to be dynamically added.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   ListNotificationChannelDescriptorsRequest request =
+   *       ListNotificationChannelDescriptorsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (NotificationChannelDescriptor element :
+   *       notificationChannelServiceClient
+   *           .listNotificationChannelDescriptors(request)
+   *           .iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNotificationChannelDescriptorsPagedResponse listNotificationChannelDescriptors(
+      ListNotificationChannelDescriptorsRequest request) {
+<span class="fc" id="L373">    return listNotificationChannelDescriptorsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the descriptors for supported channel types. The use of descriptors makes it possible for
+   * new channel types to be dynamically added.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   ListNotificationChannelDescriptorsRequest request =
+   *       ListNotificationChannelDescriptorsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;NotificationChannelDescriptor&gt; future =
+   *       notificationChannelServiceClient
+   *           .listNotificationChannelDescriptorsPagedCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   for (NotificationChannelDescriptor element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          ListNotificationChannelDescriptorsRequest,
+          ListNotificationChannelDescriptorsPagedResponse&gt;
+      listNotificationChannelDescriptorsPagedCallable() {
+<span class="fc" id="L409">    return stub.listNotificationChannelDescriptorsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the descriptors for supported channel types. The use of descriptors makes it possible for
+   * new channel types to be dynamically added.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   ListNotificationChannelDescriptorsRequest request =
+   *       ListNotificationChannelDescriptorsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListNotificationChannelDescriptorsResponse response =
+   *         notificationChannelServiceClient
+   *             .listNotificationChannelDescriptorsCallable()
+   *             .call(request);
+   *     for (NotificationChannelDescriptor element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          ListNotificationChannelDescriptorsRequest, ListNotificationChannelDescriptorsResponse&gt;
+      listNotificationChannelDescriptorsCallable() {
+<span class="nc" id="L451">    return stub.listNotificationChannelDescriptorsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single channel descriptor. The descriptor indicates which fields are expected /
+   * permitted for a notification channel of the given type.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   NotificationChannelDescriptorName name =
+   *       NotificationChannelDescriptorName.ofProjectChannelDescriptorName(
+   *           &quot;[PROJECT]&quot;, &quot;[CHANNEL_DESCRIPTOR]&quot;);
+   *   NotificationChannelDescriptor response =
+   *       notificationChannelServiceClient.getNotificationChannelDescriptor(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The channel type for which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/notificationChannelDescriptors/[CHANNEL_TYPE]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannelDescriptor getNotificationChannelDescriptor(
+      NotificationChannelDescriptorName name) {
+    GetNotificationChannelDescriptorRequest request =
+<span class="fc" id="L481">        GetNotificationChannelDescriptorRequest.newBuilder()</span>
+<span class="pc bpc" id="L482" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L483">            .build();</span>
+<span class="fc" id="L484">    return getNotificationChannelDescriptor(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single channel descriptor. The descriptor indicates which fields are expected /
+   * permitted for a notification channel of the given type.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   String name =
+   *       NotificationChannelDescriptorName.ofProjectChannelDescriptorName(
+   *               &quot;[PROJECT]&quot;, &quot;[CHANNEL_DESCRIPTOR]&quot;)
+   *           .toString();
+   *   NotificationChannelDescriptor response =
+   *       notificationChannelServiceClient.getNotificationChannelDescriptor(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The channel type for which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/notificationChannelDescriptors/[CHANNEL_TYPE]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannelDescriptor getNotificationChannelDescriptor(String name) {
+    GetNotificationChannelDescriptorRequest request =
+<span class="fc" id="L514">        GetNotificationChannelDescriptorRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L515">    return getNotificationChannelDescriptor(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single channel descriptor. The descriptor indicates which fields are expected /
+   * permitted for a notification channel of the given type.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   GetNotificationChannelDescriptorRequest request =
+   *       GetNotificationChannelDescriptorRequest.newBuilder()
+   *           .setName(
+   *               NotificationChannelDescriptorName.ofProjectChannelDescriptorName(
+   *                       &quot;[PROJECT]&quot;, &quot;[CHANNEL_DESCRIPTOR]&quot;)
+   *                   .toString())
+   *           .build();
+   *   NotificationChannelDescriptor response =
+   *       notificationChannelServiceClient.getNotificationChannelDescriptor(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannelDescriptor getNotificationChannelDescriptor(
+      GetNotificationChannelDescriptorRequest request) {
+<span class="fc" id="L547">    return getNotificationChannelDescriptorCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single channel descriptor. The descriptor indicates which fields are expected /
+   * permitted for a notification channel of the given type.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   GetNotificationChannelDescriptorRequest request =
+   *       GetNotificationChannelDescriptorRequest.newBuilder()
+   *           .setName(
+   *               NotificationChannelDescriptorName.ofProjectChannelDescriptorName(
+   *                       &quot;[PROJECT]&quot;, &quot;[CHANNEL_DESCRIPTOR]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;NotificationChannelDescriptor&gt; future =
+   *       notificationChannelServiceClient
+   *           .getNotificationChannelDescriptorCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   NotificationChannelDescriptor response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetNotificationChannelDescriptorRequest, NotificationChannelDescriptor&gt;
+      getNotificationChannelDescriptorCallable() {
+<span class="fc" id="L580">    return stub.getNotificationChannelDescriptorCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the notification channels that have been created for the project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   ResourceName name = ResourceName.of(&quot;[FOLDER]&quot;);
+   *   for (NotificationChannel element :
+   *       notificationChannelServiceClient.listNotificationChannels(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;This names the container in which to look for the notification channels; it does not
+   *     name a specific channel. To query a specific channel by REST resource name, use the
+   *     [`GetNotificationChannel`][google.monitoring.v3.NotificationChannelService.GetNotificationChannel]
+   *     operation.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNotificationChannelsPagedResponse listNotificationChannels(ResourceName name) {
+    ListNotificationChannelsRequest request =
+<span class="fc" id="L613">        ListNotificationChannelsRequest.newBuilder()</span>
+<span class="pc bpc" id="L614" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L615">            .build();</span>
+<span class="fc" id="L616">    return listNotificationChannels(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the notification channels that have been created for the project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   OrganizationName name = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   for (NotificationChannel element :
+   *       notificationChannelServiceClient.listNotificationChannels(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;This names the container in which to look for the notification channels; it does not
+   *     name a specific channel. To query a specific channel by REST resource name, use the
+   *     [`GetNotificationChannel`][google.monitoring.v3.NotificationChannelService.GetNotificationChannel]
+   *     operation.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNotificationChannelsPagedResponse listNotificationChannels(
+      OrganizationName name) {
+    ListNotificationChannelsRequest request =
+<span class="fc" id="L650">        ListNotificationChannelsRequest.newBuilder()</span>
+<span class="pc bpc" id="L651" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L652">            .build();</span>
+<span class="fc" id="L653">    return listNotificationChannels(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the notification channels that have been created for the project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   ProjectName name = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (NotificationChannel element :
+   *       notificationChannelServiceClient.listNotificationChannels(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;This names the container in which to look for the notification channels; it does not
+   *     name a specific channel. To query a specific channel by REST resource name, use the
+   *     [`GetNotificationChannel`][google.monitoring.v3.NotificationChannelService.GetNotificationChannel]
+   *     operation.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNotificationChannelsPagedResponse listNotificationChannels(ProjectName name) {
+    ListNotificationChannelsRequest request =
+<span class="fc" id="L686">        ListNotificationChannelsRequest.newBuilder()</span>
+<span class="pc bpc" id="L687" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L688">            .build();</span>
+<span class="fc" id="L689">    return listNotificationChannels(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the notification channels that have been created for the project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   String name = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (NotificationChannel element :
+   *       notificationChannelServiceClient.listNotificationChannels(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;This names the container in which to look for the notification channels; it does not
+   *     name a specific channel. To query a specific channel by REST resource name, use the
+   *     [`GetNotificationChannel`][google.monitoring.v3.NotificationChannelService.GetNotificationChannel]
+   *     operation.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNotificationChannelsPagedResponse listNotificationChannels(String name) {
+    ListNotificationChannelsRequest request =
+<span class="fc" id="L722">        ListNotificationChannelsRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L723">    return listNotificationChannels(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the notification channels that have been created for the project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   ListNotificationChannelsRequest request =
+   *       ListNotificationChannelsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (NotificationChannel element :
+   *       notificationChannelServiceClient.listNotificationChannels(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNotificationChannelsPagedResponse listNotificationChannels(
+      ListNotificationChannelsRequest request) {
+<span class="fc" id="L757">    return listNotificationChannelsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the notification channels that have been created for the project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   ListNotificationChannelsRequest request =
+   *       ListNotificationChannelsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;NotificationChannel&gt; future =
+   *       notificationChannelServiceClient
+   *           .listNotificationChannelsPagedCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   for (NotificationChannel element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListNotificationChannelsRequest, ListNotificationChannelsPagedResponse&gt;
+      listNotificationChannelsPagedCallable() {
+<span class="fc" id="L792">    return stub.listNotificationChannelsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the notification channels that have been created for the project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   ListNotificationChannelsRequest request =
+   *       ListNotificationChannelsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListNotificationChannelsResponse response =
+   *         notificationChannelServiceClient.listNotificationChannelsCallable().call(request);
+   *     for (NotificationChannel element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListNotificationChannelsRequest, ListNotificationChannelsResponse&gt;
+      listNotificationChannelsCallable() {
+<span class="nc" id="L832">    return stub.listNotificationChannelsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single notification channel. The channel includes the relevant configuration details
+   * with which the channel was created. However, the response may truncate or omit passwords, API
+   * keys, or other private key matter and thus the response may not be 100% identical to the
+   * information that was supplied in the call to the create method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   NotificationChannelName name =
+   *       NotificationChannelName.ofProjectNotificationChannelName(
+   *           &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;);
+   *   NotificationChannel response = notificationChannelServiceClient.getNotificationChannel(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The channel for which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/notificationChannels/[CHANNEL_ID]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannel getNotificationChannel(NotificationChannelName name) {
+    GetNotificationChannelRequest request =
+<span class="fc" id="L862">        GetNotificationChannelRequest.newBuilder()</span>
+<span class="pc bpc" id="L863" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L864">            .build();</span>
+<span class="fc" id="L865">    return getNotificationChannel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single notification channel. The channel includes the relevant configuration details
+   * with which the channel was created. However, the response may truncate or omit passwords, API
+   * keys, or other private key matter and thus the response may not be 100% identical to the
+   * information that was supplied in the call to the create method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   String name =
+   *       NotificationChannelName.ofProjectNotificationChannelName(
+   *               &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *           .toString();
+   *   NotificationChannel response = notificationChannelServiceClient.getNotificationChannel(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The channel for which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/notificationChannels/[CHANNEL_ID]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannel getNotificationChannel(String name) {
+    GetNotificationChannelRequest request =
+<span class="fc" id="L896">        GetNotificationChannelRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L897">    return getNotificationChannel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single notification channel. The channel includes the relevant configuration details
+   * with which the channel was created. However, the response may truncate or omit passwords, API
+   * keys, or other private key matter and thus the response may not be 100% identical to the
+   * information that was supplied in the call to the create method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   GetNotificationChannelRequest request =
+   *       GetNotificationChannelRequest.newBuilder()
+   *           .setName(
+   *               NotificationChannelName.ofProjectNotificationChannelName(
+   *                       &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *                   .toString())
+   *           .build();
+   *   NotificationChannel response =
+   *       notificationChannelServiceClient.getNotificationChannel(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannel getNotificationChannel(GetNotificationChannelRequest request) {
+<span class="fc" id="L930">    return getNotificationChannelCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single notification channel. The channel includes the relevant configuration details
+   * with which the channel was created. However, the response may truncate or omit passwords, API
+   * keys, or other private key matter and thus the response may not be 100% identical to the
+   * information that was supplied in the call to the create method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   GetNotificationChannelRequest request =
+   *       GetNotificationChannelRequest.newBuilder()
+   *           .setName(
+   *               NotificationChannelName.ofProjectNotificationChannelName(
+   *                       &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;NotificationChannel&gt; future =
+   *       notificationChannelServiceClient.getNotificationChannelCallable().futureCall(request);
+   *   // Do something.
+   *   NotificationChannel response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetNotificationChannelRequest, NotificationChannel&gt;
+      getNotificationChannelCallable() {
+<span class="fc" id="L963">    return stub.getNotificationChannelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new notification channel, representing a single notification endpoint such as an
+   * email address, SMS number, or PagerDuty service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   ResourceName name = ResourceName.of(&quot;[FOLDER]&quot;);
+   *   NotificationChannel notificationChannel = NotificationChannel.newBuilder().build();
+   *   NotificationChannel response =
+   *       notificationChannelServiceClient.createNotificationChannel(name, notificationChannel);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;This names the container into which the channel will be written, this does not name the
+   *     newly created channel. The resulting channel's name will have a normalized version of this
+   *     field as a prefix, but will add `/notificationChannels/[CHANNEL_ID]` to identify the
+   *     channel.
+   * @param notificationChannel Required. The definition of the `NotificationChannel` to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannel createNotificationChannel(
+      ResourceName name, NotificationChannel notificationChannel) {
+    CreateNotificationChannelRequest request =
+<span class="fc" id="L998">        CreateNotificationChannelRequest.newBuilder()</span>
+<span class="pc bpc" id="L999" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1000">            .setNotificationChannel(notificationChannel)</span>
+<span class="fc" id="L1001">            .build();</span>
+<span class="fc" id="L1002">    return createNotificationChannel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new notification channel, representing a single notification endpoint such as an
+   * email address, SMS number, or PagerDuty service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   OrganizationName name = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   NotificationChannel notificationChannel = NotificationChannel.newBuilder().build();
+   *   NotificationChannel response =
+   *       notificationChannelServiceClient.createNotificationChannel(name, notificationChannel);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;This names the container into which the channel will be written, this does not name the
+   *     newly created channel. The resulting channel's name will have a normalized version of this
+   *     field as a prefix, but will add `/notificationChannels/[CHANNEL_ID]` to identify the
+   *     channel.
+   * @param notificationChannel Required. The definition of the `NotificationChannel` to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannel createNotificationChannel(
+      OrganizationName name, NotificationChannel notificationChannel) {
+    CreateNotificationChannelRequest request =
+<span class="fc" id="L1037">        CreateNotificationChannelRequest.newBuilder()</span>
+<span class="pc bpc" id="L1038" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1039">            .setNotificationChannel(notificationChannel)</span>
+<span class="fc" id="L1040">            .build();</span>
+<span class="fc" id="L1041">    return createNotificationChannel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new notification channel, representing a single notification endpoint such as an
+   * email address, SMS number, or PagerDuty service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   ProjectName name = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   NotificationChannel notificationChannel = NotificationChannel.newBuilder().build();
+   *   NotificationChannel response =
+   *       notificationChannelServiceClient.createNotificationChannel(name, notificationChannel);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;This names the container into which the channel will be written, this does not name the
+   *     newly created channel. The resulting channel's name will have a normalized version of this
+   *     field as a prefix, but will add `/notificationChannels/[CHANNEL_ID]` to identify the
+   *     channel.
+   * @param notificationChannel Required. The definition of the `NotificationChannel` to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannel createNotificationChannel(
+      ProjectName name, NotificationChannel notificationChannel) {
+    CreateNotificationChannelRequest request =
+<span class="fc" id="L1076">        CreateNotificationChannelRequest.newBuilder()</span>
+<span class="pc bpc" id="L1077" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1078">            .setNotificationChannel(notificationChannel)</span>
+<span class="fc" id="L1079">            .build();</span>
+<span class="fc" id="L1080">    return createNotificationChannel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new notification channel, representing a single notification endpoint such as an
+   * email address, SMS number, or PagerDuty service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   String name = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   NotificationChannel notificationChannel = NotificationChannel.newBuilder().build();
+   *   NotificationChannel response =
+   *       notificationChannelServiceClient.createNotificationChannel(name, notificationChannel);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   *     &lt;p&gt;This names the container into which the channel will be written, this does not name the
+   *     newly created channel. The resulting channel's name will have a normalized version of this
+   *     field as a prefix, but will add `/notificationChannels/[CHANNEL_ID]` to identify the
+   *     channel.
+   * @param notificationChannel Required. The definition of the `NotificationChannel` to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannel createNotificationChannel(
+      String name, NotificationChannel notificationChannel) {
+    CreateNotificationChannelRequest request =
+<span class="fc" id="L1115">        CreateNotificationChannelRequest.newBuilder()</span>
+<span class="fc" id="L1116">            .setName(name)</span>
+<span class="fc" id="L1117">            .setNotificationChannel(notificationChannel)</span>
+<span class="fc" id="L1118">            .build();</span>
+<span class="fc" id="L1119">    return createNotificationChannel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new notification channel, representing a single notification endpoint such as an
+   * email address, SMS number, or PagerDuty service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   CreateNotificationChannelRequest request =
+   *       CreateNotificationChannelRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setNotificationChannel(NotificationChannel.newBuilder().build())
+   *           .build();
+   *   NotificationChannel response =
+   *       notificationChannelServiceClient.createNotificationChannel(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannel createNotificationChannel(
+      CreateNotificationChannelRequest request) {
+<span class="fc" id="L1149">    return createNotificationChannelCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new notification channel, representing a single notification endpoint such as an
+   * email address, SMS number, or PagerDuty service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   CreateNotificationChannelRequest request =
+   *       CreateNotificationChannelRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setNotificationChannel(NotificationChannel.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;NotificationChannel&gt; future =
+   *       notificationChannelServiceClient.createNotificationChannelCallable().futureCall(request);
+   *   // Do something.
+   *   NotificationChannel response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateNotificationChannelRequest, NotificationChannel&gt;
+      createNotificationChannelCallable() {
+<span class="fc" id="L1178">    return stub.createNotificationChannelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a notification channel. Fields not specified in the field mask remain unchanged.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   NotificationChannel notificationChannel = NotificationChannel.newBuilder().build();
+   *   NotificationChannel response =
+   *       notificationChannelServiceClient.updateNotificationChannel(
+   *           updateMask, notificationChannel);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param updateMask The fields to update.
+   * @param notificationChannel Required. A description of the changes to be applied to the
+   *     specified notification channel. The description must provide a definition for fields to be
+   *     updated; the names of these fields should also be included in the `update_mask`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannel updateNotificationChannel(
+      FieldMask updateMask, NotificationChannel notificationChannel) {
+    UpdateNotificationChannelRequest request =
+<span class="fc" id="L1209">        UpdateNotificationChannelRequest.newBuilder()</span>
+<span class="fc" id="L1210">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L1211">            .setNotificationChannel(notificationChannel)</span>
+<span class="fc" id="L1212">            .build();</span>
+<span class="fc" id="L1213">    return updateNotificationChannel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a notification channel. Fields not specified in the field mask remain unchanged.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   UpdateNotificationChannelRequest request =
+   *       UpdateNotificationChannelRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setNotificationChannel(NotificationChannel.newBuilder().build())
+   *           .build();
+   *   NotificationChannel response =
+   *       notificationChannelServiceClient.updateNotificationChannel(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannel updateNotificationChannel(
+      UpdateNotificationChannelRequest request) {
+<span class="fc" id="L1242">    return updateNotificationChannelCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a notification channel. Fields not specified in the field mask remain unchanged.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   UpdateNotificationChannelRequest request =
+   *       UpdateNotificationChannelRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setNotificationChannel(NotificationChannel.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;NotificationChannel&gt; future =
+   *       notificationChannelServiceClient.updateNotificationChannelCallable().futureCall(request);
+   *   // Do something.
+   *   NotificationChannel response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateNotificationChannelRequest, NotificationChannel&gt;
+      updateNotificationChannelCallable() {
+<span class="fc" id="L1270">    return stub.updateNotificationChannelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a notification channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   NotificationChannelName name =
+   *       NotificationChannelName.ofProjectNotificationChannelName(
+   *           &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;);
+   *   boolean force = true;
+   *   notificationChannelServiceClient.deleteNotificationChannel(name, force);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The channel for which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/notificationChannels/[CHANNEL_ID]
+   * @param force If true, the notification channel will be deleted regardless of its use in alert
+   *     policies (the policies will be updated to remove the channel). If false, channels that are
+   *     still referenced by an existing alerting policy will fail to be deleted in a delete
+   *     operation.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteNotificationChannel(NotificationChannelName name, boolean force) {
+    DeleteNotificationChannelRequest request =
+<span class="fc" id="L1302">        DeleteNotificationChannelRequest.newBuilder()</span>
+<span class="pc bpc" id="L1303" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1304">            .setForce(force)</span>
+<span class="fc" id="L1305">            .build();</span>
+<span class="fc" id="L1306">    deleteNotificationChannel(request);</span>
+<span class="fc" id="L1307">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a notification channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   String name =
+   *       NotificationChannelName.ofProjectNotificationChannelName(
+   *               &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *           .toString();
+   *   boolean force = true;
+   *   notificationChannelServiceClient.deleteNotificationChannel(name, force);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The channel for which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/notificationChannels/[CHANNEL_ID]
+   * @param force If true, the notification channel will be deleted regardless of its use in alert
+   *     policies (the policies will be updated to remove the channel). If false, channels that are
+   *     still referenced by an existing alerting policy will fail to be deleted in a delete
+   *     operation.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteNotificationChannel(String name, boolean force) {
+    DeleteNotificationChannelRequest request =
+<span class="fc" id="L1339">        DeleteNotificationChannelRequest.newBuilder().setName(name).setForce(force).build();</span>
+<span class="fc" id="L1340">    deleteNotificationChannel(request);</span>
+<span class="fc" id="L1341">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a notification channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   DeleteNotificationChannelRequest request =
+   *       DeleteNotificationChannelRequest.newBuilder()
+   *           .setName(
+   *               NotificationChannelName.ofProjectNotificationChannelName(
+   *                       &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *                   .toString())
+   *           .setForce(true)
+   *           .build();
+   *   notificationChannelServiceClient.deleteNotificationChannel(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteNotificationChannel(DeleteNotificationChannelRequest request) {
+<span class="fc" id="L1370">    deleteNotificationChannelCallable().call(request);</span>
+<span class="fc" id="L1371">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a notification channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   DeleteNotificationChannelRequest request =
+   *       DeleteNotificationChannelRequest.newBuilder()
+   *           .setName(
+   *               NotificationChannelName.ofProjectNotificationChannelName(
+   *                       &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *                   .toString())
+   *           .setForce(true)
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       notificationChannelServiceClient.deleteNotificationChannelCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteNotificationChannelRequest, Empty&gt;
+      deleteNotificationChannelCallable() {
+<span class="fc" id="L1401">    return stub.deleteNotificationChannelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Causes a verification code to be delivered to the channel. The code can then be supplied in
+   * `VerifyNotificationChannel` to verify the channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   NotificationChannelName name =
+   *       NotificationChannelName.ofProjectNotificationChannelName(
+   *           &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;);
+   *   notificationChannelServiceClient.sendNotificationChannelVerificationCode(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The notification channel to which to send a verification code.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void sendNotificationChannelVerificationCode(NotificationChannelName name) {
+    SendNotificationChannelVerificationCodeRequest request =
+<span class="fc" id="L1428">        SendNotificationChannelVerificationCodeRequest.newBuilder()</span>
+<span class="pc bpc" id="L1429" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1430">            .build();</span>
+<span class="fc" id="L1431">    sendNotificationChannelVerificationCode(request);</span>
+<span class="fc" id="L1432">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Causes a verification code to be delivered to the channel. The code can then be supplied in
+   * `VerifyNotificationChannel` to verify the channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   String name =
+   *       NotificationChannelName.ofProjectNotificationChannelName(
+   *               &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *           .toString();
+   *   notificationChannelServiceClient.sendNotificationChannelVerificationCode(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The notification channel to which to send a verification code.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void sendNotificationChannelVerificationCode(String name) {
+    SendNotificationChannelVerificationCodeRequest request =
+<span class="fc" id="L1459">        SendNotificationChannelVerificationCodeRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1460">    sendNotificationChannelVerificationCode(request);</span>
+<span class="fc" id="L1461">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Causes a verification code to be delivered to the channel. The code can then be supplied in
+   * `VerifyNotificationChannel` to verify the channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   SendNotificationChannelVerificationCodeRequest request =
+   *       SendNotificationChannelVerificationCodeRequest.newBuilder()
+   *           .setName(
+   *               NotificationChannelName.ofProjectNotificationChannelName(
+   *                       &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *                   .toString())
+   *           .build();
+   *   notificationChannelServiceClient.sendNotificationChannelVerificationCode(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void sendNotificationChannelVerificationCode(
+      SendNotificationChannelVerificationCodeRequest request) {
+<span class="fc" id="L1491">    sendNotificationChannelVerificationCodeCallable().call(request);</span>
+<span class="fc" id="L1492">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Causes a verification code to be delivered to the channel. The code can then be supplied in
+   * `VerifyNotificationChannel` to verify the channel.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   SendNotificationChannelVerificationCodeRequest request =
+   *       SendNotificationChannelVerificationCodeRequest.newBuilder()
+   *           .setName(
+   *               NotificationChannelName.ofProjectNotificationChannelName(
+   *                       &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       notificationChannelServiceClient
+   *           .sendNotificationChannelVerificationCodeCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SendNotificationChannelVerificationCodeRequest, Empty&gt;
+      sendNotificationChannelVerificationCodeCallable() {
+<span class="fc" id="L1524">    return stub.sendNotificationChannelVerificationCodeCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Requests a verification code for an already verified channel that can then be used in a call to
+   * VerifyNotificationChannel() on a different channel with an equivalent identity in the same or
+   * in a different project. This makes it possible to copy a channel between projects without
+   * requiring manual reverification of the channel. If the channel is not in the verified state,
+   * this method will fail (in other words, this may only be used if the
+   * SendNotificationChannelVerificationCode and VerifyNotificationChannel paths have already been
+   * used to put the given channel into the verified state).
+   *
+   * &lt;p&gt;There is no guarantee that the verification codes returned by this method will be of a
+   * similar structure or form as the ones that are delivered to the channel via
+   * SendNotificationChannelVerificationCode; while VerifyNotificationChannel() will recognize both
+   * the codes delivered via SendNotificationChannelVerificationCode() and returned from
+   * GetNotificationChannelVerificationCode(), it is typically the case that the verification codes
+   * delivered via SendNotificationChannelVerificationCode() will be shorter and also have a shorter
+   * expiration (e.g. codes such as &quot;G-123456&quot;) whereas GetVerificationCode() will typically return
+   * a much longer, websafe base 64 encoded string that has a longer expiration time.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   NotificationChannelName name =
+   *       NotificationChannelName.ofProjectNotificationChannelName(
+   *           &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;);
+   *   GetNotificationChannelVerificationCodeResponse response =
+   *       notificationChannelServiceClient.getNotificationChannelVerificationCode(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The notification channel for which a verification code is to be generated
+   *     and retrieved. This must name a channel that is already verified; if the specified channel
+   *     is not verified, the request will fail.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GetNotificationChannelVerificationCodeResponse
+      getNotificationChannelVerificationCode(NotificationChannelName name) {
+    GetNotificationChannelVerificationCodeRequest request =
+<span class="fc" id="L1569">        GetNotificationChannelVerificationCodeRequest.newBuilder()</span>
+<span class="pc bpc" id="L1570" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1571">            .build();</span>
+<span class="fc" id="L1572">    return getNotificationChannelVerificationCode(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Requests a verification code for an already verified channel that can then be used in a call to
+   * VerifyNotificationChannel() on a different channel with an equivalent identity in the same or
+   * in a different project. This makes it possible to copy a channel between projects without
+   * requiring manual reverification of the channel. If the channel is not in the verified state,
+   * this method will fail (in other words, this may only be used if the
+   * SendNotificationChannelVerificationCode and VerifyNotificationChannel paths have already been
+   * used to put the given channel into the verified state).
+   *
+   * &lt;p&gt;There is no guarantee that the verification codes returned by this method will be of a
+   * similar structure or form as the ones that are delivered to the channel via
+   * SendNotificationChannelVerificationCode; while VerifyNotificationChannel() will recognize both
+   * the codes delivered via SendNotificationChannelVerificationCode() and returned from
+   * GetNotificationChannelVerificationCode(), it is typically the case that the verification codes
+   * delivered via SendNotificationChannelVerificationCode() will be shorter and also have a shorter
+   * expiration (e.g. codes such as &quot;G-123456&quot;) whereas GetVerificationCode() will typically return
+   * a much longer, websafe base 64 encoded string that has a longer expiration time.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   String name =
+   *       NotificationChannelName.ofProjectNotificationChannelName(
+   *               &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *           .toString();
+   *   GetNotificationChannelVerificationCodeResponse response =
+   *       notificationChannelServiceClient.getNotificationChannelVerificationCode(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The notification channel for which a verification code is to be generated
+   *     and retrieved. This must name a channel that is already verified; if the specified channel
+   *     is not verified, the request will fail.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GetNotificationChannelVerificationCodeResponse
+      getNotificationChannelVerificationCode(String name) {
+    GetNotificationChannelVerificationCodeRequest request =
+<span class="fc" id="L1618">        GetNotificationChannelVerificationCodeRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1619">    return getNotificationChannelVerificationCode(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Requests a verification code for an already verified channel that can then be used in a call to
+   * VerifyNotificationChannel() on a different channel with an equivalent identity in the same or
+   * in a different project. This makes it possible to copy a channel between projects without
+   * requiring manual reverification of the channel. If the channel is not in the verified state,
+   * this method will fail (in other words, this may only be used if the
+   * SendNotificationChannelVerificationCode and VerifyNotificationChannel paths have already been
+   * used to put the given channel into the verified state).
+   *
+   * &lt;p&gt;There is no guarantee that the verification codes returned by this method will be of a
+   * similar structure or form as the ones that are delivered to the channel via
+   * SendNotificationChannelVerificationCode; while VerifyNotificationChannel() will recognize both
+   * the codes delivered via SendNotificationChannelVerificationCode() and returned from
+   * GetNotificationChannelVerificationCode(), it is typically the case that the verification codes
+   * delivered via SendNotificationChannelVerificationCode() will be shorter and also have a shorter
+   * expiration (e.g. codes such as &quot;G-123456&quot;) whereas GetVerificationCode() will typically return
+   * a much longer, websafe base 64 encoded string that has a longer expiration time.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   GetNotificationChannelVerificationCodeRequest request =
+   *       GetNotificationChannelVerificationCodeRequest.newBuilder()
+   *           .setName(
+   *               NotificationChannelName.ofProjectNotificationChannelName(
+   *                       &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *                   .toString())
+   *           .setExpireTime(Timestamp.newBuilder().build())
+   *           .build();
+   *   GetNotificationChannelVerificationCodeResponse response =
+   *       notificationChannelServiceClient.getNotificationChannelVerificationCode(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GetNotificationChannelVerificationCodeResponse
+      getNotificationChannelVerificationCode(
+          GetNotificationChannelVerificationCodeRequest request) {
+<span class="fc" id="L1667">    return getNotificationChannelVerificationCodeCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Requests a verification code for an already verified channel that can then be used in a call to
+   * VerifyNotificationChannel() on a different channel with an equivalent identity in the same or
+   * in a different project. This makes it possible to copy a channel between projects without
+   * requiring manual reverification of the channel. If the channel is not in the verified state,
+   * this method will fail (in other words, this may only be used if the
+   * SendNotificationChannelVerificationCode and VerifyNotificationChannel paths have already been
+   * used to put the given channel into the verified state).
+   *
+   * &lt;p&gt;There is no guarantee that the verification codes returned by this method will be of a
+   * similar structure or form as the ones that are delivered to the channel via
+   * SendNotificationChannelVerificationCode; while VerifyNotificationChannel() will recognize both
+   * the codes delivered via SendNotificationChannelVerificationCode() and returned from
+   * GetNotificationChannelVerificationCode(), it is typically the case that the verification codes
+   * delivered via SendNotificationChannelVerificationCode() will be shorter and also have a shorter
+   * expiration (e.g. codes such as &quot;G-123456&quot;) whereas GetVerificationCode() will typically return
+   * a much longer, websafe base 64 encoded string that has a longer expiration time.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   GetNotificationChannelVerificationCodeRequest request =
+   *       GetNotificationChannelVerificationCodeRequest.newBuilder()
+   *           .setName(
+   *               NotificationChannelName.ofProjectNotificationChannelName(
+   *                       &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *                   .toString())
+   *           .setExpireTime(Timestamp.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;GetNotificationChannelVerificationCodeResponse&gt; future =
+   *       notificationChannelServiceClient
+   *           .getNotificationChannelVerificationCodeCallable()
+   *           .futureCall(request);
+   *   // Do something.
+   *   GetNotificationChannelVerificationCodeResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          GetNotificationChannelVerificationCodeRequest,
+          GetNotificationChannelVerificationCodeResponse&gt;
+      getNotificationChannelVerificationCodeCallable() {
+<span class="fc" id="L1717">    return stub.getNotificationChannelVerificationCodeCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Verifies a `NotificationChannel` by proving receipt of the code delivered to the channel as a
+   * result of calling `SendNotificationChannelVerificationCode`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   NotificationChannelName name =
+   *       NotificationChannelName.ofProjectNotificationChannelName(
+   *           &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;);
+   *   String code = &quot;code3059181&quot;;
+   *   NotificationChannel response =
+   *       notificationChannelServiceClient.verifyNotificationChannel(name, code);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The notification channel to verify.
+   * @param code Required. The verification code that was delivered to the channel as a result of
+   *     invoking the `SendNotificationChannelVerificationCode` API method or that was retrieved
+   *     from a verified channel via `GetNotificationChannelVerificationCode`. For example, one
+   *     might have &quot;G-123456&quot; or &quot;TKNZGhhd2EyN3I1MnRnMjRv&quot; (in general, one is only guaranteed that
+   *     the code is valid UTF-8; one should not make any assumptions regarding the structure or
+   *     format of the code).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannel verifyNotificationChannel(
+      NotificationChannelName name, String code) {
+    VerifyNotificationChannelRequest request =
+<span class="fc" id="L1753">        VerifyNotificationChannelRequest.newBuilder()</span>
+<span class="pc bpc" id="L1754" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1755">            .setCode(code)</span>
+<span class="fc" id="L1756">            .build();</span>
+<span class="fc" id="L1757">    return verifyNotificationChannel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Verifies a `NotificationChannel` by proving receipt of the code delivered to the channel as a
+   * result of calling `SendNotificationChannelVerificationCode`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   String name =
+   *       NotificationChannelName.ofProjectNotificationChannelName(
+   *               &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *           .toString();
+   *   String code = &quot;code3059181&quot;;
+   *   NotificationChannel response =
+   *       notificationChannelServiceClient.verifyNotificationChannel(name, code);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The notification channel to verify.
+   * @param code Required. The verification code that was delivered to the channel as a result of
+   *     invoking the `SendNotificationChannelVerificationCode` API method or that was retrieved
+   *     from a verified channel via `GetNotificationChannelVerificationCode`. For example, one
+   *     might have &quot;G-123456&quot; or &quot;TKNZGhhd2EyN3I1MnRnMjRv&quot; (in general, one is only guaranteed that
+   *     the code is valid UTF-8; one should not make any assumptions regarding the structure or
+   *     format of the code).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannel verifyNotificationChannel(String name, String code) {
+    VerifyNotificationChannelRequest request =
+<span class="fc" id="L1793">        VerifyNotificationChannelRequest.newBuilder().setName(name).setCode(code).build();</span>
+<span class="fc" id="L1794">    return verifyNotificationChannel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Verifies a `NotificationChannel` by proving receipt of the code delivered to the channel as a
+   * result of calling `SendNotificationChannelVerificationCode`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   VerifyNotificationChannelRequest request =
+   *       VerifyNotificationChannelRequest.newBuilder()
+   *           .setName(
+   *               NotificationChannelName.ofProjectNotificationChannelName(
+   *                       &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *                   .toString())
+   *           .setCode(&quot;code3059181&quot;)
+   *           .build();
+   *   NotificationChannel response =
+   *       notificationChannelServiceClient.verifyNotificationChannel(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final NotificationChannel verifyNotificationChannel(
+      VerifyNotificationChannelRequest request) {
+<span class="fc" id="L1827">    return verifyNotificationChannelCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Verifies a `NotificationChannel` by proving receipt of the code delivered to the channel as a
+   * result of calling `SendNotificationChannelVerificationCode`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (NotificationChannelServiceClient notificationChannelServiceClient =
+   *     NotificationChannelServiceClient.create()) {
+   *   VerifyNotificationChannelRequest request =
+   *       VerifyNotificationChannelRequest.newBuilder()
+   *           .setName(
+   *               NotificationChannelName.ofProjectNotificationChannelName(
+   *                       &quot;[PROJECT]&quot;, &quot;[NOTIFICATION_CHANNEL]&quot;)
+   *                   .toString())
+   *           .setCode(&quot;code3059181&quot;)
+   *           .build();
+   *   ApiFuture&lt;NotificationChannel&gt; future =
+   *       notificationChannelServiceClient.verifyNotificationChannelCallable().futureCall(request);
+   *   // Do something.
+   *   NotificationChannel response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;VerifyNotificationChannelRequest, NotificationChannel&gt;
+      verifyNotificationChannelCallable() {
+<span class="fc" id="L1859">    return stub.verifyNotificationChannelCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1864">    stub.close();</span>
+<span class="fc" id="L1865">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1869">    stub.shutdown();</span>
+<span class="nc" id="L1870">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1874">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1879">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1884">    stub.shutdownNow();</span>
+<span class="nc" id="L1885">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1889">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListNotificationChannelDescriptorsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListNotificationChannelDescriptorsRequest,
+          ListNotificationChannelDescriptorsResponse,
+          NotificationChannelDescriptor,
+          ListNotificationChannelDescriptorsPage,
+          ListNotificationChannelDescriptorsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListNotificationChannelDescriptorsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListNotificationChannelDescriptorsRequest,
+                ListNotificationChannelDescriptorsResponse,
+                NotificationChannelDescriptor&gt;
+            context,
+        ApiFuture&lt;ListNotificationChannelDescriptorsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListNotificationChannelDescriptorsPage&gt; futurePage =
+<span class="fc" id="L1908">          ListNotificationChannelDescriptorsPage.createEmptyPage()</span>
+<span class="fc" id="L1909">              .createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1910">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1912">          input -&gt; new ListNotificationChannelDescriptorsPagedResponse(input),</span>
+<span class="fc" id="L1913">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListNotificationChannelDescriptorsPagedResponse(
+        ListNotificationChannelDescriptorsPage page) {
+<span class="fc" id="L1918">      super(page, ListNotificationChannelDescriptorsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1919">    }</span>
+  }
+
+  public static class ListNotificationChannelDescriptorsPage
+      extends AbstractPage&lt;
+          ListNotificationChannelDescriptorsRequest,
+          ListNotificationChannelDescriptorsResponse,
+          NotificationChannelDescriptor,
+          ListNotificationChannelDescriptorsPage&gt; {
+
+    private ListNotificationChannelDescriptorsPage(
+        PageContext&lt;
+                ListNotificationChannelDescriptorsRequest,
+                ListNotificationChannelDescriptorsResponse,
+                NotificationChannelDescriptor&gt;
+            context,
+        ListNotificationChannelDescriptorsResponse response) {
+<span class="fc" id="L1936">      super(context, response);</span>
+<span class="fc" id="L1937">    }</span>
+
+    private static ListNotificationChannelDescriptorsPage createEmptyPage() {
+<span class="fc" id="L1940">      return new ListNotificationChannelDescriptorsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListNotificationChannelDescriptorsPage createPage(
+        PageContext&lt;
+                ListNotificationChannelDescriptorsRequest,
+                ListNotificationChannelDescriptorsResponse,
+                NotificationChannelDescriptor&gt;
+            context,
+        ListNotificationChannelDescriptorsResponse response) {
+<span class="fc" id="L1951">      return new ListNotificationChannelDescriptorsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListNotificationChannelDescriptorsPage&gt; createPageAsync(
+        PageContext&lt;
+                ListNotificationChannelDescriptorsRequest,
+                ListNotificationChannelDescriptorsResponse,
+                NotificationChannelDescriptor&gt;
+            context,
+        ApiFuture&lt;ListNotificationChannelDescriptorsResponse&gt; futureResponse) {
+<span class="fc" id="L1962">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListNotificationChannelDescriptorsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListNotificationChannelDescriptorsRequest,
+          ListNotificationChannelDescriptorsResponse,
+          NotificationChannelDescriptor,
+          ListNotificationChannelDescriptorsPage,
+          ListNotificationChannelDescriptorsFixedSizeCollection&gt; {
+
+    private ListNotificationChannelDescriptorsFixedSizeCollection(
+        List&lt;ListNotificationChannelDescriptorsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1976">      super(pages, collectionSize);</span>
+<span class="fc" id="L1977">    }</span>
+
+    private static ListNotificationChannelDescriptorsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1980">      return new ListNotificationChannelDescriptorsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListNotificationChannelDescriptorsFixedSizeCollection createCollection(
+        List&lt;ListNotificationChannelDescriptorsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1986">      return new ListNotificationChannelDescriptorsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListNotificationChannelsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListNotificationChannelsRequest,
+          ListNotificationChannelsResponse,
+          NotificationChannel,
+          ListNotificationChannelsPage,
+          ListNotificationChannelsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListNotificationChannelsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListNotificationChannelsRequest,
+                ListNotificationChannelsResponse,
+                NotificationChannel&gt;
+            context,
+        ApiFuture&lt;ListNotificationChannelsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListNotificationChannelsPage&gt; futurePage =
+<span class="fc" id="L2006">          ListNotificationChannelsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2007">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2009">          input -&gt; new ListNotificationChannelsPagedResponse(input),</span>
+<span class="fc" id="L2010">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListNotificationChannelsPagedResponse(ListNotificationChannelsPage page) {
+<span class="fc" id="L2014">      super(page, ListNotificationChannelsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2015">    }</span>
+  }
+
+  public static class ListNotificationChannelsPage
+      extends AbstractPage&lt;
+          ListNotificationChannelsRequest,
+          ListNotificationChannelsResponse,
+          NotificationChannel,
+          ListNotificationChannelsPage&gt; {
+
+    private ListNotificationChannelsPage(
+        PageContext&lt;
+                ListNotificationChannelsRequest,
+                ListNotificationChannelsResponse,
+                NotificationChannel&gt;
+            context,
+        ListNotificationChannelsResponse response) {
+<span class="fc" id="L2032">      super(context, response);</span>
+<span class="fc" id="L2033">    }</span>
+
+    private static ListNotificationChannelsPage createEmptyPage() {
+<span class="fc" id="L2036">      return new ListNotificationChannelsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListNotificationChannelsPage createPage(
+        PageContext&lt;
+                ListNotificationChannelsRequest,
+                ListNotificationChannelsResponse,
+                NotificationChannel&gt;
+            context,
+        ListNotificationChannelsResponse response) {
+<span class="fc" id="L2047">      return new ListNotificationChannelsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListNotificationChannelsPage&gt; createPageAsync(
+        PageContext&lt;
+                ListNotificationChannelsRequest,
+                ListNotificationChannelsResponse,
+                NotificationChannel&gt;
+            context,
+        ApiFuture&lt;ListNotificationChannelsResponse&gt; futureResponse) {
+<span class="fc" id="L2058">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListNotificationChannelsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListNotificationChannelsRequest,
+          ListNotificationChannelsResponse,
+          NotificationChannel,
+          ListNotificationChannelsPage,
+          ListNotificationChannelsFixedSizeCollection&gt; {
+
+    private ListNotificationChannelsFixedSizeCollection(
+        List&lt;ListNotificationChannelsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2072">      super(pages, collectionSize);</span>
+<span class="fc" id="L2073">    }</span>
+
+    private static ListNotificationChannelsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2076">      return new ListNotificationChannelsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListNotificationChannelsFixedSizeCollection createCollection(
+        List&lt;ListNotificationChannelsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2082">      return new ListNotificationChannelsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

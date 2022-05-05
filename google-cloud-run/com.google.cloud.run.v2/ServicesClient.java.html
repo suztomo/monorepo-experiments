@@ -1,0 +1,1093 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ServicesClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-run</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.run.v2</a> &gt; <span class="el_source">ServicesClient.java</span></div><h1>ServicesClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.run.v2;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.run.v2.stub.ServicesStub;
+import com.google.cloud.run.v2.stub.ServicesStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.iam.v1.GetIamPolicyRequest;
+import com.google.iam.v1.Policy;
+import com.google.iam.v1.SetIamPolicyRequest;
+import com.google.iam.v1.TestIamPermissionsRequest;
+import com.google.iam.v1.TestIamPermissionsResponse;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Cloud Run Service Control Plane API
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (ServicesClient servicesClient = ServicesClient.create()) {
+ *   ServiceName name = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;);
+ *   Service response = servicesClient.getService(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the ServicesClient object to clean up resources such as
+ * threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of ServicesSettings to create().
+ * For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * ServicesSettings servicesSettings =
+ *     ServicesSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * ServicesClient servicesClient = ServicesClient.create(servicesSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * ServicesSettings servicesSettings =
+ *     ServicesSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * ServicesClient servicesClient = ServicesClient.create(servicesSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class ServicesClient implements BackgroundResource {
+  private final ServicesSettings settings;
+  private final ServicesStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of ServicesClient with default settings. */
+  public static final ServicesClient create() throws IOException {
+<span class="nc" id="L120">    return create(ServicesSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of ServicesClient, using the given settings. The channels are created
+   * based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final ServicesClient create(ServicesSettings settings) throws IOException {
+<span class="fc" id="L128">    return new ServicesClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of ServicesClient, using the given stub for making calls. This is for
+   * advanced usage - prefer using create(ServicesSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final ServicesClient create(ServicesStub stub) {
+<span class="nc" id="L137">    return new ServicesClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of ServicesClient, using the given settings. This is protected so that
+   * it is easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   */
+<span class="fc" id="L144">  protected ServicesClient(ServicesSettings settings) throws IOException {</span>
+<span class="fc" id="L145">    this.settings = settings;</span>
+<span class="fc" id="L146">    this.stub = ((ServicesStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L147">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L148">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L151">  protected ServicesClient(ServicesStub stub) {</span>
+<span class="nc" id="L152">    this.settings = null;</span>
+<span class="nc" id="L153">    this.stub = stub;</span>
+<span class="nc" id="L154">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L155">  }</span>
+
+  public final ServicesSettings getSettings() {
+<span class="nc" id="L158">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public ServicesStub getStub() {
+<span class="nc" id="L163">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L171">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Service in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Service service = Service.newBuilder().build();
+   *   String serviceId = &quot;serviceId-194185552&quot;;
+   *   Service response = servicesClient.createServiceAsync(parent, service, serviceId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The location and project in which this service should be created.
+   *     Format: projects/{projectnumber}/locations/{location}
+   * @param service Required. The Service instance to create.
+   * @param serviceId Required. The unique identifier for the Service. The name of the service
+   *     becomes {parent}/services/{service_id}.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Service, Service&gt; createServiceAsync(
+      LocationName parent, Service service, String serviceId) {
+    CreateServiceRequest request =
+<span class="fc" id="L201">        CreateServiceRequest.newBuilder()</span>
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L203">            .setService(service)</span>
+<span class="fc" id="L204">            .setServiceId(serviceId)</span>
+<span class="fc" id="L205">            .build();</span>
+<span class="fc" id="L206">    return createServiceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Service in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Service service = Service.newBuilder().build();
+   *   String serviceId = &quot;serviceId-194185552&quot;;
+   *   Service response = servicesClient.createServiceAsync(parent, service, serviceId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The location and project in which this service should be created.
+   *     Format: projects/{projectnumber}/locations/{location}
+   * @param service Required. The Service instance to create.
+   * @param serviceId Required. The unique identifier for the Service. The name of the service
+   *     becomes {parent}/services/{service_id}.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Service, Service&gt; createServiceAsync(
+      String parent, Service service, String serviceId) {
+    CreateServiceRequest request =
+<span class="fc" id="L236">        CreateServiceRequest.newBuilder()</span>
+<span class="fc" id="L237">            .setParent(parent)</span>
+<span class="fc" id="L238">            .setService(service)</span>
+<span class="fc" id="L239">            .setServiceId(serviceId)</span>
+<span class="fc" id="L240">            .build();</span>
+<span class="fc" id="L241">    return createServiceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Service in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   CreateServiceRequest request =
+   *       CreateServiceRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setService(Service.newBuilder().build())
+   *           .setServiceId(&quot;serviceId-194185552&quot;)
+   *           .setValidateOnly(true)
+   *           .build();
+   *   Service response = servicesClient.createServiceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Service, Service&gt; createServiceAsync(CreateServiceRequest request) {
+<span class="fc" id="L269">    return createServiceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Service in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   CreateServiceRequest request =
+   *       CreateServiceRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setService(Service.newBuilder().build())
+   *           .setServiceId(&quot;serviceId-194185552&quot;)
+   *           .setValidateOnly(true)
+   *           .build();
+   *   OperationFuture&lt;Service, Service&gt; future =
+   *       servicesClient.createServiceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Service response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateServiceRequest, Service, Service&gt;
+      createServiceOperationCallable() {
+<span class="fc" id="L298">    return stub.createServiceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new Service in a given project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   CreateServiceRequest request =
+   *       CreateServiceRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setService(Service.newBuilder().build())
+   *           .setServiceId(&quot;serviceId-194185552&quot;)
+   *           .setValidateOnly(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = servicesClient.createServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateServiceRequest, Operation&gt; createServiceCallable() {
+<span class="nc" id="L325">    return stub.createServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a Service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   ServiceName name = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;);
+   *   Service response = servicesClient.getService(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The full name of the Service. Format:
+   *     projects/{projectnumber}/locations/{location}/services/{service}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service getService(ServiceName name) {
+    GetServiceRequest request =
+<span class="pc bpc" id="L349" title="1 of 2 branches missed.">        GetServiceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L350">    return getService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a Service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   String name = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   Service response = servicesClient.getService(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The full name of the Service. Format:
+   *     projects/{projectnumber}/locations/{location}/services/{service}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service getService(String name) {
+<span class="fc" id="L373">    GetServiceRequest request = GetServiceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L374">    return getService(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a Service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   GetServiceRequest request =
+   *       GetServiceRequest.newBuilder()
+   *           .setName(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .build();
+   *   Service response = servicesClient.getService(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Service getService(GetServiceRequest request) {
+<span class="fc" id="L399">    return getServiceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a Service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   GetServiceRequest request =
+   *       GetServiceRequest.newBuilder()
+   *           .setName(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Service&gt; future = servicesClient.getServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Service response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetServiceRequest, Service&gt; getServiceCallable() {
+<span class="fc" id="L423">    return stub.getServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List Services.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Service element : servicesClient.listServices(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The location and project to list resources on. Location must be a valid
+   *     GCP region, and may not be the &quot;-&quot; wildcard. Format:
+   *     projects/{projectnumber}/locations/{location}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServicesPagedResponse listServices(LocationName parent) {
+    ListServicesRequest request =
+<span class="fc" id="L450">        ListServicesRequest.newBuilder()</span>
+<span class="pc bpc" id="L451" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L452">            .build();</span>
+<span class="fc" id="L453">    return listServices(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List Services.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Service element : servicesClient.listServices(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The location and project to list resources on. Location must be a valid
+   *     GCP region, and may not be the &quot;-&quot; wildcard. Format:
+   *     projects/{projectnumber}/locations/{location}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServicesPagedResponse listServices(String parent) {
+<span class="fc" id="L479">    ListServicesRequest request = ListServicesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L480">    return listServices(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List Services.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   ListServicesRequest request =
+   *       ListServicesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setShowDeleted(true)
+   *           .build();
+   *   for (Service element : servicesClient.listServices(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListServicesPagedResponse listServices(ListServicesRequest request) {
+<span class="fc" id="L510">    return listServicesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List Services.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   ListServicesRequest request =
+   *       ListServicesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setShowDeleted(true)
+   *           .build();
+   *   ApiFuture&lt;Service&gt; future = servicesClient.listServicesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Service element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListServicesRequest, ListServicesPagedResponse&gt;
+      listServicesPagedCallable() {
+<span class="fc" id="L540">    return stub.listServicesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List Services.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   ListServicesRequest request =
+   *       ListServicesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setShowDeleted(true)
+   *           .build();
+   *   while (true) {
+   *     ListServicesResponse response = servicesClient.listServicesCallable().call(request);
+   *     for (Service element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListServicesRequest, ListServicesResponse&gt; listServicesCallable() {
+<span class="nc" id="L576">    return stub.listServicesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a Service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   Service service = Service.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Service response = servicesClient.updateServiceAsync(service, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param service Required. The Service to be updated.
+   * @param updateMask The list of fields to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Service, Service&gt; updateServiceAsync(
+      Service service, FieldMask updateMask) {
+    UpdateServiceRequest request =
+<span class="fc" id="L602">        UpdateServiceRequest.newBuilder().setService(service).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L603">    return updateServiceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a Service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   UpdateServiceRequest request =
+   *       UpdateServiceRequest.newBuilder()
+   *           .setService(Service.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .setAllowMissing(true)
+   *           .build();
+   *   Service response = servicesClient.updateServiceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Service, Service&gt; updateServiceAsync(UpdateServiceRequest request) {
+<span class="fc" id="L631">    return updateServiceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a Service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   UpdateServiceRequest request =
+   *       UpdateServiceRequest.newBuilder()
+   *           .setService(Service.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .setAllowMissing(true)
+   *           .build();
+   *   OperationFuture&lt;Service, Service&gt; future =
+   *       servicesClient.updateServiceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Service response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpdateServiceRequest, Service, Service&gt;
+      updateServiceOperationCallable() {
+<span class="fc" id="L660">    return stub.updateServiceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a Service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   UpdateServiceRequest request =
+   *       UpdateServiceRequest.newBuilder()
+   *           .setService(Service.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setValidateOnly(true)
+   *           .setAllowMissing(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = servicesClient.updateServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateServiceRequest, Operation&gt; updateServiceCallable() {
+<span class="nc" id="L687">    return stub.updateServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Service. This will cause the Service to stop serving traffic and will delete all
+   * revisions.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   ServiceName name = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;);
+   *   Service response = servicesClient.deleteServiceAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The full name of the Service. Format:
+   *     projects/{projectnumber}/locations/{location}/services/{service}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Service, Service&gt; deleteServiceAsync(ServiceName name) {
+    DeleteServiceRequest request =
+<span class="pc bpc" id="L712" title="1 of 2 branches missed.">        DeleteServiceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L713">    return deleteServiceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Service. This will cause the Service to stop serving traffic and will delete all
+   * revisions.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   String name = ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString();
+   *   Service response = servicesClient.deleteServiceAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The full name of the Service. Format:
+   *     projects/{projectnumber}/locations/{location}/services/{service}
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Service, Service&gt; deleteServiceAsync(String name) {
+<span class="fc" id="L737">    DeleteServiceRequest request = DeleteServiceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L738">    return deleteServiceAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Service. This will cause the Service to stop serving traffic and will delete all
+   * revisions.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   DeleteServiceRequest request =
+   *       DeleteServiceRequest.newBuilder()
+   *           .setName(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setValidateOnly(true)
+   *           .setEtag(&quot;etag3123477&quot;)
+   *           .build();
+   *   Service response = servicesClient.deleteServiceAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Service, Service&gt; deleteServiceAsync(DeleteServiceRequest request) {
+<span class="fc" id="L766">    return deleteServiceOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Service. This will cause the Service to stop serving traffic and will delete all
+   * revisions.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   DeleteServiceRequest request =
+   *       DeleteServiceRequest.newBuilder()
+   *           .setName(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setValidateOnly(true)
+   *           .setEtag(&quot;etag3123477&quot;)
+   *           .build();
+   *   OperationFuture&lt;Service, Service&gt; future =
+   *       servicesClient.deleteServiceOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Service response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteServiceRequest, Service, Service&gt;
+      deleteServiceOperationCallable() {
+<span class="fc" id="L795">    return stub.deleteServiceOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Service. This will cause the Service to stop serving traffic and will delete all
+   * revisions.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   DeleteServiceRequest request =
+   *       DeleteServiceRequest.newBuilder()
+   *           .setName(ServiceName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[SERVICE]&quot;).toString())
+   *           .setValidateOnly(true)
+   *           .setEtag(&quot;etag3123477&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = servicesClient.deleteServiceCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteServiceRequest, Operation&gt; deleteServiceCallable() {
+<span class="nc" id="L822">    return stub.deleteServiceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the IAM Access Control policy currently in effect for the given Cloud Run Service. This
+   * result does not include any inherited policies.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   Policy response = servicesClient.getIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(GetIamPolicyRequest request) {
+<span class="fc" id="L849">    return getIamPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Get the IAM Access Control policy currently in effect for the given Cloud Run Service. This
+   * result does not include any inherited policies.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = servicesClient.getIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetIamPolicyRequest, Policy&gt; getIamPolicyCallable() {
+<span class="fc" id="L875">    return stub.getIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the IAM Access control policy for the specified Service. Overwrites any existing policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Policy response = servicesClient.setIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(SetIamPolicyRequest request) {
+<span class="fc" id="L902">    return setIamPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the IAM Access control policy for the specified Service. Overwrites any existing policy.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = servicesClient.setIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetIamPolicyRequest, Policy&gt; setIamPolicyCallable() {
+<span class="fc" id="L928">    return stub.setIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns permissions that a caller has on the specified Project.
+   *
+   * &lt;p&gt;There are no permissions required for making this API call.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   TestIamPermissionsResponse response = servicesClient.testIamPermissions(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(TestIamPermissionsRequest request) {
+<span class="fc" id="L956">    return testIamPermissionsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns permissions that a caller has on the specified Project.
+   *
+   * &lt;p&gt;There are no permissions required for making this API call.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ServicesClient servicesClient = ServicesClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   ApiFuture&lt;TestIamPermissionsResponse&gt; future =
+   *       servicesClient.testIamPermissionsCallable().futureCall(request);
+   *   // Do something.
+   *   TestIamPermissionsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+      testIamPermissionsCallable() {
+<span class="fc" id="L985">    return stub.testIamPermissionsCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L990">    stub.close();</span>
+<span class="fc" id="L991">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L995">    stub.shutdown();</span>
+<span class="nc" id="L996">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1000">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1005">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1010">    stub.shutdownNow();</span>
+<span class="nc" id="L1011">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1015">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListServicesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListServicesRequest,
+          ListServicesResponse,
+          Service,
+          ListServicesPage,
+          ListServicesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListServicesPagedResponse&gt; createAsync(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ApiFuture&lt;ListServicesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListServicesPage&gt; futurePage =
+<span class="fc" id="L1030">          ListServicesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1031">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1033">          input -&gt; new ListServicesPagedResponse(input),</span>
+<span class="fc" id="L1034">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListServicesPagedResponse(ListServicesPage page) {
+<span class="fc" id="L1038">      super(page, ListServicesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1039">    }</span>
+  }
+
+  public static class ListServicesPage
+      extends AbstractPage&lt;ListServicesRequest, ListServicesResponse, Service, ListServicesPage&gt; {
+
+    private ListServicesPage(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ListServicesResponse response) {
+<span class="fc" id="L1048">      super(context, response);</span>
+<span class="fc" id="L1049">    }</span>
+
+    private static ListServicesPage createEmptyPage() {
+<span class="fc" id="L1052">      return new ListServicesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListServicesPage createPage(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ListServicesResponse response) {
+<span class="fc" id="L1059">      return new ListServicesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListServicesPage&gt; createPageAsync(
+        PageContext&lt;ListServicesRequest, ListServicesResponse, Service&gt; context,
+        ApiFuture&lt;ListServicesResponse&gt; futureResponse) {
+<span class="fc" id="L1066">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListServicesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListServicesRequest,
+          ListServicesResponse,
+          Service,
+          ListServicesPage,
+          ListServicesFixedSizeCollection&gt; {
+
+    private ListServicesFixedSizeCollection(List&lt;ListServicesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1079">      super(pages, collectionSize);</span>
+<span class="fc" id="L1080">    }</span>
+
+    private static ListServicesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1083">      return new ListServicesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListServicesFixedSizeCollection createCollection(
+        List&lt;ListServicesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1089">      return new ListServicesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>TetherClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-apigee-connect</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.apigeeconnect.v1</a> &gt; <span class="el_source">TetherClient.java</span></div><h1>TetherClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.apigeeconnect.v1;
+
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.rpc.BidiStreamingCallable;
+import com.google.cloud.apigeeconnect.v1.stub.TetherStub;
+import com.google.cloud.apigeeconnect.v1.stub.TetherStubSettings;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Tether provides a way for the control plane to send HTTP API requests to
+ * services in data planes that runs in a remote datacenter without requiring customers to open
+ * firewalls on their runtime plane.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (TetherClient tetherClient = TetherClient.create()) {
+ *   BidiStream&lt;EgressResponse, EgressRequest&gt; bidiStream = tetherClient.egressCallable().call();
+ *   EgressResponse request =
+ *       EgressResponse.newBuilder()
+ *           .setId(&quot;id3355&quot;)
+ *           .setHttpResponse(HttpResponse.newBuilder().build())
+ *           .setStatus(Status.newBuilder().build())
+ *           .setProject(&quot;project-309310695&quot;)
+ *           .setTraceId(&quot;traceId-1067401920&quot;)
+ *           .setEndpoint(TetherEndpoint.forNumber(0))
+ *           .setName(&quot;name3373707&quot;)
+ *           .build();
+ *   bidiStream.send(request);
+ *   for (EgressRequest response : bidiStream) {
+ *     // Do something when a response is received.
+ *   }
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the TetherClient object to clean up resources such as
+ * threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of TetherSettings to create().
+ * For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * TetherSettings tetherSettings =
+ *     TetherSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * TetherClient tetherClient = TetherClient.create(tetherSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * TetherSettings tetherSettings = TetherSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * TetherClient tetherClient = TetherClient.create(tetherSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class TetherClient implements BackgroundResource {
+  private final TetherSettings settings;
+  private final TetherStub stub;
+
+  /** Constructs an instance of TetherClient with default settings. */
+  public static final TetherClient create() throws IOException {
+<span class="nc" id="L115">    return create(TetherSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of TetherClient, using the given settings. The channels are created
+   * based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final TetherClient create(TetherSettings settings) throws IOException {
+<span class="fc" id="L123">    return new TetherClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of TetherClient, using the given stub for making calls. This is for
+   * advanced usage - prefer using create(TetherSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final TetherClient create(TetherStub stub) {
+<span class="nc" id="L132">    return new TetherClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of TetherClient, using the given settings. This is protected so that it
+   * is easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   */
+<span class="fc" id="L139">  protected TetherClient(TetherSettings settings) throws IOException {</span>
+<span class="fc" id="L140">    this.settings = settings;</span>
+<span class="fc" id="L141">    this.stub = ((TetherStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L142">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L145">  protected TetherClient(TetherStub stub) {</span>
+<span class="nc" id="L146">    this.settings = null;</span>
+<span class="nc" id="L147">    this.stub = stub;</span>
+<span class="nc" id="L148">  }</span>
+
+  public final TetherSettings getSettings() {
+<span class="nc" id="L151">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public TetherStub getStub() {
+<span class="nc" id="L156">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Egress streams egress requests and responses. Logically, this is not actually a streaming
+   * request, but uses streaming as a mechanism to flip the client-server relationship of gRPC so
+   * that the server can act as a client. The listener, the RPC server, accepts connections from the
+   * dialer, the RPC client. The listener streams http requests and the dialer streams http
+   * responses.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TetherClient tetherClient = TetherClient.create()) {
+   *   BidiStream&lt;EgressResponse, EgressRequest&gt; bidiStream = tetherClient.egressCallable().call();
+   *   EgressResponse request =
+   *       EgressResponse.newBuilder()
+   *           .setId(&quot;id3355&quot;)
+   *           .setHttpResponse(HttpResponse.newBuilder().build())
+   *           .setStatus(Status.newBuilder().build())
+   *           .setProject(&quot;project-309310695&quot;)
+   *           .setTraceId(&quot;traceId-1067401920&quot;)
+   *           .setEndpoint(TetherEndpoint.forNumber(0))
+   *           .setName(&quot;name3373707&quot;)
+   *           .build();
+   *   bidiStream.send(request);
+   *   for (EgressRequest response : bidiStream) {
+   *     // Do something when a response is received.
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final BidiStreamingCallable&lt;EgressResponse, EgressRequest&gt; egressCallable() {
+<span class="fc" id="L192">    return stub.egressCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L197">    stub.close();</span>
+<span class="fc" id="L198">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L202">    stub.shutdown();</span>
+<span class="nc" id="L203">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L207">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L212">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L217">    stub.shutdownNow();</span>
+<span class="nc" id="L218">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L222">    return stub.awaitTermination(duration, unit);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

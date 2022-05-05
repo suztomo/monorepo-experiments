@@ -1,0 +1,2417 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>CloudTasksClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-tasks</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.tasks.v2beta3</a> &gt; <span class="el_source">CloudTasksClient.java</span></div><h1>CloudTasksClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.tasks.v2beta3;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.api.resourcenames.ResourceName;
+import com.google.cloud.tasks.v2beta3.stub.CloudTasksStub;
+import com.google.cloud.tasks.v2beta3.stub.CloudTasksStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.iam.v1.GetIamPolicyRequest;
+import com.google.iam.v1.Policy;
+import com.google.iam.v1.SetIamPolicyRequest;
+import com.google.iam.v1.TestIamPermissionsRequest;
+import com.google.iam.v1.TestIamPermissionsResponse;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Cloud Tasks allows developers to manage the execution of background work in
+ * their applications.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+ *   QueueName name = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;);
+ *   Queue response = cloudTasksClient.getQueue(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the CloudTasksClient object to clean up resources such as
+ * threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of CloudTasksSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * CloudTasksSettings cloudTasksSettings =
+ *     CloudTasksSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * CloudTasksClient cloudTasksClient = CloudTasksClient.create(cloudTasksSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * CloudTasksSettings cloudTasksSettings =
+ *     CloudTasksSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * CloudTasksClient cloudTasksClient = CloudTasksClient.create(cloudTasksSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@BetaApi
+@Generated(&quot;by gapic-generator-java&quot;)
+public class CloudTasksClient implements BackgroundResource {
+  private final CloudTasksSettings settings;
+  private final CloudTasksStub stub;
+
+  /** Constructs an instance of CloudTasksClient with default settings. */
+  public static final CloudTasksClient create() throws IOException {
+<span class="nc" id="L113">    return create(CloudTasksSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of CloudTasksClient, using the given settings. The channels are created
+   * based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final CloudTasksClient create(CloudTasksSettings settings) throws IOException {
+<span class="fc" id="L121">    return new CloudTasksClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of CloudTasksClient, using the given stub for making calls. This is for
+   * advanced usage - prefer using create(CloudTasksSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final CloudTasksClient create(CloudTasksStub stub) {
+<span class="nc" id="L130">    return new CloudTasksClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of CloudTasksClient, using the given settings. This is protected so that
+   * it is easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   */
+<span class="fc" id="L137">  protected CloudTasksClient(CloudTasksSettings settings) throws IOException {</span>
+<span class="fc" id="L138">    this.settings = settings;</span>
+<span class="fc" id="L139">    this.stub = ((CloudTasksStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L140">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L143">  protected CloudTasksClient(CloudTasksStub stub) {</span>
+<span class="nc" id="L144">    this.settings = null;</span>
+<span class="nc" id="L145">    this.stub = stub;</span>
+<span class="nc" id="L146">  }</span>
+
+  public final CloudTasksSettings getSettings() {
+<span class="nc" id="L149">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public CloudTasksStub getStub() {
+<span class="nc" id="L154">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists queues.
+   *
+   * &lt;p&gt;Queues are returned in lexicographical order.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Queue element : cloudTasksClient.listQueues(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The location name. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListQueuesPagedResponse listQueues(LocationName parent) {
+    ListQueuesRequest request =
+<span class="pc bpc" id="L180" title="1 of 2 branches missed.">        ListQueuesRequest.newBuilder().setParent(parent == null ? null : parent.toString()).build();</span>
+<span class="fc" id="L181">    return listQueues(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists queues.
+   *
+   * &lt;p&gt;Queues are returned in lexicographical order.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Queue element : cloudTasksClient.listQueues(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The location name. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListQueuesPagedResponse listQueues(String parent) {
+<span class="fc" id="L206">    ListQueuesRequest request = ListQueuesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L207">    return listQueues(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists queues.
+   *
+   * &lt;p&gt;Queues are returned in lexicographical order.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   ListQueuesRequest request =
+   *       ListQueuesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   for (Queue element : cloudTasksClient.listQueues(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListQueuesPagedResponse listQueues(ListQueuesRequest request) {
+<span class="fc" id="L238">    return listQueuesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists queues.
+   *
+   * &lt;p&gt;Queues are returned in lexicographical order.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   ListQueuesRequest request =
+   *       ListQueuesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Queue&gt; future = cloudTasksClient.listQueuesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Queue element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListQueuesRequest, ListQueuesPagedResponse&gt; listQueuesPagedCallable() {
+<span class="fc" id="L268">    return stub.listQueuesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists queues.
+   *
+   * &lt;p&gt;Queues are returned in lexicographical order.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   ListQueuesRequest request =
+   *       ListQueuesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   while (true) {
+   *     ListQueuesResponse response = cloudTasksClient.listQueuesCallable().call(request);
+   *     for (Queue element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListQueuesRequest, ListQueuesResponse&gt; listQueuesCallable() {
+<span class="nc" id="L305">    return stub.listQueuesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a queue.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   QueueName name = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;);
+   *   Queue response = cloudTasksClient.getQueue(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the queue. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue getQueue(QueueName name) {
+    GetQueueRequest request =
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">        GetQueueRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L328">    return getQueue(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a queue.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String name = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString();
+   *   Queue response = cloudTasksClient.getQueue(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the queue. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue getQueue(String name) {
+<span class="fc" id="L349">    GetQueueRequest request = GetQueueRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L350">    return getQueue(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a queue.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   GetQueueRequest request =
+   *       GetQueueRequest.newBuilder()
+   *           .setName(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Queue response = cloudTasksClient.getQueue(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue getQueue(GetQueueRequest request) {
+<span class="fc" id="L374">    return getQueueCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a queue.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   GetQueueRequest request =
+   *       GetQueueRequest.newBuilder()
+   *           .setName(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Queue&gt; future = cloudTasksClient.getQueueCallable().futureCall(request);
+   *   // Do something.
+   *   Queue response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetQueueRequest, Queue&gt; getQueueCallable() {
+<span class="fc" id="L397">    return stub.getQueueCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a queue.
+   *
+   * &lt;p&gt;Queues created with this method allow tasks to live for a maximum of 31 days. After a task
+   * is 31 days old, the task will be deleted regardless of whether it was dispatched or not.
+   *
+   * &lt;p&gt;WARNING: Using this method may have unintended side effects if you are using an App Engine
+   * `queue.yaml` or `queue.xml` file to manage your queues. Read [Overview of Queue Management and
+   * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using this method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Queue queue = Queue.newBuilder().build();
+   *   Queue response = cloudTasksClient.createQueue(parent, queue);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The location name in which the queue will be created. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID`
+   *     &lt;p&gt;The list of allowed locations can be obtained by calling Cloud Tasks' implementation of
+   *     [ListLocations][google.cloud.location.Locations.ListLocations].
+   * @param queue Required. The queue to create.
+   *     &lt;p&gt;[Queue's name][google.cloud.tasks.v2beta3.Queue.name] cannot be the same as an existing
+   *     queue.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue createQueue(LocationName parent, Queue queue) {
+    CreateQueueRequest request =
+<span class="fc" id="L432">        CreateQueueRequest.newBuilder()</span>
+<span class="pc bpc" id="L433" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L434">            .setQueue(queue)</span>
+<span class="fc" id="L435">            .build();</span>
+<span class="fc" id="L436">    return createQueue(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a queue.
+   *
+   * &lt;p&gt;Queues created with this method allow tasks to live for a maximum of 31 days. After a task
+   * is 31 days old, the task will be deleted regardless of whether it was dispatched or not.
+   *
+   * &lt;p&gt;WARNING: Using this method may have unintended side effects if you are using an App Engine
+   * `queue.yaml` or `queue.xml` file to manage your queues. Read [Overview of Queue Management and
+   * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using this method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Queue queue = Queue.newBuilder().build();
+   *   Queue response = cloudTasksClient.createQueue(parent, queue);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The location name in which the queue will be created. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID`
+   *     &lt;p&gt;The list of allowed locations can be obtained by calling Cloud Tasks' implementation of
+   *     [ListLocations][google.cloud.location.Locations.ListLocations].
+   * @param queue Required. The queue to create.
+   *     &lt;p&gt;[Queue's name][google.cloud.tasks.v2beta3.Queue.name] cannot be the same as an existing
+   *     queue.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue createQueue(String parent, Queue queue) {
+    CreateQueueRequest request =
+<span class="fc" id="L471">        CreateQueueRequest.newBuilder().setParent(parent).setQueue(queue).build();</span>
+<span class="fc" id="L472">    return createQueue(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a queue.
+   *
+   * &lt;p&gt;Queues created with this method allow tasks to live for a maximum of 31 days. After a task
+   * is 31 days old, the task will be deleted regardless of whether it was dispatched or not.
+   *
+   * &lt;p&gt;WARNING: Using this method may have unintended side effects if you are using an App Engine
+   * `queue.yaml` or `queue.xml` file to manage your queues. Read [Overview of Queue Management and
+   * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using this method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   CreateQueueRequest request =
+   *       CreateQueueRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setQueue(Queue.newBuilder().build())
+   *           .build();
+   *   Queue response = cloudTasksClient.createQueue(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue createQueue(CreateQueueRequest request) {
+<span class="fc" id="L503">    return createQueueCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a queue.
+   *
+   * &lt;p&gt;Queues created with this method allow tasks to live for a maximum of 31 days. After a task
+   * is 31 days old, the task will be deleted regardless of whether it was dispatched or not.
+   *
+   * &lt;p&gt;WARNING: Using this method may have unintended side effects if you are using an App Engine
+   * `queue.yaml` or `queue.xml` file to manage your queues. Read [Overview of Queue Management and
+   * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using this method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   CreateQueueRequest request =
+   *       CreateQueueRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setQueue(Queue.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Queue&gt; future = cloudTasksClient.createQueueCallable().futureCall(request);
+   *   // Do something.
+   *   Queue response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateQueueRequest, Queue&gt; createQueueCallable() {
+<span class="fc" id="L533">    return stub.createQueueCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a queue.
+   *
+   * &lt;p&gt;This method creates the queue if it does not exist and updates the queue if it does exist.
+   *
+   * &lt;p&gt;Queues created with this method allow tasks to live for a maximum of 31 days. After a task
+   * is 31 days old, the task will be deleted regardless of whether it was dispatched or not.
+   *
+   * &lt;p&gt;WARNING: Using this method may have unintended side effects if you are using an App Engine
+   * `queue.yaml` or `queue.xml` file to manage your queues. Read [Overview of Queue Management and
+   * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using this method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   Queue queue = Queue.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Queue response = cloudTasksClient.updateQueue(queue, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param queue Required. The queue to create or update.
+   *     &lt;p&gt;The queue's [name][google.cloud.tasks.v2beta3.Queue.name] must be specified.
+   *     &lt;p&gt;Output only fields cannot be modified using UpdateQueue. Any value specified for an
+   *     output only field will be ignored. The queue's
+   *     [name][google.cloud.tasks.v2beta3.Queue.name] cannot be changed.
+   * @param updateMask A mask used to specify which fields of the queue are being updated.
+   *     &lt;p&gt;If empty, then all fields will be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue updateQueue(Queue queue, FieldMask updateMask) {
+    UpdateQueueRequest request =
+<span class="fc" id="L570">        UpdateQueueRequest.newBuilder().setQueue(queue).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L571">    return updateQueue(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a queue.
+   *
+   * &lt;p&gt;This method creates the queue if it does not exist and updates the queue if it does exist.
+   *
+   * &lt;p&gt;Queues created with this method allow tasks to live for a maximum of 31 days. After a task
+   * is 31 days old, the task will be deleted regardless of whether it was dispatched or not.
+   *
+   * &lt;p&gt;WARNING: Using this method may have unintended side effects if you are using an App Engine
+   * `queue.yaml` or `queue.xml` file to manage your queues. Read [Overview of Queue Management and
+   * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using this method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   UpdateQueueRequest request =
+   *       UpdateQueueRequest.newBuilder()
+   *           .setQueue(Queue.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Queue response = cloudTasksClient.updateQueue(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue updateQueue(UpdateQueueRequest request) {
+<span class="fc" id="L604">    return updateQueueCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a queue.
+   *
+   * &lt;p&gt;This method creates the queue if it does not exist and updates the queue if it does exist.
+   *
+   * &lt;p&gt;Queues created with this method allow tasks to live for a maximum of 31 days. After a task
+   * is 31 days old, the task will be deleted regardless of whether it was dispatched or not.
+   *
+   * &lt;p&gt;WARNING: Using this method may have unintended side effects if you are using an App Engine
+   * `queue.yaml` or `queue.xml` file to manage your queues. Read [Overview of Queue Management and
+   * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using this method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   UpdateQueueRequest request =
+   *       UpdateQueueRequest.newBuilder()
+   *           .setQueue(Queue.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Queue&gt; future = cloudTasksClient.updateQueueCallable().futureCall(request);
+   *   // Do something.
+   *   Queue response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateQueueRequest, Queue&gt; updateQueueCallable() {
+<span class="fc" id="L636">    return stub.updateQueueCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a queue.
+   *
+   * &lt;p&gt;This command will delete the queue even if it has tasks in it.
+   *
+   * &lt;p&gt;Note: If you delete a queue, a queue with the same name can't be created for 7 days.
+   *
+   * &lt;p&gt;WARNING: Using this method may have unintended side effects if you are using an App Engine
+   * `queue.yaml` or `queue.xml` file to manage your queues. Read [Overview of Queue Management and
+   * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using this method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   QueueName name = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;);
+   *   cloudTasksClient.deleteQueue(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The queue name. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteQueue(QueueName name) {
+    DeleteQueueRequest request =
+<span class="pc bpc" id="L666" title="1 of 2 branches missed.">        DeleteQueueRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L667">    deleteQueue(request);</span>
+<span class="fc" id="L668">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a queue.
+   *
+   * &lt;p&gt;This command will delete the queue even if it has tasks in it.
+   *
+   * &lt;p&gt;Note: If you delete a queue, a queue with the same name can't be created for 7 days.
+   *
+   * &lt;p&gt;WARNING: Using this method may have unintended side effects if you are using an App Engine
+   * `queue.yaml` or `queue.xml` file to manage your queues. Read [Overview of Queue Management and
+   * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using this method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String name = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString();
+   *   cloudTasksClient.deleteQueue(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The queue name. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteQueue(String name) {
+<span class="fc" id="L696">    DeleteQueueRequest request = DeleteQueueRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L697">    deleteQueue(request);</span>
+<span class="fc" id="L698">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a queue.
+   *
+   * &lt;p&gt;This command will delete the queue even if it has tasks in it.
+   *
+   * &lt;p&gt;Note: If you delete a queue, a queue with the same name can't be created for 7 days.
+   *
+   * &lt;p&gt;WARNING: Using this method may have unintended side effects if you are using an App Engine
+   * `queue.yaml` or `queue.xml` file to manage your queues. Read [Overview of Queue Management and
+   * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using this method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   DeleteQueueRequest request =
+   *       DeleteQueueRequest.newBuilder()
+   *           .setName(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .build();
+   *   cloudTasksClient.deleteQueue(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteQueue(DeleteQueueRequest request) {
+<span class="fc" id="L728">    deleteQueueCallable().call(request);</span>
+<span class="fc" id="L729">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a queue.
+   *
+   * &lt;p&gt;This command will delete the queue even if it has tasks in it.
+   *
+   * &lt;p&gt;Note: If you delete a queue, a queue with the same name can't be created for 7 days.
+   *
+   * &lt;p&gt;WARNING: Using this method may have unintended side effects if you are using an App Engine
+   * `queue.yaml` or `queue.xml` file to manage your queues. Read [Overview of Queue Management and
+   * queue.yaml](https://cloud.google.com/tasks/docs/queue-yaml) before using this method.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   DeleteQueueRequest request =
+   *       DeleteQueueRequest.newBuilder()
+   *           .setName(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = cloudTasksClient.deleteQueueCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteQueueRequest, Empty&gt; deleteQueueCallable() {
+<span class="fc" id="L758">    return stub.deleteQueueCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Purges a queue by deleting all of its tasks.
+   *
+   * &lt;p&gt;All tasks created before this method is called are permanently deleted.
+   *
+   * &lt;p&gt;Purge operations can take up to one minute to take effect. Tasks might be dispatched before
+   * the purge takes effect. A purge is irreversible.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   QueueName name = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;);
+   *   Queue response = cloudTasksClient.purgeQueue(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The queue name. For example:
+   *     `projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue purgeQueue(QueueName name) {
+    PurgeQueueRequest request =
+<span class="pc bpc" id="L785" title="1 of 2 branches missed.">        PurgeQueueRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L786">    return purgeQueue(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Purges a queue by deleting all of its tasks.
+   *
+   * &lt;p&gt;All tasks created before this method is called are permanently deleted.
+   *
+   * &lt;p&gt;Purge operations can take up to one minute to take effect. Tasks might be dispatched before
+   * the purge takes effect. A purge is irreversible.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String name = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString();
+   *   Queue response = cloudTasksClient.purgeQueue(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The queue name. For example:
+   *     `projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue purgeQueue(String name) {
+<span class="fc" id="L812">    PurgeQueueRequest request = PurgeQueueRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L813">    return purgeQueue(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Purges a queue by deleting all of its tasks.
+   *
+   * &lt;p&gt;All tasks created before this method is called are permanently deleted.
+   *
+   * &lt;p&gt;Purge operations can take up to one minute to take effect. Tasks might be dispatched before
+   * the purge takes effect. A purge is irreversible.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   PurgeQueueRequest request =
+   *       PurgeQueueRequest.newBuilder()
+   *           .setName(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .build();
+   *   Queue response = cloudTasksClient.purgeQueue(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue purgeQueue(PurgeQueueRequest request) {
+<span class="fc" id="L841">    return purgeQueueCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Purges a queue by deleting all of its tasks.
+   *
+   * &lt;p&gt;All tasks created before this method is called are permanently deleted.
+   *
+   * &lt;p&gt;Purge operations can take up to one minute to take effect. Tasks might be dispatched before
+   * the purge takes effect. A purge is irreversible.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   PurgeQueueRequest request =
+   *       PurgeQueueRequest.newBuilder()
+   *           .setName(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Queue&gt; future = cloudTasksClient.purgeQueueCallable().futureCall(request);
+   *   // Do something.
+   *   Queue response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;PurgeQueueRequest, Queue&gt; purgeQueueCallable() {
+<span class="fc" id="L868">    return stub.purgeQueueCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Pauses the queue.
+   *
+   * &lt;p&gt;If a queue is paused then the system will stop dispatching tasks until the queue is resumed
+   * via [ResumeQueue][google.cloud.tasks.v2beta3.CloudTasks.ResumeQueue]. Tasks can still be added
+   * when the queue is paused. A queue is paused if its
+   * [state][google.cloud.tasks.v2beta3.Queue.state] is
+   * [PAUSED][google.cloud.tasks.v2beta3.Queue.State.PAUSED].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   QueueName name = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;);
+   *   Queue response = cloudTasksClient.pauseQueue(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The queue name. For example:
+   *     `projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue pauseQueue(QueueName name) {
+    PauseQueueRequest request =
+<span class="pc bpc" id="L896" title="1 of 2 branches missed.">        PauseQueueRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L897">    return pauseQueue(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Pauses the queue.
+   *
+   * &lt;p&gt;If a queue is paused then the system will stop dispatching tasks until the queue is resumed
+   * via [ResumeQueue][google.cloud.tasks.v2beta3.CloudTasks.ResumeQueue]. Tasks can still be added
+   * when the queue is paused. A queue is paused if its
+   * [state][google.cloud.tasks.v2beta3.Queue.state] is
+   * [PAUSED][google.cloud.tasks.v2beta3.Queue.State.PAUSED].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String name = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString();
+   *   Queue response = cloudTasksClient.pauseQueue(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The queue name. For example:
+   *     `projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue pauseQueue(String name) {
+<span class="fc" id="L924">    PauseQueueRequest request = PauseQueueRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L925">    return pauseQueue(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Pauses the queue.
+   *
+   * &lt;p&gt;If a queue is paused then the system will stop dispatching tasks until the queue is resumed
+   * via [ResumeQueue][google.cloud.tasks.v2beta3.CloudTasks.ResumeQueue]. Tasks can still be added
+   * when the queue is paused. A queue is paused if its
+   * [state][google.cloud.tasks.v2beta3.Queue.state] is
+   * [PAUSED][google.cloud.tasks.v2beta3.Queue.State.PAUSED].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   PauseQueueRequest request =
+   *       PauseQueueRequest.newBuilder()
+   *           .setName(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .build();
+   *   Queue response = cloudTasksClient.pauseQueue(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue pauseQueue(PauseQueueRequest request) {
+<span class="fc" id="L954">    return pauseQueueCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Pauses the queue.
+   *
+   * &lt;p&gt;If a queue is paused then the system will stop dispatching tasks until the queue is resumed
+   * via [ResumeQueue][google.cloud.tasks.v2beta3.CloudTasks.ResumeQueue]. Tasks can still be added
+   * when the queue is paused. A queue is paused if its
+   * [state][google.cloud.tasks.v2beta3.Queue.state] is
+   * [PAUSED][google.cloud.tasks.v2beta3.Queue.State.PAUSED].
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   PauseQueueRequest request =
+   *       PauseQueueRequest.newBuilder()
+   *           .setName(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Queue&gt; future = cloudTasksClient.pauseQueueCallable().futureCall(request);
+   *   // Do something.
+   *   Queue response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;PauseQueueRequest, Queue&gt; pauseQueueCallable() {
+<span class="fc" id="L982">    return stub.pauseQueueCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resume a queue.
+   *
+   * &lt;p&gt;This method resumes a queue after it has been
+   * [PAUSED][google.cloud.tasks.v2beta3.Queue.State.PAUSED] or
+   * [DISABLED][google.cloud.tasks.v2beta3.Queue.State.DISABLED]. The state of a queue is stored in
+   * the queue's [state][google.cloud.tasks.v2beta3.Queue.state]; after calling this method it will
+   * be set to [RUNNING][google.cloud.tasks.v2beta3.Queue.State.RUNNING].
+   *
+   * &lt;p&gt;WARNING: Resuming many high-QPS queues at the same time can lead to target overloading. If
+   * you are resuming high-QPS queues, follow the 500/50/5 pattern described in [Managing Cloud
+   * Tasks Scaling Risks](https://cloud.google.com/tasks/docs/manage-cloud-task-scaling).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   QueueName name = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;);
+   *   Queue response = cloudTasksClient.resumeQueue(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The queue name. For example:
+   *     `projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue resumeQueue(QueueName name) {
+    ResumeQueueRequest request =
+<span class="pc bpc" id="L1014" title="1 of 2 branches missed.">        ResumeQueueRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1015">    return resumeQueue(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resume a queue.
+   *
+   * &lt;p&gt;This method resumes a queue after it has been
+   * [PAUSED][google.cloud.tasks.v2beta3.Queue.State.PAUSED] or
+   * [DISABLED][google.cloud.tasks.v2beta3.Queue.State.DISABLED]. The state of a queue is stored in
+   * the queue's [state][google.cloud.tasks.v2beta3.Queue.state]; after calling this method it will
+   * be set to [RUNNING][google.cloud.tasks.v2beta3.Queue.State.RUNNING].
+   *
+   * &lt;p&gt;WARNING: Resuming many high-QPS queues at the same time can lead to target overloading. If
+   * you are resuming high-QPS queues, follow the 500/50/5 pattern described in [Managing Cloud
+   * Tasks Scaling Risks](https://cloud.google.com/tasks/docs/manage-cloud-task-scaling).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String name = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString();
+   *   Queue response = cloudTasksClient.resumeQueue(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The queue name. For example:
+   *     `projects/PROJECT_ID/location/LOCATION_ID/queues/QUEUE_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue resumeQueue(String name) {
+<span class="fc" id="L1046">    ResumeQueueRequest request = ResumeQueueRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1047">    return resumeQueue(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resume a queue.
+   *
+   * &lt;p&gt;This method resumes a queue after it has been
+   * [PAUSED][google.cloud.tasks.v2beta3.Queue.State.PAUSED] or
+   * [DISABLED][google.cloud.tasks.v2beta3.Queue.State.DISABLED]. The state of a queue is stored in
+   * the queue's [state][google.cloud.tasks.v2beta3.Queue.state]; after calling this method it will
+   * be set to [RUNNING][google.cloud.tasks.v2beta3.Queue.State.RUNNING].
+   *
+   * &lt;p&gt;WARNING: Resuming many high-QPS queues at the same time can lead to target overloading. If
+   * you are resuming high-QPS queues, follow the 500/50/5 pattern described in [Managing Cloud
+   * Tasks Scaling Risks](https://cloud.google.com/tasks/docs/manage-cloud-task-scaling).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   ResumeQueueRequest request =
+   *       ResumeQueueRequest.newBuilder()
+   *           .setName(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .build();
+   *   Queue response = cloudTasksClient.resumeQueue(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Queue resumeQueue(ResumeQueueRequest request) {
+<span class="fc" id="L1080">    return resumeQueueCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resume a queue.
+   *
+   * &lt;p&gt;This method resumes a queue after it has been
+   * [PAUSED][google.cloud.tasks.v2beta3.Queue.State.PAUSED] or
+   * [DISABLED][google.cloud.tasks.v2beta3.Queue.State.DISABLED]. The state of a queue is stored in
+   * the queue's [state][google.cloud.tasks.v2beta3.Queue.state]; after calling this method it will
+   * be set to [RUNNING][google.cloud.tasks.v2beta3.Queue.State.RUNNING].
+   *
+   * &lt;p&gt;WARNING: Resuming many high-QPS queues at the same time can lead to target overloading. If
+   * you are resuming high-QPS queues, follow the 500/50/5 pattern described in [Managing Cloud
+   * Tasks Scaling Risks](https://cloud.google.com/tasks/docs/manage-cloud-task-scaling).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   ResumeQueueRequest request =
+   *       ResumeQueueRequest.newBuilder()
+   *           .setName(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Queue&gt; future = cloudTasksClient.resumeQueueCallable().futureCall(request);
+   *   // Do something.
+   *   Queue response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ResumeQueueRequest, Queue&gt; resumeQueueCallable() {
+<span class="fc" id="L1112">    return stub.resumeQueueCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy for a [Queue][google.cloud.tasks.v2beta3.Queue]. Returns an
+   * empty policy if the resource exists and does not have a policy set.
+   *
+   * &lt;p&gt;Authorization requires the following [Google IAM](https://cloud.google.com/iam) permission
+   * on the specified resource parent:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;`cloudtasks.queues.getIamPolicy`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   ResourceName resource = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;);
+   *   Policy response = cloudTasksClient.getIamPolicy(resource);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(ResourceName resource) {
+    GetIamPolicyRequest request =
+<span class="fc" id="L1142">        GetIamPolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L1143" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L1144">            .build();</span>
+<span class="fc" id="L1145">    return getIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy for a [Queue][google.cloud.tasks.v2beta3.Queue]. Returns an
+   * empty policy if the resource exists and does not have a policy set.
+   *
+   * &lt;p&gt;Authorization requires the following [Google IAM](https://cloud.google.com/iam) permission
+   * on the specified resource parent:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;`cloudtasks.queues.getIamPolicy`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String resource = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString();
+   *   Policy response = cloudTasksClient.getIamPolicy(resource);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(String resource) {
+<span class="fc" id="L1174">    GetIamPolicyRequest request = GetIamPolicyRequest.newBuilder().setResource(resource).build();</span>
+<span class="fc" id="L1175">    return getIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy for a [Queue][google.cloud.tasks.v2beta3.Queue]. Returns an
+   * empty policy if the resource exists and does not have a policy set.
+   *
+   * &lt;p&gt;Authorization requires the following [Google IAM](https://cloud.google.com/iam) permission
+   * on the specified resource parent:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;`cloudtasks.queues.getIamPolicy`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   Policy response = cloudTasksClient.getIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(GetIamPolicyRequest request) {
+<span class="fc" id="L1207">    return getIamPolicyCallable().call(request);</span>
+  }
+
+  public final Policy getIamPolicy(QueueName queueName) {
+<span class="nc" id="L1211">    return getIamPolicy((ResourceName) queueName);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy for a [Queue][google.cloud.tasks.v2beta3.Queue]. Returns an
+   * empty policy if the resource exists and does not have a policy set.
+   *
+   * &lt;p&gt;Authorization requires the following [Google IAM](https://cloud.google.com/iam) permission
+   * on the specified resource parent:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;`cloudtasks.queues.getIamPolicy`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = cloudTasksClient.getIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetIamPolicyRequest, Policy&gt; getIamPolicyCallable() {
+<span class="fc" id="L1242">    return stub.getIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy for a [Queue][google.cloud.tasks.v2beta3.Queue]. Replaces any
+   * existing policy.
+   *
+   * &lt;p&gt;Note: The Cloud Console does not check queue-level IAM permissions yet. Project-level
+   * permissions are required to use the Cloud Console.
+   *
+   * &lt;p&gt;Authorization requires the following [Google IAM](https://cloud.google.com/iam) permission
+   * on the specified resource parent:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;`cloudtasks.queues.setIamPolicy`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   ResourceName resource = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;);
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = cloudTasksClient.setIamPolicy(resource, policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being specified. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param policy REQUIRED: The complete policy to be applied to the `resource`. The size of the
+   *     policy is limited to a few 10s of KB. An empty policy is a valid policy but certain Cloud
+   *     Platform services (such as Projects) might reject them.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(ResourceName resource, Policy policy) {
+    SetIamPolicyRequest request =
+<span class="fc" id="L1279">        SetIamPolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L1280" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L1281">            .setPolicy(policy)</span>
+<span class="fc" id="L1282">            .build();</span>
+<span class="fc" id="L1283">    return setIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy for a [Queue][google.cloud.tasks.v2beta3.Queue]. Replaces any
+   * existing policy.
+   *
+   * &lt;p&gt;Note: The Cloud Console does not check queue-level IAM permissions yet. Project-level
+   * permissions are required to use the Cloud Console.
+   *
+   * &lt;p&gt;Authorization requires the following [Google IAM](https://cloud.google.com/iam) permission
+   * on the specified resource parent:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;`cloudtasks.queues.setIamPolicy`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String resource = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString();
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = cloudTasksClient.setIamPolicy(resource, policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being specified. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param policy REQUIRED: The complete policy to be applied to the `resource`. The size of the
+   *     policy is limited to a few 10s of KB. An empty policy is a valid policy but certain Cloud
+   *     Platform services (such as Projects) might reject them.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(String resource, Policy policy) {
+    SetIamPolicyRequest request =
+<span class="fc" id="L1320">        SetIamPolicyRequest.newBuilder().setResource(resource).setPolicy(policy).build();</span>
+<span class="fc" id="L1321">    return setIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy for a [Queue][google.cloud.tasks.v2beta3.Queue]. Replaces any
+   * existing policy.
+   *
+   * &lt;p&gt;Note: The Cloud Console does not check queue-level IAM permissions yet. Project-level
+   * permissions are required to use the Cloud Console.
+   *
+   * &lt;p&gt;Authorization requires the following [Google IAM](https://cloud.google.com/iam) permission
+   * on the specified resource parent:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;`cloudtasks.queues.setIamPolicy`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .build();
+   *   Policy response = cloudTasksClient.setIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(SetIamPolicyRequest request) {
+<span class="fc" id="L1356">    return setIamPolicyCallable().call(request);</span>
+  }
+
+  public final Policy setIamPolicy(QueueName queue, Policy policy) {
+<span class="nc" id="L1360">    return setIamPolicy((ResourceName) queue, policy);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy for a [Queue][google.cloud.tasks.v2beta3.Queue]. Replaces any
+   * existing policy.
+   *
+   * &lt;p&gt;Note: The Cloud Console does not check queue-level IAM permissions yet. Project-level
+   * permissions are required to use the Cloud Console.
+   *
+   * &lt;p&gt;Authorization requires the following [Google IAM](https://cloud.google.com/iam) permission
+   * on the specified resource parent:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;`cloudtasks.queues.setIamPolicy`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = cloudTasksClient.setIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetIamPolicyRequest, Policy&gt; setIamPolicyCallable() {
+<span class="fc" id="L1394">    return stub.setIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns permissions that a caller has on a [Queue][google.cloud.tasks.v2beta3.Queue]. If the
+   * resource does not exist, this will return an empty set of permissions, not a
+   * [NOT_FOUND][google.rpc.Code.NOT_FOUND] error.
+   *
+   * &lt;p&gt;Note: This operation is designed to be used for building permission-aware UIs and
+   * command-line tools, not for authorization checking. This operation may &quot;fail open&quot; without
+   * warning.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   ResourceName resource = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;);
+   *   List&lt;String&gt; permissions = new ArrayList&lt;&gt;();
+   *   TestIamPermissionsResponse response =
+   *       cloudTasksClient.testIamPermissions(resource, permissions);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy detail is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param permissions The set of permissions to check for the `resource`. Permissions with
+   *     wildcards (such as '&amp;#42;' or 'storage.&amp;#42;') are not allowed. For more information see
+   *     [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(
+      ResourceName resource, List&lt;String&gt; permissions) {
+    TestIamPermissionsRequest request =
+<span class="fc" id="L1428">        TestIamPermissionsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1429" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L1430">            .addAllPermissions(permissions)</span>
+<span class="fc" id="L1431">            .build();</span>
+<span class="fc" id="L1432">    return testIamPermissions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns permissions that a caller has on a [Queue][google.cloud.tasks.v2beta3.Queue]. If the
+   * resource does not exist, this will return an empty set of permissions, not a
+   * [NOT_FOUND][google.rpc.Code.NOT_FOUND] error.
+   *
+   * &lt;p&gt;Note: This operation is designed to be used for building permission-aware UIs and
+   * command-line tools, not for authorization checking. This operation may &quot;fail open&quot; without
+   * warning.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String resource = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString();
+   *   List&lt;String&gt; permissions = new ArrayList&lt;&gt;();
+   *   TestIamPermissionsResponse response =
+   *       cloudTasksClient.testIamPermissions(resource, permissions);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy detail is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param permissions The set of permissions to check for the `resource`. Permissions with
+   *     wildcards (such as '&amp;#42;' or 'storage.&amp;#42;') are not allowed. For more information see
+   *     [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(
+      String resource, List&lt;String&gt; permissions) {
+    TestIamPermissionsRequest request =
+<span class="fc" id="L1466">        TestIamPermissionsRequest.newBuilder()</span>
+<span class="fc" id="L1467">            .setResource(resource)</span>
+<span class="fc" id="L1468">            .addAllPermissions(permissions)</span>
+<span class="fc" id="L1469">            .build();</span>
+<span class="fc" id="L1470">    return testIamPermissions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns permissions that a caller has on a [Queue][google.cloud.tasks.v2beta3.Queue]. If the
+   * resource does not exist, this will return an empty set of permissions, not a
+   * [NOT_FOUND][google.rpc.Code.NOT_FOUND] error.
+   *
+   * &lt;p&gt;Note: This operation is designed to be used for building permission-aware UIs and
+   * command-line tools, not for authorization checking. This operation may &quot;fail open&quot; without
+   * warning.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   TestIamPermissionsResponse response = cloudTasksClient.testIamPermissions(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(TestIamPermissionsRequest request) {
+<span class="fc" id="L1500">    return testIamPermissionsCallable().call(request);</span>
+  }
+
+  public final TestIamPermissionsResponse testIamPermissions(
+      QueueName queue, List&lt;String&gt; permissions) {
+<span class="nc" id="L1505">    return testIamPermissions((ResourceName) queue, permissions);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns permissions that a caller has on a [Queue][google.cloud.tasks.v2beta3.Queue]. If the
+   * resource does not exist, this will return an empty set of permissions, not a
+   * [NOT_FOUND][google.rpc.Code.NOT_FOUND] error.
+   *
+   * &lt;p&gt;Note: This operation is designed to be used for building permission-aware UIs and
+   * command-line tools, not for authorization checking. This operation may &quot;fail open&quot; without
+   * warning.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   ApiFuture&lt;TestIamPermissionsResponse&gt; future =
+   *       cloudTasksClient.testIamPermissionsCallable().futureCall(request);
+   *   // Do something.
+   *   TestIamPermissionsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+      testIamPermissionsCallable() {
+<span class="fc" id="L1536">    return stub.testIamPermissionsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the tasks in a queue.
+   *
+   * &lt;p&gt;By default, only the [BASIC][google.cloud.tasks.v2beta3.Task.View.BASIC] view is retrieved
+   * due to performance considerations;
+   * [response_view][google.cloud.tasks.v2beta3.ListTasksRequest.response_view] controls the subset
+   * of information which is returned.
+   *
+   * &lt;p&gt;The tasks may be returned in any order. The ordering may change at any time.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   QueueName parent = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;);
+   *   for (Task element : cloudTasksClient.listTasks(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The queue name. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTasksPagedResponse listTasks(QueueName parent) {
+    ListTasksRequest request =
+<span class="pc bpc" id="L1567" title="1 of 2 branches missed.">        ListTasksRequest.newBuilder().setParent(parent == null ? null : parent.toString()).build();</span>
+<span class="fc" id="L1568">    return listTasks(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the tasks in a queue.
+   *
+   * &lt;p&gt;By default, only the [BASIC][google.cloud.tasks.v2beta3.Task.View.BASIC] view is retrieved
+   * due to performance considerations;
+   * [response_view][google.cloud.tasks.v2beta3.ListTasksRequest.response_view] controls the subset
+   * of information which is returned.
+   *
+   * &lt;p&gt;The tasks may be returned in any order. The ordering may change at any time.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String parent = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString();
+   *   for (Task element : cloudTasksClient.listTasks(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The queue name. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTasksPagedResponse listTasks(String parent) {
+<span class="fc" id="L1598">    ListTasksRequest request = ListTasksRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1599">    return listTasks(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the tasks in a queue.
+   *
+   * &lt;p&gt;By default, only the [BASIC][google.cloud.tasks.v2beta3.Task.View.BASIC] view is retrieved
+   * due to performance considerations;
+   * [response_view][google.cloud.tasks.v2beta3.ListTasksRequest.response_view] controls the subset
+   * of information which is returned.
+   *
+   * &lt;p&gt;The tasks may be returned in any order. The ordering may change at any time.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   ListTasksRequest request =
+   *       ListTasksRequest.newBuilder()
+   *           .setParent(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Task element : cloudTasksClient.listTasks(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTasksPagedResponse listTasks(ListTasksRequest request) {
+<span class="fc" id="L1633">    return listTasksPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the tasks in a queue.
+   *
+   * &lt;p&gt;By default, only the [BASIC][google.cloud.tasks.v2beta3.Task.View.BASIC] view is retrieved
+   * due to performance considerations;
+   * [response_view][google.cloud.tasks.v2beta3.ListTasksRequest.response_view] controls the subset
+   * of information which is returned.
+   *
+   * &lt;p&gt;The tasks may be returned in any order. The ordering may change at any time.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   ListTasksRequest request =
+   *       ListTasksRequest.newBuilder()
+   *           .setParent(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Task&gt; future = cloudTasksClient.listTasksPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Task element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTasksRequest, ListTasksPagedResponse&gt; listTasksPagedCallable() {
+<span class="fc" id="L1666">    return stub.listTasksPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists the tasks in a queue.
+   *
+   * &lt;p&gt;By default, only the [BASIC][google.cloud.tasks.v2beta3.Task.View.BASIC] view is retrieved
+   * due to performance considerations;
+   * [response_view][google.cloud.tasks.v2beta3.ListTasksRequest.response_view] controls the subset
+   * of information which is returned.
+   *
+   * &lt;p&gt;The tasks may be returned in any order. The ordering may change at any time.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   ListTasksRequest request =
+   *       ListTasksRequest.newBuilder()
+   *           .setParent(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListTasksResponse response = cloudTasksClient.listTasksCallable().call(request);
+   *     for (Task element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTasksRequest, ListTasksResponse&gt; listTasksCallable() {
+<span class="nc" id="L1706">    return stub.listTasksCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a task.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   TaskName name = TaskName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;, &quot;[TASK]&quot;);
+   *   Task response = cloudTasksClient.getTask(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The task name. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Task getTask(TaskName name) {
+    GetTaskRequest request =
+<span class="pc bpc" id="L1728" title="1 of 2 branches missed.">        GetTaskRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1729">    return getTask(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a task.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String name = TaskName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;, &quot;[TASK]&quot;).toString();
+   *   Task response = cloudTasksClient.getTask(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The task name. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Task getTask(String name) {
+<span class="fc" id="L1750">    GetTaskRequest request = GetTaskRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1751">    return getTask(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a task.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   GetTaskRequest request =
+   *       GetTaskRequest.newBuilder()
+   *           .setName(TaskName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;, &quot;[TASK]&quot;).toString())
+   *           .build();
+   *   Task response = cloudTasksClient.getTask(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Task getTask(GetTaskRequest request) {
+<span class="fc" id="L1774">    return getTaskCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a task.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   GetTaskRequest request =
+   *       GetTaskRequest.newBuilder()
+   *           .setName(TaskName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;, &quot;[TASK]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Task&gt; future = cloudTasksClient.getTaskCallable().futureCall(request);
+   *   // Do something.
+   *   Task response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetTaskRequest, Task&gt; getTaskCallable() {
+<span class="fc" id="L1796">    return stub.getTaskCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a task and adds it to a queue.
+   *
+   * &lt;p&gt;Tasks cannot be updated after creation; there is no UpdateTask command.
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;The maximum task size is 100KB.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   QueueName parent = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;);
+   *   Task task = Task.newBuilder().build();
+   *   Task response = cloudTasksClient.createTask(parent, task);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The queue name. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID`
+   *     &lt;p&gt;The queue must already exist.
+   * @param task Required. The task to add.
+   *     &lt;p&gt;Task names have the following format:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID`. The user can
+   *     optionally specify a task [name][google.cloud.tasks.v2beta3.Task.name]. If a name is not
+   *     specified then the system will generate a random unique task id, which will be set in the
+   *     task returned in the [response][google.cloud.tasks.v2beta3.Task.name].
+   *     &lt;p&gt;If [schedule_time][google.cloud.tasks.v2beta3.Task.schedule_time] is not set or is in
+   *     the past then Cloud Tasks will set it to the current time.
+   *     &lt;p&gt;Task De-duplication:
+   *     &lt;p&gt;Explicitly specifying a task ID enables task de-duplication. If a task's ID is identical
+   *     to that of an existing task or a task that was deleted or executed recently then the call
+   *     will fail with [ALREADY_EXISTS][google.rpc.Code.ALREADY_EXISTS]. If the task's queue was
+   *     created using Cloud Tasks, then another task with the same name can't be created for ~1hour
+   *     after the original task was deleted or executed. If the task's queue was created using
+   *     queue.yaml or queue.xml, then another task with the same name can't be created for ~9days
+   *     after the original task was deleted or executed.
+   *     &lt;p&gt;Because there is an extra lookup cost to identify duplicate task names, these
+   *     [CreateTask][google.cloud.tasks.v2beta3.CloudTasks.CreateTask] calls have significantly
+   *     increased latency. Using hashed strings for the task id or for the prefix of the task id is
+   *     recommended. Choosing task ids that are sequential or have sequential prefixes, for example
+   *     using a timestamp, causes an increase in latency and error rates in all task commands. The
+   *     infrastructure relies on an approximately uniform distribution of task ids to store and
+   *     serve tasks efficiently.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Task createTask(QueueName parent, Task task) {
+    CreateTaskRequest request =
+<span class="fc" id="L1849">        CreateTaskRequest.newBuilder()</span>
+<span class="pc bpc" id="L1850" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1851">            .setTask(task)</span>
+<span class="fc" id="L1852">            .build();</span>
+<span class="fc" id="L1853">    return createTask(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a task and adds it to a queue.
+   *
+   * &lt;p&gt;Tasks cannot be updated after creation; there is no UpdateTask command.
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;The maximum task size is 100KB.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String parent = QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString();
+   *   Task task = Task.newBuilder().build();
+   *   Task response = cloudTasksClient.createTask(parent, task);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The queue name. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID`
+   *     &lt;p&gt;The queue must already exist.
+   * @param task Required. The task to add.
+   *     &lt;p&gt;Task names have the following format:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID`. The user can
+   *     optionally specify a task [name][google.cloud.tasks.v2beta3.Task.name]. If a name is not
+   *     specified then the system will generate a random unique task id, which will be set in the
+   *     task returned in the [response][google.cloud.tasks.v2beta3.Task.name].
+   *     &lt;p&gt;If [schedule_time][google.cloud.tasks.v2beta3.Task.schedule_time] is not set or is in
+   *     the past then Cloud Tasks will set it to the current time.
+   *     &lt;p&gt;Task De-duplication:
+   *     &lt;p&gt;Explicitly specifying a task ID enables task de-duplication. If a task's ID is identical
+   *     to that of an existing task or a task that was deleted or executed recently then the call
+   *     will fail with [ALREADY_EXISTS][google.rpc.Code.ALREADY_EXISTS]. If the task's queue was
+   *     created using Cloud Tasks, then another task with the same name can't be created for ~1hour
+   *     after the original task was deleted or executed. If the task's queue was created using
+   *     queue.yaml or queue.xml, then another task with the same name can't be created for ~9days
+   *     after the original task was deleted or executed.
+   *     &lt;p&gt;Because there is an extra lookup cost to identify duplicate task names, these
+   *     [CreateTask][google.cloud.tasks.v2beta3.CloudTasks.CreateTask] calls have significantly
+   *     increased latency. Using hashed strings for the task id or for the prefix of the task id is
+   *     recommended. Choosing task ids that are sequential or have sequential prefixes, for example
+   *     using a timestamp, causes an increase in latency and error rates in all task commands. The
+   *     infrastructure relies on an approximately uniform distribution of task ids to store and
+   *     serve tasks efficiently.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Task createTask(String parent, Task task) {
+    CreateTaskRequest request =
+<span class="fc" id="L1906">        CreateTaskRequest.newBuilder().setParent(parent).setTask(task).build();</span>
+<span class="fc" id="L1907">    return createTask(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a task and adds it to a queue.
+   *
+   * &lt;p&gt;Tasks cannot be updated after creation; there is no UpdateTask command.
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;The maximum task size is 100KB.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   CreateTaskRequest request =
+   *       CreateTaskRequest.newBuilder()
+   *           .setParent(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .setTask(Task.newBuilder().build())
+   *           .build();
+   *   Task response = cloudTasksClient.createTask(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Task createTask(CreateTaskRequest request) {
+<span class="fc" id="L1937">    return createTaskCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a task and adds it to a queue.
+   *
+   * &lt;p&gt;Tasks cannot be updated after creation; there is no UpdateTask command.
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;The maximum task size is 100KB.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   CreateTaskRequest request =
+   *       CreateTaskRequest.newBuilder()
+   *           .setParent(QueueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;).toString())
+   *           .setTask(Task.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Task&gt; future = cloudTasksClient.createTaskCallable().futureCall(request);
+   *   // Do something.
+   *   Task response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateTaskRequest, Task&gt; createTaskCallable() {
+<span class="fc" id="L1966">    return stub.createTaskCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a task.
+   *
+   * &lt;p&gt;A task can be deleted if it is scheduled or dispatched. A task cannot be deleted if it has
+   * executed successfully or permanently failed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   TaskName name = TaskName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;, &quot;[TASK]&quot;);
+   *   cloudTasksClient.deleteTask(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The task name. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteTask(TaskName name) {
+    DeleteTaskRequest request =
+<span class="pc bpc" id="L1991" title="1 of 2 branches missed.">        DeleteTaskRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1992">    deleteTask(request);</span>
+<span class="fc" id="L1993">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a task.
+   *
+   * &lt;p&gt;A task can be deleted if it is scheduled or dispatched. A task cannot be deleted if it has
+   * executed successfully or permanently failed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String name = TaskName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;, &quot;[TASK]&quot;).toString();
+   *   cloudTasksClient.deleteTask(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The task name. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteTask(String name) {
+<span class="fc" id="L2016">    DeleteTaskRequest request = DeleteTaskRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2017">    deleteTask(request);</span>
+<span class="fc" id="L2018">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a task.
+   *
+   * &lt;p&gt;A task can be deleted if it is scheduled or dispatched. A task cannot be deleted if it has
+   * executed successfully or permanently failed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   DeleteTaskRequest request =
+   *       DeleteTaskRequest.newBuilder()
+   *           .setName(TaskName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;, &quot;[TASK]&quot;).toString())
+   *           .build();
+   *   cloudTasksClient.deleteTask(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteTask(DeleteTaskRequest request) {
+<span class="fc" id="L2043">    deleteTaskCallable().call(request);</span>
+<span class="fc" id="L2044">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a task.
+   *
+   * &lt;p&gt;A task can be deleted if it is scheduled or dispatched. A task cannot be deleted if it has
+   * executed successfully or permanently failed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   DeleteTaskRequest request =
+   *       DeleteTaskRequest.newBuilder()
+   *           .setName(TaskName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;, &quot;[TASK]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = cloudTasksClient.deleteTaskCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteTaskRequest, Empty&gt; deleteTaskCallable() {
+<span class="fc" id="L2068">    return stub.deleteTaskCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Forces a task to run now.
+   *
+   * &lt;p&gt;When this method is called, Cloud Tasks will dispatch the task, even if the task is already
+   * running, the queue has reached its [RateLimits][google.cloud.tasks.v2beta3.RateLimits] or is
+   * [PAUSED][google.cloud.tasks.v2beta3.Queue.State.PAUSED].
+   *
+   * &lt;p&gt;This command is meant to be used for manual debugging. For example,
+   * [RunTask][google.cloud.tasks.v2beta3.CloudTasks.RunTask] can be used to retry a failed task
+   * after a fix has been made or to manually force a task to be dispatched now.
+   *
+   * &lt;p&gt;The dispatched task is returned. That is, the task that is returned contains the
+   * [status][Task.status] after the task is dispatched but before the task is received by its
+   * target.
+   *
+   * &lt;p&gt;If Cloud Tasks receives a successful response from the task's target, then the task will be
+   * deleted; otherwise the task's [schedule_time][google.cloud.tasks.v2beta3.Task.schedule_time]
+   * will be reset to the time that [RunTask][google.cloud.tasks.v2beta3.CloudTasks.RunTask] was
+   * called plus the retry delay specified in the queue's
+   * [RetryConfig][google.cloud.tasks.v2beta3.RetryConfig].
+   *
+   * &lt;p&gt;[RunTask][google.cloud.tasks.v2beta3.CloudTasks.RunTask] returns
+   * [NOT_FOUND][google.rpc.Code.NOT_FOUND] when it is called on a task that has already succeeded
+   * or permanently failed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   TaskName name = TaskName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;, &quot;[TASK]&quot;);
+   *   Task response = cloudTasksClient.runTask(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The task name. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Task runTask(TaskName name) {
+    RunTaskRequest request =
+<span class="pc bpc" id="L2112" title="1 of 2 branches missed.">        RunTaskRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L2113">    return runTask(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Forces a task to run now.
+   *
+   * &lt;p&gt;When this method is called, Cloud Tasks will dispatch the task, even if the task is already
+   * running, the queue has reached its [RateLimits][google.cloud.tasks.v2beta3.RateLimits] or is
+   * [PAUSED][google.cloud.tasks.v2beta3.Queue.State.PAUSED].
+   *
+   * &lt;p&gt;This command is meant to be used for manual debugging. For example,
+   * [RunTask][google.cloud.tasks.v2beta3.CloudTasks.RunTask] can be used to retry a failed task
+   * after a fix has been made or to manually force a task to be dispatched now.
+   *
+   * &lt;p&gt;The dispatched task is returned. That is, the task that is returned contains the
+   * [status][Task.status] after the task is dispatched but before the task is received by its
+   * target.
+   *
+   * &lt;p&gt;If Cloud Tasks receives a successful response from the task's target, then the task will be
+   * deleted; otherwise the task's [schedule_time][google.cloud.tasks.v2beta3.Task.schedule_time]
+   * will be reset to the time that [RunTask][google.cloud.tasks.v2beta3.CloudTasks.RunTask] was
+   * called plus the retry delay specified in the queue's
+   * [RetryConfig][google.cloud.tasks.v2beta3.RetryConfig].
+   *
+   * &lt;p&gt;[RunTask][google.cloud.tasks.v2beta3.CloudTasks.RunTask] returns
+   * [NOT_FOUND][google.rpc.Code.NOT_FOUND] when it is called on a task that has already succeeded
+   * or permanently failed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   String name = TaskName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;, &quot;[TASK]&quot;).toString();
+   *   Task response = cloudTasksClient.runTask(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The task name. For example:
+   *     `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID/tasks/TASK_ID`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Task runTask(String name) {
+<span class="fc" id="L2156">    RunTaskRequest request = RunTaskRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2157">    return runTask(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Forces a task to run now.
+   *
+   * &lt;p&gt;When this method is called, Cloud Tasks will dispatch the task, even if the task is already
+   * running, the queue has reached its [RateLimits][google.cloud.tasks.v2beta3.RateLimits] or is
+   * [PAUSED][google.cloud.tasks.v2beta3.Queue.State.PAUSED].
+   *
+   * &lt;p&gt;This command is meant to be used for manual debugging. For example,
+   * [RunTask][google.cloud.tasks.v2beta3.CloudTasks.RunTask] can be used to retry a failed task
+   * after a fix has been made or to manually force a task to be dispatched now.
+   *
+   * &lt;p&gt;The dispatched task is returned. That is, the task that is returned contains the
+   * [status][Task.status] after the task is dispatched but before the task is received by its
+   * target.
+   *
+   * &lt;p&gt;If Cloud Tasks receives a successful response from the task's target, then the task will be
+   * deleted; otherwise the task's [schedule_time][google.cloud.tasks.v2beta3.Task.schedule_time]
+   * will be reset to the time that [RunTask][google.cloud.tasks.v2beta3.CloudTasks.RunTask] was
+   * called plus the retry delay specified in the queue's
+   * [RetryConfig][google.cloud.tasks.v2beta3.RetryConfig].
+   *
+   * &lt;p&gt;[RunTask][google.cloud.tasks.v2beta3.CloudTasks.RunTask] returns
+   * [NOT_FOUND][google.rpc.Code.NOT_FOUND] when it is called on a task that has already succeeded
+   * or permanently failed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   RunTaskRequest request =
+   *       RunTaskRequest.newBuilder()
+   *           .setName(TaskName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;, &quot;[TASK]&quot;).toString())
+   *           .build();
+   *   Task response = cloudTasksClient.runTask(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Task runTask(RunTaskRequest request) {
+<span class="fc" id="L2202">    return runTaskCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Forces a task to run now.
+   *
+   * &lt;p&gt;When this method is called, Cloud Tasks will dispatch the task, even if the task is already
+   * running, the queue has reached its [RateLimits][google.cloud.tasks.v2beta3.RateLimits] or is
+   * [PAUSED][google.cloud.tasks.v2beta3.Queue.State.PAUSED].
+   *
+   * &lt;p&gt;This command is meant to be used for manual debugging. For example,
+   * [RunTask][google.cloud.tasks.v2beta3.CloudTasks.RunTask] can be used to retry a failed task
+   * after a fix has been made or to manually force a task to be dispatched now.
+   *
+   * &lt;p&gt;The dispatched task is returned. That is, the task that is returned contains the
+   * [status][Task.status] after the task is dispatched but before the task is received by its
+   * target.
+   *
+   * &lt;p&gt;If Cloud Tasks receives a successful response from the task's target, then the task will be
+   * deleted; otherwise the task's [schedule_time][google.cloud.tasks.v2beta3.Task.schedule_time]
+   * will be reset to the time that [RunTask][google.cloud.tasks.v2beta3.CloudTasks.RunTask] was
+   * called plus the retry delay specified in the queue's
+   * [RetryConfig][google.cloud.tasks.v2beta3.RetryConfig].
+   *
+   * &lt;p&gt;[RunTask][google.cloud.tasks.v2beta3.CloudTasks.RunTask] returns
+   * [NOT_FOUND][google.rpc.Code.NOT_FOUND] when it is called on a task that has already succeeded
+   * or permanently failed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (CloudTasksClient cloudTasksClient = CloudTasksClient.create()) {
+   *   RunTaskRequest request =
+   *       RunTaskRequest.newBuilder()
+   *           .setName(TaskName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[QUEUE]&quot;, &quot;[TASK]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Task&gt; future = cloudTasksClient.runTaskCallable().futureCall(request);
+   *   // Do something.
+   *   Task response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RunTaskRequest, Task&gt; runTaskCallable() {
+<span class="fc" id="L2246">    return stub.runTaskCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L2251">    stub.close();</span>
+<span class="fc" id="L2252">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L2256">    stub.shutdown();</span>
+<span class="nc" id="L2257">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L2261">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L2266">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L2271">    stub.shutdownNow();</span>
+<span class="nc" id="L2272">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L2276">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListQueuesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListQueuesRequest,
+          ListQueuesResponse,
+          Queue,
+          ListQueuesPage,
+          ListQueuesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListQueuesPagedResponse&gt; createAsync(
+        PageContext&lt;ListQueuesRequest, ListQueuesResponse, Queue&gt; context,
+        ApiFuture&lt;ListQueuesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListQueuesPage&gt; futurePage =
+<span class="fc" id="L2291">          ListQueuesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2292">      return ApiFutures.transform(</span>
+<span class="fc" id="L2293">          futurePage, input -&gt; new ListQueuesPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListQueuesPagedResponse(ListQueuesPage page) {
+<span class="fc" id="L2297">      super(page, ListQueuesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2298">    }</span>
+  }
+
+  public static class ListQueuesPage
+      extends AbstractPage&lt;ListQueuesRequest, ListQueuesResponse, Queue, ListQueuesPage&gt; {
+
+    private ListQueuesPage(
+        PageContext&lt;ListQueuesRequest, ListQueuesResponse, Queue&gt; context,
+        ListQueuesResponse response) {
+<span class="fc" id="L2307">      super(context, response);</span>
+<span class="fc" id="L2308">    }</span>
+
+    private static ListQueuesPage createEmptyPage() {
+<span class="fc" id="L2311">      return new ListQueuesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListQueuesPage createPage(
+        PageContext&lt;ListQueuesRequest, ListQueuesResponse, Queue&gt; context,
+        ListQueuesResponse response) {
+<span class="fc" id="L2318">      return new ListQueuesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListQueuesPage&gt; createPageAsync(
+        PageContext&lt;ListQueuesRequest, ListQueuesResponse, Queue&gt; context,
+        ApiFuture&lt;ListQueuesResponse&gt; futureResponse) {
+<span class="fc" id="L2325">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListQueuesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListQueuesRequest,
+          ListQueuesResponse,
+          Queue,
+          ListQueuesPage,
+          ListQueuesFixedSizeCollection&gt; {
+
+    private ListQueuesFixedSizeCollection(List&lt;ListQueuesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2338">      super(pages, collectionSize);</span>
+<span class="fc" id="L2339">    }</span>
+
+    private static ListQueuesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2342">      return new ListQueuesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListQueuesFixedSizeCollection createCollection(
+        List&lt;ListQueuesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2348">      return new ListQueuesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListTasksPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListTasksRequest, ListTasksResponse, Task, ListTasksPage, ListTasksFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListTasksPagedResponse&gt; createAsync(
+        PageContext&lt;ListTasksRequest, ListTasksResponse, Task&gt; context,
+        ApiFuture&lt;ListTasksResponse&gt; futureResponse) {
+      ApiFuture&lt;ListTasksPage&gt; futurePage =
+<span class="fc" id="L2360">          ListTasksPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2361">      return ApiFutures.transform(</span>
+<span class="fc" id="L2362">          futurePage, input -&gt; new ListTasksPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListTasksPagedResponse(ListTasksPage page) {
+<span class="fc" id="L2366">      super(page, ListTasksFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2367">    }</span>
+  }
+
+  public static class ListTasksPage
+      extends AbstractPage&lt;ListTasksRequest, ListTasksResponse, Task, ListTasksPage&gt; {
+
+    private ListTasksPage(
+        PageContext&lt;ListTasksRequest, ListTasksResponse, Task&gt; context,
+        ListTasksResponse response) {
+<span class="fc" id="L2376">      super(context, response);</span>
+<span class="fc" id="L2377">    }</span>
+
+    private static ListTasksPage createEmptyPage() {
+<span class="fc" id="L2380">      return new ListTasksPage(null, null);</span>
+    }
+
+    @Override
+    protected ListTasksPage createPage(
+        PageContext&lt;ListTasksRequest, ListTasksResponse, Task&gt; context,
+        ListTasksResponse response) {
+<span class="fc" id="L2387">      return new ListTasksPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListTasksPage&gt; createPageAsync(
+        PageContext&lt;ListTasksRequest, ListTasksResponse, Task&gt; context,
+        ApiFuture&lt;ListTasksResponse&gt; futureResponse) {
+<span class="fc" id="L2394">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListTasksFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListTasksRequest, ListTasksResponse, Task, ListTasksPage, ListTasksFixedSizeCollection&gt; {
+
+    private ListTasksFixedSizeCollection(List&lt;ListTasksPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2403">      super(pages, collectionSize);</span>
+<span class="fc" id="L2404">    }</span>
+
+    private static ListTasksFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2407">      return new ListTasksFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListTasksFixedSizeCollection createCollection(
+        List&lt;ListTasksPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2413">      return new ListTasksFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

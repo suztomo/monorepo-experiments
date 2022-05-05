@@ -1,0 +1,1819 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>TpuClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-tpu</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.tpu.v2alpha1</a> &gt; <span class="el_source">TpuClient.java</span></div><h1>TpuClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.tpu.v2alpha1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.tpu.v2alpha1.stub.TpuStub;
+import com.google.cloud.tpu.v2alpha1.stub.TpuStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Manages TPU nodes and other resources
+ *
+ * &lt;p&gt;TPU API v2alpha1
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (TpuClient tpuClient = TpuClient.create()) {
+ *   NodeName name = NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;);
+ *   Node response = tpuClient.getNode(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the TpuClient object to clean up resources such as
+ * threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of TpuSettings to create(). For
+ * example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * TpuSettings tpuSettings =
+ *     TpuSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * TpuClient tpuClient = TpuClient.create(tpuSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * TpuSettings tpuSettings = TpuSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * TpuClient tpuClient = TpuClient.create(tpuSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@BetaApi
+@Generated(&quot;by gapic-generator-java&quot;)
+public class TpuClient implements BackgroundResource {
+  private final TpuSettings settings;
+  private final TpuStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of TpuClient with default settings. */
+  public static final TpuClient create() throws IOException {
+<span class="nc" id="L117">    return create(TpuSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of TpuClient, using the given settings. The channels are created based
+   * on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final TpuClient create(TpuSettings settings) throws IOException {
+<span class="fc" id="L125">    return new TpuClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of TpuClient, using the given stub for making calls. This is for
+   * advanced usage - prefer using create(TpuSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final TpuClient create(TpuStub stub) {
+<span class="nc" id="L134">    return new TpuClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of TpuClient, using the given settings. This is protected so that it is
+   * easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   */
+<span class="fc" id="L141">  protected TpuClient(TpuSettings settings) throws IOException {</span>
+<span class="fc" id="L142">    this.settings = settings;</span>
+<span class="fc" id="L143">    this.stub = ((TpuStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L144">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L145">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L148">  protected TpuClient(TpuStub stub) {</span>
+<span class="nc" id="L149">    this.settings = null;</span>
+<span class="nc" id="L150">    this.stub = stub;</span>
+<span class="nc" id="L151">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L152">  }</span>
+
+  public final TpuSettings getSettings() {
+<span class="nc" id="L155">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public TpuStub getStub() {
+<span class="nc" id="L160">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L168">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists nodes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   NodeName parent = NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;);
+   *   for (Node element : tpuClient.listNodes(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNodesPagedResponse listNodes(NodeName parent) {
+    ListNodesRequest request =
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">        ListNodesRequest.newBuilder().setParent(parent == null ? null : parent.toString()).build();</span>
+<span class="fc" id="L194">    return listNodes(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists nodes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   String parent = NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;).toString();
+   *   for (Node element : tpuClient.listNodes(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNodesPagedResponse listNodes(String parent) {
+<span class="fc" id="L218">    ListNodesRequest request = ListNodesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L219">    return listNodes(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists nodes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   ListNodesRequest request =
+   *       ListNodesRequest.newBuilder()
+   *           .setParent(NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Node element : tpuClient.listNodes(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListNodesPagedResponse listNodes(ListNodesRequest request) {
+<span class="fc" id="L248">    return listNodesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists nodes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   ListNodesRequest request =
+   *       ListNodesRequest.newBuilder()
+   *           .setParent(NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Node&gt; future = tpuClient.listNodesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Node element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListNodesRequest, ListNodesPagedResponse&gt; listNodesPagedCallable() {
+<span class="fc" id="L276">    return stub.listNodesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists nodes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   ListNodesRequest request =
+   *       ListNodesRequest.newBuilder()
+   *           .setParent(NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListNodesResponse response = tpuClient.listNodesCallable().call(request);
+   *     for (Node element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListNodesRequest, ListNodesResponse&gt; listNodesCallable() {
+<span class="nc" id="L311">    return stub.listNodesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   NodeName name = NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;);
+   *   Node response = tpuClient.getNode(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Node getNode(NodeName name) {
+    GetNodeRequest request =
+<span class="pc bpc" id="L334" title="1 of 2 branches missed.">        GetNodeRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L335">    return getNode(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   String name = NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;).toString();
+   *   Node response = tpuClient.getNode(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Node getNode(String name) {
+<span class="fc" id="L357">    GetNodeRequest request = GetNodeRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L358">    return getNode(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   GetNodeRequest request =
+   *       GetNodeRequest.newBuilder()
+   *           .setName(NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;).toString())
+   *           .build();
+   *   Node response = tpuClient.getNode(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Node getNode(GetNodeRequest request) {
+<span class="fc" id="L383">    return getNodeCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the details of a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   GetNodeRequest request =
+   *       GetNodeRequest.newBuilder()
+   *           .setName(NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Node&gt; future = tpuClient.getNodeCallable().futureCall(request);
+   *   // Do something.
+   *   Node response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetNodeRequest, Node&gt; getNodeCallable() {
+<span class="fc" id="L407">    return stub.getNodeCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Node node = Node.newBuilder().build();
+   *   String nodeId = &quot;nodeId-1040171331&quot;;
+   *   Node response = tpuClient.createNodeAsync(parent, node, nodeId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   * @param node Required. The node.
+   * @param nodeId The unqualified resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Node, OperationMetadata&gt; createNodeAsync(
+      LocationName parent, Node node, String nodeId) {
+    CreateNodeRequest request =
+<span class="fc" id="L435">        CreateNodeRequest.newBuilder()</span>
+<span class="pc bpc" id="L436" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L437">            .setNode(node)</span>
+<span class="fc" id="L438">            .setNodeId(nodeId)</span>
+<span class="fc" id="L439">            .build();</span>
+<span class="fc" id="L440">    return createNodeAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Node node = Node.newBuilder().build();
+   *   String nodeId = &quot;nodeId-1040171331&quot;;
+   *   Node response = tpuClient.createNodeAsync(parent, node, nodeId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   * @param node Required. The node.
+   * @param nodeId The unqualified resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Node, OperationMetadata&gt; createNodeAsync(
+      String parent, Node node, String nodeId) {
+    CreateNodeRequest request =
+<span class="fc" id="L468">        CreateNodeRequest.newBuilder().setParent(parent).setNode(node).setNodeId(nodeId).build();</span>
+<span class="fc" id="L469">    return createNodeAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   CreateNodeRequest request =
+   *       CreateNodeRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setNodeId(&quot;nodeId-1040171331&quot;)
+   *           .setNode(Node.newBuilder().build())
+   *           .build();
+   *   Node response = tpuClient.createNodeAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Node, OperationMetadata&gt; createNodeAsync(CreateNodeRequest request) {
+<span class="fc" id="L496">    return createNodeOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   CreateNodeRequest request =
+   *       CreateNodeRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setNodeId(&quot;nodeId-1040171331&quot;)
+   *           .setNode(Node.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Node, OperationMetadata&gt; future =
+   *       tpuClient.createNodeOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Node response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateNodeRequest, Node, OperationMetadata&gt;
+      createNodeOperationCallable() {
+<span class="fc" id="L524">    return stub.createNodeOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   CreateNodeRequest request =
+   *       CreateNodeRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setNodeId(&quot;nodeId-1040171331&quot;)
+   *           .setNode(Node.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = tpuClient.createNodeCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateNodeRequest, Operation&gt; createNodeCallable() {
+<span class="nc" id="L550">    return stub.createNodeCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   NodeName name = NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;);
+   *   Node response = tpuClient.deleteNodeAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Node, OperationMetadata&gt; deleteNodeAsync(NodeName name) {
+    DeleteNodeRequest request =
+<span class="pc bpc" id="L573" title="1 of 2 branches missed.">        DeleteNodeRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L574">    return deleteNodeAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   String name = NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;).toString();
+   *   Node response = tpuClient.deleteNodeAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Node, OperationMetadata&gt; deleteNodeAsync(String name) {
+<span class="fc" id="L596">    DeleteNodeRequest request = DeleteNodeRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L597">    return deleteNodeAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   DeleteNodeRequest request =
+   *       DeleteNodeRequest.newBuilder()
+   *           .setName(NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;).toString())
+   *           .build();
+   *   Node response = tpuClient.deleteNodeAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Node, OperationMetadata&gt; deleteNodeAsync(DeleteNodeRequest request) {
+<span class="fc" id="L622">    return deleteNodeOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   DeleteNodeRequest request =
+   *       DeleteNodeRequest.newBuilder()
+   *           .setName(NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Node, OperationMetadata&gt; future =
+   *       tpuClient.deleteNodeOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Node response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteNodeRequest, Node, OperationMetadata&gt;
+      deleteNodeOperationCallable() {
+<span class="fc" id="L648">    return stub.deleteNodeOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   DeleteNodeRequest request =
+   *       DeleteNodeRequest.newBuilder()
+   *           .setName(NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = tpuClient.deleteNodeCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteNodeRequest, Operation&gt; deleteNodeCallable() {
+<span class="nc" id="L672">    return stub.deleteNodeCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Stops a node. This operation is only available with single TPU nodes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   StopNodeRequest request = StopNodeRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   Node response = tpuClient.stopNodeAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Node, OperationMetadata&gt; stopNodeAsync(StopNodeRequest request) {
+<span class="fc" id="L694">    return stopNodeOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Stops a node. This operation is only available with single TPU nodes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   StopNodeRequest request = StopNodeRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   OperationFuture&lt;Node, OperationMetadata&gt; future =
+   *       tpuClient.stopNodeOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Node response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;StopNodeRequest, Node, OperationMetadata&gt;
+      stopNodeOperationCallable() {
+<span class="fc" id="L717">    return stub.stopNodeOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Stops a node. This operation is only available with single TPU nodes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   StopNodeRequest request = StopNodeRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;Operation&gt; future = tpuClient.stopNodeCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;StopNodeRequest, Operation&gt; stopNodeCallable() {
+<span class="nc" id="L738">    return stub.stopNodeCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   StartNodeRequest request = StartNodeRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   Node response = tpuClient.startNodeAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Node, OperationMetadata&gt; startNodeAsync(StartNodeRequest request) {
+<span class="fc" id="L760">    return startNodeOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   StartNodeRequest request = StartNodeRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   OperationFuture&lt;Node, OperationMetadata&gt; future =
+   *       tpuClient.startNodeOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Node response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;StartNodeRequest, Node, OperationMetadata&gt;
+      startNodeOperationCallable() {
+<span class="fc" id="L783">    return stub.startNodeOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Starts a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   StartNodeRequest request = StartNodeRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;Operation&gt; future = tpuClient.startNodeCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;StartNodeRequest, Operation&gt; startNodeCallable() {
+<span class="nc" id="L804">    return stub.startNodeCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the configurations of a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   Node node = Node.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Node response = tpuClient.updateNodeAsync(node, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param node Required. The node. Only fields specified in update_mask are updated.
+   * @param updateMask Required. Mask of fields from [Node][Tpu.Node] to update. Supported fields:
+   *     None.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Node, OperationMetadata&gt; updateNodeAsync(
+      Node node, FieldMask updateMask) {
+    UpdateNodeRequest request =
+<span class="fc" id="L831">        UpdateNodeRequest.newBuilder().setNode(node).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L832">    return updateNodeAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the configurations of a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   UpdateNodeRequest request =
+   *       UpdateNodeRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setNode(Node.newBuilder().build())
+   *           .build();
+   *   Node response = tpuClient.updateNodeAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Node, OperationMetadata&gt; updateNodeAsync(UpdateNodeRequest request) {
+<span class="fc" id="L858">    return updateNodeOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the configurations of a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   UpdateNodeRequest request =
+   *       UpdateNodeRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setNode(Node.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Node, OperationMetadata&gt; future =
+   *       tpuClient.updateNodeOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Node response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpdateNodeRequest, Node, OperationMetadata&gt;
+      updateNodeOperationCallable() {
+<span class="fc" id="L885">    return stub.updateNodeOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the configurations of a node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   UpdateNodeRequest request =
+   *       UpdateNodeRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setNode(Node.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = tpuClient.updateNodeCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateNodeRequest, Operation&gt; updateNodeCallable() {
+<span class="nc" id="L910">    return stub.updateNodeCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Generates the Cloud TPU service identity for the project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   GenerateServiceIdentityRequest request =
+   *       GenerateServiceIdentityRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   GenerateServiceIdentityResponse response = tpuClient.generateServiceIdentity(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GenerateServiceIdentityResponse generateServiceIdentity(
+      GenerateServiceIdentityRequest request) {
+<span class="fc" id="L936">    return generateServiceIdentityCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Generates the Cloud TPU service identity for the project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   GenerateServiceIdentityRequest request =
+   *       GenerateServiceIdentityRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;GenerateServiceIdentityResponse&gt; future =
+   *       tpuClient.generateServiceIdentityCallable().futureCall(request);
+   *   // Do something.
+   *   GenerateServiceIdentityResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GenerateServiceIdentityRequest, GenerateServiceIdentityResponse&gt;
+      generateServiceIdentityCallable() {
+<span class="fc" id="L962">    return stub.generateServiceIdentityCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists accelerator types supported by this API.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   AcceleratorTypeName parent =
+   *       AcceleratorTypeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ACCELERATOR_TYPE]&quot;);
+   *   for (AcceleratorType element : tpuClient.listAcceleratorTypes(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAcceleratorTypesPagedResponse listAcceleratorTypes(AcceleratorTypeName parent) {
+    ListAcceleratorTypesRequest request =
+<span class="fc" id="L988">        ListAcceleratorTypesRequest.newBuilder()</span>
+<span class="pc bpc" id="L989" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L990">            .build();</span>
+<span class="fc" id="L991">    return listAcceleratorTypes(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists accelerator types supported by this API.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   String parent =
+   *       AcceleratorTypeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ACCELERATOR_TYPE]&quot;).toString();
+   *   for (AcceleratorType element : tpuClient.listAcceleratorTypes(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAcceleratorTypesPagedResponse listAcceleratorTypes(String parent) {
+    ListAcceleratorTypesRequest request =
+<span class="fc" id="L1017">        ListAcceleratorTypesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1018">    return listAcceleratorTypes(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists accelerator types supported by this API.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   ListAcceleratorTypesRequest request =
+   *       ListAcceleratorTypesRequest.newBuilder()
+   *           .setParent(
+   *               AcceleratorTypeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ACCELERATOR_TYPE]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (AcceleratorType element : tpuClient.listAcceleratorTypes(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAcceleratorTypesPagedResponse listAcceleratorTypes(
+      ListAcceleratorTypesRequest request) {
+<span class="fc" id="L1052">    return listAcceleratorTypesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists accelerator types supported by this API.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   ListAcceleratorTypesRequest request =
+   *       ListAcceleratorTypesRequest.newBuilder()
+   *           .setParent(
+   *               AcceleratorTypeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ACCELERATOR_TYPE]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;AcceleratorType&gt; future =
+   *       tpuClient.listAcceleratorTypesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (AcceleratorType element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAcceleratorTypesRequest, ListAcceleratorTypesPagedResponse&gt;
+      listAcceleratorTypesPagedCallable() {
+<span class="fc" id="L1086">    return stub.listAcceleratorTypesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists accelerator types supported by this API.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   ListAcceleratorTypesRequest request =
+   *       ListAcceleratorTypesRequest.newBuilder()
+   *           .setParent(
+   *               AcceleratorTypeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ACCELERATOR_TYPE]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListAcceleratorTypesResponse response =
+   *         tpuClient.listAcceleratorTypesCallable().call(request);
+   *     for (AcceleratorType element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAcceleratorTypesRequest, ListAcceleratorTypesResponse&gt;
+      listAcceleratorTypesCallable() {
+<span class="nc" id="L1127">    return stub.listAcceleratorTypesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets AcceleratorType.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   AcceleratorTypeName name =
+   *       AcceleratorTypeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ACCELERATOR_TYPE]&quot;);
+   *   AcceleratorType response = tpuClient.getAcceleratorType(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AcceleratorType getAcceleratorType(AcceleratorTypeName name) {
+    GetAcceleratorTypeRequest request =
+<span class="fc" id="L1151">        GetAcceleratorTypeRequest.newBuilder()</span>
+<span class="pc bpc" id="L1152" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1153">            .build();</span>
+<span class="fc" id="L1154">    return getAcceleratorType(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets AcceleratorType.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   String name =
+   *       AcceleratorTypeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ACCELERATOR_TYPE]&quot;).toString();
+   *   AcceleratorType response = tpuClient.getAcceleratorType(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AcceleratorType getAcceleratorType(String name) {
+    GetAcceleratorTypeRequest request =
+<span class="fc" id="L1178">        GetAcceleratorTypeRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1179">    return getAcceleratorType(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets AcceleratorType.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   GetAcceleratorTypeRequest request =
+   *       GetAcceleratorTypeRequest.newBuilder()
+   *           .setName(
+   *               AcceleratorTypeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ACCELERATOR_TYPE]&quot;)
+   *                   .toString())
+   *           .build();
+   *   AcceleratorType response = tpuClient.getAcceleratorType(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AcceleratorType getAcceleratorType(GetAcceleratorTypeRequest request) {
+<span class="fc" id="L1206">    return getAcceleratorTypeCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets AcceleratorType.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   GetAcceleratorTypeRequest request =
+   *       GetAcceleratorTypeRequest.newBuilder()
+   *           .setName(
+   *               AcceleratorTypeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ACCELERATOR_TYPE]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;AcceleratorType&gt; future =
+   *       tpuClient.getAcceleratorTypeCallable().futureCall(request);
+   *   // Do something.
+   *   AcceleratorType response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetAcceleratorTypeRequest, AcceleratorType&gt;
+      getAcceleratorTypeCallable() {
+<span class="fc" id="L1234">    return stub.getAcceleratorTypeCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists runtime versions supported by this API.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   RuntimeVersionName parent =
+   *       RuntimeVersionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RUNTIME_VERSION]&quot;);
+   *   for (RuntimeVersion element : tpuClient.listRuntimeVersions(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRuntimeVersionsPagedResponse listRuntimeVersions(RuntimeVersionName parent) {
+    ListRuntimeVersionsRequest request =
+<span class="fc" id="L1260">        ListRuntimeVersionsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1261" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1262">            .build();</span>
+<span class="fc" id="L1263">    return listRuntimeVersions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists runtime versions supported by this API.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   String parent =
+   *       RuntimeVersionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RUNTIME_VERSION]&quot;).toString();
+   *   for (RuntimeVersion element : tpuClient.listRuntimeVersions(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRuntimeVersionsPagedResponse listRuntimeVersions(String parent) {
+    ListRuntimeVersionsRequest request =
+<span class="fc" id="L1289">        ListRuntimeVersionsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1290">    return listRuntimeVersions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists runtime versions supported by this API.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   ListRuntimeVersionsRequest request =
+   *       ListRuntimeVersionsRequest.newBuilder()
+   *           .setParent(
+   *               RuntimeVersionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RUNTIME_VERSION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (RuntimeVersion element : tpuClient.listRuntimeVersions(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRuntimeVersionsPagedResponse listRuntimeVersions(
+      ListRuntimeVersionsRequest request) {
+<span class="fc" id="L1323">    return listRuntimeVersionsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists runtime versions supported by this API.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   ListRuntimeVersionsRequest request =
+   *       ListRuntimeVersionsRequest.newBuilder()
+   *           .setParent(
+   *               RuntimeVersionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RUNTIME_VERSION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;RuntimeVersion&gt; future =
+   *       tpuClient.listRuntimeVersionsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (RuntimeVersion element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRuntimeVersionsRequest, ListRuntimeVersionsPagedResponse&gt;
+      listRuntimeVersionsPagedCallable() {
+<span class="fc" id="L1356">    return stub.listRuntimeVersionsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists runtime versions supported by this API.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   ListRuntimeVersionsRequest request =
+   *       ListRuntimeVersionsRequest.newBuilder()
+   *           .setParent(
+   *               RuntimeVersionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RUNTIME_VERSION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListRuntimeVersionsResponse response =
+   *         tpuClient.listRuntimeVersionsCallable().call(request);
+   *     for (RuntimeVersion element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRuntimeVersionsRequest, ListRuntimeVersionsResponse&gt;
+      listRuntimeVersionsCallable() {
+<span class="nc" id="L1396">    return stub.listRuntimeVersionsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a runtime version.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   RuntimeVersionName name =
+   *       RuntimeVersionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RUNTIME_VERSION]&quot;);
+   *   RuntimeVersion response = tpuClient.getRuntimeVersion(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final RuntimeVersion getRuntimeVersion(RuntimeVersionName name) {
+    GetRuntimeVersionRequest request =
+<span class="fc" id="L1420">        GetRuntimeVersionRequest.newBuilder()</span>
+<span class="pc bpc" id="L1421" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1422">            .build();</span>
+<span class="fc" id="L1423">    return getRuntimeVersion(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a runtime version.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   String name =
+   *       RuntimeVersionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RUNTIME_VERSION]&quot;).toString();
+   *   RuntimeVersion response = tpuClient.getRuntimeVersion(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final RuntimeVersion getRuntimeVersion(String name) {
+<span class="fc" id="L1446">    GetRuntimeVersionRequest request = GetRuntimeVersionRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1447">    return getRuntimeVersion(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a runtime version.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   GetRuntimeVersionRequest request =
+   *       GetRuntimeVersionRequest.newBuilder()
+   *           .setName(
+   *               RuntimeVersionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RUNTIME_VERSION]&quot;).toString())
+   *           .build();
+   *   RuntimeVersion response = tpuClient.getRuntimeVersion(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final RuntimeVersion getRuntimeVersion(GetRuntimeVersionRequest request) {
+<span class="fc" id="L1473">    return getRuntimeVersionCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a runtime version.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   GetRuntimeVersionRequest request =
+   *       GetRuntimeVersionRequest.newBuilder()
+   *           .setName(
+   *               RuntimeVersionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RUNTIME_VERSION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;RuntimeVersion&gt; future = tpuClient.getRuntimeVersionCallable().futureCall(request);
+   *   // Do something.
+   *   RuntimeVersion response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetRuntimeVersionRequest, RuntimeVersion&gt; getRuntimeVersionCallable() {
+<span class="fc" id="L1498">    return stub.getRuntimeVersionCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves the guest attributes for the node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   GetGuestAttributesRequest request =
+   *       GetGuestAttributesRequest.newBuilder()
+   *           .setName(NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;).toString())
+   *           .setQueryPath(&quot;queryPath-1807004403&quot;)
+   *           .addAllWorkerIds(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   GetGuestAttributesResponse response = tpuClient.getGuestAttributes(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GetGuestAttributesResponse getGuestAttributes(GetGuestAttributesRequest request) {
+<span class="fc" id="L1525">    return getGuestAttributesCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves the guest attributes for the node.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (TpuClient tpuClient = TpuClient.create()) {
+   *   GetGuestAttributesRequest request =
+   *       GetGuestAttributesRequest.newBuilder()
+   *           .setName(NodeName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[NODE]&quot;).toString())
+   *           .setQueryPath(&quot;queryPath-1807004403&quot;)
+   *           .addAllWorkerIds(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   ApiFuture&lt;GetGuestAttributesResponse&gt; future =
+   *       tpuClient.getGuestAttributesCallable().futureCall(request);
+   *   // Do something.
+   *   GetGuestAttributesResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetGuestAttributesRequest, GetGuestAttributesResponse&gt;
+      getGuestAttributesCallable() {
+<span class="fc" id="L1553">    return stub.getGuestAttributesCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1558">    stub.close();</span>
+<span class="fc" id="L1559">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1563">    stub.shutdown();</span>
+<span class="nc" id="L1564">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1568">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1573">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1578">    stub.shutdownNow();</span>
+<span class="nc" id="L1579">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1583">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListNodesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListNodesRequest, ListNodesResponse, Node, ListNodesPage, ListNodesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListNodesPagedResponse&gt; createAsync(
+        PageContext&lt;ListNodesRequest, ListNodesResponse, Node&gt; context,
+        ApiFuture&lt;ListNodesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListNodesPage&gt; futurePage =
+<span class="fc" id="L1594">          ListNodesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1595">      return ApiFutures.transform(</span>
+<span class="fc" id="L1596">          futurePage, input -&gt; new ListNodesPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListNodesPagedResponse(ListNodesPage page) {
+<span class="fc" id="L1600">      super(page, ListNodesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1601">    }</span>
+  }
+
+  public static class ListNodesPage
+      extends AbstractPage&lt;ListNodesRequest, ListNodesResponse, Node, ListNodesPage&gt; {
+
+    private ListNodesPage(
+        PageContext&lt;ListNodesRequest, ListNodesResponse, Node&gt; context,
+        ListNodesResponse response) {
+<span class="fc" id="L1610">      super(context, response);</span>
+<span class="fc" id="L1611">    }</span>
+
+    private static ListNodesPage createEmptyPage() {
+<span class="fc" id="L1614">      return new ListNodesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListNodesPage createPage(
+        PageContext&lt;ListNodesRequest, ListNodesResponse, Node&gt; context,
+        ListNodesResponse response) {
+<span class="fc" id="L1621">      return new ListNodesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListNodesPage&gt; createPageAsync(
+        PageContext&lt;ListNodesRequest, ListNodesResponse, Node&gt; context,
+        ApiFuture&lt;ListNodesResponse&gt; futureResponse) {
+<span class="fc" id="L1628">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListNodesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListNodesRequest, ListNodesResponse, Node, ListNodesPage, ListNodesFixedSizeCollection&gt; {
+
+    private ListNodesFixedSizeCollection(List&lt;ListNodesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1637">      super(pages, collectionSize);</span>
+<span class="fc" id="L1638">    }</span>
+
+    private static ListNodesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1641">      return new ListNodesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListNodesFixedSizeCollection createCollection(
+        List&lt;ListNodesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1647">      return new ListNodesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListAcceleratorTypesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListAcceleratorTypesRequest,
+          ListAcceleratorTypesResponse,
+          AcceleratorType,
+          ListAcceleratorTypesPage,
+          ListAcceleratorTypesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListAcceleratorTypesPagedResponse&gt; createAsync(
+        PageContext&lt;ListAcceleratorTypesRequest, ListAcceleratorTypesResponse, AcceleratorType&gt;
+            context,
+        ApiFuture&lt;ListAcceleratorTypesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListAcceleratorTypesPage&gt; futurePage =
+<span class="fc" id="L1664">          ListAcceleratorTypesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1665">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1667">          input -&gt; new ListAcceleratorTypesPagedResponse(input),</span>
+<span class="fc" id="L1668">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListAcceleratorTypesPagedResponse(ListAcceleratorTypesPage page) {
+<span class="fc" id="L1672">      super(page, ListAcceleratorTypesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1673">    }</span>
+  }
+
+  public static class ListAcceleratorTypesPage
+      extends AbstractPage&lt;
+          ListAcceleratorTypesRequest,
+          ListAcceleratorTypesResponse,
+          AcceleratorType,
+          ListAcceleratorTypesPage&gt; {
+
+    private ListAcceleratorTypesPage(
+        PageContext&lt;ListAcceleratorTypesRequest, ListAcceleratorTypesResponse, AcceleratorType&gt;
+            context,
+        ListAcceleratorTypesResponse response) {
+<span class="fc" id="L1687">      super(context, response);</span>
+<span class="fc" id="L1688">    }</span>
+
+    private static ListAcceleratorTypesPage createEmptyPage() {
+<span class="fc" id="L1691">      return new ListAcceleratorTypesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListAcceleratorTypesPage createPage(
+        PageContext&lt;ListAcceleratorTypesRequest, ListAcceleratorTypesResponse, AcceleratorType&gt;
+            context,
+        ListAcceleratorTypesResponse response) {
+<span class="fc" id="L1699">      return new ListAcceleratorTypesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListAcceleratorTypesPage&gt; createPageAsync(
+        PageContext&lt;ListAcceleratorTypesRequest, ListAcceleratorTypesResponse, AcceleratorType&gt;
+            context,
+        ApiFuture&lt;ListAcceleratorTypesResponse&gt; futureResponse) {
+<span class="fc" id="L1707">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListAcceleratorTypesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListAcceleratorTypesRequest,
+          ListAcceleratorTypesResponse,
+          AcceleratorType,
+          ListAcceleratorTypesPage,
+          ListAcceleratorTypesFixedSizeCollection&gt; {
+
+    private ListAcceleratorTypesFixedSizeCollection(
+        List&lt;ListAcceleratorTypesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1721">      super(pages, collectionSize);</span>
+<span class="fc" id="L1722">    }</span>
+
+    private static ListAcceleratorTypesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1725">      return new ListAcceleratorTypesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListAcceleratorTypesFixedSizeCollection createCollection(
+        List&lt;ListAcceleratorTypesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1731">      return new ListAcceleratorTypesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListRuntimeVersionsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListRuntimeVersionsRequest,
+          ListRuntimeVersionsResponse,
+          RuntimeVersion,
+          ListRuntimeVersionsPage,
+          ListRuntimeVersionsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListRuntimeVersionsPagedResponse&gt; createAsync(
+        PageContext&lt;ListRuntimeVersionsRequest, ListRuntimeVersionsResponse, RuntimeVersion&gt;
+            context,
+        ApiFuture&lt;ListRuntimeVersionsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListRuntimeVersionsPage&gt; futurePage =
+<span class="fc" id="L1748">          ListRuntimeVersionsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1749">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1751">          input -&gt; new ListRuntimeVersionsPagedResponse(input),</span>
+<span class="fc" id="L1752">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListRuntimeVersionsPagedResponse(ListRuntimeVersionsPage page) {
+<span class="fc" id="L1756">      super(page, ListRuntimeVersionsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1757">    }</span>
+  }
+
+  public static class ListRuntimeVersionsPage
+      extends AbstractPage&lt;
+          ListRuntimeVersionsRequest,
+          ListRuntimeVersionsResponse,
+          RuntimeVersion,
+          ListRuntimeVersionsPage&gt; {
+
+    private ListRuntimeVersionsPage(
+        PageContext&lt;ListRuntimeVersionsRequest, ListRuntimeVersionsResponse, RuntimeVersion&gt;
+            context,
+        ListRuntimeVersionsResponse response) {
+<span class="fc" id="L1771">      super(context, response);</span>
+<span class="fc" id="L1772">    }</span>
+
+    private static ListRuntimeVersionsPage createEmptyPage() {
+<span class="fc" id="L1775">      return new ListRuntimeVersionsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListRuntimeVersionsPage createPage(
+        PageContext&lt;ListRuntimeVersionsRequest, ListRuntimeVersionsResponse, RuntimeVersion&gt;
+            context,
+        ListRuntimeVersionsResponse response) {
+<span class="fc" id="L1783">      return new ListRuntimeVersionsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListRuntimeVersionsPage&gt; createPageAsync(
+        PageContext&lt;ListRuntimeVersionsRequest, ListRuntimeVersionsResponse, RuntimeVersion&gt;
+            context,
+        ApiFuture&lt;ListRuntimeVersionsResponse&gt; futureResponse) {
+<span class="fc" id="L1791">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListRuntimeVersionsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListRuntimeVersionsRequest,
+          ListRuntimeVersionsResponse,
+          RuntimeVersion,
+          ListRuntimeVersionsPage,
+          ListRuntimeVersionsFixedSizeCollection&gt; {
+
+    private ListRuntimeVersionsFixedSizeCollection(
+        List&lt;ListRuntimeVersionsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1805">      super(pages, collectionSize);</span>
+<span class="fc" id="L1806">    }</span>
+
+    private static ListRuntimeVersionsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1809">      return new ListRuntimeVersionsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListRuntimeVersionsFixedSizeCollection createCollection(
+        List&lt;ListRuntimeVersionsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1815">      return new ListRuntimeVersionsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

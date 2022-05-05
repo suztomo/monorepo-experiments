@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>CloudBuildSettings.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-build</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.devtools.cloudbuild.v1</a> &gt; <span class="el_source">CloudBuildSettings.java</span></div><h1>CloudBuildSettings.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.devtools.cloudbuild.v1;
+
+import static com.google.cloud.devtools.cloudbuild.v1.CloudBuildClient.ListBuildTriggersPagedResponse;
+import static com.google.cloud.devtools.cloudbuild.v1.CloudBuildClient.ListBuildsPagedResponse;
+import static com.google.cloud.devtools.cloudbuild.v1.CloudBuildClient.ListWorkerPoolsPagedResponse;
+
+import com.google.api.core.ApiFunction;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.GoogleCredentialsProvider;
+import com.google.api.gax.core.InstantiatingExecutorProvider;
+import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider;
+import com.google.api.gax.rpc.ApiClientHeaderProvider;
+import com.google.api.gax.rpc.ClientContext;
+import com.google.api.gax.rpc.ClientSettings;
+import com.google.api.gax.rpc.OperationCallSettings;
+import com.google.api.gax.rpc.PagedCallSettings;
+import com.google.api.gax.rpc.TransportChannelProvider;
+import com.google.api.gax.rpc.UnaryCallSettings;
+import com.google.cloud.devtools.cloudbuild.v1.stub.CloudBuildStubSettings;
+import com.google.cloudbuild.v1.ApproveBuildRequest;
+import com.google.cloudbuild.v1.Build;
+import com.google.cloudbuild.v1.BuildOperationMetadata;
+import com.google.cloudbuild.v1.BuildTrigger;
+import com.google.cloudbuild.v1.CancelBuildRequest;
+import com.google.cloudbuild.v1.CreateBuildRequest;
+import com.google.cloudbuild.v1.CreateBuildTriggerRequest;
+import com.google.cloudbuild.v1.CreateWorkerPoolOperationMetadata;
+import com.google.cloudbuild.v1.CreateWorkerPoolRequest;
+import com.google.cloudbuild.v1.DeleteBuildTriggerRequest;
+import com.google.cloudbuild.v1.DeleteWorkerPoolOperationMetadata;
+import com.google.cloudbuild.v1.DeleteWorkerPoolRequest;
+import com.google.cloudbuild.v1.GetBuildRequest;
+import com.google.cloudbuild.v1.GetBuildTriggerRequest;
+import com.google.cloudbuild.v1.GetWorkerPoolRequest;
+import com.google.cloudbuild.v1.ListBuildTriggersRequest;
+import com.google.cloudbuild.v1.ListBuildTriggersResponse;
+import com.google.cloudbuild.v1.ListBuildsRequest;
+import com.google.cloudbuild.v1.ListBuildsResponse;
+import com.google.cloudbuild.v1.ListWorkerPoolsRequest;
+import com.google.cloudbuild.v1.ListWorkerPoolsResponse;
+import com.google.cloudbuild.v1.ReceiveTriggerWebhookRequest;
+import com.google.cloudbuild.v1.ReceiveTriggerWebhookResponse;
+import com.google.cloudbuild.v1.RetryBuildRequest;
+import com.google.cloudbuild.v1.RunBuildTriggerRequest;
+import com.google.cloudbuild.v1.UpdateBuildTriggerRequest;
+import com.google.cloudbuild.v1.UpdateWorkerPoolOperationMetadata;
+import com.google.cloudbuild.v1.UpdateWorkerPoolRequest;
+import com.google.cloudbuild.v1.WorkerPool;
+import com.google.longrunning.Operation;
+import com.google.protobuf.Empty;
+import java.io.IOException;
+import java.util.List;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Settings class to configure an instance of {@link CloudBuildClient}.
+ *
+ * &lt;p&gt;The default instance has everything set to sensible defaults:
+ *
+ * &lt;ul&gt;
+ *   &lt;li&gt;The default service address (cloudbuild.googleapis.com) and default port (443) are used.
+ *   &lt;li&gt;Credentials are acquired automatically through Application Default Credentials.
+ *   &lt;li&gt;Retries are configured for idempotent methods but not for non-idempotent methods.
+ * &lt;/ul&gt;
+ *
+ * &lt;p&gt;The builder of this class is recursive, so contained classes are themselves builders. When
+ * build() is called, the tree of builders is called to create the complete settings object.
+ *
+ * &lt;p&gt;For example, to set the total timeout of getBuild to 30 seconds:
+ *
+ * &lt;pre&gt;{@code
+ * CloudBuildSettings.Builder cloudBuildSettingsBuilder = CloudBuildSettings.newBuilder();
+ * cloudBuildSettingsBuilder
+ *     .getBuildSettings()
+ *     .setRetrySettings(
+ *         cloudBuildSettingsBuilder
+ *             .getBuildSettings()
+ *             .getRetrySettings()
+ *             .toBuilder()
+ *             .setTotalTimeout(Duration.ofSeconds(30))
+ *             .build());
+ * CloudBuildSettings cloudBuildSettings = cloudBuildSettingsBuilder.build();
+ * }&lt;/pre&gt;
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class CloudBuildSettings extends ClientSettings&lt;CloudBuildSettings&gt; {
+
+  /** Returns the object with the settings used for calls to createBuild. */
+  public UnaryCallSettings&lt;CreateBuildRequest, Operation&gt; createBuildSettings() {
+<span class="nc" id="L107">    return ((CloudBuildStubSettings) getStubSettings()).createBuildSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to createBuild. */
+  public OperationCallSettings&lt;CreateBuildRequest, Build, BuildOperationMetadata&gt;
+      createBuildOperationSettings() {
+<span class="nc" id="L113">    return ((CloudBuildStubSettings) getStubSettings()).createBuildOperationSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to getBuild. */
+  public UnaryCallSettings&lt;GetBuildRequest, Build&gt; getBuildSettings() {
+<span class="nc" id="L118">    return ((CloudBuildStubSettings) getStubSettings()).getBuildSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to listBuilds. */
+  public PagedCallSettings&lt;ListBuildsRequest, ListBuildsResponse, ListBuildsPagedResponse&gt;
+      listBuildsSettings() {
+<span class="nc" id="L124">    return ((CloudBuildStubSettings) getStubSettings()).listBuildsSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to cancelBuild. */
+  public UnaryCallSettings&lt;CancelBuildRequest, Build&gt; cancelBuildSettings() {
+<span class="nc" id="L129">    return ((CloudBuildStubSettings) getStubSettings()).cancelBuildSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to retryBuild. */
+  public UnaryCallSettings&lt;RetryBuildRequest, Operation&gt; retryBuildSettings() {
+<span class="nc" id="L134">    return ((CloudBuildStubSettings) getStubSettings()).retryBuildSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to retryBuild. */
+  public OperationCallSettings&lt;RetryBuildRequest, Build, BuildOperationMetadata&gt;
+      retryBuildOperationSettings() {
+<span class="nc" id="L140">    return ((CloudBuildStubSettings) getStubSettings()).retryBuildOperationSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to approveBuild. */
+  public UnaryCallSettings&lt;ApproveBuildRequest, Operation&gt; approveBuildSettings() {
+<span class="nc" id="L145">    return ((CloudBuildStubSettings) getStubSettings()).approveBuildSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to approveBuild. */
+  public OperationCallSettings&lt;ApproveBuildRequest, Build, BuildOperationMetadata&gt;
+      approveBuildOperationSettings() {
+<span class="nc" id="L151">    return ((CloudBuildStubSettings) getStubSettings()).approveBuildOperationSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to createBuildTrigger. */
+  public UnaryCallSettings&lt;CreateBuildTriggerRequest, BuildTrigger&gt; createBuildTriggerSettings() {
+<span class="nc" id="L156">    return ((CloudBuildStubSettings) getStubSettings()).createBuildTriggerSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to getBuildTrigger. */
+  public UnaryCallSettings&lt;GetBuildTriggerRequest, BuildTrigger&gt; getBuildTriggerSettings() {
+<span class="nc" id="L161">    return ((CloudBuildStubSettings) getStubSettings()).getBuildTriggerSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to listBuildTriggers. */
+  public PagedCallSettings&lt;
+          ListBuildTriggersRequest, ListBuildTriggersResponse, ListBuildTriggersPagedResponse&gt;
+      listBuildTriggersSettings() {
+<span class="nc" id="L168">    return ((CloudBuildStubSettings) getStubSettings()).listBuildTriggersSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to deleteBuildTrigger. */
+  public UnaryCallSettings&lt;DeleteBuildTriggerRequest, Empty&gt; deleteBuildTriggerSettings() {
+<span class="nc" id="L173">    return ((CloudBuildStubSettings) getStubSettings()).deleteBuildTriggerSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to updateBuildTrigger. */
+  public UnaryCallSettings&lt;UpdateBuildTriggerRequest, BuildTrigger&gt; updateBuildTriggerSettings() {
+<span class="nc" id="L178">    return ((CloudBuildStubSettings) getStubSettings()).updateBuildTriggerSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to runBuildTrigger. */
+  public UnaryCallSettings&lt;RunBuildTriggerRequest, Operation&gt; runBuildTriggerSettings() {
+<span class="nc" id="L183">    return ((CloudBuildStubSettings) getStubSettings()).runBuildTriggerSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to runBuildTrigger. */
+  public OperationCallSettings&lt;RunBuildTriggerRequest, Build, BuildOperationMetadata&gt;
+      runBuildTriggerOperationSettings() {
+<span class="nc" id="L189">    return ((CloudBuildStubSettings) getStubSettings()).runBuildTriggerOperationSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to receiveTriggerWebhook. */
+  public UnaryCallSettings&lt;ReceiveTriggerWebhookRequest, ReceiveTriggerWebhookResponse&gt;
+      receiveTriggerWebhookSettings() {
+<span class="nc" id="L195">    return ((CloudBuildStubSettings) getStubSettings()).receiveTriggerWebhookSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to createWorkerPool. */
+  public UnaryCallSettings&lt;CreateWorkerPoolRequest, Operation&gt; createWorkerPoolSettings() {
+<span class="nc" id="L200">    return ((CloudBuildStubSettings) getStubSettings()).createWorkerPoolSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to createWorkerPool. */
+  public OperationCallSettings&lt;
+          CreateWorkerPoolRequest, WorkerPool, CreateWorkerPoolOperationMetadata&gt;
+      createWorkerPoolOperationSettings() {
+<span class="nc" id="L207">    return ((CloudBuildStubSettings) getStubSettings()).createWorkerPoolOperationSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to getWorkerPool. */
+  public UnaryCallSettings&lt;GetWorkerPoolRequest, WorkerPool&gt; getWorkerPoolSettings() {
+<span class="nc" id="L212">    return ((CloudBuildStubSettings) getStubSettings()).getWorkerPoolSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to deleteWorkerPool. */
+  public UnaryCallSettings&lt;DeleteWorkerPoolRequest, Operation&gt; deleteWorkerPoolSettings() {
+<span class="nc" id="L217">    return ((CloudBuildStubSettings) getStubSettings()).deleteWorkerPoolSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to deleteWorkerPool. */
+  public OperationCallSettings&lt;DeleteWorkerPoolRequest, Empty, DeleteWorkerPoolOperationMetadata&gt;
+      deleteWorkerPoolOperationSettings() {
+<span class="nc" id="L223">    return ((CloudBuildStubSettings) getStubSettings()).deleteWorkerPoolOperationSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to updateWorkerPool. */
+  public UnaryCallSettings&lt;UpdateWorkerPoolRequest, Operation&gt; updateWorkerPoolSettings() {
+<span class="nc" id="L228">    return ((CloudBuildStubSettings) getStubSettings()).updateWorkerPoolSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to updateWorkerPool. */
+  public OperationCallSettings&lt;
+          UpdateWorkerPoolRequest, WorkerPool, UpdateWorkerPoolOperationMetadata&gt;
+      updateWorkerPoolOperationSettings() {
+<span class="nc" id="L235">    return ((CloudBuildStubSettings) getStubSettings()).updateWorkerPoolOperationSettings();</span>
+  }
+
+  /** Returns the object with the settings used for calls to listWorkerPools. */
+  public PagedCallSettings&lt;
+          ListWorkerPoolsRequest, ListWorkerPoolsResponse, ListWorkerPoolsPagedResponse&gt;
+      listWorkerPoolsSettings() {
+<span class="nc" id="L242">    return ((CloudBuildStubSettings) getStubSettings()).listWorkerPoolsSettings();</span>
+  }
+
+  public static final CloudBuildSettings create(CloudBuildStubSettings stub) throws IOException {
+<span class="nc" id="L246">    return new CloudBuildSettings.Builder(stub.toBuilder()).build();</span>
+  }
+
+  /** Returns a builder for the default ExecutorProvider for this service. */
+  public static InstantiatingExecutorProvider.Builder defaultExecutorProviderBuilder() {
+<span class="nc" id="L251">    return CloudBuildStubSettings.defaultExecutorProviderBuilder();</span>
+  }
+
+  /** Returns the default service endpoint. */
+  public static String getDefaultEndpoint() {
+<span class="nc" id="L256">    return CloudBuildStubSettings.getDefaultEndpoint();</span>
+  }
+
+  /** Returns the default service scopes. */
+  public static List&lt;String&gt; getDefaultServiceScopes() {
+<span class="nc" id="L261">    return CloudBuildStubSettings.getDefaultServiceScopes();</span>
+  }
+
+  /** Returns a builder for the default credentials for this service. */
+  public static GoogleCredentialsProvider.Builder defaultCredentialsProviderBuilder() {
+<span class="nc" id="L266">    return CloudBuildStubSettings.defaultCredentialsProviderBuilder();</span>
+  }
+
+  /** Returns a builder for the default ChannelProvider for this service. */
+  public static InstantiatingGrpcChannelProvider.Builder defaultGrpcTransportProviderBuilder() {
+<span class="nc" id="L271">    return CloudBuildStubSettings.defaultGrpcTransportProviderBuilder();</span>
+  }
+
+  public static TransportChannelProvider defaultTransportChannelProvider() {
+<span class="nc" id="L275">    return CloudBuildStubSettings.defaultTransportChannelProvider();</span>
+  }
+
+  @BetaApi(&quot;The surface for customizing headers is not stable yet and may change in the future.&quot;)
+  public static ApiClientHeaderProvider.Builder defaultApiClientHeaderProviderBuilder() {
+<span class="nc" id="L280">    return CloudBuildStubSettings.defaultApiClientHeaderProviderBuilder();</span>
+  }
+
+  /** Returns a new builder for this class. */
+  public static Builder newBuilder() {
+<span class="fc" id="L285">    return Builder.createDefault();</span>
+  }
+
+  /** Returns a new builder for this class. */
+  public static Builder newBuilder(ClientContext clientContext) {
+<span class="nc" id="L290">    return new Builder(clientContext);</span>
+  }
+
+  /** Returns a builder containing all the values of this settings class. */
+  public Builder toBuilder() {
+<span class="nc" id="L295">    return new Builder(this);</span>
+  }
+
+  protected CloudBuildSettings(Builder settingsBuilder) throws IOException {
+<span class="fc" id="L299">    super(settingsBuilder);</span>
+<span class="fc" id="L300">  }</span>
+
+  /** Builder for CloudBuildSettings. */
+  public static class Builder extends ClientSettings.Builder&lt;CloudBuildSettings, Builder&gt; {
+
+    protected Builder() throws IOException {
+<span class="nc" id="L306">      this(((ClientContext) null));</span>
+<span class="nc" id="L307">    }</span>
+
+    protected Builder(ClientContext clientContext) {
+<span class="nc" id="L310">      super(CloudBuildStubSettings.newBuilder(clientContext));</span>
+<span class="nc" id="L311">    }</span>
+
+    protected Builder(CloudBuildSettings settings) {
+<span class="nc" id="L314">      super(settings.getStubSettings().toBuilder());</span>
+<span class="nc" id="L315">    }</span>
+
+    protected Builder(CloudBuildStubSettings.Builder stubSettings) {
+<span class="fc" id="L318">      super(stubSettings);</span>
+<span class="fc" id="L319">    }</span>
+
+    private static Builder createDefault() {
+<span class="fc" id="L322">      return new Builder(CloudBuildStubSettings.newBuilder());</span>
+    }
+
+    public CloudBuildStubSettings.Builder getStubSettingsBuilder() {
+<span class="nc" id="L326">      return ((CloudBuildStubSettings.Builder) getStubSettings());</span>
+    }
+
+    /**
+     * Applies the given settings updater function to all of the unary API methods in this service.
+     *
+     * &lt;p&gt;Note: This method does not support applying settings to streaming methods.
+     */
+    public Builder applyToAllUnaryMethods(
+        ApiFunction&lt;UnaryCallSettings.Builder&lt;?, ?&gt;, Void&gt; settingsUpdater) {
+<span class="nc" id="L336">      super.applyToAllUnaryMethods(</span>
+<span class="nc" id="L337">          getStubSettingsBuilder().unaryMethodSettingsBuilders(), settingsUpdater);</span>
+<span class="nc" id="L338">      return this;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to createBuild. */
+    public UnaryCallSettings.Builder&lt;CreateBuildRequest, Operation&gt; createBuildSettings() {
+<span class="nc" id="L343">      return getStubSettingsBuilder().createBuildSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to createBuild. */
+    public OperationCallSettings.Builder&lt;CreateBuildRequest, Build, BuildOperationMetadata&gt;
+        createBuildOperationSettings() {
+<span class="nc" id="L349">      return getStubSettingsBuilder().createBuildOperationSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to getBuild. */
+    public UnaryCallSettings.Builder&lt;GetBuildRequest, Build&gt; getBuildSettings() {
+<span class="nc" id="L354">      return getStubSettingsBuilder().getBuildSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to listBuilds. */
+    public PagedCallSettings.Builder&lt;ListBuildsRequest, ListBuildsResponse, ListBuildsPagedResponse&gt;
+        listBuildsSettings() {
+<span class="nc" id="L360">      return getStubSettingsBuilder().listBuildsSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to cancelBuild. */
+    public UnaryCallSettings.Builder&lt;CancelBuildRequest, Build&gt; cancelBuildSettings() {
+<span class="nc" id="L365">      return getStubSettingsBuilder().cancelBuildSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to retryBuild. */
+    public UnaryCallSettings.Builder&lt;RetryBuildRequest, Operation&gt; retryBuildSettings() {
+<span class="nc" id="L370">      return getStubSettingsBuilder().retryBuildSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to retryBuild. */
+    public OperationCallSettings.Builder&lt;RetryBuildRequest, Build, BuildOperationMetadata&gt;
+        retryBuildOperationSettings() {
+<span class="nc" id="L376">      return getStubSettingsBuilder().retryBuildOperationSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to approveBuild. */
+    public UnaryCallSettings.Builder&lt;ApproveBuildRequest, Operation&gt; approveBuildSettings() {
+<span class="nc" id="L381">      return getStubSettingsBuilder().approveBuildSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to approveBuild. */
+    public OperationCallSettings.Builder&lt;ApproveBuildRequest, Build, BuildOperationMetadata&gt;
+        approveBuildOperationSettings() {
+<span class="nc" id="L387">      return getStubSettingsBuilder().approveBuildOperationSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to createBuildTrigger. */
+    public UnaryCallSettings.Builder&lt;CreateBuildTriggerRequest, BuildTrigger&gt;
+        createBuildTriggerSettings() {
+<span class="nc" id="L393">      return getStubSettingsBuilder().createBuildTriggerSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to getBuildTrigger. */
+    public UnaryCallSettings.Builder&lt;GetBuildTriggerRequest, BuildTrigger&gt;
+        getBuildTriggerSettings() {
+<span class="nc" id="L399">      return getStubSettingsBuilder().getBuildTriggerSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to listBuildTriggers. */
+    public PagedCallSettings.Builder&lt;
+            ListBuildTriggersRequest, ListBuildTriggersResponse, ListBuildTriggersPagedResponse&gt;
+        listBuildTriggersSettings() {
+<span class="nc" id="L406">      return getStubSettingsBuilder().listBuildTriggersSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to deleteBuildTrigger. */
+    public UnaryCallSettings.Builder&lt;DeleteBuildTriggerRequest, Empty&gt;
+        deleteBuildTriggerSettings() {
+<span class="nc" id="L412">      return getStubSettingsBuilder().deleteBuildTriggerSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to updateBuildTrigger. */
+    public UnaryCallSettings.Builder&lt;UpdateBuildTriggerRequest, BuildTrigger&gt;
+        updateBuildTriggerSettings() {
+<span class="nc" id="L418">      return getStubSettingsBuilder().updateBuildTriggerSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to runBuildTrigger. */
+    public UnaryCallSettings.Builder&lt;RunBuildTriggerRequest, Operation&gt; runBuildTriggerSettings() {
+<span class="nc" id="L423">      return getStubSettingsBuilder().runBuildTriggerSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to runBuildTrigger. */
+    public OperationCallSettings.Builder&lt;RunBuildTriggerRequest, Build, BuildOperationMetadata&gt;
+        runBuildTriggerOperationSettings() {
+<span class="nc" id="L429">      return getStubSettingsBuilder().runBuildTriggerOperationSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to receiveTriggerWebhook. */
+    public UnaryCallSettings.Builder&lt;ReceiveTriggerWebhookRequest, ReceiveTriggerWebhookResponse&gt;
+        receiveTriggerWebhookSettings() {
+<span class="nc" id="L435">      return getStubSettingsBuilder().receiveTriggerWebhookSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to createWorkerPool. */
+    public UnaryCallSettings.Builder&lt;CreateWorkerPoolRequest, Operation&gt;
+        createWorkerPoolSettings() {
+<span class="nc" id="L441">      return getStubSettingsBuilder().createWorkerPoolSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to createWorkerPool. */
+    public OperationCallSettings.Builder&lt;
+            CreateWorkerPoolRequest, WorkerPool, CreateWorkerPoolOperationMetadata&gt;
+        createWorkerPoolOperationSettings() {
+<span class="nc" id="L448">      return getStubSettingsBuilder().createWorkerPoolOperationSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to getWorkerPool. */
+    public UnaryCallSettings.Builder&lt;GetWorkerPoolRequest, WorkerPool&gt; getWorkerPoolSettings() {
+<span class="nc" id="L453">      return getStubSettingsBuilder().getWorkerPoolSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to deleteWorkerPool. */
+    public UnaryCallSettings.Builder&lt;DeleteWorkerPoolRequest, Operation&gt;
+        deleteWorkerPoolSettings() {
+<span class="nc" id="L459">      return getStubSettingsBuilder().deleteWorkerPoolSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to deleteWorkerPool. */
+    public OperationCallSettings.Builder&lt;
+            DeleteWorkerPoolRequest, Empty, DeleteWorkerPoolOperationMetadata&gt;
+        deleteWorkerPoolOperationSettings() {
+<span class="nc" id="L466">      return getStubSettingsBuilder().deleteWorkerPoolOperationSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to updateWorkerPool. */
+    public UnaryCallSettings.Builder&lt;UpdateWorkerPoolRequest, Operation&gt;
+        updateWorkerPoolSettings() {
+<span class="nc" id="L472">      return getStubSettingsBuilder().updateWorkerPoolSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to updateWorkerPool. */
+    public OperationCallSettings.Builder&lt;
+            UpdateWorkerPoolRequest, WorkerPool, UpdateWorkerPoolOperationMetadata&gt;
+        updateWorkerPoolOperationSettings() {
+<span class="nc" id="L479">      return getStubSettingsBuilder().updateWorkerPoolOperationSettings();</span>
+    }
+
+    /** Returns the builder for the settings used for calls to listWorkerPools. */
+    public PagedCallSettings.Builder&lt;
+            ListWorkerPoolsRequest, ListWorkerPoolsResponse, ListWorkerPoolsPagedResponse&gt;
+        listWorkerPoolsSettings() {
+<span class="nc" id="L486">      return getStubSettingsBuilder().listWorkerPoolsSettings();</span>
+    }
+
+    @Override
+    public CloudBuildSettings build() throws IOException {
+<span class="fc" id="L491">      return new CloudBuildSettings(this);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

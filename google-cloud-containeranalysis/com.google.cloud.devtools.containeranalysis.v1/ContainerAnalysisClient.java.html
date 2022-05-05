@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ContainerAnalysisClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-containeranalysis</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.devtools.containeranalysis.v1</a> &gt; <span class="el_source">ContainerAnalysisClient.java</span></div><h1>ContainerAnalysisClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.devtools.containeranalysis.v1;
+
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.api.resourcenames.ResourceName;
+import com.google.cloud.devtools.containeranalysis.v1.stub.ContainerAnalysisStub;
+import com.google.cloud.devtools.containeranalysis.v1.stub.ContainerAnalysisStubSettings;
+import com.google.containeranalysis.v1.GetVulnerabilityOccurrencesSummaryRequest;
+import com.google.containeranalysis.v1.ProjectName;
+import com.google.containeranalysis.v1.VulnerabilityOccurrencesSummary;
+import com.google.iam.v1.GetIamPolicyRequest;
+import com.google.iam.v1.Policy;
+import com.google.iam.v1.SetIamPolicyRequest;
+import com.google.iam.v1.TestIamPermissionsRequest;
+import com.google.iam.v1.TestIamPermissionsResponse;
+import io.grafeas.v1.GrafeasClient;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Retrieves analysis results of Cloud components such as Docker container
+ * images. The Container Analysis API is an implementation of the [Grafeas](https://grafeas.io) API.
+ *
+ * &lt;p&gt;Analysis results are stored as a series of occurrences. An `Occurrence` contains information
+ * about a specific analysis instance on a resource. An occurrence refers to a `Note`. A note
+ * contains details describing the analysis and is generally stored in a separate project, called a
+ * `Provider`. Multiple occurrences can refer to the same note.
+ *
+ * &lt;p&gt;For example, an SSL vulnerability could affect multiple images. In this case, there would be
+ * one note for the vulnerability and an occurrence for each image with the vulnerability referring
+ * to that note.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+ *   ResourceName resource = ProjectName.of(&quot;[PROJECT]&quot;);
+ *   Policy policy = Policy.newBuilder().build();
+ *   Policy response = containerAnalysisClient.setIamPolicy(resource, policy);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the ContainerAnalysisClient object to clean up resources
+ * such as threads. In the example above, try-with-resources is used, which automatically calls
+ * close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of ContainerAnalysisSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * ContainerAnalysisSettings containerAnalysisSettings =
+ *     ContainerAnalysisSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * ContainerAnalysisClient containerAnalysisClient =
+ *     ContainerAnalysisClient.create(containerAnalysisSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * ContainerAnalysisSettings containerAnalysisSettings =
+ *     ContainerAnalysisSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * ContainerAnalysisClient containerAnalysisClient =
+ *     ContainerAnalysisClient.create(containerAnalysisSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class ContainerAnalysisClient implements BackgroundResource {
+  private final ContainerAnalysisSettings settings;
+  private final ContainerAnalysisStub stub;
+  /**
+   * Returns a new GrafeasClient with the same configured settings.
+   *
+   * @throws IOException
+   */
+  public GrafeasClient getGrafeasClient() throws IOException {
+<span class="nc" id="L123">    return GrafeasClient.create(GrafeasUtils.transformSettings(settings));</span>
+  }
+
+  /** Constructs an instance of ContainerAnalysisClient with default settings. */
+  public static final ContainerAnalysisClient create() throws IOException {
+<span class="nc" id="L128">    return create(ContainerAnalysisSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of ContainerAnalysisClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final ContainerAnalysisClient create(ContainerAnalysisSettings settings)
+      throws IOException {
+<span class="fc" id="L137">    return new ContainerAnalysisClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of ContainerAnalysisClient, using the given stub for making calls. This
+   * is for advanced usage - prefer using create(ContainerAnalysisSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final ContainerAnalysisClient create(ContainerAnalysisStub stub) {
+<span class="nc" id="L146">    return new ContainerAnalysisClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of ContainerAnalysisClient, using the given settings. This is protected
+   * so that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L154">  protected ContainerAnalysisClient(ContainerAnalysisSettings settings) throws IOException {</span>
+<span class="fc" id="L155">    this.settings = settings;</span>
+<span class="fc" id="L156">    this.stub = ((ContainerAnalysisStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L157">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L160">  protected ContainerAnalysisClient(ContainerAnalysisStub stub) {</span>
+<span class="nc" id="L161">    this.settings = null;</span>
+<span class="nc" id="L162">    this.stub = stub;</span>
+<span class="nc" id="L163">  }</span>
+
+  public final ContainerAnalysisSettings getSettings() {
+<span class="nc" id="L166">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public ContainerAnalysisStub getStub() {
+<span class="nc" id="L171">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy on the specified note or occurrence. Requires
+   * `containeranalysis.notes.setIamPolicy` or `containeranalysis.occurrences.setIamPolicy`
+   * permission if the resource is a note or an occurrence, respectively.
+   *
+   * &lt;p&gt;The resource takes the format `projects/[PROJECT_ID]/notes/[NOTE_ID]` for notes and
+   * `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]` for occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   ResourceName resource = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = containerAnalysisClient.setIamPolicy(resource, policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being specified. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param policy REQUIRED: The complete policy to be applied to the `resource`. The size of the
+   *     policy is limited to a few 10s of KB. An empty policy is a valid policy but certain Cloud
+   *     Platform services (such as Projects) might reject them.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(ResourceName resource, Policy policy) {
+    SetIamPolicyRequest request =
+<span class="fc" id="L202">        SetIamPolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L204">            .setPolicy(policy)</span>
+<span class="fc" id="L205">            .build();</span>
+<span class="fc" id="L206">    return setIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy on the specified note or occurrence. Requires
+   * `containeranalysis.notes.setIamPolicy` or `containeranalysis.occurrences.setIamPolicy`
+   * permission if the resource is a note or an occurrence, respectively.
+   *
+   * &lt;p&gt;The resource takes the format `projects/[PROJECT_ID]/notes/[NOTE_ID]` for notes and
+   * `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]` for occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   String resource = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = containerAnalysisClient.setIamPolicy(resource, policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being specified. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param policy REQUIRED: The complete policy to be applied to the `resource`. The size of the
+   *     policy is limited to a few 10s of KB. An empty policy is a valid policy but certain Cloud
+   *     Platform services (such as Projects) might reject them.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(String resource, Policy policy) {
+    SetIamPolicyRequest request =
+<span class="fc" id="L237">        SetIamPolicyRequest.newBuilder().setResource(resource).setPolicy(policy).build();</span>
+<span class="fc" id="L238">    return setIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy on the specified note or occurrence. Requires
+   * `containeranalysis.notes.setIamPolicy` or `containeranalysis.occurrences.setIamPolicy`
+   * permission if the resource is a note or an occurrence, respectively.
+   *
+   * &lt;p&gt;The resource takes the format `projects/[PROJECT_ID]/notes/[NOTE_ID]` for notes and
+   * `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]` for occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .build();
+   *   Policy response = containerAnalysisClient.setIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(SetIamPolicyRequest request) {
+<span class="fc" id="L267">    return setIamPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy on the specified note or occurrence. Requires
+   * `containeranalysis.notes.setIamPolicy` or `containeranalysis.occurrences.setIamPolicy`
+   * permission if the resource is a note or an occurrence, respectively.
+   *
+   * &lt;p&gt;The resource takes the format `projects/[PROJECT_ID]/notes/[NOTE_ID]` for notes and
+   * `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]` for occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = containerAnalysisClient.setIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetIamPolicyRequest, Policy&gt; setIamPolicyCallable() {
+<span class="fc" id="L295">    return stub.setIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy for a note or an occurrence resource. Requires
+   * `containeranalysis.notes.setIamPolicy` or `containeranalysis.occurrences.setIamPolicy`
+   * permission if the resource is a note or occurrence, respectively.
+   *
+   * &lt;p&gt;The resource takes the format `projects/[PROJECT_ID]/notes/[NOTE_ID]` for notes and
+   * `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]` for occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   ResourceName resource = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   Policy response = containerAnalysisClient.getIamPolicy(resource);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(ResourceName resource) {
+    GetIamPolicyRequest request =
+<span class="fc" id="L322">        GetIamPolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L323" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L324">            .build();</span>
+<span class="fc" id="L325">    return getIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy for a note or an occurrence resource. Requires
+   * `containeranalysis.notes.setIamPolicy` or `containeranalysis.occurrences.setIamPolicy`
+   * permission if the resource is a note or occurrence, respectively.
+   *
+   * &lt;p&gt;The resource takes the format `projects/[PROJECT_ID]/notes/[NOTE_ID]` for notes and
+   * `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]` for occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   String resource = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   Policy response = containerAnalysisClient.getIamPolicy(resource);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(String resource) {
+<span class="fc" id="L351">    GetIamPolicyRequest request = GetIamPolicyRequest.newBuilder().setResource(resource).build();</span>
+<span class="fc" id="L352">    return getIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy for a note or an occurrence resource. Requires
+   * `containeranalysis.notes.setIamPolicy` or `containeranalysis.occurrences.setIamPolicy`
+   * permission if the resource is a note or occurrence, respectively.
+   *
+   * &lt;p&gt;The resource takes the format `projects/[PROJECT_ID]/notes/[NOTE_ID]` for notes and
+   * `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]` for occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   Policy response = containerAnalysisClient.getIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(GetIamPolicyRequest request) {
+<span class="fc" id="L381">    return getIamPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy for a note or an occurrence resource. Requires
+   * `containeranalysis.notes.setIamPolicy` or `containeranalysis.occurrences.setIamPolicy`
+   * permission if the resource is a note or occurrence, respectively.
+   *
+   * &lt;p&gt;The resource takes the format `projects/[PROJECT_ID]/notes/[NOTE_ID]` for notes and
+   * `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]` for occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = containerAnalysisClient.getIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetIamPolicyRequest, Policy&gt; getIamPolicyCallable() {
+<span class="fc" id="L409">    return stub.getIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the permissions that a caller has on the specified note or occurrence. Requires list
+   * permission on the project (for example, `containeranalysis.notes.list`).
+   *
+   * &lt;p&gt;The resource takes the format `projects/[PROJECT_ID]/notes/[NOTE_ID]` for notes and
+   * `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]` for occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   ResourceName resource = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   List&lt;String&gt; permissions = new ArrayList&lt;&gt;();
+   *   TestIamPermissionsResponse response =
+   *       containerAnalysisClient.testIamPermissions(resource, permissions);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy detail is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param permissions The set of permissions to check for the `resource`. Permissions with
+   *     wildcards (such as '&amp;#42;' or 'storage.&amp;#42;') are not allowed. For more information see
+   *     [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(
+      ResourceName resource, List&lt;String&gt; permissions) {
+    TestIamPermissionsRequest request =
+<span class="fc" id="L441">        TestIamPermissionsRequest.newBuilder()</span>
+<span class="pc bpc" id="L442" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L443">            .addAllPermissions(permissions)</span>
+<span class="fc" id="L444">            .build();</span>
+<span class="fc" id="L445">    return testIamPermissions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the permissions that a caller has on the specified note or occurrence. Requires list
+   * permission on the project (for example, `containeranalysis.notes.list`).
+   *
+   * &lt;p&gt;The resource takes the format `projects/[PROJECT_ID]/notes/[NOTE_ID]` for notes and
+   * `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]` for occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   String resource = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   List&lt;String&gt; permissions = new ArrayList&lt;&gt;();
+   *   TestIamPermissionsResponse response =
+   *       containerAnalysisClient.testIamPermissions(resource, permissions);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy detail is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param permissions The set of permissions to check for the `resource`. Permissions with
+   *     wildcards (such as '&amp;#42;' or 'storage.&amp;#42;') are not allowed. For more information see
+   *     [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(
+      String resource, List&lt;String&gt; permissions) {
+    TestIamPermissionsRequest request =
+<span class="fc" id="L477">        TestIamPermissionsRequest.newBuilder()</span>
+<span class="fc" id="L478">            .setResource(resource)</span>
+<span class="fc" id="L479">            .addAllPermissions(permissions)</span>
+<span class="fc" id="L480">            .build();</span>
+<span class="fc" id="L481">    return testIamPermissions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the permissions that a caller has on the specified note or occurrence. Requires list
+   * permission on the project (for example, `containeranalysis.notes.list`).
+   *
+   * &lt;p&gt;The resource takes the format `projects/[PROJECT_ID]/notes/[NOTE_ID]` for notes and
+   * `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]` for occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   TestIamPermissionsResponse response = containerAnalysisClient.testIamPermissions(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(TestIamPermissionsRequest request) {
+<span class="fc" id="L509">    return testIamPermissionsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the permissions that a caller has on the specified note or occurrence. Requires list
+   * permission on the project (for example, `containeranalysis.notes.list`).
+   *
+   * &lt;p&gt;The resource takes the format `projects/[PROJECT_ID]/notes/[NOTE_ID]` for notes and
+   * `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]` for occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   ApiFuture&lt;TestIamPermissionsResponse&gt; future =
+   *       containerAnalysisClient.testIamPermissionsCallable().futureCall(request);
+   *   // Do something.
+   *   TestIamPermissionsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+      testIamPermissionsCallable() {
+<span class="fc" id="L538">    return stub.testIamPermissionsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a summary of the number and severity of occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   ProjectName parent = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   String filter = &quot;filter-1274492040&quot;;
+   *   VulnerabilityOccurrencesSummary response =
+   *       containerAnalysisClient.getVulnerabilityOccurrencesSummary(parent, filter);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the project to get a vulnerability summary for in the form
+   *     of `projects/[PROJECT_ID]`.
+   * @param filter The filter expression.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final VulnerabilityOccurrencesSummary getVulnerabilityOccurrencesSummary(
+      ProjectName parent, String filter) {
+    GetVulnerabilityOccurrencesSummaryRequest request =
+<span class="fc" id="L564">        GetVulnerabilityOccurrencesSummaryRequest.newBuilder()</span>
+<span class="pc bpc" id="L565" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L566">            .setFilter(filter)</span>
+<span class="fc" id="L567">            .build();</span>
+<span class="fc" id="L568">    return getVulnerabilityOccurrencesSummary(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a summary of the number and severity of occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   String parent = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   String filter = &quot;filter-1274492040&quot;;
+   *   VulnerabilityOccurrencesSummary response =
+   *       containerAnalysisClient.getVulnerabilityOccurrencesSummary(parent, filter);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the project to get a vulnerability summary for in the form
+   *     of `projects/[PROJECT_ID]`.
+   * @param filter The filter expression.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final VulnerabilityOccurrencesSummary getVulnerabilityOccurrencesSummary(
+      String parent, String filter) {
+    GetVulnerabilityOccurrencesSummaryRequest request =
+<span class="fc" id="L594">        GetVulnerabilityOccurrencesSummaryRequest.newBuilder()</span>
+<span class="fc" id="L595">            .setParent(parent)</span>
+<span class="fc" id="L596">            .setFilter(filter)</span>
+<span class="fc" id="L597">            .build();</span>
+<span class="fc" id="L598">    return getVulnerabilityOccurrencesSummary(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a summary of the number and severity of occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   GetVulnerabilityOccurrencesSummaryRequest request =
+   *       GetVulnerabilityOccurrencesSummaryRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   VulnerabilityOccurrencesSummary response =
+   *       containerAnalysisClient.getVulnerabilityOccurrencesSummary(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final VulnerabilityOccurrencesSummary getVulnerabilityOccurrencesSummary(
+      GetVulnerabilityOccurrencesSummaryRequest request) {
+<span class="fc" id="L624">    return getVulnerabilityOccurrencesSummaryCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a summary of the number and severity of occurrences.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (ContainerAnalysisClient containerAnalysisClient = ContainerAnalysisClient.create()) {
+   *   GetVulnerabilityOccurrencesSummaryRequest request =
+   *       GetVulnerabilityOccurrencesSummaryRequest.newBuilder()
+   *           .setParent(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;VulnerabilityOccurrencesSummary&gt; future =
+   *       containerAnalysisClient.getVulnerabilityOccurrencesSummaryCallable().futureCall(request);
+   *   // Do something.
+   *   VulnerabilityOccurrencesSummary response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          GetVulnerabilityOccurrencesSummaryRequest, VulnerabilityOccurrencesSummary&gt;
+      getVulnerabilityOccurrencesSummaryCallable() {
+<span class="fc" id="L650">    return stub.getVulnerabilityOccurrencesSummaryCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L655">    stub.close();</span>
+<span class="fc" id="L656">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L660">    stub.shutdown();</span>
+<span class="nc" id="L661">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L665">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L670">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L675">    stub.shutdownNow();</span>
+<span class="nc" id="L676">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L680">    return stub.awaitTermination(duration, unit);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

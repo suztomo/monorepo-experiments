@@ -1,0 +1,4094 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DatastreamClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-datastream</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.datastream.v1</a> &gt; <span class="el_source">DatastreamClient.java</span></div><h1>DatastreamClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.datastream.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.datastream.v1.stub.DatastreamStub;
+import com.google.cloud.datastream.v1.stub.DatastreamStubSettings;
+import com.google.cloud.location.GetLocationRequest;
+import com.google.cloud.location.ListLocationsRequest;
+import com.google.cloud.location.ListLocationsResponse;
+import com.google.cloud.location.Location;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Datastream service
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+ *   ConnectionProfileName name =
+ *       ConnectionProfileName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONNECTION_PROFILE]&quot;);
+ *   ConnectionProfile response = datastreamClient.getConnectionProfile(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the DatastreamClient object to clean up resources such as
+ * threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of DatastreamSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * DatastreamSettings datastreamSettings =
+ *     DatastreamSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * DatastreamClient datastreamClient = DatastreamClient.create(datastreamSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * DatastreamSettings datastreamSettings =
+ *     DatastreamSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * DatastreamClient datastreamClient = DatastreamClient.create(datastreamSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class DatastreamClient implements BackgroundResource {
+  private final DatastreamSettings settings;
+  private final DatastreamStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of DatastreamClient with default settings. */
+  public static final DatastreamClient create() throws IOException {
+<span class="nc" id="L121">    return create(DatastreamSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of DatastreamClient, using the given settings. The channels are created
+   * based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final DatastreamClient create(DatastreamSettings settings) throws IOException {
+<span class="fc" id="L129">    return new DatastreamClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of DatastreamClient, using the given stub for making calls. This is for
+   * advanced usage - prefer using create(DatastreamSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final DatastreamClient create(DatastreamStub stub) {
+<span class="nc" id="L138">    return new DatastreamClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of DatastreamClient, using the given settings. This is protected so that
+   * it is easy to make a subclass, but otherwise, the static factory methods should be preferred.
+   */
+<span class="fc" id="L145">  protected DatastreamClient(DatastreamSettings settings) throws IOException {</span>
+<span class="fc" id="L146">    this.settings = settings;</span>
+<span class="fc" id="L147">    this.stub = ((DatastreamStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L148">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L149">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L152">  protected DatastreamClient(DatastreamStub stub) {</span>
+<span class="nc" id="L153">    this.settings = null;</span>
+<span class="nc" id="L154">    this.stub = stub;</span>
+<span class="nc" id="L155">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L156">  }</span>
+
+  public final DatastreamSettings getSettings() {
+<span class="nc" id="L159">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public DatastreamStub getStub() {
+<span class="nc" id="L164">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L172">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list connection profiles created in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (ConnectionProfile element :
+   *       datastreamClient.listConnectionProfiles(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of connection profiles.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListConnectionProfilesPagedResponse listConnectionProfiles(LocationName parent) {
+    ListConnectionProfilesRequest request =
+<span class="fc" id="L198">        ListConnectionProfilesRequest.newBuilder()</span>
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L200">            .build();</span>
+<span class="fc" id="L201">    return listConnectionProfiles(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list connection profiles created in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (ConnectionProfile element :
+   *       datastreamClient.listConnectionProfiles(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of connection profiles.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListConnectionProfilesPagedResponse listConnectionProfiles(String parent) {
+    ListConnectionProfilesRequest request =
+<span class="fc" id="L227">        ListConnectionProfilesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L228">    return listConnectionProfiles(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list connection profiles created in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListConnectionProfilesRequest request =
+   *       ListConnectionProfilesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (ConnectionProfile element :
+   *       datastreamClient.listConnectionProfiles(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListConnectionProfilesPagedResponse listConnectionProfiles(
+      ListConnectionProfilesRequest request) {
+<span class="fc" id="L261">    return listConnectionProfilesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list connection profiles created in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListConnectionProfilesRequest request =
+   *       ListConnectionProfilesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;ConnectionProfile&gt; future =
+   *       datastreamClient.listConnectionProfilesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (ConnectionProfile element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListConnectionProfilesRequest, ListConnectionProfilesPagedResponse&gt;
+      listConnectionProfilesPagedCallable() {
+<span class="fc" id="L293">    return stub.listConnectionProfilesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list connection profiles created in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListConnectionProfilesRequest request =
+   *       ListConnectionProfilesRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListConnectionProfilesResponse response =
+   *         datastreamClient.listConnectionProfilesCallable().call(request);
+   *     for (ConnectionProfile element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListConnectionProfilesRequest, ListConnectionProfilesResponse&gt;
+      listConnectionProfilesCallable() {
+<span class="nc" id="L332">    return stub.listConnectionProfilesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a connection profile.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ConnectionProfileName name =
+   *       ConnectionProfileName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONNECTION_PROFILE]&quot;);
+   *   ConnectionProfile response = datastreamClient.getConnectionProfile(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the connection profile resource to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ConnectionProfile getConnectionProfile(ConnectionProfileName name) {
+    GetConnectionProfileRequest request =
+<span class="fc" id="L356">        GetConnectionProfileRequest.newBuilder()</span>
+<span class="pc bpc" id="L357" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L358">            .build();</span>
+<span class="fc" id="L359">    return getConnectionProfile(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a connection profile.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String name =
+   *       ConnectionProfileName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONNECTION_PROFILE]&quot;).toString();
+   *   ConnectionProfile response = datastreamClient.getConnectionProfile(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the connection profile resource to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ConnectionProfile getConnectionProfile(String name) {
+    GetConnectionProfileRequest request =
+<span class="fc" id="L383">        GetConnectionProfileRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L384">    return getConnectionProfile(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a connection profile.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   GetConnectionProfileRequest request =
+   *       GetConnectionProfileRequest.newBuilder()
+   *           .setName(
+   *               ConnectionProfileName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONNECTION_PROFILE]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ConnectionProfile response = datastreamClient.getConnectionProfile(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ConnectionProfile getConnectionProfile(GetConnectionProfileRequest request) {
+<span class="fc" id="L411">    return getConnectionProfileCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a connection profile.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   GetConnectionProfileRequest request =
+   *       GetConnectionProfileRequest.newBuilder()
+   *           .setName(
+   *               ConnectionProfileName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONNECTION_PROFILE]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;ConnectionProfile&gt; future =
+   *       datastreamClient.getConnectionProfileCallable().futureCall(request);
+   *   // Do something.
+   *   ConnectionProfile response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetConnectionProfileRequest, ConnectionProfile&gt;
+      getConnectionProfileCallable() {
+<span class="fc" id="L439">    return stub.getConnectionProfileCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a connection profile in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   ConnectionProfile connectionProfile = ConnectionProfile.newBuilder().build();
+   *   String connectionProfileId = &quot;connectionProfileId597575526&quot;;
+   *   ConnectionProfile response =
+   *       datastreamClient
+   *           .createConnectionProfileAsync(parent, connectionProfile, connectionProfileId)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of ConnectionProfiles.
+   * @param connectionProfile Required. The connection profile resource to create.
+   * @param connectionProfileId Required. The connection profile identifier.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ConnectionProfile, OperationMetadata&gt; createConnectionProfileAsync(
+      LocationName parent, ConnectionProfile connectionProfile, String connectionProfileId) {
+    CreateConnectionProfileRequest request =
+<span class="fc" id="L470">        CreateConnectionProfileRequest.newBuilder()</span>
+<span class="pc bpc" id="L471" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L472">            .setConnectionProfile(connectionProfile)</span>
+<span class="fc" id="L473">            .setConnectionProfileId(connectionProfileId)</span>
+<span class="fc" id="L474">            .build();</span>
+<span class="fc" id="L475">    return createConnectionProfileAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a connection profile in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   ConnectionProfile connectionProfile = ConnectionProfile.newBuilder().build();
+   *   String connectionProfileId = &quot;connectionProfileId597575526&quot;;
+   *   ConnectionProfile response =
+   *       datastreamClient
+   *           .createConnectionProfileAsync(parent, connectionProfile, connectionProfileId)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of ConnectionProfiles.
+   * @param connectionProfile Required. The connection profile resource to create.
+   * @param connectionProfileId Required. The connection profile identifier.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ConnectionProfile, OperationMetadata&gt; createConnectionProfileAsync(
+      String parent, ConnectionProfile connectionProfile, String connectionProfileId) {
+    CreateConnectionProfileRequest request =
+<span class="fc" id="L506">        CreateConnectionProfileRequest.newBuilder()</span>
+<span class="fc" id="L507">            .setParent(parent)</span>
+<span class="fc" id="L508">            .setConnectionProfile(connectionProfile)</span>
+<span class="fc" id="L509">            .setConnectionProfileId(connectionProfileId)</span>
+<span class="fc" id="L510">            .build();</span>
+<span class="fc" id="L511">    return createConnectionProfileAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a connection profile in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   CreateConnectionProfileRequest request =
+   *       CreateConnectionProfileRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setConnectionProfileId(&quot;connectionProfileId597575526&quot;)
+   *           .setConnectionProfile(ConnectionProfile.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setValidateOnly(true)
+   *           .setForce(true)
+   *           .build();
+   *   ConnectionProfile response = datastreamClient.createConnectionProfileAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ConnectionProfile, OperationMetadata&gt; createConnectionProfileAsync(
+      CreateConnectionProfileRequest request) {
+<span class="fc" id="L542">    return createConnectionProfileOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a connection profile in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   CreateConnectionProfileRequest request =
+   *       CreateConnectionProfileRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setConnectionProfileId(&quot;connectionProfileId597575526&quot;)
+   *           .setConnectionProfile(ConnectionProfile.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setValidateOnly(true)
+   *           .setForce(true)
+   *           .build();
+   *   OperationFuture&lt;ConnectionProfile, OperationMetadata&gt; future =
+   *       datastreamClient.createConnectionProfileOperationCallable().futureCall(request);
+   *   // Do something.
+   *   ConnectionProfile response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          CreateConnectionProfileRequest, ConnectionProfile, OperationMetadata&gt;
+      createConnectionProfileOperationCallable() {
+<span class="fc" id="L574">    return stub.createConnectionProfileOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a connection profile in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   CreateConnectionProfileRequest request =
+   *       CreateConnectionProfileRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setConnectionProfileId(&quot;connectionProfileId597575526&quot;)
+   *           .setConnectionProfile(ConnectionProfile.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setValidateOnly(true)
+   *           .setForce(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       datastreamClient.createConnectionProfileCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateConnectionProfileRequest, Operation&gt;
+      createConnectionProfileCallable() {
+<span class="nc" id="L605">    return stub.createConnectionProfileCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to update the parameters of a connection profile.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ConnectionProfile connectionProfile = ConnectionProfile.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   ConnectionProfile response =
+   *       datastreamClient.updateConnectionProfileAsync(connectionProfile, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param connectionProfile Required. The connection profile to update.
+   * @param updateMask Optional. Field mask is used to specify the fields to be overwritten in the
+   *     ConnectionProfile resource by the update. The fields specified in the update_mask are
+   *     relative to the resource, not the full request. A field will be overwritten if it is in the
+   *     mask. If the user does not provide a mask then all fields will be overwritten.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ConnectionProfile, OperationMetadata&gt; updateConnectionProfileAsync(
+      ConnectionProfile connectionProfile, FieldMask updateMask) {
+    UpdateConnectionProfileRequest request =
+<span class="fc" id="L635">        UpdateConnectionProfileRequest.newBuilder()</span>
+<span class="fc" id="L636">            .setConnectionProfile(connectionProfile)</span>
+<span class="fc" id="L637">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L638">            .build();</span>
+<span class="fc" id="L639">    return updateConnectionProfileAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to update the parameters of a connection profile.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   UpdateConnectionProfileRequest request =
+   *       UpdateConnectionProfileRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setConnectionProfile(ConnectionProfile.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setValidateOnly(true)
+   *           .setForce(true)
+   *           .build();
+   *   ConnectionProfile response = datastreamClient.updateConnectionProfileAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ConnectionProfile, OperationMetadata&gt; updateConnectionProfileAsync(
+      UpdateConnectionProfileRequest request) {
+<span class="fc" id="L669">    return updateConnectionProfileOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to update the parameters of a connection profile.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   UpdateConnectionProfileRequest request =
+   *       UpdateConnectionProfileRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setConnectionProfile(ConnectionProfile.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setValidateOnly(true)
+   *           .setForce(true)
+   *           .build();
+   *   OperationFuture&lt;ConnectionProfile, OperationMetadata&gt; future =
+   *       datastreamClient.updateConnectionProfileOperationCallable().futureCall(request);
+   *   // Do something.
+   *   ConnectionProfile response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          UpdateConnectionProfileRequest, ConnectionProfile, OperationMetadata&gt;
+      updateConnectionProfileOperationCallable() {
+<span class="fc" id="L700">    return stub.updateConnectionProfileOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to update the parameters of a connection profile.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   UpdateConnectionProfileRequest request =
+   *       UpdateConnectionProfileRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setConnectionProfile(ConnectionProfile.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setValidateOnly(true)
+   *           .setForce(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       datastreamClient.updateConnectionProfileCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateConnectionProfileRequest, Operation&gt;
+      updateConnectionProfileCallable() {
+<span class="nc" id="L730">    return stub.updateConnectionProfileCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a connection profile.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ConnectionProfileName name =
+   *       ConnectionProfileName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONNECTION_PROFILE]&quot;);
+   *   datastreamClient.deleteConnectionProfileAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the connection profile resource to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteConnectionProfileAsync(
+      ConnectionProfileName name) {
+    DeleteConnectionProfileRequest request =
+<span class="fc" id="L755">        DeleteConnectionProfileRequest.newBuilder()</span>
+<span class="pc bpc" id="L756" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L757">            .build();</span>
+<span class="fc" id="L758">    return deleteConnectionProfileAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a connection profile.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String name =
+   *       ConnectionProfileName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONNECTION_PROFILE]&quot;).toString();
+   *   datastreamClient.deleteConnectionProfileAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the connection profile resource to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteConnectionProfileAsync(String name) {
+    DeleteConnectionProfileRequest request =
+<span class="fc" id="L782">        DeleteConnectionProfileRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L783">    return deleteConnectionProfileAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a connection profile.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   DeleteConnectionProfileRequest request =
+   *       DeleteConnectionProfileRequest.newBuilder()
+   *           .setName(
+   *               ConnectionProfileName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONNECTION_PROFILE]&quot;)
+   *                   .toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   datastreamClient.deleteConnectionProfileAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteConnectionProfileAsync(
+      DeleteConnectionProfileRequest request) {
+<span class="fc" id="L812">    return deleteConnectionProfileOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a connection profile.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   DeleteConnectionProfileRequest request =
+   *       DeleteConnectionProfileRequest.newBuilder()
+   *           .setName(
+   *               ConnectionProfileName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONNECTION_PROFILE]&quot;)
+   *                   .toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       datastreamClient.deleteConnectionProfileOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteConnectionProfileRequest, Empty, OperationMetadata&gt;
+      deleteConnectionProfileOperationCallable() {
+<span class="fc" id="L841">    return stub.deleteConnectionProfileOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a connection profile.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   DeleteConnectionProfileRequest request =
+   *       DeleteConnectionProfileRequest.newBuilder()
+   *           .setName(
+   *               ConnectionProfileName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONNECTION_PROFILE]&quot;)
+   *                   .toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       datastreamClient.deleteConnectionProfileCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteConnectionProfileRequest, Operation&gt;
+      deleteConnectionProfileCallable() {
+<span class="nc" id="L870">    return stub.deleteConnectionProfileCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to discover a connection profile. The discover API call exposes the data
+   * objects and metadata belonging to the profile. Typically, a request returns children data
+   * objects of a parent data object that's optionally supplied in the request.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   DiscoverConnectionProfileRequest request =
+   *       DiscoverConnectionProfileRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   DiscoverConnectionProfileResponse response =
+   *       datastreamClient.discoverConnectionProfile(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final DiscoverConnectionProfileResponse discoverConnectionProfile(
+      DiscoverConnectionProfileRequest request) {
+<span class="fc" id="L899">    return discoverConnectionProfileCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to discover a connection profile. The discover API call exposes the data
+   * objects and metadata belonging to the profile. Typically, a request returns children data
+   * objects of a parent data object that's optionally supplied in the request.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   DiscoverConnectionProfileRequest request =
+   *       DiscoverConnectionProfileRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;DiscoverConnectionProfileResponse&gt; future =
+   *       datastreamClient.discoverConnectionProfileCallable().futureCall(request);
+   *   // Do something.
+   *   DiscoverConnectionProfileResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DiscoverConnectionProfileRequest, DiscoverConnectionProfileResponse&gt;
+      discoverConnectionProfileCallable() {
+<span class="fc" id="L927">    return stub.discoverConnectionProfileCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list streams in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Stream element : datastreamClient.listStreams(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of streams.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListStreamsPagedResponse listStreams(LocationName parent) {
+    ListStreamsRequest request =
+<span class="fc" id="L952">        ListStreamsRequest.newBuilder()</span>
+<span class="pc bpc" id="L953" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L954">            .build();</span>
+<span class="fc" id="L955">    return listStreams(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list streams in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Stream element : datastreamClient.listStreams(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of streams.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListStreamsPagedResponse listStreams(String parent) {
+<span class="fc" id="L979">    ListStreamsRequest request = ListStreamsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L980">    return listStreams(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list streams in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListStreamsRequest request =
+   *       ListStreamsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Stream element : datastreamClient.listStreams(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListStreamsPagedResponse listStreams(ListStreamsRequest request) {
+<span class="fc" id="L1011">    return listStreamsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list streams in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListStreamsRequest request =
+   *       ListStreamsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Stream&gt; future = datastreamClient.listStreamsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Stream element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListStreamsRequest, ListStreamsPagedResponse&gt;
+      listStreamsPagedCallable() {
+<span class="fc" id="L1042">    return stub.listStreamsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list streams in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListStreamsRequest request =
+   *       ListStreamsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListStreamsResponse response = datastreamClient.listStreamsCallable().call(request);
+   *     for (Stream element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListStreamsRequest, ListStreamsResponse&gt; listStreamsCallable() {
+<span class="nc" id="L1079">    return stub.listStreamsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   StreamName name = StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;);
+   *   Stream response = datastreamClient.getStream(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the stream resource to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Stream getStream(StreamName name) {
+    GetStreamRequest request =
+<span class="pc bpc" id="L1102" title="1 of 2 branches missed.">        GetStreamRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1103">    return getStream(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String name = StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;).toString();
+   *   Stream response = datastreamClient.getStream(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the stream resource to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Stream getStream(String name) {
+<span class="fc" id="L1125">    GetStreamRequest request = GetStreamRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1126">    return getStream(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   GetStreamRequest request =
+   *       GetStreamRequest.newBuilder()
+   *           .setName(StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;).toString())
+   *           .build();
+   *   Stream response = datastreamClient.getStream(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Stream getStream(GetStreamRequest request) {
+<span class="fc" id="L1151">    return getStreamCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   GetStreamRequest request =
+   *       GetStreamRequest.newBuilder()
+   *           .setName(StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Stream&gt; future = datastreamClient.getStreamCallable().futureCall(request);
+   *   // Do something.
+   *   Stream response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetStreamRequest, Stream&gt; getStreamCallable() {
+<span class="fc" id="L1175">    return stub.getStreamCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Stream stream = Stream.newBuilder().build();
+   *   String streamId = &quot;streamId1790933179&quot;;
+   *   Stream response = datastreamClient.createStreamAsync(parent, stream, streamId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of streams.
+   * @param stream Required. The stream resource to create.
+   * @param streamId Required. The stream identifier.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Stream, OperationMetadata&gt; createStreamAsync(
+      LocationName parent, Stream stream, String streamId) {
+    CreateStreamRequest request =
+<span class="fc" id="L1203">        CreateStreamRequest.newBuilder()</span>
+<span class="pc bpc" id="L1204" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1205">            .setStream(stream)</span>
+<span class="fc" id="L1206">            .setStreamId(streamId)</span>
+<span class="fc" id="L1207">            .build();</span>
+<span class="fc" id="L1208">    return createStreamAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Stream stream = Stream.newBuilder().build();
+   *   String streamId = &quot;streamId1790933179&quot;;
+   *   Stream response = datastreamClient.createStreamAsync(parent, stream, streamId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of streams.
+   * @param stream Required. The stream resource to create.
+   * @param streamId Required. The stream identifier.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Stream, OperationMetadata&gt; createStreamAsync(
+      String parent, Stream stream, String streamId) {
+    CreateStreamRequest request =
+<span class="fc" id="L1236">        CreateStreamRequest.newBuilder()</span>
+<span class="fc" id="L1237">            .setParent(parent)</span>
+<span class="fc" id="L1238">            .setStream(stream)</span>
+<span class="fc" id="L1239">            .setStreamId(streamId)</span>
+<span class="fc" id="L1240">            .build();</span>
+<span class="fc" id="L1241">    return createStreamAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   CreateStreamRequest request =
+   *       CreateStreamRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setStreamId(&quot;streamId1790933179&quot;)
+   *           .setStream(Stream.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setValidateOnly(true)
+   *           .setForce(true)
+   *           .build();
+   *   Stream response = datastreamClient.createStreamAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Stream, OperationMetadata&gt; createStreamAsync(
+      CreateStreamRequest request) {
+<span class="fc" id="L1272">    return createStreamOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   CreateStreamRequest request =
+   *       CreateStreamRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setStreamId(&quot;streamId1790933179&quot;)
+   *           .setStream(Stream.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setValidateOnly(true)
+   *           .setForce(true)
+   *           .build();
+   *   OperationFuture&lt;Stream, OperationMetadata&gt; future =
+   *       datastreamClient.createStreamOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Stream response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateStreamRequest, Stream, OperationMetadata&gt;
+      createStreamOperationCallable() {
+<span class="fc" id="L1303">    return stub.createStreamOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   CreateStreamRequest request =
+   *       CreateStreamRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setStreamId(&quot;streamId1790933179&quot;)
+   *           .setStream(Stream.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setValidateOnly(true)
+   *           .setForce(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = datastreamClient.createStreamCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateStreamRequest, Operation&gt; createStreamCallable() {
+<span class="nc" id="L1332">    return stub.createStreamCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to update the configuration of a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   Stream stream = Stream.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Stream response = datastreamClient.updateStreamAsync(stream, updateMask).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param stream Required. The stream resource to update.
+   * @param updateMask Optional. Field mask is used to specify the fields to be overwritten in the
+   *     stream resource by the update. The fields specified in the update_mask are relative to the
+   *     resource, not the full request. A field will be overwritten if it is in the mask. If the
+   *     user does not provide a mask then all fields will be overwritten.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Stream, OperationMetadata&gt; updateStreamAsync(
+      Stream stream, FieldMask updateMask) {
+    UpdateStreamRequest request =
+<span class="fc" id="L1361">        UpdateStreamRequest.newBuilder().setStream(stream).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L1362">    return updateStreamAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to update the configuration of a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   UpdateStreamRequest request =
+   *       UpdateStreamRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setStream(Stream.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setValidateOnly(true)
+   *           .setForce(true)
+   *           .build();
+   *   Stream response = datastreamClient.updateStreamAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Stream, OperationMetadata&gt; updateStreamAsync(
+      UpdateStreamRequest request) {
+<span class="fc" id="L1392">    return updateStreamOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to update the configuration of a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   UpdateStreamRequest request =
+   *       UpdateStreamRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setStream(Stream.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setValidateOnly(true)
+   *           .setForce(true)
+   *           .build();
+   *   OperationFuture&lt;Stream, OperationMetadata&gt; future =
+   *       datastreamClient.updateStreamOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Stream response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;UpdateStreamRequest, Stream, OperationMetadata&gt;
+      updateStreamOperationCallable() {
+<span class="fc" id="L1422">    return stub.updateStreamOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to update the configuration of a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   UpdateStreamRequest request =
+   *       UpdateStreamRequest.newBuilder()
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setStream(Stream.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setValidateOnly(true)
+   *           .setForce(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = datastreamClient.updateStreamCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateStreamRequest, Operation&gt; updateStreamCallable() {
+<span class="nc" id="L1450">    return stub.updateStreamCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   StreamName name = StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;);
+   *   datastreamClient.deleteStreamAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the stream resource to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteStreamAsync(StreamName name) {
+    DeleteStreamRequest request =
+<span class="pc bpc" id="L1473" title="1 of 2 branches missed.">        DeleteStreamRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1474">    return deleteStreamAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String name = StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;).toString();
+   *   datastreamClient.deleteStreamAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the stream resource to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteStreamAsync(String name) {
+<span class="fc" id="L1496">    DeleteStreamRequest request = DeleteStreamRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1497">    return deleteStreamAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   DeleteStreamRequest request =
+   *       DeleteStreamRequest.newBuilder()
+   *           .setName(StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   datastreamClient.deleteStreamAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteStreamAsync(
+      DeleteStreamRequest request) {
+<span class="fc" id="L1524">    return deleteStreamOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   DeleteStreamRequest request =
+   *       DeleteStreamRequest.newBuilder()
+   *           .setName(StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       datastreamClient.deleteStreamOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteStreamRequest, Empty, OperationMetadata&gt;
+      deleteStreamOperationCallable() {
+<span class="fc" id="L1551">    return stub.deleteStreamOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   DeleteStreamRequest request =
+   *       DeleteStreamRequest.newBuilder()
+   *           .setName(StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;).toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = datastreamClient.deleteStreamCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteStreamRequest, Operation&gt; deleteStreamCallable() {
+<span class="nc" id="L1576">    return stub.deleteStreamCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a stream object.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   StreamObjectName name =
+   *       StreamObjectName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;, &quot;[OBJECT]&quot;);
+   *   StreamObject response = datastreamClient.getStreamObject(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the stream object resource to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final StreamObject getStreamObject(StreamObjectName name) {
+    GetStreamObjectRequest request =
+<span class="pc bpc" id="L1600" title="1 of 2 branches missed.">        GetStreamObjectRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1601">    return getStreamObject(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a stream object.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String name =
+   *       StreamObjectName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;, &quot;[OBJECT]&quot;).toString();
+   *   StreamObject response = datastreamClient.getStreamObject(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the stream object resource to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final StreamObject getStreamObject(String name) {
+<span class="fc" id="L1624">    GetStreamObjectRequest request = GetStreamObjectRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1625">    return getStreamObject(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a stream object.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   GetStreamObjectRequest request =
+   *       GetStreamObjectRequest.newBuilder()
+   *           .setName(
+   *               StreamObjectName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;, &quot;[OBJECT]&quot;).toString())
+   *           .build();
+   *   StreamObject response = datastreamClient.getStreamObject(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final StreamObject getStreamObject(GetStreamObjectRequest request) {
+<span class="fc" id="L1651">    return getStreamObjectCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a stream object.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   GetStreamObjectRequest request =
+   *       GetStreamObjectRequest.newBuilder()
+   *           .setName(
+   *               StreamObjectName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;, &quot;[OBJECT]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;StreamObject&gt; future =
+   *       datastreamClient.getStreamObjectCallable().futureCall(request);
+   *   // Do something.
+   *   StreamObject response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetStreamObjectRequest, StreamObject&gt; getStreamObjectCallable() {
+<span class="fc" id="L1677">    return stub.getStreamObjectCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to look up a stream object by its source object identifier.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   LookupStreamObjectRequest request =
+   *       LookupStreamObjectRequest.newBuilder()
+   *           .setParent(StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;).toString())
+   *           .setSourceObjectIdentifier(SourceObjectIdentifier.newBuilder().build())
+   *           .build();
+   *   StreamObject response = datastreamClient.lookupStreamObject(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final StreamObject lookupStreamObject(LookupStreamObjectRequest request) {
+<span class="fc" id="L1703">    return lookupStreamObjectCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to look up a stream object by its source object identifier.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   LookupStreamObjectRequest request =
+   *       LookupStreamObjectRequest.newBuilder()
+   *           .setParent(StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;).toString())
+   *           .setSourceObjectIdentifier(SourceObjectIdentifier.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;StreamObject&gt; future =
+   *       datastreamClient.lookupStreamObjectCallable().futureCall(request);
+   *   // Do something.
+   *   StreamObject response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;LookupStreamObjectRequest, StreamObject&gt; lookupStreamObjectCallable() {
+<span class="fc" id="L1729">    return stub.lookupStreamObjectCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list the objects of a specific stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   StreamName parent = StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;);
+   *   for (StreamObject element : datastreamClient.listStreamObjects(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent stream that owns the collection of objects.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListStreamObjectsPagedResponse listStreamObjects(StreamName parent) {
+    ListStreamObjectsRequest request =
+<span class="fc" id="L1754">        ListStreamObjectsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1755" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1756">            .build();</span>
+<span class="fc" id="L1757">    return listStreamObjects(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list the objects of a specific stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String parent = StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;).toString();
+   *   for (StreamObject element : datastreamClient.listStreamObjects(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent stream that owns the collection of objects.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListStreamObjectsPagedResponse listStreamObjects(String parent) {
+    ListStreamObjectsRequest request =
+<span class="fc" id="L1782">        ListStreamObjectsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1783">    return listStreamObjects(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list the objects of a specific stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListStreamObjectsRequest request =
+   *       ListStreamObjectsRequest.newBuilder()
+   *           .setParent(StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (StreamObject element : datastreamClient.listStreamObjects(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListStreamObjectsPagedResponse listStreamObjects(ListStreamObjectsRequest request) {
+<span class="fc" id="L1812">    return listStreamObjectsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list the objects of a specific stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListStreamObjectsRequest request =
+   *       ListStreamObjectsRequest.newBuilder()
+   *           .setParent(StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;StreamObject&gt; future =
+   *       datastreamClient.listStreamObjectsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (StreamObject element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListStreamObjectsRequest, ListStreamObjectsPagedResponse&gt;
+      listStreamObjectsPagedCallable() {
+<span class="fc" id="L1842">    return stub.listStreamObjectsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list the objects of a specific stream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListStreamObjectsRequest request =
+   *       ListStreamObjectsRequest.newBuilder()
+   *           .setParent(StreamName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListStreamObjectsResponse response =
+   *         datastreamClient.listStreamObjectsCallable().call(request);
+   *     for (StreamObject element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListStreamObjectsRequest, ListStreamObjectsResponse&gt;
+      listStreamObjectsCallable() {
+<span class="nc" id="L1879">    return stub.listStreamObjectsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to start a backfill job for the specified stream object.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   StreamObjectName object =
+   *       StreamObjectName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;, &quot;[OBJECT]&quot;);
+   *   StartBackfillJobResponse response = datastreamClient.startBackfillJob(object);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param object Required. The name of the stream object resource to start a backfill job for.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final StartBackfillJobResponse startBackfillJob(StreamObjectName object) {
+    StartBackfillJobRequest request =
+<span class="fc" id="L1903">        StartBackfillJobRequest.newBuilder()</span>
+<span class="pc bpc" id="L1904" title="1 of 2 branches missed.">            .setObject(object == null ? null : object.toString())</span>
+<span class="fc" id="L1905">            .build();</span>
+<span class="fc" id="L1906">    return startBackfillJob(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to start a backfill job for the specified stream object.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String object =
+   *       StreamObjectName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;, &quot;[OBJECT]&quot;).toString();
+   *   StartBackfillJobResponse response = datastreamClient.startBackfillJob(object);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param object Required. The name of the stream object resource to start a backfill job for.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final StartBackfillJobResponse startBackfillJob(String object) {
+    StartBackfillJobRequest request =
+<span class="fc" id="L1930">        StartBackfillJobRequest.newBuilder().setObject(object).build();</span>
+<span class="fc" id="L1931">    return startBackfillJob(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to start a backfill job for the specified stream object.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   StartBackfillJobRequest request =
+   *       StartBackfillJobRequest.newBuilder()
+   *           .setObject(
+   *               StreamObjectName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;, &quot;[OBJECT]&quot;).toString())
+   *           .build();
+   *   StartBackfillJobResponse response = datastreamClient.startBackfillJob(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final StartBackfillJobResponse startBackfillJob(StartBackfillJobRequest request) {
+<span class="fc" id="L1957">    return startBackfillJobCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to start a backfill job for the specified stream object.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   StartBackfillJobRequest request =
+   *       StartBackfillJobRequest.newBuilder()
+   *           .setObject(
+   *               StreamObjectName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;, &quot;[OBJECT]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;StartBackfillJobResponse&gt; future =
+   *       datastreamClient.startBackfillJobCallable().futureCall(request);
+   *   // Do something.
+   *   StartBackfillJobResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;StartBackfillJobRequest, StartBackfillJobResponse&gt;
+      startBackfillJobCallable() {
+<span class="fc" id="L1984">    return stub.startBackfillJobCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to stop a backfill job for the specified stream object.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   StreamObjectName object =
+   *       StreamObjectName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;, &quot;[OBJECT]&quot;);
+   *   StopBackfillJobResponse response = datastreamClient.stopBackfillJob(object);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param object Required. The name of the stream object resource to stop the backfill job for.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final StopBackfillJobResponse stopBackfillJob(StreamObjectName object) {
+    StopBackfillJobRequest request =
+<span class="fc" id="L2008">        StopBackfillJobRequest.newBuilder()</span>
+<span class="pc bpc" id="L2009" title="1 of 2 branches missed.">            .setObject(object == null ? null : object.toString())</span>
+<span class="fc" id="L2010">            .build();</span>
+<span class="fc" id="L2011">    return stopBackfillJob(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to stop a backfill job for the specified stream object.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String object =
+   *       StreamObjectName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;, &quot;[OBJECT]&quot;).toString();
+   *   StopBackfillJobResponse response = datastreamClient.stopBackfillJob(object);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param object Required. The name of the stream object resource to stop the backfill job for.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final StopBackfillJobResponse stopBackfillJob(String object) {
+<span class="fc" id="L2034">    StopBackfillJobRequest request = StopBackfillJobRequest.newBuilder().setObject(object).build();</span>
+<span class="fc" id="L2035">    return stopBackfillJob(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to stop a backfill job for the specified stream object.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   StopBackfillJobRequest request =
+   *       StopBackfillJobRequest.newBuilder()
+   *           .setObject(
+   *               StreamObjectName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;, &quot;[OBJECT]&quot;).toString())
+   *           .build();
+   *   StopBackfillJobResponse response = datastreamClient.stopBackfillJob(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final StopBackfillJobResponse stopBackfillJob(StopBackfillJobRequest request) {
+<span class="fc" id="L2061">    return stopBackfillJobCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to stop a backfill job for the specified stream object.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   StopBackfillJobRequest request =
+   *       StopBackfillJobRequest.newBuilder()
+   *           .setObject(
+   *               StreamObjectName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[STREAM]&quot;, &quot;[OBJECT]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;StopBackfillJobResponse&gt; future =
+   *       datastreamClient.stopBackfillJobCallable().futureCall(request);
+   *   // Do something.
+   *   StopBackfillJobResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;StopBackfillJobRequest, StopBackfillJobResponse&gt;
+      stopBackfillJobCallable() {
+<span class="fc" id="L2088">    return stub.stopBackfillJobCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * The FetchStaticIps API call exposes the static IP addresses used by Datastream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   LocationName name = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (String element : datastreamClient.fetchStaticIps(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name for the location for which static IPs should be
+   *     returned. Must be in the format `projects/&amp;#42;/locations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final FetchStaticIpsPagedResponse fetchStaticIps(LocationName name) {
+    FetchStaticIpsRequest request =
+<span class="pc bpc" id="L2114" title="1 of 2 branches missed.">        FetchStaticIpsRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L2115">    return fetchStaticIps(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * The FetchStaticIps API call exposes the static IP addresses used by Datastream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String name = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (String element : datastreamClient.fetchStaticIps(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name for the location for which static IPs should be
+   *     returned. Must be in the format `projects/&amp;#42;/locations/&amp;#42;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final FetchStaticIpsPagedResponse fetchStaticIps(String name) {
+<span class="fc" id="L2140">    FetchStaticIpsRequest request = FetchStaticIpsRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2141">    return fetchStaticIps(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * The FetchStaticIps API call exposes the static IP addresses used by Datastream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   FetchStaticIpsRequest request =
+   *       FetchStaticIpsRequest.newBuilder()
+   *           .setName(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (String element : datastreamClient.fetchStaticIps(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final FetchStaticIpsPagedResponse fetchStaticIps(FetchStaticIpsRequest request) {
+<span class="fc" id="L2170">    return fetchStaticIpsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * The FetchStaticIps API call exposes the static IP addresses used by Datastream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   FetchStaticIpsRequest request =
+   *       FetchStaticIpsRequest.newBuilder()
+   *           .setName(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;String&gt; future = datastreamClient.fetchStaticIpsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (String element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;FetchStaticIpsRequest, FetchStaticIpsPagedResponse&gt;
+      fetchStaticIpsPagedCallable() {
+<span class="fc" id="L2199">    return stub.fetchStaticIpsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * The FetchStaticIps API call exposes the static IP addresses used by Datastream.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   FetchStaticIpsRequest request =
+   *       FetchStaticIpsRequest.newBuilder()
+   *           .setName(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     FetchStaticIpsResponse response = datastreamClient.fetchStaticIpsCallable().call(request);
+   *     for (String element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;FetchStaticIpsRequest, FetchStaticIpsResponse&gt;
+      fetchStaticIpsCallable() {
+<span class="nc" id="L2235">    return stub.fetchStaticIpsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a private connectivity configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   PrivateConnection privateConnection = PrivateConnection.newBuilder().build();
+   *   String privateConnectionId = &quot;privateConnectionId-1926654532&quot;;
+   *   PrivateConnection response =
+   *       datastreamClient
+   *           .createPrivateConnectionAsync(parent, privateConnection, privateConnectionId)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of PrivateConnections.
+   * @param privateConnection Required. The Private Connectivity resource to create.
+   * @param privateConnectionId Required. The private connectivity identifier.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;PrivateConnection, OperationMetadata&gt; createPrivateConnectionAsync(
+      LocationName parent, PrivateConnection privateConnection, String privateConnectionId) {
+    CreatePrivateConnectionRequest request =
+<span class="fc" id="L2266">        CreatePrivateConnectionRequest.newBuilder()</span>
+<span class="pc bpc" id="L2267" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L2268">            .setPrivateConnection(privateConnection)</span>
+<span class="fc" id="L2269">            .setPrivateConnectionId(privateConnectionId)</span>
+<span class="fc" id="L2270">            .build();</span>
+<span class="fc" id="L2271">    return createPrivateConnectionAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a private connectivity configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   PrivateConnection privateConnection = PrivateConnection.newBuilder().build();
+   *   String privateConnectionId = &quot;privateConnectionId-1926654532&quot;;
+   *   PrivateConnection response =
+   *       datastreamClient
+   *           .createPrivateConnectionAsync(parent, privateConnection, privateConnectionId)
+   *           .get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of PrivateConnections.
+   * @param privateConnection Required. The Private Connectivity resource to create.
+   * @param privateConnectionId Required. The private connectivity identifier.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;PrivateConnection, OperationMetadata&gt; createPrivateConnectionAsync(
+      String parent, PrivateConnection privateConnection, String privateConnectionId) {
+    CreatePrivateConnectionRequest request =
+<span class="fc" id="L2302">        CreatePrivateConnectionRequest.newBuilder()</span>
+<span class="fc" id="L2303">            .setParent(parent)</span>
+<span class="fc" id="L2304">            .setPrivateConnection(privateConnection)</span>
+<span class="fc" id="L2305">            .setPrivateConnectionId(privateConnectionId)</span>
+<span class="fc" id="L2306">            .build();</span>
+<span class="fc" id="L2307">    return createPrivateConnectionAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a private connectivity configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   CreatePrivateConnectionRequest request =
+   *       CreatePrivateConnectionRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPrivateConnectionId(&quot;privateConnectionId-1926654532&quot;)
+   *           .setPrivateConnection(PrivateConnection.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   PrivateConnection response = datastreamClient.createPrivateConnectionAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;PrivateConnection, OperationMetadata&gt; createPrivateConnectionAsync(
+      CreatePrivateConnectionRequest request) {
+<span class="fc" id="L2336">    return createPrivateConnectionOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a private connectivity configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   CreatePrivateConnectionRequest request =
+   *       CreatePrivateConnectionRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPrivateConnectionId(&quot;privateConnectionId-1926654532&quot;)
+   *           .setPrivateConnection(PrivateConnection.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;PrivateConnection, OperationMetadata&gt; future =
+   *       datastreamClient.createPrivateConnectionOperationCallable().futureCall(request);
+   *   // Do something.
+   *   PrivateConnection response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          CreatePrivateConnectionRequest, PrivateConnection, OperationMetadata&gt;
+      createPrivateConnectionOperationCallable() {
+<span class="fc" id="L2366">    return stub.createPrivateConnectionOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a private connectivity configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   CreatePrivateConnectionRequest request =
+   *       CreatePrivateConnectionRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPrivateConnectionId(&quot;privateConnectionId-1926654532&quot;)
+   *           .setPrivateConnection(PrivateConnection.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       datastreamClient.createPrivateConnectionCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreatePrivateConnectionRequest, Operation&gt;
+      createPrivateConnectionCallable() {
+<span class="nc" id="L2395">    return stub.createPrivateConnectionCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a private connectivity configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   PrivateConnectionName name =
+   *       PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;);
+   *   PrivateConnection response = datastreamClient.getPrivateConnection(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the private connectivity configuration to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PrivateConnection getPrivateConnection(PrivateConnectionName name) {
+    GetPrivateConnectionRequest request =
+<span class="fc" id="L2419">        GetPrivateConnectionRequest.newBuilder()</span>
+<span class="pc bpc" id="L2420" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L2421">            .build();</span>
+<span class="fc" id="L2422">    return getPrivateConnection(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a private connectivity configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String name =
+   *       PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;).toString();
+   *   PrivateConnection response = datastreamClient.getPrivateConnection(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the private connectivity configuration to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PrivateConnection getPrivateConnection(String name) {
+    GetPrivateConnectionRequest request =
+<span class="fc" id="L2446">        GetPrivateConnectionRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2447">    return getPrivateConnection(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a private connectivity configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   GetPrivateConnectionRequest request =
+   *       GetPrivateConnectionRequest.newBuilder()
+   *           .setName(
+   *               PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;)
+   *                   .toString())
+   *           .build();
+   *   PrivateConnection response = datastreamClient.getPrivateConnection(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PrivateConnection getPrivateConnection(GetPrivateConnectionRequest request) {
+<span class="fc" id="L2474">    return getPrivateConnectionCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a private connectivity configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   GetPrivateConnectionRequest request =
+   *       GetPrivateConnectionRequest.newBuilder()
+   *           .setName(
+   *               PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;PrivateConnection&gt; future =
+   *       datastreamClient.getPrivateConnectionCallable().futureCall(request);
+   *   // Do something.
+   *   PrivateConnection response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetPrivateConnectionRequest, PrivateConnection&gt;
+      getPrivateConnectionCallable() {
+<span class="fc" id="L2502">    return stub.getPrivateConnectionCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list private connectivity configurations in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (PrivateConnection element :
+   *       datastreamClient.listPrivateConnections(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of private connectivity
+   *     configurations.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPrivateConnectionsPagedResponse listPrivateConnections(LocationName parent) {
+    ListPrivateConnectionsRequest request =
+<span class="fc" id="L2529">        ListPrivateConnectionsRequest.newBuilder()</span>
+<span class="pc bpc" id="L2530" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L2531">            .build();</span>
+<span class="fc" id="L2532">    return listPrivateConnections(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list private connectivity configurations in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (PrivateConnection element :
+   *       datastreamClient.listPrivateConnections(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of private connectivity
+   *     configurations.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPrivateConnectionsPagedResponse listPrivateConnections(String parent) {
+    ListPrivateConnectionsRequest request =
+<span class="fc" id="L2559">        ListPrivateConnectionsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L2560">    return listPrivateConnections(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list private connectivity configurations in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListPrivateConnectionsRequest request =
+   *       ListPrivateConnectionsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (PrivateConnection element :
+   *       datastreamClient.listPrivateConnections(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPrivateConnectionsPagedResponse listPrivateConnections(
+      ListPrivateConnectionsRequest request) {
+<span class="fc" id="L2593">    return listPrivateConnectionsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list private connectivity configurations in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListPrivateConnectionsRequest request =
+   *       ListPrivateConnectionsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;PrivateConnection&gt; future =
+   *       datastreamClient.listPrivateConnectionsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (PrivateConnection element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListPrivateConnectionsRequest, ListPrivateConnectionsPagedResponse&gt;
+      listPrivateConnectionsPagedCallable() {
+<span class="fc" id="L2625">    return stub.listPrivateConnectionsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list private connectivity configurations in a project and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListPrivateConnectionsRequest request =
+   *       ListPrivateConnectionsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListPrivateConnectionsResponse response =
+   *         datastreamClient.listPrivateConnectionsCallable().call(request);
+   *     for (PrivateConnection element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListPrivateConnectionsRequest, ListPrivateConnectionsResponse&gt;
+      listPrivateConnectionsCallable() {
+<span class="nc" id="L2664">    return stub.listPrivateConnectionsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a private connectivity configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   PrivateConnectionName name =
+   *       PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;);
+   *   datastreamClient.deletePrivateConnectionAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the private connectivity configuration to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deletePrivateConnectionAsync(
+      PrivateConnectionName name) {
+    DeletePrivateConnectionRequest request =
+<span class="fc" id="L2689">        DeletePrivateConnectionRequest.newBuilder()</span>
+<span class="pc bpc" id="L2690" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L2691">            .build();</span>
+<span class="fc" id="L2692">    return deletePrivateConnectionAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a private connectivity configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String name =
+   *       PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;).toString();
+   *   datastreamClient.deletePrivateConnectionAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the private connectivity configuration to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deletePrivateConnectionAsync(String name) {
+    DeletePrivateConnectionRequest request =
+<span class="fc" id="L2716">        DeletePrivateConnectionRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2717">    return deletePrivateConnectionAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a private connectivity configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   DeletePrivateConnectionRequest request =
+   *       DeletePrivateConnectionRequest.newBuilder()
+   *           .setName(
+   *               PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;)
+   *                   .toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setForce(true)
+   *           .build();
+   *   datastreamClient.deletePrivateConnectionAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deletePrivateConnectionAsync(
+      DeletePrivateConnectionRequest request) {
+<span class="fc" id="L2747">    return deletePrivateConnectionOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a private connectivity configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   DeletePrivateConnectionRequest request =
+   *       DeletePrivateConnectionRequest.newBuilder()
+   *           .setName(
+   *               PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;)
+   *                   .toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setForce(true)
+   *           .build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       datastreamClient.deletePrivateConnectionOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeletePrivateConnectionRequest, Empty, OperationMetadata&gt;
+      deletePrivateConnectionOperationCallable() {
+<span class="fc" id="L2777">    return stub.deletePrivateConnectionOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a private connectivity configuration.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   DeletePrivateConnectionRequest request =
+   *       DeletePrivateConnectionRequest.newBuilder()
+   *           .setName(
+   *               PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;)
+   *                   .toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .setForce(true)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       datastreamClient.deletePrivateConnectionCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeletePrivateConnectionRequest, Operation&gt;
+      deletePrivateConnectionCallable() {
+<span class="nc" id="L2807">    return stub.deletePrivateConnectionCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a route for a private connectivity configuration in a project and
+   * location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   PrivateConnectionName parent =
+   *       PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;);
+   *   Route route = Route.newBuilder().build();
+   *   String routeId = &quot;routeId1385647428&quot;;
+   *   Route response = datastreamClient.createRouteAsync(parent, route, routeId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of Routes.
+   * @param route Required. The Route resource to create.
+   * @param routeId Required. The Route identifier.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Route, OperationMetadata&gt; createRouteAsync(
+      PrivateConnectionName parent, Route route, String routeId) {
+    CreateRouteRequest request =
+<span class="fc" id="L2837">        CreateRouteRequest.newBuilder()</span>
+<span class="pc bpc" id="L2838" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L2839">            .setRoute(route)</span>
+<span class="fc" id="L2840">            .setRouteId(routeId)</span>
+<span class="fc" id="L2841">            .build();</span>
+<span class="fc" id="L2842">    return createRouteAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a route for a private connectivity configuration in a project and
+   * location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String parent =
+   *       PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;).toString();
+   *   Route route = Route.newBuilder().build();
+   *   String routeId = &quot;routeId1385647428&quot;;
+   *   Route response = datastreamClient.createRouteAsync(parent, route, routeId).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of Routes.
+   * @param route Required. The Route resource to create.
+   * @param routeId Required. The Route identifier.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Route, OperationMetadata&gt; createRouteAsync(
+      String parent, Route route, String routeId) {
+    CreateRouteRequest request =
+<span class="fc" id="L2872">        CreateRouteRequest.newBuilder()</span>
+<span class="fc" id="L2873">            .setParent(parent)</span>
+<span class="fc" id="L2874">            .setRoute(route)</span>
+<span class="fc" id="L2875">            .setRouteId(routeId)</span>
+<span class="fc" id="L2876">            .build();</span>
+<span class="fc" id="L2877">    return createRouteAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a route for a private connectivity configuration in a project and
+   * location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   CreateRouteRequest request =
+   *       CreateRouteRequest.newBuilder()
+   *           .setParent(
+   *               PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;)
+   *                   .toString())
+   *           .setRouteId(&quot;routeId1385647428&quot;)
+   *           .setRoute(Route.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   Route response = datastreamClient.createRouteAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Route, OperationMetadata&gt; createRouteAsync(
+      CreateRouteRequest request) {
+<span class="fc" id="L2909">    return createRouteOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a route for a private connectivity configuration in a project and
+   * location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   CreateRouteRequest request =
+   *       CreateRouteRequest.newBuilder()
+   *           .setParent(
+   *               PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;)
+   *                   .toString())
+   *           .setRouteId(&quot;routeId1385647428&quot;)
+   *           .setRoute(Route.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Route, OperationMetadata&gt; future =
+   *       datastreamClient.createRouteOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Route response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateRouteRequest, Route, OperationMetadata&gt;
+      createRouteOperationCallable() {
+<span class="fc" id="L2941">    return stub.createRouteOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to create a route for a private connectivity configuration in a project and
+   * location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   CreateRouteRequest request =
+   *       CreateRouteRequest.newBuilder()
+   *           .setParent(
+   *               PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;)
+   *                   .toString())
+   *           .setRouteId(&quot;routeId1385647428&quot;)
+   *           .setRoute(Route.newBuilder().build())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = datastreamClient.createRouteCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateRouteRequest, Operation&gt; createRouteCallable() {
+<span class="nc" id="L2971">    return stub.createRouteCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a route.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   RouteName name = RouteName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;, &quot;[ROUTE]&quot;);
+   *   Route response = datastreamClient.getRoute(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Route resource to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Route getRoute(RouteName name) {
+    GetRouteRequest request =
+<span class="pc bpc" id="L2994" title="1 of 2 branches missed.">        GetRouteRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L2995">    return getRoute(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a route.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String name =
+   *       RouteName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;, &quot;[ROUTE]&quot;).toString();
+   *   Route response = datastreamClient.getRoute(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Route resource to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Route getRoute(String name) {
+<span class="fc" id="L3018">    GetRouteRequest request = GetRouteRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L3019">    return getRoute(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a route.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   GetRouteRequest request =
+   *       GetRouteRequest.newBuilder()
+   *           .setName(
+   *               RouteName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;, &quot;[ROUTE]&quot;)
+   *                   .toString())
+   *           .build();
+   *   Route response = datastreamClient.getRoute(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Route getRoute(GetRouteRequest request) {
+<span class="fc" id="L3046">    return getRouteCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to get details about a route.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   GetRouteRequest request =
+   *       GetRouteRequest.newBuilder()
+   *           .setName(
+   *               RouteName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;, &quot;[ROUTE]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;Route&gt; future = datastreamClient.getRouteCallable().futureCall(request);
+   *   // Do something.
+   *   Route response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetRouteRequest, Route&gt; getRouteCallable() {
+<span class="fc" id="L3072">    return stub.getRouteCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list routes created for a private connectivity configuration in a project
+   * and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   PrivateConnectionName parent =
+   *       PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;);
+   *   for (Route element : datastreamClient.listRoutes(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of Routess.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRoutesPagedResponse listRoutes(PrivateConnectionName parent) {
+    ListRoutesRequest request =
+<span class="pc bpc" id="L3099" title="1 of 2 branches missed.">        ListRoutesRequest.newBuilder().setParent(parent == null ? null : parent.toString()).build();</span>
+<span class="fc" id="L3100">    return listRoutes(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list routes created for a private connectivity configuration in a project
+   * and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String parent =
+   *       PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;).toString();
+   *   for (Route element : datastreamClient.listRoutes(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent that owns the collection of Routess.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRoutesPagedResponse listRoutes(String parent) {
+<span class="fc" id="L3126">    ListRoutesRequest request = ListRoutesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L3127">    return listRoutes(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list routes created for a private connectivity configuration in a project
+   * and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListRoutesRequest request =
+   *       ListRoutesRequest.newBuilder()
+   *           .setParent(
+   *               PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Route element : datastreamClient.listRoutes(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListRoutesPagedResponse listRoutes(ListRoutesRequest request) {
+<span class="fc" id="L3161">    return listRoutesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list routes created for a private connectivity configuration in a project
+   * and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListRoutesRequest request =
+   *       ListRoutesRequest.newBuilder()
+   *           .setParent(
+   *               PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Route&gt; future = datastreamClient.listRoutesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Route element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRoutesRequest, ListRoutesPagedResponse&gt; listRoutesPagedCallable() {
+<span class="fc" id="L3194">    return stub.listRoutesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to list routes created for a private connectivity configuration in a project
+   * and location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListRoutesRequest request =
+   *       ListRoutesRequest.newBuilder()
+   *           .setParent(
+   *               PrivateConnectionName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;)
+   *                   .toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListRoutesResponse response = datastreamClient.listRoutesCallable().call(request);
+   *     for (Route element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListRoutesRequest, ListRoutesResponse&gt; listRoutesCallable() {
+<span class="nc" id="L3234">    return stub.listRoutesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a route.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   RouteName name = RouteName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;, &quot;[ROUTE]&quot;);
+   *   datastreamClient.deleteRouteAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Route resource to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteRouteAsync(RouteName name) {
+    DeleteRouteRequest request =
+<span class="pc bpc" id="L3257" title="1 of 2 branches missed.">        DeleteRouteRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L3258">    return deleteRouteAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a route.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   String name =
+   *       RouteName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;, &quot;[ROUTE]&quot;).toString();
+   *   datastreamClient.deleteRouteAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Route resource to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteRouteAsync(String name) {
+<span class="fc" id="L3281">    DeleteRouteRequest request = DeleteRouteRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L3282">    return deleteRouteAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a route.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   DeleteRouteRequest request =
+   *       DeleteRouteRequest.newBuilder()
+   *           .setName(
+   *               RouteName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;, &quot;[ROUTE]&quot;)
+   *                   .toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   datastreamClient.deleteRouteAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, OperationMetadata&gt; deleteRouteAsync(
+      DeleteRouteRequest request) {
+<span class="fc" id="L3311">    return deleteRouteOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a route.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   DeleteRouteRequest request =
+   *       DeleteRouteRequest.newBuilder()
+   *           .setName(
+   *               RouteName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;, &quot;[ROUTE]&quot;)
+   *                   .toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   OperationFuture&lt;Empty, OperationMetadata&gt; future =
+   *       datastreamClient.deleteRouteOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteRouteRequest, Empty, OperationMetadata&gt;
+      deleteRouteOperationCallable() {
+<span class="fc" id="L3340">    return stub.deleteRouteOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Use this method to delete a route.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   DeleteRouteRequest request =
+   *       DeleteRouteRequest.newBuilder()
+   *           .setName(
+   *               RouteName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PRIVATE_CONNECTION]&quot;, &quot;[ROUTE]&quot;)
+   *                   .toString())
+   *           .setRequestId(&quot;requestId693933066&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = datastreamClient.deleteRouteCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteRouteRequest, Operation&gt; deleteRouteCallable() {
+<span class="nc" id="L3367">    return stub.deleteRouteCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists information about the supported locations for this service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListLocationsRequest request =
+   *       ListLocationsRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Location element : datastreamClient.listLocations(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListLocationsPagedResponse listLocations(ListLocationsRequest request) {
+<span class="fc" id="L3397">    return listLocationsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists information about the supported locations for this service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListLocationsRequest request =
+   *       ListLocationsRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Location&gt; future =
+   *       datastreamClient.listLocationsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Location element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListLocationsRequest, ListLocationsPagedResponse&gt;
+      listLocationsPagedCallable() {
+<span class="fc" id="L3428">    return stub.listLocationsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists information about the supported locations for this service.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   ListLocationsRequest request =
+   *       ListLocationsRequest.newBuilder()
+   *           .setName(&quot;name3373707&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListLocationsResponse response = datastreamClient.listLocationsCallable().call(request);
+   *     for (Location element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListLocationsRequest, ListLocationsResponse&gt; listLocationsCallable() {
+<span class="nc" id="L3464">    return stub.listLocationsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   GetLocationRequest request = GetLocationRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   Location response = datastreamClient.getLocation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Location getLocation(GetLocationRequest request) {
+<span class="fc" id="L3486">    return getLocationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (DatastreamClient datastreamClient = DatastreamClient.create()) {
+   *   GetLocationRequest request = GetLocationRequest.newBuilder().setName(&quot;name3373707&quot;).build();
+   *   ApiFuture&lt;Location&gt; future = datastreamClient.getLocationCallable().futureCall(request);
+   *   // Do something.
+   *   Location response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetLocationRequest, Location&gt; getLocationCallable() {
+<span class="fc" id="L3507">    return stub.getLocationCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L3512">    stub.close();</span>
+<span class="fc" id="L3513">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L3517">    stub.shutdown();</span>
+<span class="nc" id="L3518">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L3522">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L3527">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L3532">    stub.shutdownNow();</span>
+<span class="nc" id="L3533">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L3537">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListConnectionProfilesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListConnectionProfilesRequest,
+          ListConnectionProfilesResponse,
+          ConnectionProfile,
+          ListConnectionProfilesPage,
+          ListConnectionProfilesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListConnectionProfilesPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListConnectionProfilesRequest, ListConnectionProfilesResponse, ConnectionProfile&gt;
+            context,
+        ApiFuture&lt;ListConnectionProfilesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListConnectionProfilesPage&gt; futurePage =
+<span class="fc" id="L3554">          ListConnectionProfilesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3555">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3557">          input -&gt; new ListConnectionProfilesPagedResponse(input),</span>
+<span class="fc" id="L3558">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListConnectionProfilesPagedResponse(ListConnectionProfilesPage page) {
+<span class="fc" id="L3562">      super(page, ListConnectionProfilesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3563">    }</span>
+  }
+
+  public static class ListConnectionProfilesPage
+      extends AbstractPage&lt;
+          ListConnectionProfilesRequest,
+          ListConnectionProfilesResponse,
+          ConnectionProfile,
+          ListConnectionProfilesPage&gt; {
+
+    private ListConnectionProfilesPage(
+        PageContext&lt;
+                ListConnectionProfilesRequest, ListConnectionProfilesResponse, ConnectionProfile&gt;
+            context,
+        ListConnectionProfilesResponse response) {
+<span class="fc" id="L3578">      super(context, response);</span>
+<span class="fc" id="L3579">    }</span>
+
+    private static ListConnectionProfilesPage createEmptyPage() {
+<span class="fc" id="L3582">      return new ListConnectionProfilesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListConnectionProfilesPage createPage(
+        PageContext&lt;
+                ListConnectionProfilesRequest, ListConnectionProfilesResponse, ConnectionProfile&gt;
+            context,
+        ListConnectionProfilesResponse response) {
+<span class="fc" id="L3591">      return new ListConnectionProfilesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListConnectionProfilesPage&gt; createPageAsync(
+        PageContext&lt;
+                ListConnectionProfilesRequest, ListConnectionProfilesResponse, ConnectionProfile&gt;
+            context,
+        ApiFuture&lt;ListConnectionProfilesResponse&gt; futureResponse) {
+<span class="fc" id="L3600">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListConnectionProfilesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListConnectionProfilesRequest,
+          ListConnectionProfilesResponse,
+          ConnectionProfile,
+          ListConnectionProfilesPage,
+          ListConnectionProfilesFixedSizeCollection&gt; {
+
+    private ListConnectionProfilesFixedSizeCollection(
+        List&lt;ListConnectionProfilesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3614">      super(pages, collectionSize);</span>
+<span class="fc" id="L3615">    }</span>
+
+    private static ListConnectionProfilesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3618">      return new ListConnectionProfilesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListConnectionProfilesFixedSizeCollection createCollection(
+        List&lt;ListConnectionProfilesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3624">      return new ListConnectionProfilesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListStreamsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListStreamsRequest,
+          ListStreamsResponse,
+          Stream,
+          ListStreamsPage,
+          ListStreamsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListStreamsPagedResponse&gt; createAsync(
+        PageContext&lt;ListStreamsRequest, ListStreamsResponse, Stream&gt; context,
+        ApiFuture&lt;ListStreamsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListStreamsPage&gt; futurePage =
+<span class="fc" id="L3640">          ListStreamsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3641">      return ApiFutures.transform(</span>
+<span class="fc" id="L3642">          futurePage, input -&gt; new ListStreamsPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListStreamsPagedResponse(ListStreamsPage page) {
+<span class="fc" id="L3646">      super(page, ListStreamsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3647">    }</span>
+  }
+
+  public static class ListStreamsPage
+      extends AbstractPage&lt;ListStreamsRequest, ListStreamsResponse, Stream, ListStreamsPage&gt; {
+
+    private ListStreamsPage(
+        PageContext&lt;ListStreamsRequest, ListStreamsResponse, Stream&gt; context,
+        ListStreamsResponse response) {
+<span class="fc" id="L3656">      super(context, response);</span>
+<span class="fc" id="L3657">    }</span>
+
+    private static ListStreamsPage createEmptyPage() {
+<span class="fc" id="L3660">      return new ListStreamsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListStreamsPage createPage(
+        PageContext&lt;ListStreamsRequest, ListStreamsResponse, Stream&gt; context,
+        ListStreamsResponse response) {
+<span class="fc" id="L3667">      return new ListStreamsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListStreamsPage&gt; createPageAsync(
+        PageContext&lt;ListStreamsRequest, ListStreamsResponse, Stream&gt; context,
+        ApiFuture&lt;ListStreamsResponse&gt; futureResponse) {
+<span class="fc" id="L3674">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListStreamsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListStreamsRequest,
+          ListStreamsResponse,
+          Stream,
+          ListStreamsPage,
+          ListStreamsFixedSizeCollection&gt; {
+
+    private ListStreamsFixedSizeCollection(List&lt;ListStreamsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3687">      super(pages, collectionSize);</span>
+<span class="fc" id="L3688">    }</span>
+
+    private static ListStreamsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3691">      return new ListStreamsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListStreamsFixedSizeCollection createCollection(
+        List&lt;ListStreamsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3697">      return new ListStreamsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListStreamObjectsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListStreamObjectsRequest,
+          ListStreamObjectsResponse,
+          StreamObject,
+          ListStreamObjectsPage,
+          ListStreamObjectsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListStreamObjectsPagedResponse&gt; createAsync(
+        PageContext&lt;ListStreamObjectsRequest, ListStreamObjectsResponse, StreamObject&gt; context,
+        ApiFuture&lt;ListStreamObjectsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListStreamObjectsPage&gt; futurePage =
+<span class="fc" id="L3713">          ListStreamObjectsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3714">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3716">          input -&gt; new ListStreamObjectsPagedResponse(input),</span>
+<span class="fc" id="L3717">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListStreamObjectsPagedResponse(ListStreamObjectsPage page) {
+<span class="fc" id="L3721">      super(page, ListStreamObjectsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3722">    }</span>
+  }
+
+  public static class ListStreamObjectsPage
+      extends AbstractPage&lt;
+          ListStreamObjectsRequest,
+          ListStreamObjectsResponse,
+          StreamObject,
+          ListStreamObjectsPage&gt; {
+
+    private ListStreamObjectsPage(
+        PageContext&lt;ListStreamObjectsRequest, ListStreamObjectsResponse, StreamObject&gt; context,
+        ListStreamObjectsResponse response) {
+<span class="fc" id="L3735">      super(context, response);</span>
+<span class="fc" id="L3736">    }</span>
+
+    private static ListStreamObjectsPage createEmptyPage() {
+<span class="fc" id="L3739">      return new ListStreamObjectsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListStreamObjectsPage createPage(
+        PageContext&lt;ListStreamObjectsRequest, ListStreamObjectsResponse, StreamObject&gt; context,
+        ListStreamObjectsResponse response) {
+<span class="fc" id="L3746">      return new ListStreamObjectsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListStreamObjectsPage&gt; createPageAsync(
+        PageContext&lt;ListStreamObjectsRequest, ListStreamObjectsResponse, StreamObject&gt; context,
+        ApiFuture&lt;ListStreamObjectsResponse&gt; futureResponse) {
+<span class="fc" id="L3753">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListStreamObjectsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListStreamObjectsRequest,
+          ListStreamObjectsResponse,
+          StreamObject,
+          ListStreamObjectsPage,
+          ListStreamObjectsFixedSizeCollection&gt; {
+
+    private ListStreamObjectsFixedSizeCollection(
+        List&lt;ListStreamObjectsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3767">      super(pages, collectionSize);</span>
+<span class="fc" id="L3768">    }</span>
+
+    private static ListStreamObjectsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3771">      return new ListStreamObjectsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListStreamObjectsFixedSizeCollection createCollection(
+        List&lt;ListStreamObjectsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3777">      return new ListStreamObjectsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class FetchStaticIpsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          FetchStaticIpsRequest,
+          FetchStaticIpsResponse,
+          String,
+          FetchStaticIpsPage,
+          FetchStaticIpsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;FetchStaticIpsPagedResponse&gt; createAsync(
+        PageContext&lt;FetchStaticIpsRequest, FetchStaticIpsResponse, String&gt; context,
+        ApiFuture&lt;FetchStaticIpsResponse&gt; futureResponse) {
+      ApiFuture&lt;FetchStaticIpsPage&gt; futurePage =
+<span class="fc" id="L3793">          FetchStaticIpsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3794">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3796">          input -&gt; new FetchStaticIpsPagedResponse(input),</span>
+<span class="fc" id="L3797">          MoreExecutors.directExecutor());</span>
+    }
+
+    private FetchStaticIpsPagedResponse(FetchStaticIpsPage page) {
+<span class="fc" id="L3801">      super(page, FetchStaticIpsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3802">    }</span>
+  }
+
+  public static class FetchStaticIpsPage
+      extends AbstractPage&lt;
+          FetchStaticIpsRequest, FetchStaticIpsResponse, String, FetchStaticIpsPage&gt; {
+
+    private FetchStaticIpsPage(
+        PageContext&lt;FetchStaticIpsRequest, FetchStaticIpsResponse, String&gt; context,
+        FetchStaticIpsResponse response) {
+<span class="fc" id="L3812">      super(context, response);</span>
+<span class="fc" id="L3813">    }</span>
+
+    private static FetchStaticIpsPage createEmptyPage() {
+<span class="fc" id="L3816">      return new FetchStaticIpsPage(null, null);</span>
+    }
+
+    @Override
+    protected FetchStaticIpsPage createPage(
+        PageContext&lt;FetchStaticIpsRequest, FetchStaticIpsResponse, String&gt; context,
+        FetchStaticIpsResponse response) {
+<span class="fc" id="L3823">      return new FetchStaticIpsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;FetchStaticIpsPage&gt; createPageAsync(
+        PageContext&lt;FetchStaticIpsRequest, FetchStaticIpsResponse, String&gt; context,
+        ApiFuture&lt;FetchStaticIpsResponse&gt; futureResponse) {
+<span class="fc" id="L3830">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class FetchStaticIpsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          FetchStaticIpsRequest,
+          FetchStaticIpsResponse,
+          String,
+          FetchStaticIpsPage,
+          FetchStaticIpsFixedSizeCollection&gt; {
+
+    private FetchStaticIpsFixedSizeCollection(List&lt;FetchStaticIpsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3843">      super(pages, collectionSize);</span>
+<span class="fc" id="L3844">    }</span>
+
+    private static FetchStaticIpsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3847">      return new FetchStaticIpsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected FetchStaticIpsFixedSizeCollection createCollection(
+        List&lt;FetchStaticIpsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3853">      return new FetchStaticIpsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListPrivateConnectionsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListPrivateConnectionsRequest,
+          ListPrivateConnectionsResponse,
+          PrivateConnection,
+          ListPrivateConnectionsPage,
+          ListPrivateConnectionsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListPrivateConnectionsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListPrivateConnectionsRequest, ListPrivateConnectionsResponse, PrivateConnection&gt;
+            context,
+        ApiFuture&lt;ListPrivateConnectionsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListPrivateConnectionsPage&gt; futurePage =
+<span class="fc" id="L3871">          ListPrivateConnectionsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3872">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3874">          input -&gt; new ListPrivateConnectionsPagedResponse(input),</span>
+<span class="fc" id="L3875">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListPrivateConnectionsPagedResponse(ListPrivateConnectionsPage page) {
+<span class="fc" id="L3879">      super(page, ListPrivateConnectionsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3880">    }</span>
+  }
+
+  public static class ListPrivateConnectionsPage
+      extends AbstractPage&lt;
+          ListPrivateConnectionsRequest,
+          ListPrivateConnectionsResponse,
+          PrivateConnection,
+          ListPrivateConnectionsPage&gt; {
+
+    private ListPrivateConnectionsPage(
+        PageContext&lt;
+                ListPrivateConnectionsRequest, ListPrivateConnectionsResponse, PrivateConnection&gt;
+            context,
+        ListPrivateConnectionsResponse response) {
+<span class="fc" id="L3895">      super(context, response);</span>
+<span class="fc" id="L3896">    }</span>
+
+    private static ListPrivateConnectionsPage createEmptyPage() {
+<span class="fc" id="L3899">      return new ListPrivateConnectionsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListPrivateConnectionsPage createPage(
+        PageContext&lt;
+                ListPrivateConnectionsRequest, ListPrivateConnectionsResponse, PrivateConnection&gt;
+            context,
+        ListPrivateConnectionsResponse response) {
+<span class="fc" id="L3908">      return new ListPrivateConnectionsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListPrivateConnectionsPage&gt; createPageAsync(
+        PageContext&lt;
+                ListPrivateConnectionsRequest, ListPrivateConnectionsResponse, PrivateConnection&gt;
+            context,
+        ApiFuture&lt;ListPrivateConnectionsResponse&gt; futureResponse) {
+<span class="fc" id="L3917">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListPrivateConnectionsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListPrivateConnectionsRequest,
+          ListPrivateConnectionsResponse,
+          PrivateConnection,
+          ListPrivateConnectionsPage,
+          ListPrivateConnectionsFixedSizeCollection&gt; {
+
+    private ListPrivateConnectionsFixedSizeCollection(
+        List&lt;ListPrivateConnectionsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3931">      super(pages, collectionSize);</span>
+<span class="fc" id="L3932">    }</span>
+
+    private static ListPrivateConnectionsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3935">      return new ListPrivateConnectionsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListPrivateConnectionsFixedSizeCollection createCollection(
+        List&lt;ListPrivateConnectionsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3941">      return new ListPrivateConnectionsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListRoutesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListRoutesRequest,
+          ListRoutesResponse,
+          Route,
+          ListRoutesPage,
+          ListRoutesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListRoutesPagedResponse&gt; createAsync(
+        PageContext&lt;ListRoutesRequest, ListRoutesResponse, Route&gt; context,
+        ApiFuture&lt;ListRoutesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListRoutesPage&gt; futurePage =
+<span class="fc" id="L3957">          ListRoutesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3958">      return ApiFutures.transform(</span>
+<span class="fc" id="L3959">          futurePage, input -&gt; new ListRoutesPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListRoutesPagedResponse(ListRoutesPage page) {
+<span class="fc" id="L3963">      super(page, ListRoutesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3964">    }</span>
+  }
+
+  public static class ListRoutesPage
+      extends AbstractPage&lt;ListRoutesRequest, ListRoutesResponse, Route, ListRoutesPage&gt; {
+
+    private ListRoutesPage(
+        PageContext&lt;ListRoutesRequest, ListRoutesResponse, Route&gt; context,
+        ListRoutesResponse response) {
+<span class="fc" id="L3973">      super(context, response);</span>
+<span class="fc" id="L3974">    }</span>
+
+    private static ListRoutesPage createEmptyPage() {
+<span class="fc" id="L3977">      return new ListRoutesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListRoutesPage createPage(
+        PageContext&lt;ListRoutesRequest, ListRoutesResponse, Route&gt; context,
+        ListRoutesResponse response) {
+<span class="fc" id="L3984">      return new ListRoutesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListRoutesPage&gt; createPageAsync(
+        PageContext&lt;ListRoutesRequest, ListRoutesResponse, Route&gt; context,
+        ApiFuture&lt;ListRoutesResponse&gt; futureResponse) {
+<span class="fc" id="L3991">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListRoutesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListRoutesRequest,
+          ListRoutesResponse,
+          Route,
+          ListRoutesPage,
+          ListRoutesFixedSizeCollection&gt; {
+
+    private ListRoutesFixedSizeCollection(List&lt;ListRoutesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L4004">      super(pages, collectionSize);</span>
+<span class="fc" id="L4005">    }</span>
+
+    private static ListRoutesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L4008">      return new ListRoutesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListRoutesFixedSizeCollection createCollection(
+        List&lt;ListRoutesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L4014">      return new ListRoutesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListLocationsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListLocationsRequest,
+          ListLocationsResponse,
+          Location,
+          ListLocationsPage,
+          ListLocationsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListLocationsPagedResponse&gt; createAsync(
+        PageContext&lt;ListLocationsRequest, ListLocationsResponse, Location&gt; context,
+        ApiFuture&lt;ListLocationsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListLocationsPage&gt; futurePage =
+<span class="fc" id="L4030">          ListLocationsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L4031">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L4033">          input -&gt; new ListLocationsPagedResponse(input),</span>
+<span class="fc" id="L4034">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListLocationsPagedResponse(ListLocationsPage page) {
+<span class="fc" id="L4038">      super(page, ListLocationsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L4039">    }</span>
+  }
+
+  public static class ListLocationsPage
+      extends AbstractPage&lt;
+          ListLocationsRequest, ListLocationsResponse, Location, ListLocationsPage&gt; {
+
+    private ListLocationsPage(
+        PageContext&lt;ListLocationsRequest, ListLocationsResponse, Location&gt; context,
+        ListLocationsResponse response) {
+<span class="fc" id="L4049">      super(context, response);</span>
+<span class="fc" id="L4050">    }</span>
+
+    private static ListLocationsPage createEmptyPage() {
+<span class="fc" id="L4053">      return new ListLocationsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListLocationsPage createPage(
+        PageContext&lt;ListLocationsRequest, ListLocationsResponse, Location&gt; context,
+        ListLocationsResponse response) {
+<span class="fc" id="L4060">      return new ListLocationsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListLocationsPage&gt; createPageAsync(
+        PageContext&lt;ListLocationsRequest, ListLocationsResponse, Location&gt; context,
+        ApiFuture&lt;ListLocationsResponse&gt; futureResponse) {
+<span class="fc" id="L4067">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListLocationsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListLocationsRequest,
+          ListLocationsResponse,
+          Location,
+          ListLocationsPage,
+          ListLocationsFixedSizeCollection&gt; {
+
+    private ListLocationsFixedSizeCollection(List&lt;ListLocationsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L4080">      super(pages, collectionSize);</span>
+<span class="fc" id="L4081">    }</span>
+
+    private static ListLocationsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L4084">      return new ListLocationsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListLocationsFixedSizeCollection createCollection(
+        List&lt;ListLocationsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L4090">      return new ListLocationsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

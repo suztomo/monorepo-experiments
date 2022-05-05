@@ -1,0 +1,3744 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ReservationServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-bigqueryreservation</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.bigquery.reservation.v1</a> &gt; <span class="el_source">ReservationServiceClient.java</span></div><h1>ReservationServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.bigquery.reservation.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.bigquery.reservation.v1.stub.ReservationServiceStub;
+import com.google.cloud.bigquery.reservation.v1.stub.ReservationServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: This API allows users to manage their flat-rate BigQuery reservations.
+ *
+ * &lt;p&gt;A reservation provides computational resource guarantees, in the form of
+ * [slots](https://cloud.google.com/bigquery/docs/slots), to users. A slot is a unit of
+ * computational power in BigQuery, and serves as the basic unit of parallelism. In a scan of a
+ * multi-partitioned table, a single slot operates on a single partition of the table. A reservation
+ * resource exists as a child resource of the admin project and location, e.g.:
+ * `projects/myproject/locations/US/reservations/reservationName`.
+ *
+ * &lt;p&gt;A capacity commitment is a way to purchase compute capacity for BigQuery jobs (in the form of
+ * slots) with some committed period of usage. A capacity commitment resource exists as a child
+ * resource of the admin project and location, e.g.:
+ * `projects/myproject/locations/US/capacityCommitments/id`.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+ *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+ *   Reservation reservation = Reservation.newBuilder().build();
+ *   String reservationId = &quot;reservationId1116965383&quot;;
+ *   Reservation response =
+ *       reservationServiceClient.createReservation(parent, reservation, reservationId);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the ReservationServiceClient object to clean up resources
+ * such as threads. In the example above, try-with-resources is used, which automatically calls
+ * close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of ReservationServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * ReservationServiceSettings reservationServiceSettings =
+ *     ReservationServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * ReservationServiceClient reservationServiceClient =
+ *     ReservationServiceClient.create(reservationServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * ReservationServiceSettings reservationServiceSettings =
+ *     ReservationServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * ReservationServiceClient reservationServiceClient =
+ *     ReservationServiceClient.create(reservationServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class ReservationServiceClient implements BackgroundResource {
+  private final ReservationServiceSettings settings;
+  private final ReservationServiceStub stub;
+
+  /** Constructs an instance of ReservationServiceClient with default settings. */
+  public static final ReservationServiceClient create() throws IOException {
+<span class="nc" id="L129">    return create(ReservationServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of ReservationServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final ReservationServiceClient create(ReservationServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L138">    return new ReservationServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of ReservationServiceClient, using the given stub for making calls. This
+   * is for advanced usage - prefer using create(ReservationServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final ReservationServiceClient create(ReservationServiceStub stub) {
+<span class="nc" id="L147">    return new ReservationServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of ReservationServiceClient, using the given settings. This is protected
+   * so that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L155">  protected ReservationServiceClient(ReservationServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L156">    this.settings = settings;</span>
+<span class="fc" id="L157">    this.stub = ((ReservationServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L158">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L161">  protected ReservationServiceClient(ReservationServiceStub stub) {</span>
+<span class="nc" id="L162">    this.settings = null;</span>
+<span class="nc" id="L163">    this.stub = stub;</span>
+<span class="nc" id="L164">  }</span>
+
+  public final ReservationServiceSettings getSettings() {
+<span class="nc" id="L167">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public ReservationServiceStub getStub() {
+<span class="nc" id="L172">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new reservation resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Reservation reservation = Reservation.newBuilder().build();
+   *   String reservationId = &quot;reservationId1116965383&quot;;
+   *   Reservation response =
+   *       reservationServiceClient.createReservation(parent, reservation, reservationId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Project, location. E.g., `projects/myproject/locations/US`
+   * @param reservation Definition of the new reservation to create.
+   * @param reservationId The reservation ID. It must only contain lower case alphanumeric
+   *     characters or dashes. It must start with a letter and must not end with a dash. Its maximum
+   *     length is 64 characters.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Reservation createReservation(
+      LocationName parent, Reservation reservation, String reservationId) {
+    CreateReservationRequest request =
+<span class="fc" id="L203">        CreateReservationRequest.newBuilder()</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L205">            .setReservation(reservation)</span>
+<span class="fc" id="L206">            .setReservationId(reservationId)</span>
+<span class="fc" id="L207">            .build();</span>
+<span class="fc" id="L208">    return createReservation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new reservation resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Reservation reservation = Reservation.newBuilder().build();
+   *   String reservationId = &quot;reservationId1116965383&quot;;
+   *   Reservation response =
+   *       reservationServiceClient.createReservation(parent, reservation, reservationId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Project, location. E.g., `projects/myproject/locations/US`
+   * @param reservation Definition of the new reservation to create.
+   * @param reservationId The reservation ID. It must only contain lower case alphanumeric
+   *     characters or dashes. It must start with a letter and must not end with a dash. Its maximum
+   *     length is 64 characters.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Reservation createReservation(
+      String parent, Reservation reservation, String reservationId) {
+    CreateReservationRequest request =
+<span class="fc" id="L239">        CreateReservationRequest.newBuilder()</span>
+<span class="fc" id="L240">            .setParent(parent)</span>
+<span class="fc" id="L241">            .setReservation(reservation)</span>
+<span class="fc" id="L242">            .setReservationId(reservationId)</span>
+<span class="fc" id="L243">            .build();</span>
+<span class="fc" id="L244">    return createReservation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new reservation resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   CreateReservationRequest request =
+   *       CreateReservationRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setReservationId(&quot;reservationId1116965383&quot;)
+   *           .setReservation(Reservation.newBuilder().build())
+   *           .build();
+   *   Reservation response = reservationServiceClient.createReservation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Reservation createReservation(CreateReservationRequest request) {
+<span class="fc" id="L271">    return createReservationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new reservation resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   CreateReservationRequest request =
+   *       CreateReservationRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setReservationId(&quot;reservationId1116965383&quot;)
+   *           .setReservation(Reservation.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Reservation&gt; future =
+   *       reservationServiceClient.createReservationCallable().futureCall(request);
+   *   // Do something.
+   *   Reservation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateReservationRequest, Reservation&gt; createReservationCallable() {
+<span class="fc" id="L298">    return stub.createReservationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the reservations for the project in the specified location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Reservation element : reservationServiceClient.listReservations(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name containing project and location, e.g.:
+   *     `projects/myproject/locations/US`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListReservationsPagedResponse listReservations(LocationName parent) {
+    ListReservationsRequest request =
+<span class="fc" id="L324">        ListReservationsRequest.newBuilder()</span>
+<span class="pc bpc" id="L325" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L326">            .build();</span>
+<span class="fc" id="L327">    return listReservations(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the reservations for the project in the specified location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Reservation element : reservationServiceClient.listReservations(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name containing project and location, e.g.:
+   *     `projects/myproject/locations/US`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListReservationsPagedResponse listReservations(String parent) {
+    ListReservationsRequest request =
+<span class="fc" id="L353">        ListReservationsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L354">    return listReservations(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the reservations for the project in the specified location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   ListReservationsRequest request =
+   *       ListReservationsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Reservation element : reservationServiceClient.listReservations(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListReservationsPagedResponse listReservations(ListReservationsRequest request) {
+<span class="fc" id="L383">    return listReservationsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the reservations for the project in the specified location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   ListReservationsRequest request =
+   *       ListReservationsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Reservation&gt; future =
+   *       reservationServiceClient.listReservationsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Reservation element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListReservationsRequest, ListReservationsPagedResponse&gt;
+      listReservationsPagedCallable() {
+<span class="fc" id="L413">    return stub.listReservationsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the reservations for the project in the specified location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   ListReservationsRequest request =
+   *       ListReservationsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListReservationsResponse response =
+   *         reservationServiceClient.listReservationsCallable().call(request);
+   *     for (Reservation element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListReservationsRequest, ListReservationsResponse&gt;
+      listReservationsCallable() {
+<span class="nc" id="L450">    return stub.listReservationsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about the reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   ReservationName name = ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;);
+   *   Reservation response = reservationServiceClient.getReservation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the reservation to retrieve. E.g.,
+   *     `projects/myproject/locations/US/reservations/team1-prod`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Reservation getReservation(ReservationName name) {
+    GetReservationRequest request =
+<span class="pc bpc" id="L474" title="1 of 2 branches missed.">        GetReservationRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L475">    return getReservation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about the reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String name = ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString();
+   *   Reservation response = reservationServiceClient.getReservation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the reservation to retrieve. E.g.,
+   *     `projects/myproject/locations/US/reservations/team1-prod`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Reservation getReservation(String name) {
+<span class="fc" id="L498">    GetReservationRequest request = GetReservationRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L499">    return getReservation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about the reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   GetReservationRequest request =
+   *       GetReservationRequest.newBuilder()
+   *           .setName(ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString())
+   *           .build();
+   *   Reservation response = reservationServiceClient.getReservation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Reservation getReservation(GetReservationRequest request) {
+<span class="fc" id="L524">    return getReservationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about the reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   GetReservationRequest request =
+   *       GetReservationRequest.newBuilder()
+   *           .setName(ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Reservation&gt; future =
+   *       reservationServiceClient.getReservationCallable().futureCall(request);
+   *   // Do something.
+   *   Reservation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetReservationRequest, Reservation&gt; getReservationCallable() {
+<span class="fc" id="L549">    return stub.getReservationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a reservation. Returns `google.rpc.Code.FAILED_PRECONDITION` when reservation has
+   * assignments.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   ReservationName name = ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;);
+   *   reservationServiceClient.deleteReservation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the reservation to retrieve. E.g.,
+   *     `projects/myproject/locations/US/reservations/team1-prod`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteReservation(ReservationName name) {
+    DeleteReservationRequest request =
+<span class="fc" id="L574">        DeleteReservationRequest.newBuilder()</span>
+<span class="pc bpc" id="L575" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L576">            .build();</span>
+<span class="fc" id="L577">    deleteReservation(request);</span>
+<span class="fc" id="L578">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a reservation. Returns `google.rpc.Code.FAILED_PRECONDITION` when reservation has
+   * assignments.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String name = ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString();
+   *   reservationServiceClient.deleteReservation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the reservation to retrieve. E.g.,
+   *     `projects/myproject/locations/US/reservations/team1-prod`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteReservation(String name) {
+<span class="fc" id="L601">    DeleteReservationRequest request = DeleteReservationRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L602">    deleteReservation(request);</span>
+<span class="fc" id="L603">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a reservation. Returns `google.rpc.Code.FAILED_PRECONDITION` when reservation has
+   * assignments.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   DeleteReservationRequest request =
+   *       DeleteReservationRequest.newBuilder()
+   *           .setName(ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString())
+   *           .build();
+   *   reservationServiceClient.deleteReservation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteReservation(DeleteReservationRequest request) {
+<span class="fc" id="L628">    deleteReservationCallable().call(request);</span>
+<span class="fc" id="L629">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a reservation. Returns `google.rpc.Code.FAILED_PRECONDITION` when reservation has
+   * assignments.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   DeleteReservationRequest request =
+   *       DeleteReservationRequest.newBuilder()
+   *           .setName(ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       reservationServiceClient.deleteReservationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteReservationRequest, Empty&gt; deleteReservationCallable() {
+<span class="fc" id="L654">    return stub.deleteReservationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an existing reservation resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   Reservation reservation = Reservation.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Reservation response = reservationServiceClient.updateReservation(reservation, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param reservation Content of the reservation to update.
+   * @param updateMask Standard field mask for the set of fields to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Reservation updateReservation(Reservation reservation, FieldMask updateMask) {
+    UpdateReservationRequest request =
+<span class="fc" id="L679">        UpdateReservationRequest.newBuilder()</span>
+<span class="fc" id="L680">            .setReservation(reservation)</span>
+<span class="fc" id="L681">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L682">            .build();</span>
+<span class="fc" id="L683">    return updateReservation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an existing reservation resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   UpdateReservationRequest request =
+   *       UpdateReservationRequest.newBuilder()
+   *           .setReservation(Reservation.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Reservation response = reservationServiceClient.updateReservation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Reservation updateReservation(UpdateReservationRequest request) {
+<span class="fc" id="L709">    return updateReservationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an existing reservation resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   UpdateReservationRequest request =
+   *       UpdateReservationRequest.newBuilder()
+   *           .setReservation(Reservation.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Reservation&gt; future =
+   *       reservationServiceClient.updateReservationCallable().futureCall(request);
+   *   // Do something.
+   *   Reservation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateReservationRequest, Reservation&gt; updateReservationCallable() {
+<span class="fc" id="L735">    return stub.updateReservationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new capacity commitment resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   CapacityCommitment capacityCommitment = CapacityCommitment.newBuilder().build();
+   *   CapacityCommitment response =
+   *       reservationServiceClient.createCapacityCommitment(parent, capacityCommitment);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the parent reservation. E.g.,
+   *     `projects/myproject/locations/US`
+   * @param capacityCommitment Content of the capacity commitment to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CapacityCommitment createCapacityCommitment(
+      LocationName parent, CapacityCommitment capacityCommitment) {
+    CreateCapacityCommitmentRequest request =
+<span class="fc" id="L763">        CreateCapacityCommitmentRequest.newBuilder()</span>
+<span class="pc bpc" id="L764" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L765">            .setCapacityCommitment(capacityCommitment)</span>
+<span class="fc" id="L766">            .build();</span>
+<span class="fc" id="L767">    return createCapacityCommitment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new capacity commitment resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   CapacityCommitment capacityCommitment = CapacityCommitment.newBuilder().build();
+   *   CapacityCommitment response =
+   *       reservationServiceClient.createCapacityCommitment(parent, capacityCommitment);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the parent reservation. E.g.,
+   *     `projects/myproject/locations/US`
+   * @param capacityCommitment Content of the capacity commitment to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CapacityCommitment createCapacityCommitment(
+      String parent, CapacityCommitment capacityCommitment) {
+    CreateCapacityCommitmentRequest request =
+<span class="fc" id="L795">        CreateCapacityCommitmentRequest.newBuilder()</span>
+<span class="fc" id="L796">            .setParent(parent)</span>
+<span class="fc" id="L797">            .setCapacityCommitment(capacityCommitment)</span>
+<span class="fc" id="L798">            .build();</span>
+<span class="fc" id="L799">    return createCapacityCommitment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new capacity commitment resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   CreateCapacityCommitmentRequest request =
+   *       CreateCapacityCommitmentRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setCapacityCommitment(CapacityCommitment.newBuilder().build())
+   *           .setEnforceSingleAdminProjectPerOrg(true)
+   *           .setCapacityCommitmentId(&quot;capacityCommitmentId1185645802&quot;)
+   *           .build();
+   *   CapacityCommitment response = reservationServiceClient.createCapacityCommitment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CapacityCommitment createCapacityCommitment(
+      CreateCapacityCommitmentRequest request) {
+<span class="fc" id="L828">    return createCapacityCommitmentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new capacity commitment resource.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   CreateCapacityCommitmentRequest request =
+   *       CreateCapacityCommitmentRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setCapacityCommitment(CapacityCommitment.newBuilder().build())
+   *           .setEnforceSingleAdminProjectPerOrg(true)
+   *           .setCapacityCommitmentId(&quot;capacityCommitmentId1185645802&quot;)
+   *           .build();
+   *   ApiFuture&lt;CapacityCommitment&gt; future =
+   *       reservationServiceClient.createCapacityCommitmentCallable().futureCall(request);
+   *   // Do something.
+   *   CapacityCommitment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateCapacityCommitmentRequest, CapacityCommitment&gt;
+      createCapacityCommitmentCallable() {
+<span class="fc" id="L857">    return stub.createCapacityCommitmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the capacity commitments for the admin project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (CapacityCommitment element :
+   *       reservationServiceClient.listCapacityCommitments(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the parent reservation. E.g.,
+   *     `projects/myproject/locations/US`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListCapacityCommitmentsPagedResponse listCapacityCommitments(LocationName parent) {
+    ListCapacityCommitmentsRequest request =
+<span class="fc" id="L884">        ListCapacityCommitmentsRequest.newBuilder()</span>
+<span class="pc bpc" id="L885" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L886">            .build();</span>
+<span class="fc" id="L887">    return listCapacityCommitments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the capacity commitments for the admin project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (CapacityCommitment element :
+   *       reservationServiceClient.listCapacityCommitments(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the parent reservation. E.g.,
+   *     `projects/myproject/locations/US`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListCapacityCommitmentsPagedResponse listCapacityCommitments(String parent) {
+    ListCapacityCommitmentsRequest request =
+<span class="fc" id="L914">        ListCapacityCommitmentsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L915">    return listCapacityCommitments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the capacity commitments for the admin project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   ListCapacityCommitmentsRequest request =
+   *       ListCapacityCommitmentsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (CapacityCommitment element :
+   *       reservationServiceClient.listCapacityCommitments(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListCapacityCommitmentsPagedResponse listCapacityCommitments(
+      ListCapacityCommitmentsRequest request) {
+<span class="fc" id="L946">    return listCapacityCommitmentsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the capacity commitments for the admin project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   ListCapacityCommitmentsRequest request =
+   *       ListCapacityCommitmentsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;CapacityCommitment&gt; future =
+   *       reservationServiceClient.listCapacityCommitmentsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (CapacityCommitment element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListCapacityCommitmentsRequest, ListCapacityCommitmentsPagedResponse&gt;
+      listCapacityCommitmentsPagedCallable() {
+<span class="fc" id="L976">    return stub.listCapacityCommitmentsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the capacity commitments for the admin project.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   ListCapacityCommitmentsRequest request =
+   *       ListCapacityCommitmentsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListCapacityCommitmentsResponse response =
+   *         reservationServiceClient.listCapacityCommitmentsCallable().call(request);
+   *     for (CapacityCommitment element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListCapacityCommitmentsRequest, ListCapacityCommitmentsResponse&gt;
+      listCapacityCommitmentsCallable() {
+<span class="nc" id="L1013">    return stub.listCapacityCommitmentsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about the capacity commitment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   CapacityCommitmentName name =
+   *       CapacityCommitmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CAPACITY_COMMITMENT]&quot;);
+   *   CapacityCommitment response = reservationServiceClient.getCapacityCommitment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the capacity commitment to retrieve. E.g.,
+   *     `projects/myproject/locations/US/capacityCommitments/123`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CapacityCommitment getCapacityCommitment(CapacityCommitmentName name) {
+    GetCapacityCommitmentRequest request =
+<span class="fc" id="L1038">        GetCapacityCommitmentRequest.newBuilder()</span>
+<span class="pc bpc" id="L1039" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1040">            .build();</span>
+<span class="fc" id="L1041">    return getCapacityCommitment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about the capacity commitment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String name =
+   *       CapacityCommitmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CAPACITY_COMMITMENT]&quot;).toString();
+   *   CapacityCommitment response = reservationServiceClient.getCapacityCommitment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the capacity commitment to retrieve. E.g.,
+   *     `projects/myproject/locations/US/capacityCommitments/123`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CapacityCommitment getCapacityCommitment(String name) {
+    GetCapacityCommitmentRequest request =
+<span class="fc" id="L1066">        GetCapacityCommitmentRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1067">    return getCapacityCommitment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about the capacity commitment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   GetCapacityCommitmentRequest request =
+   *       GetCapacityCommitmentRequest.newBuilder()
+   *           .setName(
+   *               CapacityCommitmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CAPACITY_COMMITMENT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   CapacityCommitment response = reservationServiceClient.getCapacityCommitment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CapacityCommitment getCapacityCommitment(GetCapacityCommitmentRequest request) {
+<span class="fc" id="L1094">    return getCapacityCommitmentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns information about the capacity commitment.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   GetCapacityCommitmentRequest request =
+   *       GetCapacityCommitmentRequest.newBuilder()
+   *           .setName(
+   *               CapacityCommitmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CAPACITY_COMMITMENT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;CapacityCommitment&gt; future =
+   *       reservationServiceClient.getCapacityCommitmentCallable().futureCall(request);
+   *   // Do something.
+   *   CapacityCommitment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetCapacityCommitmentRequest, CapacityCommitment&gt;
+      getCapacityCommitmentCallable() {
+<span class="fc" id="L1122">    return stub.getCapacityCommitmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a capacity commitment. Attempting to delete capacity commitment before its
+   * commitment_end_time will fail with the error code `google.rpc.Code.FAILED_PRECONDITION`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   CapacityCommitmentName name =
+   *       CapacityCommitmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CAPACITY_COMMITMENT]&quot;);
+   *   reservationServiceClient.deleteCapacityCommitment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the capacity commitment to delete. E.g.,
+   *     `projects/myproject/locations/US/capacityCommitments/123`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteCapacityCommitment(CapacityCommitmentName name) {
+    DeleteCapacityCommitmentRequest request =
+<span class="fc" id="L1148">        DeleteCapacityCommitmentRequest.newBuilder()</span>
+<span class="pc bpc" id="L1149" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1150">            .build();</span>
+<span class="fc" id="L1151">    deleteCapacityCommitment(request);</span>
+<span class="fc" id="L1152">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a capacity commitment. Attempting to delete capacity commitment before its
+   * commitment_end_time will fail with the error code `google.rpc.Code.FAILED_PRECONDITION`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String name =
+   *       CapacityCommitmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CAPACITY_COMMITMENT]&quot;).toString();
+   *   reservationServiceClient.deleteCapacityCommitment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Resource name of the capacity commitment to delete. E.g.,
+   *     `projects/myproject/locations/US/capacityCommitments/123`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteCapacityCommitment(String name) {
+    DeleteCapacityCommitmentRequest request =
+<span class="fc" id="L1177">        DeleteCapacityCommitmentRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1178">    deleteCapacityCommitment(request);</span>
+<span class="fc" id="L1179">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a capacity commitment. Attempting to delete capacity commitment before its
+   * commitment_end_time will fail with the error code `google.rpc.Code.FAILED_PRECONDITION`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   DeleteCapacityCommitmentRequest request =
+   *       DeleteCapacityCommitmentRequest.newBuilder()
+   *           .setName(
+   *               CapacityCommitmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CAPACITY_COMMITMENT]&quot;)
+   *                   .toString())
+   *           .setForce(true)
+   *           .build();
+   *   reservationServiceClient.deleteCapacityCommitment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteCapacityCommitment(DeleteCapacityCommitmentRequest request) {
+<span class="fc" id="L1207">    deleteCapacityCommitmentCallable().call(request);</span>
+<span class="fc" id="L1208">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a capacity commitment. Attempting to delete capacity commitment before its
+   * commitment_end_time will fail with the error code `google.rpc.Code.FAILED_PRECONDITION`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   DeleteCapacityCommitmentRequest request =
+   *       DeleteCapacityCommitmentRequest.newBuilder()
+   *           .setName(
+   *               CapacityCommitmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CAPACITY_COMMITMENT]&quot;)
+   *                   .toString())
+   *           .setForce(true)
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       reservationServiceClient.deleteCapacityCommitmentCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteCapacityCommitmentRequest, Empty&gt;
+      deleteCapacityCommitmentCallable() {
+<span class="fc" id="L1237">    return stub.deleteCapacityCommitmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an existing capacity commitment.
+   *
+   * &lt;p&gt;Only `plan` and `renewal_plan` fields can be updated.
+   *
+   * &lt;p&gt;Plan can only be changed to a plan of a longer commitment period. Attempting to change to a
+   * plan with shorter commitment period will fail with the error code
+   * `google.rpc.Code.FAILED_PRECONDITION`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   CapacityCommitment capacityCommitment = CapacityCommitment.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   CapacityCommitment response =
+   *       reservationServiceClient.updateCapacityCommitment(capacityCommitment, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param capacityCommitment Content of the capacity commitment to update.
+   * @param updateMask Standard field mask for the set of fields to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CapacityCommitment updateCapacityCommitment(
+      CapacityCommitment capacityCommitment, FieldMask updateMask) {
+    UpdateCapacityCommitmentRequest request =
+<span class="fc" id="L1270">        UpdateCapacityCommitmentRequest.newBuilder()</span>
+<span class="fc" id="L1271">            .setCapacityCommitment(capacityCommitment)</span>
+<span class="fc" id="L1272">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L1273">            .build();</span>
+<span class="fc" id="L1274">    return updateCapacityCommitment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an existing capacity commitment.
+   *
+   * &lt;p&gt;Only `plan` and `renewal_plan` fields can be updated.
+   *
+   * &lt;p&gt;Plan can only be changed to a plan of a longer commitment period. Attempting to change to a
+   * plan with shorter commitment period will fail with the error code
+   * `google.rpc.Code.FAILED_PRECONDITION`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   UpdateCapacityCommitmentRequest request =
+   *       UpdateCapacityCommitmentRequest.newBuilder()
+   *           .setCapacityCommitment(CapacityCommitment.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   CapacityCommitment response = reservationServiceClient.updateCapacityCommitment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CapacityCommitment updateCapacityCommitment(
+      UpdateCapacityCommitmentRequest request) {
+<span class="fc" id="L1307">    return updateCapacityCommitmentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an existing capacity commitment.
+   *
+   * &lt;p&gt;Only `plan` and `renewal_plan` fields can be updated.
+   *
+   * &lt;p&gt;Plan can only be changed to a plan of a longer commitment period. Attempting to change to a
+   * plan with shorter commitment period will fail with the error code
+   * `google.rpc.Code.FAILED_PRECONDITION`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   UpdateCapacityCommitmentRequest request =
+   *       UpdateCapacityCommitmentRequest.newBuilder()
+   *           .setCapacityCommitment(CapacityCommitment.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;CapacityCommitment&gt; future =
+   *       reservationServiceClient.updateCapacityCommitmentCallable().futureCall(request);
+   *   // Do something.
+   *   CapacityCommitment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateCapacityCommitmentRequest, CapacityCommitment&gt;
+      updateCapacityCommitmentCallable() {
+<span class="fc" id="L1340">    return stub.updateCapacityCommitmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Splits capacity commitment to two commitments of the same plan and `commitment_end_time`.
+   *
+   * &lt;p&gt;A common use case is to enable downgrading commitments.
+   *
+   * &lt;p&gt;For example, in order to downgrade from 10000 slots to 8000, you might split a 10000
+   * capacity commitment into commitments of 2000 and 8000. Then, you delete the first one after the
+   * commitment end time passes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   CapacityCommitmentName name =
+   *       CapacityCommitmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CAPACITY_COMMITMENT]&quot;);
+   *   long slotCount = -191518834;
+   *   SplitCapacityCommitmentResponse response =
+   *       reservationServiceClient.splitCapacityCommitment(name, slotCount);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name e.g.,:
+   *     `projects/myproject/locations/US/capacityCommitments/123`
+   * @param slotCount Number of slots in the capacity commitment after the split.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SplitCapacityCommitmentResponse splitCapacityCommitment(
+      CapacityCommitmentName name, long slotCount) {
+    SplitCapacityCommitmentRequest request =
+<span class="fc" id="L1375">        SplitCapacityCommitmentRequest.newBuilder()</span>
+<span class="pc bpc" id="L1376" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1377">            .setSlotCount(slotCount)</span>
+<span class="fc" id="L1378">            .build();</span>
+<span class="fc" id="L1379">    return splitCapacityCommitment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Splits capacity commitment to two commitments of the same plan and `commitment_end_time`.
+   *
+   * &lt;p&gt;A common use case is to enable downgrading commitments.
+   *
+   * &lt;p&gt;For example, in order to downgrade from 10000 slots to 8000, you might split a 10000
+   * capacity commitment into commitments of 2000 and 8000. Then, you delete the first one after the
+   * commitment end time passes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String name =
+   *       CapacityCommitmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CAPACITY_COMMITMENT]&quot;).toString();
+   *   long slotCount = -191518834;
+   *   SplitCapacityCommitmentResponse response =
+   *       reservationServiceClient.splitCapacityCommitment(name, slotCount);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name e.g.,:
+   *     `projects/myproject/locations/US/capacityCommitments/123`
+   * @param slotCount Number of slots in the capacity commitment after the split.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SplitCapacityCommitmentResponse splitCapacityCommitment(
+      String name, long slotCount) {
+    SplitCapacityCommitmentRequest request =
+<span class="fc" id="L1414">        SplitCapacityCommitmentRequest.newBuilder().setName(name).setSlotCount(slotCount).build();</span>
+<span class="fc" id="L1415">    return splitCapacityCommitment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Splits capacity commitment to two commitments of the same plan and `commitment_end_time`.
+   *
+   * &lt;p&gt;A common use case is to enable downgrading commitments.
+   *
+   * &lt;p&gt;For example, in order to downgrade from 10000 slots to 8000, you might split a 10000
+   * capacity commitment into commitments of 2000 and 8000. Then, you delete the first one after the
+   * commitment end time passes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   SplitCapacityCommitmentRequest request =
+   *       SplitCapacityCommitmentRequest.newBuilder()
+   *           .setName(
+   *               CapacityCommitmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CAPACITY_COMMITMENT]&quot;)
+   *                   .toString())
+   *           .setSlotCount(-191518834)
+   *           .build();
+   *   SplitCapacityCommitmentResponse response =
+   *       reservationServiceClient.splitCapacityCommitment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SplitCapacityCommitmentResponse splitCapacityCommitment(
+      SplitCapacityCommitmentRequest request) {
+<span class="fc" id="L1451">    return splitCapacityCommitmentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Splits capacity commitment to two commitments of the same plan and `commitment_end_time`.
+   *
+   * &lt;p&gt;A common use case is to enable downgrading commitments.
+   *
+   * &lt;p&gt;For example, in order to downgrade from 10000 slots to 8000, you might split a 10000
+   * capacity commitment into commitments of 2000 and 8000. Then, you delete the first one after the
+   * commitment end time passes.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   SplitCapacityCommitmentRequest request =
+   *       SplitCapacityCommitmentRequest.newBuilder()
+   *           .setName(
+   *               CapacityCommitmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CAPACITY_COMMITMENT]&quot;)
+   *                   .toString())
+   *           .setSlotCount(-191518834)
+   *           .build();
+   *   ApiFuture&lt;SplitCapacityCommitmentResponse&gt; future =
+   *       reservationServiceClient.splitCapacityCommitmentCallable().futureCall(request);
+   *   // Do something.
+   *   SplitCapacityCommitmentResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SplitCapacityCommitmentRequest, SplitCapacityCommitmentResponse&gt;
+      splitCapacityCommitmentCallable() {
+<span class="fc" id="L1486">    return stub.splitCapacityCommitmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Merges capacity commitments of the same plan into a single commitment.
+   *
+   * &lt;p&gt;The resulting capacity commitment has the greater commitment_end_time out of the
+   * to-be-merged capacity commitments.
+   *
+   * &lt;p&gt;Attempting to merge capacity commitments of different plan will fail with the error code
+   * `google.rpc.Code.FAILED_PRECONDITION`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   List&lt;String&gt; capacityCommitmentIds = new ArrayList&lt;&gt;();
+   *   CapacityCommitment response =
+   *       reservationServiceClient.mergeCapacityCommitments(parent, capacityCommitmentIds);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Parent resource that identifies admin project and location e.g.,
+   *     `projects/myproject/locations/us`
+   * @param capacityCommitmentIds Ids of capacity commitments to merge. These capacity commitments
+   *     must exist under admin project and location specified in the parent. ID is the last portion
+   *     of capacity commitment name e.g., 'abc' for
+   *     projects/myproject/locations/US/capacityCommitments/abc
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CapacityCommitment mergeCapacityCommitments(
+      LocationName parent, List&lt;String&gt; capacityCommitmentIds) {
+    MergeCapacityCommitmentsRequest request =
+<span class="fc" id="L1523">        MergeCapacityCommitmentsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1524" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1525">            .addAllCapacityCommitmentIds(capacityCommitmentIds)</span>
+<span class="fc" id="L1526">            .build();</span>
+<span class="fc" id="L1527">    return mergeCapacityCommitments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Merges capacity commitments of the same plan into a single commitment.
+   *
+   * &lt;p&gt;The resulting capacity commitment has the greater commitment_end_time out of the
+   * to-be-merged capacity commitments.
+   *
+   * &lt;p&gt;Attempting to merge capacity commitments of different plan will fail with the error code
+   * `google.rpc.Code.FAILED_PRECONDITION`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   List&lt;String&gt; capacityCommitmentIds = new ArrayList&lt;&gt;();
+   *   CapacityCommitment response =
+   *       reservationServiceClient.mergeCapacityCommitments(parent, capacityCommitmentIds);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Parent resource that identifies admin project and location e.g.,
+   *     `projects/myproject/locations/us`
+   * @param capacityCommitmentIds Ids of capacity commitments to merge. These capacity commitments
+   *     must exist under admin project and location specified in the parent. ID is the last portion
+   *     of capacity commitment name e.g., 'abc' for
+   *     projects/myproject/locations/US/capacityCommitments/abc
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CapacityCommitment mergeCapacityCommitments(
+      String parent, List&lt;String&gt; capacityCommitmentIds) {
+    MergeCapacityCommitmentsRequest request =
+<span class="fc" id="L1564">        MergeCapacityCommitmentsRequest.newBuilder()</span>
+<span class="fc" id="L1565">            .setParent(parent)</span>
+<span class="fc" id="L1566">            .addAllCapacityCommitmentIds(capacityCommitmentIds)</span>
+<span class="fc" id="L1567">            .build();</span>
+<span class="fc" id="L1568">    return mergeCapacityCommitments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Merges capacity commitments of the same plan into a single commitment.
+   *
+   * &lt;p&gt;The resulting capacity commitment has the greater commitment_end_time out of the
+   * to-be-merged capacity commitments.
+   *
+   * &lt;p&gt;Attempting to merge capacity commitments of different plan will fail with the error code
+   * `google.rpc.Code.FAILED_PRECONDITION`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   MergeCapacityCommitmentsRequest request =
+   *       MergeCapacityCommitmentsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .addAllCapacityCommitmentIds(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   CapacityCommitment response = reservationServiceClient.mergeCapacityCommitments(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CapacityCommitment mergeCapacityCommitments(
+      MergeCapacityCommitmentsRequest request) {
+<span class="fc" id="L1601">    return mergeCapacityCommitmentsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Merges capacity commitments of the same plan into a single commitment.
+   *
+   * &lt;p&gt;The resulting capacity commitment has the greater commitment_end_time out of the
+   * to-be-merged capacity commitments.
+   *
+   * &lt;p&gt;Attempting to merge capacity commitments of different plan will fail with the error code
+   * `google.rpc.Code.FAILED_PRECONDITION`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   MergeCapacityCommitmentsRequest request =
+   *       MergeCapacityCommitmentsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .addAllCapacityCommitmentIds(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   ApiFuture&lt;CapacityCommitment&gt; future =
+   *       reservationServiceClient.mergeCapacityCommitmentsCallable().futureCall(request);
+   *   // Do something.
+   *   CapacityCommitment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;MergeCapacityCommitmentsRequest, CapacityCommitment&gt;
+      mergeCapacityCommitmentsCallable() {
+<span class="fc" id="L1634">    return stub.mergeCapacityCommitmentsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an assignment object which allows the given project to submit jobs of a certain type
+   * using slots from the specified reservation.
+   *
+   * &lt;p&gt;Currently a resource (project, folder, organization) can only have one assignment per each
+   * (job_type, location) combination, and that reservation will be used for all jobs of the
+   * matching type.
+   *
+   * &lt;p&gt;Different assignments can be created on different levels of the projects, folders or
+   * organization hierarchy. During query execution, the assignment is looked up at the project,
+   * folder and organization levels in that order. The first assignment found is applied to the
+   * query.
+   *
+   * &lt;p&gt;When creating assignments, it does not matter if other assignments exist at higher levels.
+   *
+   * &lt;p&gt;Example:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;The organization `organizationA` contains two projects, `project1` and `project2`.
+   *   &lt;li&gt;Assignments for all three entities (`organizationA`, `project1`, and `project2`) could
+   *       all be created and mapped to the same or different reservations.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;&quot;None&quot; assignments represent an absence of the assignment. Projects assigned to None use
+   * on-demand pricing. To create a &quot;None&quot; assignment, use &quot;none&quot; as a reservation_id in the parent.
+   * Example parent: `projects/myproject/locations/US/reservations/none`.
+   *
+   * &lt;p&gt;Returns `google.rpc.Code.PERMISSION_DENIED` if user does not have 'bigquery.admin'
+   * permissions on the project using the reservation and the project that owns this reservation.
+   *
+   * &lt;p&gt;Returns `google.rpc.Code.INVALID_ARGUMENT` when location of the assignment does not match
+   * location of the reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   ReservationName parent = ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;);
+   *   Assignment assignment = Assignment.newBuilder().build();
+   *   Assignment response = reservationServiceClient.createAssignment(parent, assignment);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name of the assignment E.g.
+   *     `projects/myproject/locations/US/reservations/team1-prod`
+   * @param assignment Assignment resource to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Assignment createAssignment(ReservationName parent, Assignment assignment) {
+    CreateAssignmentRequest request =
+<span class="fc" id="L1690">        CreateAssignmentRequest.newBuilder()</span>
+<span class="pc bpc" id="L1691" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1692">            .setAssignment(assignment)</span>
+<span class="fc" id="L1693">            .build();</span>
+<span class="fc" id="L1694">    return createAssignment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an assignment object which allows the given project to submit jobs of a certain type
+   * using slots from the specified reservation.
+   *
+   * &lt;p&gt;Currently a resource (project, folder, organization) can only have one assignment per each
+   * (job_type, location) combination, and that reservation will be used for all jobs of the
+   * matching type.
+   *
+   * &lt;p&gt;Different assignments can be created on different levels of the projects, folders or
+   * organization hierarchy. During query execution, the assignment is looked up at the project,
+   * folder and organization levels in that order. The first assignment found is applied to the
+   * query.
+   *
+   * &lt;p&gt;When creating assignments, it does not matter if other assignments exist at higher levels.
+   *
+   * &lt;p&gt;Example:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;The organization `organizationA` contains two projects, `project1` and `project2`.
+   *   &lt;li&gt;Assignments for all three entities (`organizationA`, `project1`, and `project2`) could
+   *       all be created and mapped to the same or different reservations.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;&quot;None&quot; assignments represent an absence of the assignment. Projects assigned to None use
+   * on-demand pricing. To create a &quot;None&quot; assignment, use &quot;none&quot; as a reservation_id in the parent.
+   * Example parent: `projects/myproject/locations/US/reservations/none`.
+   *
+   * &lt;p&gt;Returns `google.rpc.Code.PERMISSION_DENIED` if user does not have 'bigquery.admin'
+   * permissions on the project using the reservation and the project that owns this reservation.
+   *
+   * &lt;p&gt;Returns `google.rpc.Code.INVALID_ARGUMENT` when location of the assignment does not match
+   * location of the reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String parent = ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString();
+   *   Assignment assignment = Assignment.newBuilder().build();
+   *   Assignment response = reservationServiceClient.createAssignment(parent, assignment);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name of the assignment E.g.
+   *     `projects/myproject/locations/US/reservations/team1-prod`
+   * @param assignment Assignment resource to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Assignment createAssignment(String parent, Assignment assignment) {
+    CreateAssignmentRequest request =
+<span class="fc" id="L1750">        CreateAssignmentRequest.newBuilder().setParent(parent).setAssignment(assignment).build();</span>
+<span class="fc" id="L1751">    return createAssignment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an assignment object which allows the given project to submit jobs of a certain type
+   * using slots from the specified reservation.
+   *
+   * &lt;p&gt;Currently a resource (project, folder, organization) can only have one assignment per each
+   * (job_type, location) combination, and that reservation will be used for all jobs of the
+   * matching type.
+   *
+   * &lt;p&gt;Different assignments can be created on different levels of the projects, folders or
+   * organization hierarchy. During query execution, the assignment is looked up at the project,
+   * folder and organization levels in that order. The first assignment found is applied to the
+   * query.
+   *
+   * &lt;p&gt;When creating assignments, it does not matter if other assignments exist at higher levels.
+   *
+   * &lt;p&gt;Example:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;The organization `organizationA` contains two projects, `project1` and `project2`.
+   *   &lt;li&gt;Assignments for all three entities (`organizationA`, `project1`, and `project2`) could
+   *       all be created and mapped to the same or different reservations.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;&quot;None&quot; assignments represent an absence of the assignment. Projects assigned to None use
+   * on-demand pricing. To create a &quot;None&quot; assignment, use &quot;none&quot; as a reservation_id in the parent.
+   * Example parent: `projects/myproject/locations/US/reservations/none`.
+   *
+   * &lt;p&gt;Returns `google.rpc.Code.PERMISSION_DENIED` if user does not have 'bigquery.admin'
+   * permissions on the project using the reservation and the project that owns this reservation.
+   *
+   * &lt;p&gt;Returns `google.rpc.Code.INVALID_ARGUMENT` when location of the assignment does not match
+   * location of the reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   CreateAssignmentRequest request =
+   *       CreateAssignmentRequest.newBuilder()
+   *           .setParent(ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString())
+   *           .setAssignment(Assignment.newBuilder().build())
+   *           .setAssignmentId(&quot;assignmentId-1603989304&quot;)
+   *           .build();
+   *   Assignment response = reservationServiceClient.createAssignment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Assignment createAssignment(CreateAssignmentRequest request) {
+<span class="fc" id="L1808">    return createAssignmentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an assignment object which allows the given project to submit jobs of a certain type
+   * using slots from the specified reservation.
+   *
+   * &lt;p&gt;Currently a resource (project, folder, organization) can only have one assignment per each
+   * (job_type, location) combination, and that reservation will be used for all jobs of the
+   * matching type.
+   *
+   * &lt;p&gt;Different assignments can be created on different levels of the projects, folders or
+   * organization hierarchy. During query execution, the assignment is looked up at the project,
+   * folder and organization levels in that order. The first assignment found is applied to the
+   * query.
+   *
+   * &lt;p&gt;When creating assignments, it does not matter if other assignments exist at higher levels.
+   *
+   * &lt;p&gt;Example:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;The organization `organizationA` contains two projects, `project1` and `project2`.
+   *   &lt;li&gt;Assignments for all three entities (`organizationA`, `project1`, and `project2`) could
+   *       all be created and mapped to the same or different reservations.
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;&quot;None&quot; assignments represent an absence of the assignment. Projects assigned to None use
+   * on-demand pricing. To create a &quot;None&quot; assignment, use &quot;none&quot; as a reservation_id in the parent.
+   * Example parent: `projects/myproject/locations/US/reservations/none`.
+   *
+   * &lt;p&gt;Returns `google.rpc.Code.PERMISSION_DENIED` if user does not have 'bigquery.admin'
+   * permissions on the project using the reservation and the project that owns this reservation.
+   *
+   * &lt;p&gt;Returns `google.rpc.Code.INVALID_ARGUMENT` when location of the assignment does not match
+   * location of the reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   CreateAssignmentRequest request =
+   *       CreateAssignmentRequest.newBuilder()
+   *           .setParent(ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString())
+   *           .setAssignment(Assignment.newBuilder().build())
+   *           .setAssignmentId(&quot;assignmentId-1603989304&quot;)
+   *           .build();
+   *   ApiFuture&lt;Assignment&gt; future =
+   *       reservationServiceClient.createAssignmentCallable().futureCall(request);
+   *   // Do something.
+   *   Assignment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateAssignmentRequest, Assignment&gt; createAssignmentCallable() {
+<span class="fc" id="L1865">    return stub.createAssignmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists assignments.
+   *
+   * &lt;p&gt;Only explicitly created assignments will be returned.
+   *
+   * &lt;p&gt;Example:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;Organization `organizationA` contains two projects, `project1` and `project2`.
+   *   &lt;li&gt;Reservation `res1` exists and was created previously.
+   *   &lt;li&gt;CreateAssignment was used previously to define the following associations between
+   *       entities and reservations: `&amp;lt;organizationA, res1&amp;gt;` and `&amp;lt;project1, res1&amp;gt;`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;In this example, ListAssignments will just return the above two assignments for reservation
+   * `res1`, and no expansion/merge will happen.
+   *
+   * &lt;p&gt;The wildcard &quot;-&quot; can be used for reservations in the request. In that case all assignments
+   * belongs to the specified project and location will be listed.
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Note&amp;#42;&amp;#42; &quot;-&quot; cannot be used for projects nor locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   ReservationName parent = ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;);
+   *   for (Assignment element : reservationServiceClient.listAssignments(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name e.g.:
+   *     &lt;p&gt;`projects/myproject/locations/US/reservations/team1-prod`
+   *     &lt;p&gt;Or:
+   *     &lt;p&gt;`projects/myproject/locations/US/reservations/-`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAssignmentsPagedResponse listAssignments(ReservationName parent) {
+    ListAssignmentsRequest request =
+<span class="fc" id="L1912">        ListAssignmentsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1913" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1914">            .build();</span>
+<span class="fc" id="L1915">    return listAssignments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists assignments.
+   *
+   * &lt;p&gt;Only explicitly created assignments will be returned.
+   *
+   * &lt;p&gt;Example:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;Organization `organizationA` contains two projects, `project1` and `project2`.
+   *   &lt;li&gt;Reservation `res1` exists and was created previously.
+   *   &lt;li&gt;CreateAssignment was used previously to define the following associations between
+   *       entities and reservations: `&amp;lt;organizationA, res1&amp;gt;` and `&amp;lt;project1, res1&amp;gt;`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;In this example, ListAssignments will just return the above two assignments for reservation
+   * `res1`, and no expansion/merge will happen.
+   *
+   * &lt;p&gt;The wildcard &quot;-&quot; can be used for reservations in the request. In that case all assignments
+   * belongs to the specified project and location will be listed.
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Note&amp;#42;&amp;#42; &quot;-&quot; cannot be used for projects nor locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String parent = ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString();
+   *   for (Assignment element : reservationServiceClient.listAssignments(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource name e.g.:
+   *     &lt;p&gt;`projects/myproject/locations/US/reservations/team1-prod`
+   *     &lt;p&gt;Or:
+   *     &lt;p&gt;`projects/myproject/locations/US/reservations/-`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAssignmentsPagedResponse listAssignments(String parent) {
+<span class="fc" id="L1961">    ListAssignmentsRequest request = ListAssignmentsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1962">    return listAssignments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists assignments.
+   *
+   * &lt;p&gt;Only explicitly created assignments will be returned.
+   *
+   * &lt;p&gt;Example:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;Organization `organizationA` contains two projects, `project1` and `project2`.
+   *   &lt;li&gt;Reservation `res1` exists and was created previously.
+   *   &lt;li&gt;CreateAssignment was used previously to define the following associations between
+   *       entities and reservations: `&amp;lt;organizationA, res1&amp;gt;` and `&amp;lt;project1, res1&amp;gt;`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;In this example, ListAssignments will just return the above two assignments for reservation
+   * `res1`, and no expansion/merge will happen.
+   *
+   * &lt;p&gt;The wildcard &quot;-&quot; can be used for reservations in the request. In that case all assignments
+   * belongs to the specified project and location will be listed.
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Note&amp;#42;&amp;#42; &quot;-&quot; cannot be used for projects nor locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   ListAssignmentsRequest request =
+   *       ListAssignmentsRequest.newBuilder()
+   *           .setParent(ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Assignment element : reservationServiceClient.listAssignments(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAssignmentsPagedResponse listAssignments(ListAssignmentsRequest request) {
+<span class="fc" id="L2010">    return listAssignmentsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists assignments.
+   *
+   * &lt;p&gt;Only explicitly created assignments will be returned.
+   *
+   * &lt;p&gt;Example:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;Organization `organizationA` contains two projects, `project1` and `project2`.
+   *   &lt;li&gt;Reservation `res1` exists and was created previously.
+   *   &lt;li&gt;CreateAssignment was used previously to define the following associations between
+   *       entities and reservations: `&amp;lt;organizationA, res1&amp;gt;` and `&amp;lt;project1, res1&amp;gt;`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;In this example, ListAssignments will just return the above two assignments for reservation
+   * `res1`, and no expansion/merge will happen.
+   *
+   * &lt;p&gt;The wildcard &quot;-&quot; can be used for reservations in the request. In that case all assignments
+   * belongs to the specified project and location will be listed.
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Note&amp;#42;&amp;#42; &quot;-&quot; cannot be used for projects nor locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   ListAssignmentsRequest request =
+   *       ListAssignmentsRequest.newBuilder()
+   *           .setParent(ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Assignment&gt; future =
+   *       reservationServiceClient.listAssignmentsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Assignment element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAssignmentsRequest, ListAssignmentsPagedResponse&gt;
+      listAssignmentsPagedCallable() {
+<span class="fc" id="L2059">    return stub.listAssignmentsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists assignments.
+   *
+   * &lt;p&gt;Only explicitly created assignments will be returned.
+   *
+   * &lt;p&gt;Example:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;Organization `organizationA` contains two projects, `project1` and `project2`.
+   *   &lt;li&gt;Reservation `res1` exists and was created previously.
+   *   &lt;li&gt;CreateAssignment was used previously to define the following associations between
+   *       entities and reservations: `&amp;lt;organizationA, res1&amp;gt;` and `&amp;lt;project1, res1&amp;gt;`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;In this example, ListAssignments will just return the above two assignments for reservation
+   * `res1`, and no expansion/merge will happen.
+   *
+   * &lt;p&gt;The wildcard &quot;-&quot; can be used for reservations in the request. In that case all assignments
+   * belongs to the specified project and location will be listed.
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Note&amp;#42;&amp;#42; &quot;-&quot; cannot be used for projects nor locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   ListAssignmentsRequest request =
+   *       ListAssignmentsRequest.newBuilder()
+   *           .setParent(ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListAssignmentsResponse response =
+   *         reservationServiceClient.listAssignmentsCallable().call(request);
+   *     for (Assignment element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAssignmentsRequest, ListAssignmentsResponse&gt;
+      listAssignmentsCallable() {
+<span class="nc" id="L2115">    return stub.listAssignmentsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a assignment. No expansion will happen.
+   *
+   * &lt;p&gt;Example:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;Organization `organizationA` contains two projects, `project1` and `project2`.
+   *   &lt;li&gt;Reservation `res1` exists and was created previously.
+   *   &lt;li&gt;CreateAssignment was used previously to define the following associations between
+   *       entities and reservations: `&amp;lt;organizationA, res1&amp;gt;` and `&amp;lt;project1, res1&amp;gt;`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;In this example, deletion of the `&amp;lt;organizationA, res1&amp;gt;` assignment won't affect the
+   * other assignment `&amp;lt;project1, res1&amp;gt;`. After said deletion, queries from `project1` will
+   * still use `res1` while queries from `project2` will switch to use on-demand mode.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   AssignmentName name =
+   *       AssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;, &quot;[ASSIGNMENT]&quot;);
+   *   reservationServiceClient.deleteAssignment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Name of the resource, e.g.
+   *     `projects/myproject/locations/US/reservations/team1-prod/assignments/123`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteAssignment(AssignmentName name) {
+    DeleteAssignmentRequest request =
+<span class="pc bpc" id="L2153" title="1 of 2 branches missed.">        DeleteAssignmentRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L2154">    deleteAssignment(request);</span>
+<span class="fc" id="L2155">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a assignment. No expansion will happen.
+   *
+   * &lt;p&gt;Example:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;Organization `organizationA` contains two projects, `project1` and `project2`.
+   *   &lt;li&gt;Reservation `res1` exists and was created previously.
+   *   &lt;li&gt;CreateAssignment was used previously to define the following associations between
+   *       entities and reservations: `&amp;lt;organizationA, res1&amp;gt;` and `&amp;lt;project1, res1&amp;gt;`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;In this example, deletion of the `&amp;lt;organizationA, res1&amp;gt;` assignment won't affect the
+   * other assignment `&amp;lt;project1, res1&amp;gt;`. After said deletion, queries from `project1` will
+   * still use `res1` while queries from `project2` will switch to use on-demand mode.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String name =
+   *       AssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;, &quot;[ASSIGNMENT]&quot;).toString();
+   *   reservationServiceClient.deleteAssignment(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Name of the resource, e.g.
+   *     `projects/myproject/locations/US/reservations/team1-prod/assignments/123`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteAssignment(String name) {
+<span class="fc" id="L2191">    DeleteAssignmentRequest request = DeleteAssignmentRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2192">    deleteAssignment(request);</span>
+<span class="fc" id="L2193">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a assignment. No expansion will happen.
+   *
+   * &lt;p&gt;Example:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;Organization `organizationA` contains two projects, `project1` and `project2`.
+   *   &lt;li&gt;Reservation `res1` exists and was created previously.
+   *   &lt;li&gt;CreateAssignment was used previously to define the following associations between
+   *       entities and reservations: `&amp;lt;organizationA, res1&amp;gt;` and `&amp;lt;project1, res1&amp;gt;`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;In this example, deletion of the `&amp;lt;organizationA, res1&amp;gt;` assignment won't affect the
+   * other assignment `&amp;lt;project1, res1&amp;gt;`. After said deletion, queries from `project1` will
+   * still use `res1` while queries from `project2` will switch to use on-demand mode.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   DeleteAssignmentRequest request =
+   *       DeleteAssignmentRequest.newBuilder()
+   *           .setName(
+   *               AssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;, &quot;[ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   reservationServiceClient.deleteAssignment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteAssignment(DeleteAssignmentRequest request) {
+<span class="fc" id="L2232">    deleteAssignmentCallable().call(request);</span>
+<span class="fc" id="L2233">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a assignment. No expansion will happen.
+   *
+   * &lt;p&gt;Example:
+   *
+   * &lt;ul&gt;
+   *   &lt;li&gt;Organization `organizationA` contains two projects, `project1` and `project2`.
+   *   &lt;li&gt;Reservation `res1` exists and was created previously.
+   *   &lt;li&gt;CreateAssignment was used previously to define the following associations between
+   *       entities and reservations: `&amp;lt;organizationA, res1&amp;gt;` and `&amp;lt;project1, res1&amp;gt;`
+   * &lt;/ul&gt;
+   *
+   * &lt;p&gt;In this example, deletion of the `&amp;lt;organizationA, res1&amp;gt;` assignment won't affect the
+   * other assignment `&amp;lt;project1, res1&amp;gt;`. After said deletion, queries from `project1` will
+   * still use `res1` while queries from `project2` will switch to use on-demand mode.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   DeleteAssignmentRequest request =
+   *       DeleteAssignmentRequest.newBuilder()
+   *           .setName(
+   *               AssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;, &quot;[ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       reservationServiceClient.deleteAssignmentCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteAssignmentRequest, Empty&gt; deleteAssignmentCallable() {
+<span class="fc" id="L2272">    return stub.deleteAssignmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deprecated: Looks up assignments for a specified resource for a particular region. If the
+   * request is about a project:
+   *
+   * &lt;p&gt;1. Assignments created on the project will be returned if they exist. 2. Otherwise
+   * assignments created on the closest ancestor will be returned. 3. Assignments for different
+   * JobTypes will all be returned.
+   *
+   * &lt;p&gt;The same logic applies if the request is about a folder.
+   *
+   * &lt;p&gt;If the request is about an organization, then assignments created on the organization will
+   * be returned (organization doesn't have ancestors).
+   *
+   * &lt;p&gt;Comparing to ListAssignments, there are some behavior differences:
+   *
+   * &lt;p&gt;1. permission on the assignee will be verified in this API. 2. Hierarchy lookup
+   * (project-&amp;gt;folder-&amp;gt;organization) happens in this API. 3. Parent here is
+   * `projects/&amp;#42;/locations/&amp;#42;`, instead of
+   * `projects/&amp;#42;/locations/&amp;#42;reservations/&amp;#42;`.
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Note&amp;#42;&amp;#42; &quot;-&quot; cannot be used for projects nor locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   String query = &quot;query107944136&quot;;
+   *   for (Assignment element :
+   *       reservationServiceClient.searchAssignments(parent, query).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the admin project(containing project and
+   *     location), e.g.: `projects/myproject/locations/US`.
+   * @param query Please specify resource name as assignee in the query.
+   *     &lt;p&gt;Examples:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`assignee=projects/myproject`
+   *       &lt;li&gt;`assignee=folders/123`
+   *       &lt;li&gt;`assignee=organizations/456`
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final SearchAssignmentsPagedResponse searchAssignments(LocationName parent, String query) {
+    SearchAssignmentsRequest request =
+<span class="fc" id="L2329">        SearchAssignmentsRequest.newBuilder()</span>
+<span class="pc bpc" id="L2330" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L2331">            .setQuery(query)</span>
+<span class="fc" id="L2332">            .build();</span>
+<span class="fc" id="L2333">    return searchAssignments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deprecated: Looks up assignments for a specified resource for a particular region. If the
+   * request is about a project:
+   *
+   * &lt;p&gt;1. Assignments created on the project will be returned if they exist. 2. Otherwise
+   * assignments created on the closest ancestor will be returned. 3. Assignments for different
+   * JobTypes will all be returned.
+   *
+   * &lt;p&gt;The same logic applies if the request is about a folder.
+   *
+   * &lt;p&gt;If the request is about an organization, then assignments created on the organization will
+   * be returned (organization doesn't have ancestors).
+   *
+   * &lt;p&gt;Comparing to ListAssignments, there are some behavior differences:
+   *
+   * &lt;p&gt;1. permission on the assignee will be verified in this API. 2. Hierarchy lookup
+   * (project-&amp;gt;folder-&amp;gt;organization) happens in this API. 3. Parent here is
+   * `projects/&amp;#42;/locations/&amp;#42;`, instead of
+   * `projects/&amp;#42;/locations/&amp;#42;reservations/&amp;#42;`.
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Note&amp;#42;&amp;#42; &quot;-&quot; cannot be used for projects nor locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   String query = &quot;query107944136&quot;;
+   *   for (Assignment element :
+   *       reservationServiceClient.searchAssignments(parent, query).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the admin project(containing project and
+   *     location), e.g.: `projects/myproject/locations/US`.
+   * @param query Please specify resource name as assignee in the query.
+   *     &lt;p&gt;Examples:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`assignee=projects/myproject`
+   *       &lt;li&gt;`assignee=folders/123`
+   *       &lt;li&gt;`assignee=organizations/456`
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final SearchAssignmentsPagedResponse searchAssignments(String parent, String query) {
+    SearchAssignmentsRequest request =
+<span class="fc" id="L2390">        SearchAssignmentsRequest.newBuilder().setParent(parent).setQuery(query).build();</span>
+<span class="fc" id="L2391">    return searchAssignments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deprecated: Looks up assignments for a specified resource for a particular region. If the
+   * request is about a project:
+   *
+   * &lt;p&gt;1. Assignments created on the project will be returned if they exist. 2. Otherwise
+   * assignments created on the closest ancestor will be returned. 3. Assignments for different
+   * JobTypes will all be returned.
+   *
+   * &lt;p&gt;The same logic applies if the request is about a folder.
+   *
+   * &lt;p&gt;If the request is about an organization, then assignments created on the organization will
+   * be returned (organization doesn't have ancestors).
+   *
+   * &lt;p&gt;Comparing to ListAssignments, there are some behavior differences:
+   *
+   * &lt;p&gt;1. permission on the assignee will be verified in this API. 2. Hierarchy lookup
+   * (project-&amp;gt;folder-&amp;gt;organization) happens in this API. 3. Parent here is
+   * `projects/&amp;#42;/locations/&amp;#42;`, instead of
+   * `projects/&amp;#42;/locations/&amp;#42;reservations/&amp;#42;`.
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Note&amp;#42;&amp;#42; &quot;-&quot; cannot be used for projects nor locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   SearchAssignmentsRequest request =
+   *       SearchAssignmentsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setQuery(&quot;query107944136&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Assignment element : reservationServiceClient.searchAssignments(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final SearchAssignmentsPagedResponse searchAssignments(SearchAssignmentsRequest request) {
+<span class="fc" id="L2442">    return searchAssignmentsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deprecated: Looks up assignments for a specified resource for a particular region. If the
+   * request is about a project:
+   *
+   * &lt;p&gt;1. Assignments created on the project will be returned if they exist. 2. Otherwise
+   * assignments created on the closest ancestor will be returned. 3. Assignments for different
+   * JobTypes will all be returned.
+   *
+   * &lt;p&gt;The same logic applies if the request is about a folder.
+   *
+   * &lt;p&gt;If the request is about an organization, then assignments created on the organization will
+   * be returned (organization doesn't have ancestors).
+   *
+   * &lt;p&gt;Comparing to ListAssignments, there are some behavior differences:
+   *
+   * &lt;p&gt;1. permission on the assignee will be verified in this API. 2. Hierarchy lookup
+   * (project-&amp;gt;folder-&amp;gt;organization) happens in this API. 3. Parent here is
+   * `projects/&amp;#42;/locations/&amp;#42;`, instead of
+   * `projects/&amp;#42;/locations/&amp;#42;reservations/&amp;#42;`.
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Note&amp;#42;&amp;#42; &quot;-&quot; cannot be used for projects nor locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   SearchAssignmentsRequest request =
+   *       SearchAssignmentsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setQuery(&quot;query107944136&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Assignment&gt; future =
+   *       reservationServiceClient.searchAssignmentsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Assignment element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final UnaryCallable&lt;SearchAssignmentsRequest, SearchAssignmentsPagedResponse&gt;
+      searchAssignmentsPagedCallable() {
+<span class="fc" id="L2495">    return stub.searchAssignmentsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deprecated: Looks up assignments for a specified resource for a particular region. If the
+   * request is about a project:
+   *
+   * &lt;p&gt;1. Assignments created on the project will be returned if they exist. 2. Otherwise
+   * assignments created on the closest ancestor will be returned. 3. Assignments for different
+   * JobTypes will all be returned.
+   *
+   * &lt;p&gt;The same logic applies if the request is about a folder.
+   *
+   * &lt;p&gt;If the request is about an organization, then assignments created on the organization will
+   * be returned (organization doesn't have ancestors).
+   *
+   * &lt;p&gt;Comparing to ListAssignments, there are some behavior differences:
+   *
+   * &lt;p&gt;1. permission on the assignee will be verified in this API. 2. Hierarchy lookup
+   * (project-&amp;gt;folder-&amp;gt;organization) happens in this API. 3. Parent here is
+   * `projects/&amp;#42;/locations/&amp;#42;`, instead of
+   * `projects/&amp;#42;/locations/&amp;#42;reservations/&amp;#42;`.
+   *
+   * &lt;p&gt;&amp;#42;&amp;#42;Note&amp;#42;&amp;#42; &quot;-&quot; cannot be used for projects nor locations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   SearchAssignmentsRequest request =
+   *       SearchAssignmentsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setQuery(&quot;query107944136&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     SearchAssignmentsResponse response =
+   *         reservationServiceClient.searchAssignmentsCallable().call(request);
+   *     for (Assignment element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @deprecated This method is deprecated and will be removed in the next major version update.
+   */
+  @Deprecated
+  public final UnaryCallable&lt;SearchAssignmentsRequest, SearchAssignmentsResponse&gt;
+      searchAssignmentsCallable() {
+<span class="nc" id="L2555">    return stub.searchAssignmentsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Looks up assignments for a specified resource for a particular region. If the request is about
+   * a project:
+   *
+   * &lt;p&gt;1. Assignments created on the project will be returned if they exist. 2. Otherwise
+   * assignments created on the closest ancestor will be returned. 3. Assignments for different
+   * JobTypes will all be returned.
+   *
+   * &lt;p&gt;The same logic applies if the request is about a folder.
+   *
+   * &lt;p&gt;If the request is about an organization, then assignments created on the organization will
+   * be returned (organization doesn't have ancestors).
+   *
+   * &lt;p&gt;Comparing to ListAssignments, there are some behavior differences:
+   *
+   * &lt;p&gt;1. permission on the assignee will be verified in this API. 2. Hierarchy lookup
+   * (project-&amp;gt;folder-&amp;gt;organization) happens in this API. 3. Parent here is
+   * `projects/&amp;#42;/locations/&amp;#42;`, instead of
+   * `projects/&amp;#42;/locations/&amp;#42;reservations/&amp;#42;`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   String query = &quot;query107944136&quot;;
+   *   for (Assignment element :
+   *       reservationServiceClient.searchAllAssignments(parent, query).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name with location (project name could be the wildcard
+   *     '-'), e.g.: `projects/-/locations/US`.
+   * @param query Please specify resource name as assignee in the query.
+   *     &lt;p&gt;Examples:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`assignee=projects/myproject`
+   *       &lt;li&gt;`assignee=folders/123`
+   *       &lt;li&gt;`assignee=organizations/456`
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SearchAllAssignmentsPagedResponse searchAllAssignments(
+      LocationName parent, String query) {
+    SearchAllAssignmentsRequest request =
+<span class="fc" id="L2609">        SearchAllAssignmentsRequest.newBuilder()</span>
+<span class="pc bpc" id="L2610" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L2611">            .setQuery(query)</span>
+<span class="fc" id="L2612">            .build();</span>
+<span class="fc" id="L2613">    return searchAllAssignments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Looks up assignments for a specified resource for a particular region. If the request is about
+   * a project:
+   *
+   * &lt;p&gt;1. Assignments created on the project will be returned if they exist. 2. Otherwise
+   * assignments created on the closest ancestor will be returned. 3. Assignments for different
+   * JobTypes will all be returned.
+   *
+   * &lt;p&gt;The same logic applies if the request is about a folder.
+   *
+   * &lt;p&gt;If the request is about an organization, then assignments created on the organization will
+   * be returned (organization doesn't have ancestors).
+   *
+   * &lt;p&gt;Comparing to ListAssignments, there are some behavior differences:
+   *
+   * &lt;p&gt;1. permission on the assignee will be verified in this API. 2. Hierarchy lookup
+   * (project-&amp;gt;folder-&amp;gt;organization) happens in this API. 3. Parent here is
+   * `projects/&amp;#42;/locations/&amp;#42;`, instead of
+   * `projects/&amp;#42;/locations/&amp;#42;reservations/&amp;#42;`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   String query = &quot;query107944136&quot;;
+   *   for (Assignment element :
+   *       reservationServiceClient.searchAllAssignments(parent, query).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name with location (project name could be the wildcard
+   *     '-'), e.g.: `projects/-/locations/US`.
+   * @param query Please specify resource name as assignee in the query.
+   *     &lt;p&gt;Examples:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;`assignee=projects/myproject`
+   *       &lt;li&gt;`assignee=folders/123`
+   *       &lt;li&gt;`assignee=organizations/456`
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SearchAllAssignmentsPagedResponse searchAllAssignments(String parent, String query) {
+    SearchAllAssignmentsRequest request =
+<span class="fc" id="L2666">        SearchAllAssignmentsRequest.newBuilder().setParent(parent).setQuery(query).build();</span>
+<span class="fc" id="L2667">    return searchAllAssignments(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Looks up assignments for a specified resource for a particular region. If the request is about
+   * a project:
+   *
+   * &lt;p&gt;1. Assignments created on the project will be returned if they exist. 2. Otherwise
+   * assignments created on the closest ancestor will be returned. 3. Assignments for different
+   * JobTypes will all be returned.
+   *
+   * &lt;p&gt;The same logic applies if the request is about a folder.
+   *
+   * &lt;p&gt;If the request is about an organization, then assignments created on the organization will
+   * be returned (organization doesn't have ancestors).
+   *
+   * &lt;p&gt;Comparing to ListAssignments, there are some behavior differences:
+   *
+   * &lt;p&gt;1. permission on the assignee will be verified in this API. 2. Hierarchy lookup
+   * (project-&amp;gt;folder-&amp;gt;organization) happens in this API. 3. Parent here is
+   * `projects/&amp;#42;/locations/&amp;#42;`, instead of
+   * `projects/&amp;#42;/locations/&amp;#42;reservations/&amp;#42;`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   SearchAllAssignmentsRequest request =
+   *       SearchAllAssignmentsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setQuery(&quot;query107944136&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (Assignment element :
+   *       reservationServiceClient.searchAllAssignments(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SearchAllAssignmentsPagedResponse searchAllAssignments(
+      SearchAllAssignmentsRequest request) {
+<span class="fc" id="L2716">    return searchAllAssignmentsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Looks up assignments for a specified resource for a particular region. If the request is about
+   * a project:
+   *
+   * &lt;p&gt;1. Assignments created on the project will be returned if they exist. 2. Otherwise
+   * assignments created on the closest ancestor will be returned. 3. Assignments for different
+   * JobTypes will all be returned.
+   *
+   * &lt;p&gt;The same logic applies if the request is about a folder.
+   *
+   * &lt;p&gt;If the request is about an organization, then assignments created on the organization will
+   * be returned (organization doesn't have ancestors).
+   *
+   * &lt;p&gt;Comparing to ListAssignments, there are some behavior differences:
+   *
+   * &lt;p&gt;1. permission on the assignee will be verified in this API. 2. Hierarchy lookup
+   * (project-&amp;gt;folder-&amp;gt;organization) happens in this API. 3. Parent here is
+   * `projects/&amp;#42;/locations/&amp;#42;`, instead of
+   * `projects/&amp;#42;/locations/&amp;#42;reservations/&amp;#42;`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   SearchAllAssignmentsRequest request =
+   *       SearchAllAssignmentsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setQuery(&quot;query107944136&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;Assignment&gt; future =
+   *       reservationServiceClient.searchAllAssignmentsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Assignment element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SearchAllAssignmentsRequest, SearchAllAssignmentsPagedResponse&gt;
+      searchAllAssignmentsPagedCallable() {
+<span class="fc" id="L2764">    return stub.searchAllAssignmentsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Looks up assignments for a specified resource for a particular region. If the request is about
+   * a project:
+   *
+   * &lt;p&gt;1. Assignments created on the project will be returned if they exist. 2. Otherwise
+   * assignments created on the closest ancestor will be returned. 3. Assignments for different
+   * JobTypes will all be returned.
+   *
+   * &lt;p&gt;The same logic applies if the request is about a folder.
+   *
+   * &lt;p&gt;If the request is about an organization, then assignments created on the organization will
+   * be returned (organization doesn't have ancestors).
+   *
+   * &lt;p&gt;Comparing to ListAssignments, there are some behavior differences:
+   *
+   * &lt;p&gt;1. permission on the assignee will be verified in this API. 2. Hierarchy lookup
+   * (project-&amp;gt;folder-&amp;gt;organization) happens in this API. 3. Parent here is
+   * `projects/&amp;#42;/locations/&amp;#42;`, instead of
+   * `projects/&amp;#42;/locations/&amp;#42;reservations/&amp;#42;`.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   SearchAllAssignmentsRequest request =
+   *       SearchAllAssignmentsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setQuery(&quot;query107944136&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     SearchAllAssignmentsResponse response =
+   *         reservationServiceClient.searchAllAssignmentsCallable().call(request);
+   *     for (Assignment element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SearchAllAssignmentsRequest, SearchAllAssignmentsResponse&gt;
+      searchAllAssignmentsCallable() {
+<span class="nc" id="L2819">    return stub.searchAllAssignmentsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Moves an assignment under a new reservation.
+   *
+   * &lt;p&gt;This differs from removing an existing assignment and recreating a new one by providing a
+   * transactional change that ensures an assignee always has an associated reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   AssignmentName name =
+   *       AssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;, &quot;[ASSIGNMENT]&quot;);
+   *   ReservationName destinationId =
+   *       ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;);
+   *   Assignment response = reservationServiceClient.moveAssignment(name, destinationId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the assignment, e.g.
+   *     `projects/myproject/locations/US/reservations/team1-prod/assignments/123`
+   * @param destinationId The new reservation ID, e.g.:
+   *     `projects/myotherproject/locations/US/reservations/team2-prod`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Assignment moveAssignment(AssignmentName name, ReservationName destinationId) {
+    MoveAssignmentRequest request =
+<span class="fc" id="L2851">        MoveAssignmentRequest.newBuilder()</span>
+<span class="pc bpc" id="L2852" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="pc bpc" id="L2853" title="1 of 2 branches missed.">            .setDestinationId(destinationId == null ? null : destinationId.toString())</span>
+<span class="fc" id="L2854">            .build();</span>
+<span class="fc" id="L2855">    return moveAssignment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Moves an assignment under a new reservation.
+   *
+   * &lt;p&gt;This differs from removing an existing assignment and recreating a new one by providing a
+   * transactional change that ensures an assignee always has an associated reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   AssignmentName name =
+   *       AssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;, &quot;[ASSIGNMENT]&quot;);
+   *   String destinationId =
+   *       ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString();
+   *   Assignment response = reservationServiceClient.moveAssignment(name, destinationId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the assignment, e.g.
+   *     `projects/myproject/locations/US/reservations/team1-prod/assignments/123`
+   * @param destinationId The new reservation ID, e.g.:
+   *     `projects/myotherproject/locations/US/reservations/team2-prod`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Assignment moveAssignment(AssignmentName name, String destinationId) {
+    MoveAssignmentRequest request =
+<span class="fc" id="L2887">        MoveAssignmentRequest.newBuilder()</span>
+<span class="pc bpc" id="L2888" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L2889">            .setDestinationId(destinationId)</span>
+<span class="fc" id="L2890">            .build();</span>
+<span class="fc" id="L2891">    return moveAssignment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Moves an assignment under a new reservation.
+   *
+   * &lt;p&gt;This differs from removing an existing assignment and recreating a new one by providing a
+   * transactional change that ensures an assignee always has an associated reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String name =
+   *       AssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;, &quot;[ASSIGNMENT]&quot;).toString();
+   *   ReservationName destinationId =
+   *       ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;);
+   *   Assignment response = reservationServiceClient.moveAssignment(name, destinationId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the assignment, e.g.
+   *     `projects/myproject/locations/US/reservations/team1-prod/assignments/123`
+   * @param destinationId The new reservation ID, e.g.:
+   *     `projects/myotherproject/locations/US/reservations/team2-prod`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Assignment moveAssignment(String name, ReservationName destinationId) {
+    MoveAssignmentRequest request =
+<span class="fc" id="L2923">        MoveAssignmentRequest.newBuilder()</span>
+<span class="fc" id="L2924">            .setName(name)</span>
+<span class="pc bpc" id="L2925" title="1 of 2 branches missed.">            .setDestinationId(destinationId == null ? null : destinationId.toString())</span>
+<span class="fc" id="L2926">            .build();</span>
+<span class="fc" id="L2927">    return moveAssignment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Moves an assignment under a new reservation.
+   *
+   * &lt;p&gt;This differs from removing an existing assignment and recreating a new one by providing a
+   * transactional change that ensures an assignee always has an associated reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String name =
+   *       AssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;, &quot;[ASSIGNMENT]&quot;).toString();
+   *   String destinationId =
+   *       ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString();
+   *   Assignment response = reservationServiceClient.moveAssignment(name, destinationId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the assignment, e.g.
+   *     `projects/myproject/locations/US/reservations/team1-prod/assignments/123`
+   * @param destinationId The new reservation ID, e.g.:
+   *     `projects/myotherproject/locations/US/reservations/team2-prod`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Assignment moveAssignment(String name, String destinationId) {
+    MoveAssignmentRequest request =
+<span class="fc" id="L2959">        MoveAssignmentRequest.newBuilder().setName(name).setDestinationId(destinationId).build();</span>
+<span class="fc" id="L2960">    return moveAssignment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Moves an assignment under a new reservation.
+   *
+   * &lt;p&gt;This differs from removing an existing assignment and recreating a new one by providing a
+   * transactional change that ensures an assignee always has an associated reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   MoveAssignmentRequest request =
+   *       MoveAssignmentRequest.newBuilder()
+   *           .setName(
+   *               AssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;, &quot;[ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .setDestinationId(
+   *               ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString())
+   *           .build();
+   *   Assignment response = reservationServiceClient.moveAssignment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Assignment moveAssignment(MoveAssignmentRequest request) {
+<span class="fc" id="L2992">    return moveAssignmentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Moves an assignment under a new reservation.
+   *
+   * &lt;p&gt;This differs from removing an existing assignment and recreating a new one by providing a
+   * transactional change that ensures an assignee always has an associated reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   MoveAssignmentRequest request =
+   *       MoveAssignmentRequest.newBuilder()
+   *           .setName(
+   *               AssignmentName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;, &quot;[ASSIGNMENT]&quot;)
+   *                   .toString())
+   *           .setDestinationId(
+   *               ReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[RESERVATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Assignment&gt; future =
+   *       reservationServiceClient.moveAssignmentCallable().futureCall(request);
+   *   // Do something.
+   *   Assignment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;MoveAssignmentRequest, Assignment&gt; moveAssignmentCallable() {
+<span class="fc" id="L3024">    return stub.moveAssignmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an existing assignment.
+   *
+   * &lt;p&gt;Only the `priority` field can be updated.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   Assignment assignment = Assignment.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Assignment response = reservationServiceClient.updateAssignment(assignment, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param assignment Content of the assignment to update.
+   * @param updateMask Standard field mask for the set of fields to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Assignment updateAssignment(Assignment assignment, FieldMask updateMask) {
+    UpdateAssignmentRequest request =
+<span class="fc" id="L3051">        UpdateAssignmentRequest.newBuilder()</span>
+<span class="fc" id="L3052">            .setAssignment(assignment)</span>
+<span class="fc" id="L3053">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L3054">            .build();</span>
+<span class="fc" id="L3055">    return updateAssignment(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an existing assignment.
+   *
+   * &lt;p&gt;Only the `priority` field can be updated.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   UpdateAssignmentRequest request =
+   *       UpdateAssignmentRequest.newBuilder()
+   *           .setAssignment(Assignment.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Assignment response = reservationServiceClient.updateAssignment(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Assignment updateAssignment(UpdateAssignmentRequest request) {
+<span class="fc" id="L3083">    return updateAssignmentCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an existing assignment.
+   *
+   * &lt;p&gt;Only the `priority` field can be updated.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   UpdateAssignmentRequest request =
+   *       UpdateAssignmentRequest.newBuilder()
+   *           .setAssignment(Assignment.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Assignment&gt; future =
+   *       reservationServiceClient.updateAssignmentCallable().futureCall(request);
+   *   // Do something.
+   *   Assignment response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateAssignmentRequest, Assignment&gt; updateAssignmentCallable() {
+<span class="fc" id="L3111">    return stub.updateAssignmentCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves a BI reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   BiReservationName name = BiReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   BiReservation response = reservationServiceClient.getBiReservation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Name of the requested reservation, for example:
+   *     `projects/{project_id}/locations/{location_id}/biReservation`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BiReservation getBiReservation(BiReservationName name) {
+    GetBiReservationRequest request =
+<span class="pc bpc" id="L3135" title="1 of 2 branches missed.">        GetBiReservationRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L3136">    return getBiReservation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves a BI reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   String name = BiReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   BiReservation response = reservationServiceClient.getBiReservation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Name of the requested reservation, for example:
+   *     `projects/{project_id}/locations/{location_id}/biReservation`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BiReservation getBiReservation(String name) {
+<span class="fc" id="L3159">    GetBiReservationRequest request = GetBiReservationRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L3160">    return getBiReservation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves a BI reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   GetBiReservationRequest request =
+   *       GetBiReservationRequest.newBuilder()
+   *           .setName(BiReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   BiReservation response = reservationServiceClient.getBiReservation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BiReservation getBiReservation(GetBiReservationRequest request) {
+<span class="fc" id="L3185">    return getBiReservationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Retrieves a BI reservation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   GetBiReservationRequest request =
+   *       GetBiReservationRequest.newBuilder()
+   *           .setName(BiReservationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;BiReservation&gt; future =
+   *       reservationServiceClient.getBiReservationCallable().futureCall(request);
+   *   // Do something.
+   *   BiReservation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetBiReservationRequest, BiReservation&gt; getBiReservationCallable() {
+<span class="fc" id="L3210">    return stub.getBiReservationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a BI reservation.
+   *
+   * &lt;p&gt;Only fields specified in the `field_mask` are updated.
+   *
+   * &lt;p&gt;A singleton BI reservation always exists with default size 0. In order to reserve BI
+   * capacity it needs to be updated to an amount greater than 0. In order to release BI capacity
+   * reservation size must be set to 0.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   BiReservation biReservation = BiReservation.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   BiReservation response =
+   *       reservationServiceClient.updateBiReservation(biReservation, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param biReservation A reservation to update.
+   * @param updateMask A list of fields to be updated in this request.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BiReservation updateBiReservation(
+      BiReservation biReservation, FieldMask updateMask) {
+    UpdateBiReservationRequest request =
+<span class="fc" id="L3243">        UpdateBiReservationRequest.newBuilder()</span>
+<span class="fc" id="L3244">            .setBiReservation(biReservation)</span>
+<span class="fc" id="L3245">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L3246">            .build();</span>
+<span class="fc" id="L3247">    return updateBiReservation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a BI reservation.
+   *
+   * &lt;p&gt;Only fields specified in the `field_mask` are updated.
+   *
+   * &lt;p&gt;A singleton BI reservation always exists with default size 0. In order to reserve BI
+   * capacity it needs to be updated to an amount greater than 0. In order to release BI capacity
+   * reservation size must be set to 0.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   UpdateBiReservationRequest request =
+   *       UpdateBiReservationRequest.newBuilder()
+   *           .setBiReservation(BiReservation.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   BiReservation response = reservationServiceClient.updateBiReservation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BiReservation updateBiReservation(UpdateBiReservationRequest request) {
+<span class="fc" id="L3279">    return updateBiReservationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a BI reservation.
+   *
+   * &lt;p&gt;Only fields specified in the `field_mask` are updated.
+   *
+   * &lt;p&gt;A singleton BI reservation always exists with default size 0. In order to reserve BI
+   * capacity it needs to be updated to an amount greater than 0. In order to release BI capacity
+   * reservation size must be set to 0.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ReservationServiceClient reservationServiceClient = ReservationServiceClient.create()) {
+   *   UpdateBiReservationRequest request =
+   *       UpdateBiReservationRequest.newBuilder()
+   *           .setBiReservation(BiReservation.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;BiReservation&gt; future =
+   *       reservationServiceClient.updateBiReservationCallable().futureCall(request);
+   *   // Do something.
+   *   BiReservation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateBiReservationRequest, BiReservation&gt;
+      updateBiReservationCallable() {
+<span class="fc" id="L3312">    return stub.updateBiReservationCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L3317">    stub.close();</span>
+<span class="fc" id="L3318">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L3322">    stub.shutdown();</span>
+<span class="nc" id="L3323">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L3327">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L3332">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L3337">    stub.shutdownNow();</span>
+<span class="nc" id="L3338">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L3342">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListReservationsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListReservationsRequest,
+          ListReservationsResponse,
+          Reservation,
+          ListReservationsPage,
+          ListReservationsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListReservationsPagedResponse&gt; createAsync(
+        PageContext&lt;ListReservationsRequest, ListReservationsResponse, Reservation&gt; context,
+        ApiFuture&lt;ListReservationsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListReservationsPage&gt; futurePage =
+<span class="fc" id="L3357">          ListReservationsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3358">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3360">          input -&gt; new ListReservationsPagedResponse(input),</span>
+<span class="fc" id="L3361">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListReservationsPagedResponse(ListReservationsPage page) {
+<span class="fc" id="L3365">      super(page, ListReservationsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3366">    }</span>
+  }
+
+  public static class ListReservationsPage
+      extends AbstractPage&lt;
+          ListReservationsRequest, ListReservationsResponse, Reservation, ListReservationsPage&gt; {
+
+    private ListReservationsPage(
+        PageContext&lt;ListReservationsRequest, ListReservationsResponse, Reservation&gt; context,
+        ListReservationsResponse response) {
+<span class="fc" id="L3376">      super(context, response);</span>
+<span class="fc" id="L3377">    }</span>
+
+    private static ListReservationsPage createEmptyPage() {
+<span class="fc" id="L3380">      return new ListReservationsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListReservationsPage createPage(
+        PageContext&lt;ListReservationsRequest, ListReservationsResponse, Reservation&gt; context,
+        ListReservationsResponse response) {
+<span class="fc" id="L3387">      return new ListReservationsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListReservationsPage&gt; createPageAsync(
+        PageContext&lt;ListReservationsRequest, ListReservationsResponse, Reservation&gt; context,
+        ApiFuture&lt;ListReservationsResponse&gt; futureResponse) {
+<span class="fc" id="L3394">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListReservationsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListReservationsRequest,
+          ListReservationsResponse,
+          Reservation,
+          ListReservationsPage,
+          ListReservationsFixedSizeCollection&gt; {
+
+    private ListReservationsFixedSizeCollection(
+        List&lt;ListReservationsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3408">      super(pages, collectionSize);</span>
+<span class="fc" id="L3409">    }</span>
+
+    private static ListReservationsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3412">      return new ListReservationsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListReservationsFixedSizeCollection createCollection(
+        List&lt;ListReservationsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3418">      return new ListReservationsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListCapacityCommitmentsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListCapacityCommitmentsRequest,
+          ListCapacityCommitmentsResponse,
+          CapacityCommitment,
+          ListCapacityCommitmentsPage,
+          ListCapacityCommitmentsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListCapacityCommitmentsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListCapacityCommitmentsRequest, ListCapacityCommitmentsResponse, CapacityCommitment&gt;
+            context,
+        ApiFuture&lt;ListCapacityCommitmentsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListCapacityCommitmentsPage&gt; futurePage =
+<span class="fc" id="L3436">          ListCapacityCommitmentsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3437">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3439">          input -&gt; new ListCapacityCommitmentsPagedResponse(input),</span>
+<span class="fc" id="L3440">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListCapacityCommitmentsPagedResponse(ListCapacityCommitmentsPage page) {
+<span class="fc" id="L3444">      super(page, ListCapacityCommitmentsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3445">    }</span>
+  }
+
+  public static class ListCapacityCommitmentsPage
+      extends AbstractPage&lt;
+          ListCapacityCommitmentsRequest,
+          ListCapacityCommitmentsResponse,
+          CapacityCommitment,
+          ListCapacityCommitmentsPage&gt; {
+
+    private ListCapacityCommitmentsPage(
+        PageContext&lt;
+                ListCapacityCommitmentsRequest, ListCapacityCommitmentsResponse, CapacityCommitment&gt;
+            context,
+        ListCapacityCommitmentsResponse response) {
+<span class="fc" id="L3460">      super(context, response);</span>
+<span class="fc" id="L3461">    }</span>
+
+    private static ListCapacityCommitmentsPage createEmptyPage() {
+<span class="fc" id="L3464">      return new ListCapacityCommitmentsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListCapacityCommitmentsPage createPage(
+        PageContext&lt;
+                ListCapacityCommitmentsRequest, ListCapacityCommitmentsResponse, CapacityCommitment&gt;
+            context,
+        ListCapacityCommitmentsResponse response) {
+<span class="fc" id="L3473">      return new ListCapacityCommitmentsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListCapacityCommitmentsPage&gt; createPageAsync(
+        PageContext&lt;
+                ListCapacityCommitmentsRequest, ListCapacityCommitmentsResponse, CapacityCommitment&gt;
+            context,
+        ApiFuture&lt;ListCapacityCommitmentsResponse&gt; futureResponse) {
+<span class="fc" id="L3482">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListCapacityCommitmentsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListCapacityCommitmentsRequest,
+          ListCapacityCommitmentsResponse,
+          CapacityCommitment,
+          ListCapacityCommitmentsPage,
+          ListCapacityCommitmentsFixedSizeCollection&gt; {
+
+    private ListCapacityCommitmentsFixedSizeCollection(
+        List&lt;ListCapacityCommitmentsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3496">      super(pages, collectionSize);</span>
+<span class="fc" id="L3497">    }</span>
+
+    private static ListCapacityCommitmentsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3500">      return new ListCapacityCommitmentsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListCapacityCommitmentsFixedSizeCollection createCollection(
+        List&lt;ListCapacityCommitmentsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3506">      return new ListCapacityCommitmentsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListAssignmentsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListAssignmentsRequest,
+          ListAssignmentsResponse,
+          Assignment,
+          ListAssignmentsPage,
+          ListAssignmentsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListAssignmentsPagedResponse&gt; createAsync(
+        PageContext&lt;ListAssignmentsRequest, ListAssignmentsResponse, Assignment&gt; context,
+        ApiFuture&lt;ListAssignmentsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListAssignmentsPage&gt; futurePage =
+<span class="fc" id="L3522">          ListAssignmentsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3523">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3525">          input -&gt; new ListAssignmentsPagedResponse(input),</span>
+<span class="fc" id="L3526">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListAssignmentsPagedResponse(ListAssignmentsPage page) {
+<span class="fc" id="L3530">      super(page, ListAssignmentsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3531">    }</span>
+  }
+
+  public static class ListAssignmentsPage
+      extends AbstractPage&lt;
+          ListAssignmentsRequest, ListAssignmentsResponse, Assignment, ListAssignmentsPage&gt; {
+
+    private ListAssignmentsPage(
+        PageContext&lt;ListAssignmentsRequest, ListAssignmentsResponse, Assignment&gt; context,
+        ListAssignmentsResponse response) {
+<span class="fc" id="L3541">      super(context, response);</span>
+<span class="fc" id="L3542">    }</span>
+
+    private static ListAssignmentsPage createEmptyPage() {
+<span class="fc" id="L3545">      return new ListAssignmentsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListAssignmentsPage createPage(
+        PageContext&lt;ListAssignmentsRequest, ListAssignmentsResponse, Assignment&gt; context,
+        ListAssignmentsResponse response) {
+<span class="fc" id="L3552">      return new ListAssignmentsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListAssignmentsPage&gt; createPageAsync(
+        PageContext&lt;ListAssignmentsRequest, ListAssignmentsResponse, Assignment&gt; context,
+        ApiFuture&lt;ListAssignmentsResponse&gt; futureResponse) {
+<span class="fc" id="L3559">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListAssignmentsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListAssignmentsRequest,
+          ListAssignmentsResponse,
+          Assignment,
+          ListAssignmentsPage,
+          ListAssignmentsFixedSizeCollection&gt; {
+
+    private ListAssignmentsFixedSizeCollection(
+        List&lt;ListAssignmentsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3573">      super(pages, collectionSize);</span>
+<span class="fc" id="L3574">    }</span>
+
+    private static ListAssignmentsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3577">      return new ListAssignmentsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListAssignmentsFixedSizeCollection createCollection(
+        List&lt;ListAssignmentsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3583">      return new ListAssignmentsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class SearchAssignmentsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          SearchAssignmentsRequest,
+          SearchAssignmentsResponse,
+          Assignment,
+          SearchAssignmentsPage,
+          SearchAssignmentsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;SearchAssignmentsPagedResponse&gt; createAsync(
+        PageContext&lt;SearchAssignmentsRequest, SearchAssignmentsResponse, Assignment&gt; context,
+        ApiFuture&lt;SearchAssignmentsResponse&gt; futureResponse) {
+      ApiFuture&lt;SearchAssignmentsPage&gt; futurePage =
+<span class="fc" id="L3599">          SearchAssignmentsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3600">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3602">          input -&gt; new SearchAssignmentsPagedResponse(input),</span>
+<span class="fc" id="L3603">          MoreExecutors.directExecutor());</span>
+    }
+
+    private SearchAssignmentsPagedResponse(SearchAssignmentsPage page) {
+<span class="fc" id="L3607">      super(page, SearchAssignmentsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3608">    }</span>
+  }
+
+  public static class SearchAssignmentsPage
+      extends AbstractPage&lt;
+          SearchAssignmentsRequest, SearchAssignmentsResponse, Assignment, SearchAssignmentsPage&gt; {
+
+    private SearchAssignmentsPage(
+        PageContext&lt;SearchAssignmentsRequest, SearchAssignmentsResponse, Assignment&gt; context,
+        SearchAssignmentsResponse response) {
+<span class="fc" id="L3618">      super(context, response);</span>
+<span class="fc" id="L3619">    }</span>
+
+    private static SearchAssignmentsPage createEmptyPage() {
+<span class="fc" id="L3622">      return new SearchAssignmentsPage(null, null);</span>
+    }
+
+    @Override
+    protected SearchAssignmentsPage createPage(
+        PageContext&lt;SearchAssignmentsRequest, SearchAssignmentsResponse, Assignment&gt; context,
+        SearchAssignmentsResponse response) {
+<span class="fc" id="L3629">      return new SearchAssignmentsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;SearchAssignmentsPage&gt; createPageAsync(
+        PageContext&lt;SearchAssignmentsRequest, SearchAssignmentsResponse, Assignment&gt; context,
+        ApiFuture&lt;SearchAssignmentsResponse&gt; futureResponse) {
+<span class="fc" id="L3636">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class SearchAssignmentsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          SearchAssignmentsRequest,
+          SearchAssignmentsResponse,
+          Assignment,
+          SearchAssignmentsPage,
+          SearchAssignmentsFixedSizeCollection&gt; {
+
+    private SearchAssignmentsFixedSizeCollection(
+        List&lt;SearchAssignmentsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3650">      super(pages, collectionSize);</span>
+<span class="fc" id="L3651">    }</span>
+
+    private static SearchAssignmentsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3654">      return new SearchAssignmentsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected SearchAssignmentsFixedSizeCollection createCollection(
+        List&lt;SearchAssignmentsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3660">      return new SearchAssignmentsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class SearchAllAssignmentsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          SearchAllAssignmentsRequest,
+          SearchAllAssignmentsResponse,
+          Assignment,
+          SearchAllAssignmentsPage,
+          SearchAllAssignmentsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;SearchAllAssignmentsPagedResponse&gt; createAsync(
+        PageContext&lt;SearchAllAssignmentsRequest, SearchAllAssignmentsResponse, Assignment&gt; context,
+        ApiFuture&lt;SearchAllAssignmentsResponse&gt; futureResponse) {
+      ApiFuture&lt;SearchAllAssignmentsPage&gt; futurePage =
+<span class="fc" id="L3676">          SearchAllAssignmentsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L3677">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L3679">          input -&gt; new SearchAllAssignmentsPagedResponse(input),</span>
+<span class="fc" id="L3680">          MoreExecutors.directExecutor());</span>
+    }
+
+    private SearchAllAssignmentsPagedResponse(SearchAllAssignmentsPage page) {
+<span class="fc" id="L3684">      super(page, SearchAllAssignmentsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L3685">    }</span>
+  }
+
+  public static class SearchAllAssignmentsPage
+      extends AbstractPage&lt;
+          SearchAllAssignmentsRequest,
+          SearchAllAssignmentsResponse,
+          Assignment,
+          SearchAllAssignmentsPage&gt; {
+
+    private SearchAllAssignmentsPage(
+        PageContext&lt;SearchAllAssignmentsRequest, SearchAllAssignmentsResponse, Assignment&gt; context,
+        SearchAllAssignmentsResponse response) {
+<span class="fc" id="L3698">      super(context, response);</span>
+<span class="fc" id="L3699">    }</span>
+
+    private static SearchAllAssignmentsPage createEmptyPage() {
+<span class="fc" id="L3702">      return new SearchAllAssignmentsPage(null, null);</span>
+    }
+
+    @Override
+    protected SearchAllAssignmentsPage createPage(
+        PageContext&lt;SearchAllAssignmentsRequest, SearchAllAssignmentsResponse, Assignment&gt; context,
+        SearchAllAssignmentsResponse response) {
+<span class="fc" id="L3709">      return new SearchAllAssignmentsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;SearchAllAssignmentsPage&gt; createPageAsync(
+        PageContext&lt;SearchAllAssignmentsRequest, SearchAllAssignmentsResponse, Assignment&gt; context,
+        ApiFuture&lt;SearchAllAssignmentsResponse&gt; futureResponse) {
+<span class="fc" id="L3716">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class SearchAllAssignmentsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          SearchAllAssignmentsRequest,
+          SearchAllAssignmentsResponse,
+          Assignment,
+          SearchAllAssignmentsPage,
+          SearchAllAssignmentsFixedSizeCollection&gt; {
+
+    private SearchAllAssignmentsFixedSizeCollection(
+        List&lt;SearchAllAssignmentsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L3730">      super(pages, collectionSize);</span>
+<span class="fc" id="L3731">    }</span>
+
+    private static SearchAllAssignmentsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L3734">      return new SearchAllAssignmentsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected SearchAllAssignmentsFixedSizeCollection createCollection(
+        List&lt;SearchAllAssignmentsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L3740">      return new SearchAllAssignmentsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

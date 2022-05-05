@@ -1,0 +1,4417 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ContactCenterInsightsClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-contact-center-insights</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.contactcenterinsights.v1</a> &gt; <span class="el_source">ContactCenterInsightsClient.java</span></div><h1>ContactCenterInsightsClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.contactcenterinsights.v1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.contactcenterinsights.v1.stub.ContactCenterInsightsStub;
+import com.google.cloud.contactcenterinsights.v1.stub.ContactCenterInsightsStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: An API that lets users analyze and explore their business conversation data.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (ContactCenterInsightsClient contactCenterInsightsClient =
+ *     ContactCenterInsightsClient.create()) {
+ *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+ *   Conversation conversation = Conversation.newBuilder().build();
+ *   String conversationId = &quot;conversationId-1676095234&quot;;
+ *   Conversation response =
+ *       contactCenterInsightsClient.createConversation(parent, conversation, conversationId);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the ContactCenterInsightsClient object to clean up
+ * resources such as threads. In the example above, try-with-resources is used, which automatically
+ * calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of ContactCenterInsightsSettings
+ * to create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * ContactCenterInsightsSettings contactCenterInsightsSettings =
+ *     ContactCenterInsightsSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * ContactCenterInsightsClient contactCenterInsightsClient =
+ *     ContactCenterInsightsClient.create(contactCenterInsightsSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * ContactCenterInsightsSettings contactCenterInsightsSettings =
+ *     ContactCenterInsightsSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * ContactCenterInsightsClient contactCenterInsightsClient =
+ *     ContactCenterInsightsClient.create(contactCenterInsightsSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class ContactCenterInsightsClient implements BackgroundResource {
+  private final ContactCenterInsightsSettings settings;
+  private final ContactCenterInsightsStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of ContactCenterInsightsClient with default settings. */
+  public static final ContactCenterInsightsClient create() throws IOException {
+<span class="nc" id="L123">    return create(ContactCenterInsightsSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of ContactCenterInsightsClient, using the given settings. The channels
+   * are created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final ContactCenterInsightsClient create(ContactCenterInsightsSettings settings)
+      throws IOException {
+<span class="fc" id="L132">    return new ContactCenterInsightsClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of ContactCenterInsightsClient, using the given stub for making calls.
+   * This is for advanced usage - prefer using create(ContactCenterInsightsSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final ContactCenterInsightsClient create(ContactCenterInsightsStub stub) {
+<span class="nc" id="L141">    return new ContactCenterInsightsClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of ContactCenterInsightsClient, using the given settings. This is
+   * protected so that it is easy to make a subclass, but otherwise, the static factory methods
+   * should be preferred.
+   */
+<span class="fc" id="L149">  protected ContactCenterInsightsClient(ContactCenterInsightsSettings settings) throws IOException {</span>
+<span class="fc" id="L150">    this.settings = settings;</span>
+<span class="fc" id="L151">    this.stub = ((ContactCenterInsightsStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L152">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L153">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L156">  protected ContactCenterInsightsClient(ContactCenterInsightsStub stub) {</span>
+<span class="nc" id="L157">    this.settings = null;</span>
+<span class="nc" id="L158">    this.stub = stub;</span>
+<span class="nc" id="L159">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L160">  }</span>
+
+  public final ContactCenterInsightsSettings getSettings() {
+<span class="nc" id="L163">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public ContactCenterInsightsStub getStub() {
+<span class="nc" id="L168">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L176">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Conversation conversation = Conversation.newBuilder().build();
+   *   String conversationId = &quot;conversationId-1676095234&quot;;
+   *   Conversation response =
+   *       contactCenterInsightsClient.createConversation(parent, conversation, conversationId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the conversation.
+   * @param conversation Required. The conversation resource to create.
+   * @param conversationId A unique ID for the new conversation. This ID will become the final
+   *     component of the conversation's resource name. If no ID is specified, a server-generated ID
+   *     will be used.
+   *     &lt;p&gt;This value should be 4-64 characters and must match the regular expression
+   *     `^[a-z0-9-]{4,64}$`. Valid characters are `[a-z][0-9]-`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Conversation createConversation(
+      LocationName parent, Conversation conversation, String conversationId) {
+    CreateConversationRequest request =
+<span class="fc" id="L210">        CreateConversationRequest.newBuilder()</span>
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L212">            .setConversation(conversation)</span>
+<span class="fc" id="L213">            .setConversationId(conversationId)</span>
+<span class="fc" id="L214">            .build();</span>
+<span class="fc" id="L215">    return createConversation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Conversation conversation = Conversation.newBuilder().build();
+   *   String conversationId = &quot;conversationId-1676095234&quot;;
+   *   Conversation response =
+   *       contactCenterInsightsClient.createConversation(parent, conversation, conversationId);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the conversation.
+   * @param conversation Required. The conversation resource to create.
+   * @param conversationId A unique ID for the new conversation. This ID will become the final
+   *     component of the conversation's resource name. If no ID is specified, a server-generated ID
+   *     will be used.
+   *     &lt;p&gt;This value should be 4-64 characters and must match the regular expression
+   *     `^[a-z0-9-]{4,64}$`. Valid characters are `[a-z][0-9]-`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Conversation createConversation(
+      String parent, Conversation conversation, String conversationId) {
+    CreateConversationRequest request =
+<span class="fc" id="L249">        CreateConversationRequest.newBuilder()</span>
+<span class="fc" id="L250">            .setParent(parent)</span>
+<span class="fc" id="L251">            .setConversation(conversation)</span>
+<span class="fc" id="L252">            .setConversationId(conversationId)</span>
+<span class="fc" id="L253">            .build();</span>
+<span class="fc" id="L254">    return createConversation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CreateConversationRequest request =
+   *       CreateConversationRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setConversation(Conversation.newBuilder().build())
+   *           .setConversationId(&quot;conversationId-1676095234&quot;)
+   *           .build();
+   *   Conversation response = contactCenterInsightsClient.createConversation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Conversation createConversation(CreateConversationRequest request) {
+<span class="fc" id="L282">    return createConversationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CreateConversationRequest request =
+   *       CreateConversationRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setConversation(Conversation.newBuilder().build())
+   *           .setConversationId(&quot;conversationId-1676095234&quot;)
+   *           .build();
+   *   ApiFuture&lt;Conversation&gt; future =
+   *       contactCenterInsightsClient.createConversationCallable().futureCall(request);
+   *   // Do something.
+   *   Conversation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateConversationRequest, Conversation&gt; createConversationCallable() {
+<span class="fc" id="L310">    return stub.createConversationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   Conversation conversation = Conversation.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Conversation response =
+   *       contactCenterInsightsClient.updateConversation(conversation, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param conversation Required. The new values for the conversation.
+   * @param updateMask The list of fields to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Conversation updateConversation(Conversation conversation, FieldMask updateMask) {
+    UpdateConversationRequest request =
+<span class="fc" id="L337">        UpdateConversationRequest.newBuilder()</span>
+<span class="fc" id="L338">            .setConversation(conversation)</span>
+<span class="fc" id="L339">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L340">            .build();</span>
+<span class="fc" id="L341">    return updateConversation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UpdateConversationRequest request =
+   *       UpdateConversationRequest.newBuilder()
+   *           .setConversation(Conversation.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Conversation response = contactCenterInsightsClient.updateConversation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Conversation updateConversation(UpdateConversationRequest request) {
+<span class="fc" id="L368">    return updateConversationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UpdateConversationRequest request =
+   *       UpdateConversationRequest.newBuilder()
+   *           .setConversation(Conversation.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Conversation&gt; future =
+   *       contactCenterInsightsClient.updateConversationCallable().futureCall(request);
+   *   // Do something.
+   *   Conversation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateConversationRequest, Conversation&gt; updateConversationCallable() {
+<span class="fc" id="L395">    return stub.updateConversationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ConversationName name = ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;);
+   *   Conversation response = contactCenterInsightsClient.getConversation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the conversation to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Conversation getConversation(ConversationName name) {
+    GetConversationRequest request =
+<span class="pc bpc" id="L419" title="1 of 2 branches missed.">        GetConversationRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L420">    return getConversation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String name = ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;).toString();
+   *   Conversation response = contactCenterInsightsClient.getConversation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the conversation to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Conversation getConversation(String name) {
+<span class="fc" id="L443">    GetConversationRequest request = GetConversationRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L444">    return getConversation(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   GetConversationRequest request =
+   *       GetConversationRequest.newBuilder()
+   *           .setName(ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;).toString())
+   *           .setView(ConversationView.forNumber(0))
+   *           .build();
+   *   Conversation response = contactCenterInsightsClient.getConversation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Conversation getConversation(GetConversationRequest request) {
+<span class="fc" id="L471">    return getConversationCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   GetConversationRequest request =
+   *       GetConversationRequest.newBuilder()
+   *           .setName(ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;).toString())
+   *           .setView(ConversationView.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;Conversation&gt; future =
+   *       contactCenterInsightsClient.getConversationCallable().futureCall(request);
+   *   // Do something.
+   *   Conversation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetConversationRequest, Conversation&gt; getConversationCallable() {
+<span class="fc" id="L498">    return stub.getConversationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists conversations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Conversation element :
+   *       contactCenterInsightsClient.listConversations(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the conversation.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListConversationsPagedResponse listConversations(LocationName parent) {
+    ListConversationsRequest request =
+<span class="fc" id="L525">        ListConversationsRequest.newBuilder()</span>
+<span class="pc bpc" id="L526" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L527">            .build();</span>
+<span class="fc" id="L528">    return listConversations(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists conversations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Conversation element :
+   *       contactCenterInsightsClient.listConversations(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the conversation.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListConversationsPagedResponse listConversations(String parent) {
+    ListConversationsRequest request =
+<span class="fc" id="L555">        ListConversationsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L556">    return listConversations(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists conversations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListConversationsRequest request =
+   *       ListConversationsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setView(ConversationView.forNumber(0))
+   *           .build();
+   *   for (Conversation element :
+   *       contactCenterInsightsClient.listConversations(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListConversationsPagedResponse listConversations(ListConversationsRequest request) {
+<span class="fc" id="L589">    return listConversationsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists conversations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListConversationsRequest request =
+   *       ListConversationsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setView(ConversationView.forNumber(0))
+   *           .build();
+   *   ApiFuture&lt;Conversation&gt; future =
+   *       contactCenterInsightsClient.listConversationsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Conversation element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListConversationsRequest, ListConversationsPagedResponse&gt;
+      listConversationsPagedCallable() {
+<span class="fc" id="L622">    return stub.listConversationsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists conversations.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListConversationsRequest request =
+   *       ListConversationsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setView(ConversationView.forNumber(0))
+   *           .build();
+   *   while (true) {
+   *     ListConversationsResponse response =
+   *         contactCenterInsightsClient.listConversationsCallable().call(request);
+   *     for (Conversation element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListConversationsRequest, ListConversationsResponse&gt;
+      listConversationsCallable() {
+<span class="nc" id="L662">    return stub.listConversationsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ConversationName name = ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;);
+   *   contactCenterInsightsClient.deleteConversation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the conversation to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteConversation(ConversationName name) {
+    DeleteConversationRequest request =
+<span class="fc" id="L686">        DeleteConversationRequest.newBuilder()</span>
+<span class="pc bpc" id="L687" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L688">            .build();</span>
+<span class="fc" id="L689">    deleteConversation(request);</span>
+<span class="fc" id="L690">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String name = ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;).toString();
+   *   contactCenterInsightsClient.deleteConversation(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the conversation to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteConversation(String name) {
+    DeleteConversationRequest request =
+<span class="fc" id="L713">        DeleteConversationRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L714">    deleteConversation(request);</span>
+<span class="fc" id="L715">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   DeleteConversationRequest request =
+   *       DeleteConversationRequest.newBuilder()
+   *           .setName(ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;).toString())
+   *           .setForce(true)
+   *           .build();
+   *   contactCenterInsightsClient.deleteConversation(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteConversation(DeleteConversationRequest request) {
+<span class="fc" id="L741">    deleteConversationCallable().call(request);</span>
+<span class="fc" id="L742">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a conversation.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   DeleteConversationRequest request =
+   *       DeleteConversationRequest.newBuilder()
+   *           .setName(ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;).toString())
+   *           .setForce(true)
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       contactCenterInsightsClient.deleteConversationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteConversationRequest, Empty&gt; deleteConversationCallable() {
+<span class="fc" id="L768">    return stub.deleteConversationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an analysis. The long running operation is done when the analysis has completed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ConversationName parent = ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;);
+   *   Analysis analysis = Analysis.newBuilder().build();
+   *   Analysis response = contactCenterInsightsClient.createAnalysisAsync(parent, analysis).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the analysis.
+   * @param analysis Required. The analysis to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Analysis, CreateAnalysisOperationMetadata&gt; createAnalysisAsync(
+      ConversationName parent, Analysis analysis) {
+    CreateAnalysisRequest request =
+<span class="fc" id="L795">        CreateAnalysisRequest.newBuilder()</span>
+<span class="pc bpc" id="L796" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L797">            .setAnalysis(analysis)</span>
+<span class="fc" id="L798">            .build();</span>
+<span class="fc" id="L799">    return createAnalysisAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an analysis. The long running operation is done when the analysis has completed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String parent = ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;).toString();
+   *   Analysis analysis = Analysis.newBuilder().build();
+   *   Analysis response = contactCenterInsightsClient.createAnalysisAsync(parent, analysis).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the analysis.
+   * @param analysis Required. The analysis to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Analysis, CreateAnalysisOperationMetadata&gt; createAnalysisAsync(
+      String parent, Analysis analysis) {
+    CreateAnalysisRequest request =
+<span class="fc" id="L826">        CreateAnalysisRequest.newBuilder().setParent(parent).setAnalysis(analysis).build();</span>
+<span class="fc" id="L827">    return createAnalysisAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an analysis. The long running operation is done when the analysis has completed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CreateAnalysisRequest request =
+   *       CreateAnalysisRequest.newBuilder()
+   *           .setParent(
+   *               ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;).toString())
+   *           .setAnalysis(Analysis.newBuilder().build())
+   *           .build();
+   *   Analysis response = contactCenterInsightsClient.createAnalysisAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Analysis, CreateAnalysisOperationMetadata&gt; createAnalysisAsync(
+      CreateAnalysisRequest request) {
+<span class="fc" id="L856">    return createAnalysisOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an analysis. The long running operation is done when the analysis has completed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CreateAnalysisRequest request =
+   *       CreateAnalysisRequest.newBuilder()
+   *           .setParent(
+   *               ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;).toString())
+   *           .setAnalysis(Analysis.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Analysis, CreateAnalysisOperationMetadata&gt; future =
+   *       contactCenterInsightsClient.createAnalysisOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Analysis response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateAnalysisRequest, Analysis, CreateAnalysisOperationMetadata&gt;
+      createAnalysisOperationCallable() {
+<span class="fc" id="L885">    return stub.createAnalysisOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an analysis. The long running operation is done when the analysis has completed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CreateAnalysisRequest request =
+   *       CreateAnalysisRequest.newBuilder()
+   *           .setParent(
+   *               ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;).toString())
+   *           .setAnalysis(Analysis.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       contactCenterInsightsClient.createAnalysisCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateAnalysisRequest, Operation&gt; createAnalysisCallable() {
+<span class="nc" id="L913">    return stub.createAnalysisCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an analysis.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   AnalysisName name =
+   *       AnalysisName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;, &quot;[ANALYSIS]&quot;);
+   *   Analysis response = contactCenterInsightsClient.getAnalysis(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the analysis to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Analysis getAnalysis(AnalysisName name) {
+    GetAnalysisRequest request =
+<span class="pc bpc" id="L938" title="1 of 2 branches missed.">        GetAnalysisRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L939">    return getAnalysis(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an analysis.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String name =
+   *       AnalysisName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;, &quot;[ANALYSIS]&quot;).toString();
+   *   Analysis response = contactCenterInsightsClient.getAnalysis(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the analysis to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Analysis getAnalysis(String name) {
+<span class="fc" id="L963">    GetAnalysisRequest request = GetAnalysisRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L964">    return getAnalysis(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an analysis.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   GetAnalysisRequest request =
+   *       GetAnalysisRequest.newBuilder()
+   *           .setName(
+   *               AnalysisName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;, &quot;[ANALYSIS]&quot;)
+   *                   .toString())
+   *           .build();
+   *   Analysis response = contactCenterInsightsClient.getAnalysis(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Analysis getAnalysis(GetAnalysisRequest request) {
+<span class="fc" id="L992">    return getAnalysisCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an analysis.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   GetAnalysisRequest request =
+   *       GetAnalysisRequest.newBuilder()
+   *           .setName(
+   *               AnalysisName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;, &quot;[ANALYSIS]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;Analysis&gt; future =
+   *       contactCenterInsightsClient.getAnalysisCallable().futureCall(request);
+   *   // Do something.
+   *   Analysis response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetAnalysisRequest, Analysis&gt; getAnalysisCallable() {
+<span class="fc" id="L1020">    return stub.getAnalysisCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists analyses.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ConversationName parent = ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;);
+   *   for (Analysis element : contactCenterInsightsClient.listAnalyses(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the analyses.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAnalysesPagedResponse listAnalyses(ConversationName parent) {
+    ListAnalysesRequest request =
+<span class="fc" id="L1046">        ListAnalysesRequest.newBuilder()</span>
+<span class="pc bpc" id="L1047" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1048">            .build();</span>
+<span class="fc" id="L1049">    return listAnalyses(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists analyses.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String parent = ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;).toString();
+   *   for (Analysis element : contactCenterInsightsClient.listAnalyses(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the analyses.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAnalysesPagedResponse listAnalyses(String parent) {
+<span class="fc" id="L1074">    ListAnalysesRequest request = ListAnalysesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1075">    return listAnalyses(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists analyses.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListAnalysesRequest request =
+   *       ListAnalysesRequest.newBuilder()
+   *           .setParent(
+   *               ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   for (Analysis element : contactCenterInsightsClient.listAnalyses(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAnalysesPagedResponse listAnalyses(ListAnalysesRequest request) {
+<span class="fc" id="L1107">    return listAnalysesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists analyses.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListAnalysesRequest request =
+   *       ListAnalysesRequest.newBuilder()
+   *           .setParent(
+   *               ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;Analysis&gt; future =
+   *       contactCenterInsightsClient.listAnalysesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Analysis element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAnalysesRequest, ListAnalysesPagedResponse&gt;
+      listAnalysesPagedCallable() {
+<span class="fc" id="L1140">    return stub.listAnalysesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists analyses.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListAnalysesRequest request =
+   *       ListAnalysesRequest.newBuilder()
+   *           .setParent(
+   *               ConversationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListAnalysesResponse response =
+   *         contactCenterInsightsClient.listAnalysesCallable().call(request);
+   *     for (Analysis element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAnalysesRequest, ListAnalysesResponse&gt; listAnalysesCallable() {
+<span class="nc" id="L1179">    return stub.listAnalysesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an analysis.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   AnalysisName name =
+   *       AnalysisName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;, &quot;[ANALYSIS]&quot;);
+   *   contactCenterInsightsClient.deleteAnalysis(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the analysis to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteAnalysis(AnalysisName name) {
+    DeleteAnalysisRequest request =
+<span class="pc bpc" id="L1204" title="1 of 2 branches missed.">        DeleteAnalysisRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1205">    deleteAnalysis(request);</span>
+<span class="fc" id="L1206">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an analysis.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String name =
+   *       AnalysisName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;, &quot;[ANALYSIS]&quot;).toString();
+   *   contactCenterInsightsClient.deleteAnalysis(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the analysis to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteAnalysis(String name) {
+<span class="fc" id="L1229">    DeleteAnalysisRequest request = DeleteAnalysisRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1230">    deleteAnalysis(request);</span>
+<span class="fc" id="L1231">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an analysis.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   DeleteAnalysisRequest request =
+   *       DeleteAnalysisRequest.newBuilder()
+   *           .setName(
+   *               AnalysisName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;, &quot;[ANALYSIS]&quot;)
+   *                   .toString())
+   *           .build();
+   *   contactCenterInsightsClient.deleteAnalysis(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteAnalysis(DeleteAnalysisRequest request) {
+<span class="fc" id="L1258">    deleteAnalysisCallable().call(request);</span>
+<span class="fc" id="L1259">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an analysis.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   DeleteAnalysisRequest request =
+   *       DeleteAnalysisRequest.newBuilder()
+   *           .setName(
+   *               AnalysisName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[CONVERSATION]&quot;, &quot;[ANALYSIS]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       contactCenterInsightsClient.deleteAnalysisCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteAnalysisRequest, Empty&gt; deleteAnalysisCallable() {
+<span class="fc" id="L1286">    return stub.deleteAnalysisCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Export insights data to a destination defined in the request body.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   ExportInsightsDataResponse response =
+   *       contactCenterInsightsClient.exportInsightsDataAsync(parent).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource to export data from.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ExportInsightsDataResponse, ExportInsightsDataMetadata&gt;
+      exportInsightsDataAsync(LocationName parent) {
+    ExportInsightsDataRequest request =
+<span class="fc" id="L1312">        ExportInsightsDataRequest.newBuilder()</span>
+<span class="pc bpc" id="L1313" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1314">            .build();</span>
+<span class="fc" id="L1315">    return exportInsightsDataAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Export insights data to a destination defined in the request body.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   ExportInsightsDataResponse response =
+   *       contactCenterInsightsClient.exportInsightsDataAsync(parent).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource to export data from.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ExportInsightsDataResponse, ExportInsightsDataMetadata&gt;
+      exportInsightsDataAsync(String parent) {
+    ExportInsightsDataRequest request =
+<span class="fc" id="L1341">        ExportInsightsDataRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1342">    return exportInsightsDataAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Export insights data to a destination defined in the request body.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ExportInsightsDataRequest request =
+   *       ExportInsightsDataRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setKmsKey(&quot;kmsKey-1127483058&quot;)
+   *           .build();
+   *   ExportInsightsDataResponse response =
+   *       contactCenterInsightsClient.exportInsightsDataAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ExportInsightsDataResponse, ExportInsightsDataMetadata&gt;
+      exportInsightsDataAsync(ExportInsightsDataRequest request) {
+<span class="fc" id="L1372">    return exportInsightsDataOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Export insights data to a destination defined in the request body.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ExportInsightsDataRequest request =
+   *       ExportInsightsDataRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setKmsKey(&quot;kmsKey-1127483058&quot;)
+   *           .build();
+   *   OperationFuture&lt;ExportInsightsDataResponse, ExportInsightsDataMetadata&gt; future =
+   *       contactCenterInsightsClient.exportInsightsDataOperationCallable().futureCall(request);
+   *   // Do something.
+   *   ExportInsightsDataResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          ExportInsightsDataRequest, ExportInsightsDataResponse, ExportInsightsDataMetadata&gt;
+      exportInsightsDataOperationCallable() {
+<span class="fc" id="L1402">    return stub.exportInsightsDataOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Export insights data to a destination defined in the request body.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ExportInsightsDataRequest request =
+   *       ExportInsightsDataRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setKmsKey(&quot;kmsKey-1127483058&quot;)
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       contactCenterInsightsClient.exportInsightsDataCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ExportInsightsDataRequest, Operation&gt; exportInsightsDataCallable() {
+<span class="nc" id="L1430">    return stub.exportInsightsDataCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   IssueModel issueModel = IssueModel.newBuilder().build();
+   *   IssueModel response =
+   *       contactCenterInsightsClient.createIssueModelAsync(parent, issueModel).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the issue model.
+   * @param issueModel Required. The issue model to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;IssueModel, CreateIssueModelMetadata&gt; createIssueModelAsync(
+      LocationName parent, IssueModel issueModel) {
+    CreateIssueModelRequest request =
+<span class="fc" id="L1458">        CreateIssueModelRequest.newBuilder()</span>
+<span class="pc bpc" id="L1459" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1460">            .setIssueModel(issueModel)</span>
+<span class="fc" id="L1461">            .build();</span>
+<span class="fc" id="L1462">    return createIssueModelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   IssueModel issueModel = IssueModel.newBuilder().build();
+   *   IssueModel response =
+   *       contactCenterInsightsClient.createIssueModelAsync(parent, issueModel).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the issue model.
+   * @param issueModel Required. The issue model to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;IssueModel, CreateIssueModelMetadata&gt; createIssueModelAsync(
+      String parent, IssueModel issueModel) {
+    CreateIssueModelRequest request =
+<span class="fc" id="L1490">        CreateIssueModelRequest.newBuilder().setParent(parent).setIssueModel(issueModel).build();</span>
+<span class="fc" id="L1491">    return createIssueModelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CreateIssueModelRequest request =
+   *       CreateIssueModelRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setIssueModel(IssueModel.newBuilder().build())
+   *           .build();
+   *   IssueModel response = contactCenterInsightsClient.createIssueModelAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;IssueModel, CreateIssueModelMetadata&gt; createIssueModelAsync(
+      CreateIssueModelRequest request) {
+<span class="fc" id="L1519">    return createIssueModelOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CreateIssueModelRequest request =
+   *       CreateIssueModelRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setIssueModel(IssueModel.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;IssueModel, CreateIssueModelMetadata&gt; future =
+   *       contactCenterInsightsClient.createIssueModelOperationCallable().futureCall(request);
+   *   // Do something.
+   *   IssueModel response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateIssueModelRequest, IssueModel, CreateIssueModelMetadata&gt;
+      createIssueModelOperationCallable() {
+<span class="fc" id="L1547">    return stub.createIssueModelOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CreateIssueModelRequest request =
+   *       CreateIssueModelRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setIssueModel(IssueModel.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       contactCenterInsightsClient.createIssueModelCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateIssueModelRequest, Operation&gt; createIssueModelCallable() {
+<span class="nc" id="L1574">    return stub.createIssueModelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   IssueModel issueModel = IssueModel.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   IssueModel response = contactCenterInsightsClient.updateIssueModel(issueModel, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param issueModel Required. The new values for the issue model.
+   * @param updateMask The list of fields to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final IssueModel updateIssueModel(IssueModel issueModel, FieldMask updateMask) {
+    UpdateIssueModelRequest request =
+<span class="fc" id="L1600">        UpdateIssueModelRequest.newBuilder()</span>
+<span class="fc" id="L1601">            .setIssueModel(issueModel)</span>
+<span class="fc" id="L1602">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L1603">            .build();</span>
+<span class="fc" id="L1604">    return updateIssueModel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UpdateIssueModelRequest request =
+   *       UpdateIssueModelRequest.newBuilder()
+   *           .setIssueModel(IssueModel.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   IssueModel response = contactCenterInsightsClient.updateIssueModel(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final IssueModel updateIssueModel(UpdateIssueModelRequest request) {
+<span class="fc" id="L1631">    return updateIssueModelCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UpdateIssueModelRequest request =
+   *       UpdateIssueModelRequest.newBuilder()
+   *           .setIssueModel(IssueModel.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;IssueModel&gt; future =
+   *       contactCenterInsightsClient.updateIssueModelCallable().futureCall(request);
+   *   // Do something.
+   *   IssueModel response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateIssueModelRequest, IssueModel&gt; updateIssueModelCallable() {
+<span class="fc" id="L1658">    return stub.updateIssueModelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   IssueModelName name = IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;);
+   *   IssueModel response = contactCenterInsightsClient.getIssueModel(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the issue model to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final IssueModel getIssueModel(IssueModelName name) {
+    GetIssueModelRequest request =
+<span class="pc bpc" id="L1682" title="1 of 2 branches missed.">        GetIssueModelRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1683">    return getIssueModel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String name = IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString();
+   *   IssueModel response = contactCenterInsightsClient.getIssueModel(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the issue model to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final IssueModel getIssueModel(String name) {
+<span class="fc" id="L1706">    GetIssueModelRequest request = GetIssueModelRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1707">    return getIssueModel(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   GetIssueModelRequest request =
+   *       GetIssueModelRequest.newBuilder()
+   *           .setName(IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   IssueModel response = contactCenterInsightsClient.getIssueModel(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final IssueModel getIssueModel(GetIssueModelRequest request) {
+<span class="fc" id="L1733">    return getIssueModelCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   GetIssueModelRequest request =
+   *       GetIssueModelRequest.newBuilder()
+   *           .setName(IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;IssueModel&gt; future =
+   *       contactCenterInsightsClient.getIssueModelCallable().futureCall(request);
+   *   // Do something.
+   *   IssueModel response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetIssueModelRequest, IssueModel&gt; getIssueModelCallable() {
+<span class="fc" id="L1759">    return stub.getIssueModelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists issue models.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   ListIssueModelsResponse response = contactCenterInsightsClient.listIssueModels(parent);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the issue model.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListIssueModelsResponse listIssueModels(LocationName parent) {
+    ListIssueModelsRequest request =
+<span class="fc" id="L1783">        ListIssueModelsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1784" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1785">            .build();</span>
+<span class="fc" id="L1786">    return listIssueModels(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists issue models.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   ListIssueModelsResponse response = contactCenterInsightsClient.listIssueModels(parent);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the issue model.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListIssueModelsResponse listIssueModels(String parent) {
+<span class="fc" id="L1809">    ListIssueModelsRequest request = ListIssueModelsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1810">    return listIssueModels(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists issue models.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListIssueModelsRequest request =
+   *       ListIssueModelsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   ListIssueModelsResponse response = contactCenterInsightsClient.listIssueModels(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListIssueModelsResponse listIssueModels(ListIssueModelsRequest request) {
+<span class="fc" id="L1836">    return listIssueModelsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists issue models.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListIssueModelsRequest request =
+   *       ListIssueModelsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;ListIssueModelsResponse&gt; future =
+   *       contactCenterInsightsClient.listIssueModelsCallable().futureCall(request);
+   *   // Do something.
+   *   ListIssueModelsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListIssueModelsRequest, ListIssueModelsResponse&gt;
+      listIssueModelsCallable() {
+<span class="fc" id="L1863">    return stub.listIssueModelsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   IssueModelName name = IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;);
+   *   contactCenterInsightsClient.deleteIssueModelAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the issue model to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteIssueModelMetadata&gt; deleteIssueModelAsync(
+      IssueModelName name) {
+    DeleteIssueModelRequest request =
+<span class="pc bpc" id="L1888" title="1 of 2 branches missed.">        DeleteIssueModelRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L1889">    return deleteIssueModelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String name = IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString();
+   *   contactCenterInsightsClient.deleteIssueModelAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the issue model to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteIssueModelMetadata&gt; deleteIssueModelAsync(String name) {
+<span class="fc" id="L1912">    DeleteIssueModelRequest request = DeleteIssueModelRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1913">    return deleteIssueModelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   DeleteIssueModelRequest request =
+   *       DeleteIssueModelRequest.newBuilder()
+   *           .setName(IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   contactCenterInsightsClient.deleteIssueModelAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteIssueModelMetadata&gt; deleteIssueModelAsync(
+      DeleteIssueModelRequest request) {
+<span class="fc" id="L1940">    return deleteIssueModelOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   DeleteIssueModelRequest request =
+   *       DeleteIssueModelRequest.newBuilder()
+   *           .setName(IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Empty, DeleteIssueModelMetadata&gt; future =
+   *       contactCenterInsightsClient.deleteIssueModelOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteIssueModelRequest, Empty, DeleteIssueModelMetadata&gt;
+      deleteIssueModelOperationCallable() {
+<span class="fc" id="L1967">    return stub.deleteIssueModelOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes an issue model.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   DeleteIssueModelRequest request =
+   *       DeleteIssueModelRequest.newBuilder()
+   *           .setName(IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       contactCenterInsightsClient.deleteIssueModelCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteIssueModelRequest, Operation&gt; deleteIssueModelCallable() {
+<span class="nc" id="L1993">    return stub.deleteIssueModelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deploys an issue model. Returns an error if a model is already deployed. An issue model can
+   * only be used in analysis after it has been deployed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   IssueModelName name = IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;);
+   *   DeployIssueModelResponse response =
+   *       contactCenterInsightsClient.deployIssueModelAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The issue model to deploy.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;DeployIssueModelResponse, DeployIssueModelMetadata&gt;
+      deployIssueModelAsync(IssueModelName name) {
+    DeployIssueModelRequest request =
+<span class="pc bpc" id="L2020" title="1 of 2 branches missed.">        DeployIssueModelRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L2021">    return deployIssueModelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deploys an issue model. Returns an error if a model is already deployed. An issue model can
+   * only be used in analysis after it has been deployed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String name = IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString();
+   *   DeployIssueModelResponse response =
+   *       contactCenterInsightsClient.deployIssueModelAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The issue model to deploy.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;DeployIssueModelResponse, DeployIssueModelMetadata&gt;
+      deployIssueModelAsync(String name) {
+<span class="fc" id="L2047">    DeployIssueModelRequest request = DeployIssueModelRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2048">    return deployIssueModelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deploys an issue model. Returns an error if a model is already deployed. An issue model can
+   * only be used in analysis after it has been deployed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   DeployIssueModelRequest request =
+   *       DeployIssueModelRequest.newBuilder()
+   *           .setName(IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   DeployIssueModelResponse response =
+   *       contactCenterInsightsClient.deployIssueModelAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;DeployIssueModelResponse, DeployIssueModelMetadata&gt;
+      deployIssueModelAsync(DeployIssueModelRequest request) {
+<span class="fc" id="L2077">    return deployIssueModelOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deploys an issue model. Returns an error if a model is already deployed. An issue model can
+   * only be used in analysis after it has been deployed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   DeployIssueModelRequest request =
+   *       DeployIssueModelRequest.newBuilder()
+   *           .setName(IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;DeployIssueModelResponse, DeployIssueModelMetadata&gt; future =
+   *       contactCenterInsightsClient.deployIssueModelOperationCallable().futureCall(request);
+   *   // Do something.
+   *   DeployIssueModelResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          DeployIssueModelRequest, DeployIssueModelResponse, DeployIssueModelMetadata&gt;
+      deployIssueModelOperationCallable() {
+<span class="fc" id="L2106">    return stub.deployIssueModelOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deploys an issue model. Returns an error if a model is already deployed. An issue model can
+   * only be used in analysis after it has been deployed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   DeployIssueModelRequest request =
+   *       DeployIssueModelRequest.newBuilder()
+   *           .setName(IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       contactCenterInsightsClient.deployIssueModelCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeployIssueModelRequest, Operation&gt; deployIssueModelCallable() {
+<span class="nc" id="L2133">    return stub.deployIssueModelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Undeploys an issue model. An issue model can not be used in analysis after it has been
+   * undeployed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   IssueModelName name = IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;);
+   *   UndeployIssueModelResponse response =
+   *       contactCenterInsightsClient.undeployIssueModelAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The issue model to undeploy.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;UndeployIssueModelResponse, UndeployIssueModelMetadata&gt;
+      undeployIssueModelAsync(IssueModelName name) {
+    UndeployIssueModelRequest request =
+<span class="fc" id="L2160">        UndeployIssueModelRequest.newBuilder()</span>
+<span class="pc bpc" id="L2161" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L2162">            .build();</span>
+<span class="fc" id="L2163">    return undeployIssueModelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Undeploys an issue model. An issue model can not be used in analysis after it has been
+   * undeployed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String name = IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString();
+   *   UndeployIssueModelResponse response =
+   *       contactCenterInsightsClient.undeployIssueModelAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The issue model to undeploy.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;UndeployIssueModelResponse, UndeployIssueModelMetadata&gt;
+      undeployIssueModelAsync(String name) {
+    UndeployIssueModelRequest request =
+<span class="fc" id="L2190">        UndeployIssueModelRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2191">    return undeployIssueModelAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Undeploys an issue model. An issue model can not be used in analysis after it has been
+   * undeployed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UndeployIssueModelRequest request =
+   *       UndeployIssueModelRequest.newBuilder()
+   *           .setName(IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   UndeployIssueModelResponse response =
+   *       contactCenterInsightsClient.undeployIssueModelAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;UndeployIssueModelResponse, UndeployIssueModelMetadata&gt;
+      undeployIssueModelAsync(UndeployIssueModelRequest request) {
+<span class="fc" id="L2220">    return undeployIssueModelOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Undeploys an issue model. An issue model can not be used in analysis after it has been
+   * undeployed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UndeployIssueModelRequest request =
+   *       UndeployIssueModelRequest.newBuilder()
+   *           .setName(IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;UndeployIssueModelResponse, UndeployIssueModelMetadata&gt; future =
+   *       contactCenterInsightsClient.undeployIssueModelOperationCallable().futureCall(request);
+   *   // Do something.
+   *   UndeployIssueModelResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;
+          UndeployIssueModelRequest, UndeployIssueModelResponse, UndeployIssueModelMetadata&gt;
+      undeployIssueModelOperationCallable() {
+<span class="fc" id="L2249">    return stub.undeployIssueModelOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Undeploys an issue model. An issue model can not be used in analysis after it has been
+   * undeployed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UndeployIssueModelRequest request =
+   *       UndeployIssueModelRequest.newBuilder()
+   *           .setName(IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       contactCenterInsightsClient.undeployIssueModelCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UndeployIssueModelRequest, Operation&gt; undeployIssueModelCallable() {
+<span class="nc" id="L2276">    return stub.undeployIssueModelCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an issue.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   IssueName name = IssueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;, &quot;[ISSUE]&quot;);
+   *   Issue response = contactCenterInsightsClient.getIssue(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the issue to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Issue getIssue(IssueName name) {
+    GetIssueRequest request =
+<span class="pc bpc" id="L2300" title="1 of 2 branches missed.">        GetIssueRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L2301">    return getIssue(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an issue.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String name = IssueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;, &quot;[ISSUE]&quot;).toString();
+   *   Issue response = contactCenterInsightsClient.getIssue(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the issue to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Issue getIssue(String name) {
+<span class="fc" id="L2324">    GetIssueRequest request = GetIssueRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2325">    return getIssue(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an issue.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   GetIssueRequest request =
+   *       GetIssueRequest.newBuilder()
+   *           .setName(
+   *               IssueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;, &quot;[ISSUE]&quot;).toString())
+   *           .build();
+   *   Issue response = contactCenterInsightsClient.getIssue(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Issue getIssue(GetIssueRequest request) {
+<span class="fc" id="L2352">    return getIssueCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an issue.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   GetIssueRequest request =
+   *       GetIssueRequest.newBuilder()
+   *           .setName(
+   *               IssueName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;, &quot;[ISSUE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Issue&gt; future = contactCenterInsightsClient.getIssueCallable().futureCall(request);
+   *   // Do something.
+   *   Issue response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetIssueRequest, Issue&gt; getIssueCallable() {
+<span class="fc" id="L2378">    return stub.getIssueCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists issues.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   IssueModelName parent = IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;);
+   *   ListIssuesResponse response = contactCenterInsightsClient.listIssues(parent);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the issue.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListIssuesResponse listIssues(IssueModelName parent) {
+    ListIssuesRequest request =
+<span class="pc bpc" id="L2402" title="1 of 2 branches missed.">        ListIssuesRequest.newBuilder().setParent(parent == null ? null : parent.toString()).build();</span>
+<span class="fc" id="L2403">    return listIssues(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists issues.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String parent = IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString();
+   *   ListIssuesResponse response = contactCenterInsightsClient.listIssues(parent);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the issue.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListIssuesResponse listIssues(String parent) {
+<span class="fc" id="L2426">    ListIssuesRequest request = ListIssuesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L2427">    return listIssues(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists issues.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListIssuesRequest request =
+   *       ListIssuesRequest.newBuilder()
+   *           .setParent(IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   ListIssuesResponse response = contactCenterInsightsClient.listIssues(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListIssuesResponse listIssues(ListIssuesRequest request) {
+<span class="fc" id="L2453">    return listIssuesCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists issues.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListIssuesRequest request =
+   *       ListIssuesRequest.newBuilder()
+   *           .setParent(IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;ListIssuesResponse&gt; future =
+   *       contactCenterInsightsClient.listIssuesCallable().futureCall(request);
+   *   // Do something.
+   *   ListIssuesResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListIssuesRequest, ListIssuesResponse&gt; listIssuesCallable() {
+<span class="fc" id="L2479">    return stub.listIssuesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an issue.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   Issue issue = Issue.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Issue response = contactCenterInsightsClient.updateIssue(issue, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param issue Required. The new values for the issue.
+   * @param updateMask The list of fields to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Issue updateIssue(Issue issue, FieldMask updateMask) {
+    UpdateIssueRequest request =
+<span class="fc" id="L2505">        UpdateIssueRequest.newBuilder().setIssue(issue).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L2506">    return updateIssue(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an issue.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UpdateIssueRequest request =
+   *       UpdateIssueRequest.newBuilder()
+   *           .setIssue(Issue.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Issue response = contactCenterInsightsClient.updateIssue(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Issue updateIssue(UpdateIssueRequest request) {
+<span class="fc" id="L2533">    return updateIssueCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an issue.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UpdateIssueRequest request =
+   *       UpdateIssueRequest.newBuilder()
+   *           .setIssue(Issue.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Issue&gt; future =
+   *       contactCenterInsightsClient.updateIssueCallable().futureCall(request);
+   *   // Do something.
+   *   Issue response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateIssueRequest, Issue&gt; updateIssueCallable() {
+<span class="fc" id="L2560">    return stub.updateIssueCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an issue model's statistics.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   IssueModelName issueModel = IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;);
+   *   CalculateIssueModelStatsResponse response =
+   *       contactCenterInsightsClient.calculateIssueModelStats(issueModel);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param issueModel Required. The resource name of the issue model to query against.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CalculateIssueModelStatsResponse calculateIssueModelStats(
+      IssueModelName issueModel) {
+    CalculateIssueModelStatsRequest request =
+<span class="fc" id="L2586">        CalculateIssueModelStatsRequest.newBuilder()</span>
+<span class="pc bpc" id="L2587" title="1 of 2 branches missed.">            .setIssueModel(issueModel == null ? null : issueModel.toString())</span>
+<span class="fc" id="L2588">            .build();</span>
+<span class="fc" id="L2589">    return calculateIssueModelStats(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an issue model's statistics.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String issueModel = IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString();
+   *   CalculateIssueModelStatsResponse response =
+   *       contactCenterInsightsClient.calculateIssueModelStats(issueModel);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param issueModel Required. The resource name of the issue model to query against.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CalculateIssueModelStatsResponse calculateIssueModelStats(String issueModel) {
+    CalculateIssueModelStatsRequest request =
+<span class="fc" id="L2614">        CalculateIssueModelStatsRequest.newBuilder().setIssueModel(issueModel).build();</span>
+<span class="fc" id="L2615">    return calculateIssueModelStats(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an issue model's statistics.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CalculateIssueModelStatsRequest request =
+   *       CalculateIssueModelStatsRequest.newBuilder()
+   *           .setIssueModel(
+   *               IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   CalculateIssueModelStatsResponse response =
+   *       contactCenterInsightsClient.calculateIssueModelStats(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CalculateIssueModelStatsResponse calculateIssueModelStats(
+      CalculateIssueModelStatsRequest request) {
+<span class="fc" id="L2644">    return calculateIssueModelStatsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an issue model's statistics.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CalculateIssueModelStatsRequest request =
+   *       CalculateIssueModelStatsRequest.newBuilder()
+   *           .setIssueModel(
+   *               IssueModelName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[ISSUE_MODEL]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;CalculateIssueModelStatsResponse&gt; future =
+   *       contactCenterInsightsClient.calculateIssueModelStatsCallable().futureCall(request);
+   *   // Do something.
+   *   CalculateIssueModelStatsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CalculateIssueModelStatsRequest, CalculateIssueModelStatsResponse&gt;
+      calculateIssueModelStatsCallable() {
+<span class="fc" id="L2672">    return stub.calculateIssueModelStatsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   PhraseMatcher phraseMatcher = PhraseMatcher.newBuilder().build();
+   *   PhraseMatcher response =
+   *       contactCenterInsightsClient.createPhraseMatcher(parent, phraseMatcher);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the phrase matcher. Required. The location to
+   *     create a phrase matcher for. Format: `projects/&amp;lt;Project ID&amp;gt;/locations/&amp;lt;Location
+   *     ID&amp;gt;` or `projects/&amp;lt;Project Number&amp;gt;/locations/&amp;lt;Location ID&amp;gt;`
+   * @param phraseMatcher Required. The phrase matcher resource to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PhraseMatcher createPhraseMatcher(LocationName parent, PhraseMatcher phraseMatcher) {
+    CreatePhraseMatcherRequest request =
+<span class="fc" id="L2701">        CreatePhraseMatcherRequest.newBuilder()</span>
+<span class="pc bpc" id="L2702" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L2703">            .setPhraseMatcher(phraseMatcher)</span>
+<span class="fc" id="L2704">            .build();</span>
+<span class="fc" id="L2705">    return createPhraseMatcher(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   PhraseMatcher phraseMatcher = PhraseMatcher.newBuilder().build();
+   *   PhraseMatcher response =
+   *       contactCenterInsightsClient.createPhraseMatcher(parent, phraseMatcher);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the phrase matcher. Required. The location to
+   *     create a phrase matcher for. Format: `projects/&amp;lt;Project ID&amp;gt;/locations/&amp;lt;Location
+   *     ID&amp;gt;` or `projects/&amp;lt;Project Number&amp;gt;/locations/&amp;lt;Location ID&amp;gt;`
+   * @param phraseMatcher Required. The phrase matcher resource to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PhraseMatcher createPhraseMatcher(String parent, PhraseMatcher phraseMatcher) {
+    CreatePhraseMatcherRequest request =
+<span class="fc" id="L2734">        CreatePhraseMatcherRequest.newBuilder()</span>
+<span class="fc" id="L2735">            .setParent(parent)</span>
+<span class="fc" id="L2736">            .setPhraseMatcher(phraseMatcher)</span>
+<span class="fc" id="L2737">            .build();</span>
+<span class="fc" id="L2738">    return createPhraseMatcher(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CreatePhraseMatcherRequest request =
+   *       CreatePhraseMatcherRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPhraseMatcher(PhraseMatcher.newBuilder().build())
+   *           .build();
+   *   PhraseMatcher response = contactCenterInsightsClient.createPhraseMatcher(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PhraseMatcher createPhraseMatcher(CreatePhraseMatcherRequest request) {
+<span class="fc" id="L2765">    return createPhraseMatcherCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CreatePhraseMatcherRequest request =
+   *       CreatePhraseMatcherRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPhraseMatcher(PhraseMatcher.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;PhraseMatcher&gt; future =
+   *       contactCenterInsightsClient.createPhraseMatcherCallable().futureCall(request);
+   *   // Do something.
+   *   PhraseMatcher response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreatePhraseMatcherRequest, PhraseMatcher&gt;
+      createPhraseMatcherCallable() {
+<span class="fc" id="L2793">    return stub.createPhraseMatcherCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   PhraseMatcherName name = PhraseMatcherName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PHRASE_MATCHER]&quot;);
+   *   PhraseMatcher response = contactCenterInsightsClient.getPhraseMatcher(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the phrase matcher to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PhraseMatcher getPhraseMatcher(PhraseMatcherName name) {
+    GetPhraseMatcherRequest request =
+<span class="pc bpc" id="L2817" title="1 of 2 branches missed.">        GetPhraseMatcherRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L2818">    return getPhraseMatcher(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String name = PhraseMatcherName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PHRASE_MATCHER]&quot;).toString();
+   *   PhraseMatcher response = contactCenterInsightsClient.getPhraseMatcher(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the phrase matcher to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PhraseMatcher getPhraseMatcher(String name) {
+<span class="fc" id="L2841">    GetPhraseMatcherRequest request = GetPhraseMatcherRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L2842">    return getPhraseMatcher(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   GetPhraseMatcherRequest request =
+   *       GetPhraseMatcherRequest.newBuilder()
+   *           .setName(
+   *               PhraseMatcherName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PHRASE_MATCHER]&quot;).toString())
+   *           .build();
+   *   PhraseMatcher response = contactCenterInsightsClient.getPhraseMatcher(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PhraseMatcher getPhraseMatcher(GetPhraseMatcherRequest request) {
+<span class="fc" id="L2869">    return getPhraseMatcherCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   GetPhraseMatcherRequest request =
+   *       GetPhraseMatcherRequest.newBuilder()
+   *           .setName(
+   *               PhraseMatcherName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PHRASE_MATCHER]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;PhraseMatcher&gt; future =
+   *       contactCenterInsightsClient.getPhraseMatcherCallable().futureCall(request);
+   *   // Do something.
+   *   PhraseMatcher response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetPhraseMatcherRequest, PhraseMatcher&gt; getPhraseMatcherCallable() {
+<span class="fc" id="L2896">    return stub.getPhraseMatcherCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists phrase matchers.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (PhraseMatcher element :
+   *       contactCenterInsightsClient.listPhraseMatchers(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the phrase matcher.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPhraseMatchersPagedResponse listPhraseMatchers(LocationName parent) {
+    ListPhraseMatchersRequest request =
+<span class="fc" id="L2923">        ListPhraseMatchersRequest.newBuilder()</span>
+<span class="pc bpc" id="L2924" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L2925">            .build();</span>
+<span class="fc" id="L2926">    return listPhraseMatchers(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists phrase matchers.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (PhraseMatcher element :
+   *       contactCenterInsightsClient.listPhraseMatchers(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the phrase matcher.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPhraseMatchersPagedResponse listPhraseMatchers(String parent) {
+    ListPhraseMatchersRequest request =
+<span class="fc" id="L2953">        ListPhraseMatchersRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L2954">    return listPhraseMatchers(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists phrase matchers.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListPhraseMatchersRequest request =
+   *       ListPhraseMatchersRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   for (PhraseMatcher element :
+   *       contactCenterInsightsClient.listPhraseMatchers(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListPhraseMatchersPagedResponse listPhraseMatchers(
+      ListPhraseMatchersRequest request) {
+<span class="fc" id="L2987">    return listPhraseMatchersPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists phrase matchers.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListPhraseMatchersRequest request =
+   *       ListPhraseMatchersRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;PhraseMatcher&gt; future =
+   *       contactCenterInsightsClient.listPhraseMatchersPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (PhraseMatcher element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListPhraseMatchersRequest, ListPhraseMatchersPagedResponse&gt;
+      listPhraseMatchersPagedCallable() {
+<span class="fc" id="L3019">    return stub.listPhraseMatchersPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists phrase matchers.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListPhraseMatchersRequest request =
+   *       ListPhraseMatchersRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListPhraseMatchersResponse response =
+   *         contactCenterInsightsClient.listPhraseMatchersCallable().call(request);
+   *     for (PhraseMatcher element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListPhraseMatchersRequest, ListPhraseMatchersResponse&gt;
+      listPhraseMatchersCallable() {
+<span class="nc" id="L3058">    return stub.listPhraseMatchersCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   PhraseMatcherName name = PhraseMatcherName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PHRASE_MATCHER]&quot;);
+   *   contactCenterInsightsClient.deletePhraseMatcher(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the phrase matcher to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deletePhraseMatcher(PhraseMatcherName name) {
+    DeletePhraseMatcherRequest request =
+<span class="fc" id="L3082">        DeletePhraseMatcherRequest.newBuilder()</span>
+<span class="pc bpc" id="L3083" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L3084">            .build();</span>
+<span class="fc" id="L3085">    deletePhraseMatcher(request);</span>
+<span class="fc" id="L3086">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String name = PhraseMatcherName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PHRASE_MATCHER]&quot;).toString();
+   *   contactCenterInsightsClient.deletePhraseMatcher(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the phrase matcher to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deletePhraseMatcher(String name) {
+    DeletePhraseMatcherRequest request =
+<span class="fc" id="L3109">        DeletePhraseMatcherRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L3110">    deletePhraseMatcher(request);</span>
+<span class="fc" id="L3111">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   DeletePhraseMatcherRequest request =
+   *       DeletePhraseMatcherRequest.newBuilder()
+   *           .setName(
+   *               PhraseMatcherName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PHRASE_MATCHER]&quot;).toString())
+   *           .build();
+   *   contactCenterInsightsClient.deletePhraseMatcher(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deletePhraseMatcher(DeletePhraseMatcherRequest request) {
+<span class="fc" id="L3137">    deletePhraseMatcherCallable().call(request);</span>
+<span class="fc" id="L3138">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   DeletePhraseMatcherRequest request =
+   *       DeletePhraseMatcherRequest.newBuilder()
+   *           .setName(
+   *               PhraseMatcherName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[PHRASE_MATCHER]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       contactCenterInsightsClient.deletePhraseMatcherCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeletePhraseMatcherRequest, Empty&gt; deletePhraseMatcherCallable() {
+<span class="fc" id="L3164">    return stub.deletePhraseMatcherCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   PhraseMatcher phraseMatcher = PhraseMatcher.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   PhraseMatcher response =
+   *       contactCenterInsightsClient.updatePhraseMatcher(phraseMatcher, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param phraseMatcher Required. The new values for the phrase matcher.
+   * @param updateMask The list of fields to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PhraseMatcher updatePhraseMatcher(
+      PhraseMatcher phraseMatcher, FieldMask updateMask) {
+    UpdatePhraseMatcherRequest request =
+<span class="fc" id="L3192">        UpdatePhraseMatcherRequest.newBuilder()</span>
+<span class="fc" id="L3193">            .setPhraseMatcher(phraseMatcher)</span>
+<span class="fc" id="L3194">            .setUpdateMask(updateMask)</span>
+<span class="fc" id="L3195">            .build();</span>
+<span class="fc" id="L3196">    return updatePhraseMatcher(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UpdatePhraseMatcherRequest request =
+   *       UpdatePhraseMatcherRequest.newBuilder()
+   *           .setPhraseMatcher(PhraseMatcher.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   PhraseMatcher response = contactCenterInsightsClient.updatePhraseMatcher(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final PhraseMatcher updatePhraseMatcher(UpdatePhraseMatcherRequest request) {
+<span class="fc" id="L3223">    return updatePhraseMatcherCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a phrase matcher.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UpdatePhraseMatcherRequest request =
+   *       UpdatePhraseMatcherRequest.newBuilder()
+   *           .setPhraseMatcher(PhraseMatcher.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;PhraseMatcher&gt; future =
+   *       contactCenterInsightsClient.updatePhraseMatcherCallable().futureCall(request);
+   *   // Do something.
+   *   PhraseMatcher response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdatePhraseMatcherRequest, PhraseMatcher&gt;
+      updatePhraseMatcherCallable() {
+<span class="fc" id="L3251">    return stub.updatePhraseMatcherCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets conversation statistics.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   LocationName location = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   CalculateStatsResponse response = contactCenterInsightsClient.calculateStats(location);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param location Required. The location of the conversations.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CalculateStatsResponse calculateStats(LocationName location) {
+    CalculateStatsRequest request =
+<span class="fc" id="L3275">        CalculateStatsRequest.newBuilder()</span>
+<span class="pc bpc" id="L3276" title="1 of 2 branches missed.">            .setLocation(location == null ? null : location.toString())</span>
+<span class="fc" id="L3277">            .build();</span>
+<span class="fc" id="L3278">    return calculateStats(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets conversation statistics.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String location = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   CalculateStatsResponse response = contactCenterInsightsClient.calculateStats(location);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param location Required. The location of the conversations.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CalculateStatsResponse calculateStats(String location) {
+    CalculateStatsRequest request =
+<span class="fc" id="L3302">        CalculateStatsRequest.newBuilder().setLocation(location).build();</span>
+<span class="fc" id="L3303">    return calculateStats(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets conversation statistics.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CalculateStatsRequest request =
+   *       CalculateStatsRequest.newBuilder()
+   *           .setLocation(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   CalculateStatsResponse response = contactCenterInsightsClient.calculateStats(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final CalculateStatsResponse calculateStats(CalculateStatsRequest request) {
+<span class="fc" id="L3330">    return calculateStatsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets conversation statistics.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CalculateStatsRequest request =
+   *       CalculateStatsRequest.newBuilder()
+   *           .setLocation(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .build();
+   *   ApiFuture&lt;CalculateStatsResponse&gt; future =
+   *       contactCenterInsightsClient.calculateStatsCallable().futureCall(request);
+   *   // Do something.
+   *   CalculateStatsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CalculateStatsRequest, CalculateStatsResponse&gt;
+      calculateStatsCallable() {
+<span class="fc" id="L3358">    return stub.calculateStatsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets project-level settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   SettingsName name = SettingsName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Settings response = contactCenterInsightsClient.getSettings(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the settings resource to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Settings getSettings(SettingsName name) {
+    GetSettingsRequest request =
+<span class="pc bpc" id="L3382" title="1 of 2 branches missed.">        GetSettingsRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L3383">    return getSettings(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets project-level settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String name = SettingsName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Settings response = contactCenterInsightsClient.getSettings(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the settings resource to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Settings getSettings(String name) {
+<span class="fc" id="L3406">    GetSettingsRequest request = GetSettingsRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L3407">    return getSettings(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets project-level settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   GetSettingsRequest request =
+   *       GetSettingsRequest.newBuilder()
+   *           .setName(SettingsName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   Settings response = contactCenterInsightsClient.getSettings(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Settings getSettings(GetSettingsRequest request) {
+<span class="fc" id="L3433">    return getSettingsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets project-level settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   GetSettingsRequest request =
+   *       GetSettingsRequest.newBuilder()
+   *           .setName(SettingsName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Settings&gt; future =
+   *       contactCenterInsightsClient.getSettingsCallable().futureCall(request);
+   *   // Do something.
+   *   Settings response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetSettingsRequest, Settings&gt; getSettingsCallable() {
+<span class="fc" id="L3459">    return stub.getSettingsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates project-level settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   Settings settings = Settings.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Settings response = contactCenterInsightsClient.updateSettings(settings, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param settings Required. The new settings values.
+   * @param updateMask Required. The list of fields to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Settings updateSettings(Settings settings, FieldMask updateMask) {
+    UpdateSettingsRequest request =
+<span class="fc" id="L3485">        UpdateSettingsRequest.newBuilder().setSettings(settings).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L3486">    return updateSettings(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates project-level settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UpdateSettingsRequest request =
+   *       UpdateSettingsRequest.newBuilder()
+   *           .setSettings(Settings.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Settings response = contactCenterInsightsClient.updateSettings(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Settings updateSettings(UpdateSettingsRequest request) {
+<span class="fc" id="L3513">    return updateSettingsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates project-level settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UpdateSettingsRequest request =
+   *       UpdateSettingsRequest.newBuilder()
+   *           .setSettings(Settings.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Settings&gt; future =
+   *       contactCenterInsightsClient.updateSettingsCallable().futureCall(request);
+   *   // Do something.
+   *   Settings response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateSettingsRequest, Settings&gt; updateSettingsCallable() {
+<span class="fc" id="L3540">    return stub.updateSettingsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   View view = View.newBuilder().build();
+   *   View response = contactCenterInsightsClient.createView(parent, view);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the view. Required. The location to create a
+   *     view for. Format: `projects/&amp;lt;Project ID&amp;gt;/locations/&amp;lt;Location ID&amp;gt;` or
+   *     `projects/&amp;lt;Project Number&amp;gt;/locations/&amp;lt;Location ID&amp;gt;`
+   * @param view Required. The view resource to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final View createView(LocationName parent, View view) {
+    CreateViewRequest request =
+<span class="fc" id="L3568">        CreateViewRequest.newBuilder()</span>
+<span class="pc bpc" id="L3569" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L3570">            .setView(view)</span>
+<span class="fc" id="L3571">            .build();</span>
+<span class="fc" id="L3572">    return createView(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   View view = View.newBuilder().build();
+   *   View response = contactCenterInsightsClient.createView(parent, view);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the view. Required. The location to create a
+   *     view for. Format: `projects/&amp;lt;Project ID&amp;gt;/locations/&amp;lt;Location ID&amp;gt;` or
+   *     `projects/&amp;lt;Project Number&amp;gt;/locations/&amp;lt;Location ID&amp;gt;`
+   * @param view Required. The view resource to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final View createView(String parent, View view) {
+    CreateViewRequest request =
+<span class="fc" id="L3600">        CreateViewRequest.newBuilder().setParent(parent).setView(view).build();</span>
+<span class="fc" id="L3601">    return createView(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CreateViewRequest request =
+   *       CreateViewRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setView(View.newBuilder().build())
+   *           .build();
+   *   View response = contactCenterInsightsClient.createView(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final View createView(CreateViewRequest request) {
+<span class="fc" id="L3628">    return createViewCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   CreateViewRequest request =
+   *       CreateViewRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setView(View.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;View&gt; future = contactCenterInsightsClient.createViewCallable().futureCall(request);
+   *   // Do something.
+   *   View response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateViewRequest, View&gt; createViewCallable() {
+<span class="fc" id="L3654">    return stub.createViewCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ViewName name = ViewName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[VIEW]&quot;);
+   *   View response = contactCenterInsightsClient.getView(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the view to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final View getView(ViewName name) {
+    GetViewRequest request =
+<span class="pc bpc" id="L3678" title="1 of 2 branches missed.">        GetViewRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L3679">    return getView(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String name = ViewName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[VIEW]&quot;).toString();
+   *   View response = contactCenterInsightsClient.getView(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the view to get.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final View getView(String name) {
+<span class="fc" id="L3702">    GetViewRequest request = GetViewRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L3703">    return getView(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   GetViewRequest request =
+   *       GetViewRequest.newBuilder()
+   *           .setName(ViewName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[VIEW]&quot;).toString())
+   *           .build();
+   *   View response = contactCenterInsightsClient.getView(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final View getView(GetViewRequest request) {
+<span class="fc" id="L3729">    return getViewCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   GetViewRequest request =
+   *       GetViewRequest.newBuilder()
+   *           .setName(ViewName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[VIEW]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;View&gt; future = contactCenterInsightsClient.getViewCallable().futureCall(request);
+   *   // Do something.
+   *   View response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetViewRequest, View&gt; getViewCallable() {
+<span class="fc" id="L3754">    return stub.getViewCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists views.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (View element : contactCenterInsightsClient.listViews(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the views.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListViewsPagedResponse listViews(LocationName parent) {
+    ListViewsRequest request =
+<span class="pc bpc" id="L3780" title="1 of 2 branches missed.">        ListViewsRequest.newBuilder().setParent(parent == null ? null : parent.toString()).build();</span>
+<span class="fc" id="L3781">    return listViews(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists views.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (View element : contactCenterInsightsClient.listViews(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The parent resource of the views.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListViewsPagedResponse listViews(String parent) {
+<span class="fc" id="L3806">    ListViewsRequest request = ListViewsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L3807">    return listViews(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists views.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListViewsRequest request =
+   *       ListViewsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (View element : contactCenterInsightsClient.listViews(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListViewsPagedResponse listViews(ListViewsRequest request) {
+<span class="fc" id="L3837">    return listViewsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists views.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListViewsRequest request =
+   *       ListViewsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;View&gt; future =
+   *       contactCenterInsightsClient.listViewsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (View element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListViewsRequest, ListViewsPagedResponse&gt; listViewsPagedCallable() {
+<span class="fc" id="L3867">    return stub.listViewsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists views.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ListViewsRequest request =
+   *       ListViewsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListViewsResponse response = contactCenterInsightsClient.listViewsCallable().call(request);
+   *     for (View element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListViewsRequest, ListViewsResponse&gt; listViewsCallable() {
+<span class="nc" id="L3903">    return stub.listViewsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   View view = View.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   View response = contactCenterInsightsClient.updateView(view, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param view Required. The new view.
+   * @param updateMask The list of fields to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final View updateView(View view, FieldMask updateMask) {
+    UpdateViewRequest request =
+<span class="fc" id="L3929">        UpdateViewRequest.newBuilder().setView(view).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L3930">    return updateView(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UpdateViewRequest request =
+   *       UpdateViewRequest.newBuilder()
+   *           .setView(View.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   View response = contactCenterInsightsClient.updateView(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final View updateView(UpdateViewRequest request) {
+<span class="fc" id="L3957">    return updateViewCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   UpdateViewRequest request =
+   *       UpdateViewRequest.newBuilder()
+   *           .setView(View.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;View&gt; future = contactCenterInsightsClient.updateViewCallable().futureCall(request);
+   *   // Do something.
+   *   View response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateViewRequest, View&gt; updateViewCallable() {
+<span class="fc" id="L3983">    return stub.updateViewCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   ViewName name = ViewName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[VIEW]&quot;);
+   *   contactCenterInsightsClient.deleteView(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the view to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteView(ViewName name) {
+    DeleteViewRequest request =
+<span class="pc bpc" id="L4007" title="1 of 2 branches missed.">        DeleteViewRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L4008">    deleteView(request);</span>
+<span class="fc" id="L4009">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   String name = ViewName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[VIEW]&quot;).toString();
+   *   contactCenterInsightsClient.deleteView(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the view to delete.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteView(String name) {
+<span class="fc" id="L4031">    DeleteViewRequest request = DeleteViewRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L4032">    deleteView(request);</span>
+<span class="fc" id="L4033">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   DeleteViewRequest request =
+   *       DeleteViewRequest.newBuilder()
+   *           .setName(ViewName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[VIEW]&quot;).toString())
+   *           .build();
+   *   contactCenterInsightsClient.deleteView(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteView(DeleteViewRequest request) {
+<span class="fc" id="L4058">    deleteViewCallable().call(request);</span>
+<span class="fc" id="L4059">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a view.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (ContactCenterInsightsClient contactCenterInsightsClient =
+   *     ContactCenterInsightsClient.create()) {
+   *   DeleteViewRequest request =
+   *       DeleteViewRequest.newBuilder()
+   *           .setName(ViewName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[VIEW]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       contactCenterInsightsClient.deleteViewCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteViewRequest, Empty&gt; deleteViewCallable() {
+<span class="fc" id="L4084">    return stub.deleteViewCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L4089">    stub.close();</span>
+<span class="fc" id="L4090">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L4094">    stub.shutdown();</span>
+<span class="nc" id="L4095">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L4099">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L4104">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L4109">    stub.shutdownNow();</span>
+<span class="nc" id="L4110">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L4114">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListConversationsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListConversationsRequest,
+          ListConversationsResponse,
+          Conversation,
+          ListConversationsPage,
+          ListConversationsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListConversationsPagedResponse&gt; createAsync(
+        PageContext&lt;ListConversationsRequest, ListConversationsResponse, Conversation&gt; context,
+        ApiFuture&lt;ListConversationsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListConversationsPage&gt; futurePage =
+<span class="fc" id="L4129">          ListConversationsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L4130">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L4132">          input -&gt; new ListConversationsPagedResponse(input),</span>
+<span class="fc" id="L4133">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListConversationsPagedResponse(ListConversationsPage page) {
+<span class="fc" id="L4137">      super(page, ListConversationsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L4138">    }</span>
+  }
+
+  public static class ListConversationsPage
+      extends AbstractPage&lt;
+          ListConversationsRequest,
+          ListConversationsResponse,
+          Conversation,
+          ListConversationsPage&gt; {
+
+    private ListConversationsPage(
+        PageContext&lt;ListConversationsRequest, ListConversationsResponse, Conversation&gt; context,
+        ListConversationsResponse response) {
+<span class="fc" id="L4151">      super(context, response);</span>
+<span class="fc" id="L4152">    }</span>
+
+    private static ListConversationsPage createEmptyPage() {
+<span class="fc" id="L4155">      return new ListConversationsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListConversationsPage createPage(
+        PageContext&lt;ListConversationsRequest, ListConversationsResponse, Conversation&gt; context,
+        ListConversationsResponse response) {
+<span class="fc" id="L4162">      return new ListConversationsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListConversationsPage&gt; createPageAsync(
+        PageContext&lt;ListConversationsRequest, ListConversationsResponse, Conversation&gt; context,
+        ApiFuture&lt;ListConversationsResponse&gt; futureResponse) {
+<span class="fc" id="L4169">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListConversationsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListConversationsRequest,
+          ListConversationsResponse,
+          Conversation,
+          ListConversationsPage,
+          ListConversationsFixedSizeCollection&gt; {
+
+    private ListConversationsFixedSizeCollection(
+        List&lt;ListConversationsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L4183">      super(pages, collectionSize);</span>
+<span class="fc" id="L4184">    }</span>
+
+    private static ListConversationsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L4187">      return new ListConversationsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListConversationsFixedSizeCollection createCollection(
+        List&lt;ListConversationsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L4193">      return new ListConversationsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListAnalysesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListAnalysesRequest,
+          ListAnalysesResponse,
+          Analysis,
+          ListAnalysesPage,
+          ListAnalysesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListAnalysesPagedResponse&gt; createAsync(
+        PageContext&lt;ListAnalysesRequest, ListAnalysesResponse, Analysis&gt; context,
+        ApiFuture&lt;ListAnalysesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListAnalysesPage&gt; futurePage =
+<span class="fc" id="L4209">          ListAnalysesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L4210">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L4212">          input -&gt; new ListAnalysesPagedResponse(input),</span>
+<span class="fc" id="L4213">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListAnalysesPagedResponse(ListAnalysesPage page) {
+<span class="fc" id="L4217">      super(page, ListAnalysesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L4218">    }</span>
+  }
+
+  public static class ListAnalysesPage
+      extends AbstractPage&lt;ListAnalysesRequest, ListAnalysesResponse, Analysis, ListAnalysesPage&gt; {
+
+    private ListAnalysesPage(
+        PageContext&lt;ListAnalysesRequest, ListAnalysesResponse, Analysis&gt; context,
+        ListAnalysesResponse response) {
+<span class="fc" id="L4227">      super(context, response);</span>
+<span class="fc" id="L4228">    }</span>
+
+    private static ListAnalysesPage createEmptyPage() {
+<span class="fc" id="L4231">      return new ListAnalysesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListAnalysesPage createPage(
+        PageContext&lt;ListAnalysesRequest, ListAnalysesResponse, Analysis&gt; context,
+        ListAnalysesResponse response) {
+<span class="fc" id="L4238">      return new ListAnalysesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListAnalysesPage&gt; createPageAsync(
+        PageContext&lt;ListAnalysesRequest, ListAnalysesResponse, Analysis&gt; context,
+        ApiFuture&lt;ListAnalysesResponse&gt; futureResponse) {
+<span class="fc" id="L4245">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListAnalysesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListAnalysesRequest,
+          ListAnalysesResponse,
+          Analysis,
+          ListAnalysesPage,
+          ListAnalysesFixedSizeCollection&gt; {
+
+    private ListAnalysesFixedSizeCollection(List&lt;ListAnalysesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L4258">      super(pages, collectionSize);</span>
+<span class="fc" id="L4259">    }</span>
+
+    private static ListAnalysesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L4262">      return new ListAnalysesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListAnalysesFixedSizeCollection createCollection(
+        List&lt;ListAnalysesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L4268">      return new ListAnalysesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListPhraseMatchersPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListPhraseMatchersRequest,
+          ListPhraseMatchersResponse,
+          PhraseMatcher,
+          ListPhraseMatchersPage,
+          ListPhraseMatchersFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListPhraseMatchersPagedResponse&gt; createAsync(
+        PageContext&lt;ListPhraseMatchersRequest, ListPhraseMatchersResponse, PhraseMatcher&gt; context,
+        ApiFuture&lt;ListPhraseMatchersResponse&gt; futureResponse) {
+      ApiFuture&lt;ListPhraseMatchersPage&gt; futurePage =
+<span class="fc" id="L4284">          ListPhraseMatchersPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L4285">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L4287">          input -&gt; new ListPhraseMatchersPagedResponse(input),</span>
+<span class="fc" id="L4288">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListPhraseMatchersPagedResponse(ListPhraseMatchersPage page) {
+<span class="fc" id="L4292">      super(page, ListPhraseMatchersFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L4293">    }</span>
+  }
+
+  public static class ListPhraseMatchersPage
+      extends AbstractPage&lt;
+          ListPhraseMatchersRequest,
+          ListPhraseMatchersResponse,
+          PhraseMatcher,
+          ListPhraseMatchersPage&gt; {
+
+    private ListPhraseMatchersPage(
+        PageContext&lt;ListPhraseMatchersRequest, ListPhraseMatchersResponse, PhraseMatcher&gt; context,
+        ListPhraseMatchersResponse response) {
+<span class="fc" id="L4306">      super(context, response);</span>
+<span class="fc" id="L4307">    }</span>
+
+    private static ListPhraseMatchersPage createEmptyPage() {
+<span class="fc" id="L4310">      return new ListPhraseMatchersPage(null, null);</span>
+    }
+
+    @Override
+    protected ListPhraseMatchersPage createPage(
+        PageContext&lt;ListPhraseMatchersRequest, ListPhraseMatchersResponse, PhraseMatcher&gt; context,
+        ListPhraseMatchersResponse response) {
+<span class="fc" id="L4317">      return new ListPhraseMatchersPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListPhraseMatchersPage&gt; createPageAsync(
+        PageContext&lt;ListPhraseMatchersRequest, ListPhraseMatchersResponse, PhraseMatcher&gt; context,
+        ApiFuture&lt;ListPhraseMatchersResponse&gt; futureResponse) {
+<span class="fc" id="L4324">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListPhraseMatchersFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListPhraseMatchersRequest,
+          ListPhraseMatchersResponse,
+          PhraseMatcher,
+          ListPhraseMatchersPage,
+          ListPhraseMatchersFixedSizeCollection&gt; {
+
+    private ListPhraseMatchersFixedSizeCollection(
+        List&lt;ListPhraseMatchersPage&gt; pages, int collectionSize) {
+<span class="fc" id="L4338">      super(pages, collectionSize);</span>
+<span class="fc" id="L4339">    }</span>
+
+    private static ListPhraseMatchersFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L4342">      return new ListPhraseMatchersFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListPhraseMatchersFixedSizeCollection createCollection(
+        List&lt;ListPhraseMatchersPage&gt; pages, int collectionSize) {
+<span class="nc" id="L4348">      return new ListPhraseMatchersFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListViewsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListViewsRequest, ListViewsResponse, View, ListViewsPage, ListViewsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListViewsPagedResponse&gt; createAsync(
+        PageContext&lt;ListViewsRequest, ListViewsResponse, View&gt; context,
+        ApiFuture&lt;ListViewsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListViewsPage&gt; futurePage =
+<span class="fc" id="L4360">          ListViewsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L4361">      return ApiFutures.transform(</span>
+<span class="fc" id="L4362">          futurePage, input -&gt; new ListViewsPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListViewsPagedResponse(ListViewsPage page) {
+<span class="fc" id="L4366">      super(page, ListViewsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L4367">    }</span>
+  }
+
+  public static class ListViewsPage
+      extends AbstractPage&lt;ListViewsRequest, ListViewsResponse, View, ListViewsPage&gt; {
+
+    private ListViewsPage(
+        PageContext&lt;ListViewsRequest, ListViewsResponse, View&gt; context,
+        ListViewsResponse response) {
+<span class="fc" id="L4376">      super(context, response);</span>
+<span class="fc" id="L4377">    }</span>
+
+    private static ListViewsPage createEmptyPage() {
+<span class="fc" id="L4380">      return new ListViewsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListViewsPage createPage(
+        PageContext&lt;ListViewsRequest, ListViewsResponse, View&gt; context,
+        ListViewsResponse response) {
+<span class="fc" id="L4387">      return new ListViewsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListViewsPage&gt; createPageAsync(
+        PageContext&lt;ListViewsRequest, ListViewsResponse, View&gt; context,
+        ApiFuture&lt;ListViewsResponse&gt; futureResponse) {
+<span class="fc" id="L4394">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListViewsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListViewsRequest, ListViewsResponse, View, ListViewsPage, ListViewsFixedSizeCollection&gt; {
+
+    private ListViewsFixedSizeCollection(List&lt;ListViewsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L4403">      super(pages, collectionSize);</span>
+<span class="fc" id="L4404">    }</span>
+
+    private static ListViewsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L4407">      return new ListViewsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListViewsFixedSizeCollection createCollection(
+        List&lt;ListViewsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L4413">      return new ListViewsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

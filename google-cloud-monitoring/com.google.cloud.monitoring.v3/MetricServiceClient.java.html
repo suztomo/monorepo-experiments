@@ -1,0 +1,2055 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>MetricServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-monitoring</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.monitoring.v3</a> &gt; <span class="el_source">MetricServiceClient.java</span></div><h1>MetricServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.monitoring.v3;
+
+import com.google.api.MetricDescriptor;
+import com.google.api.MonitoredResourceDescriptor;
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.api.resourcenames.ResourceName;
+import com.google.cloud.monitoring.v3.stub.MetricServiceStub;
+import com.google.cloud.monitoring.v3.stub.MetricServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.monitoring.v3.CreateMetricDescriptorRequest;
+import com.google.monitoring.v3.CreateTimeSeriesRequest;
+import com.google.monitoring.v3.DeleteMetricDescriptorRequest;
+import com.google.monitoring.v3.GetMetricDescriptorRequest;
+import com.google.monitoring.v3.GetMonitoredResourceDescriptorRequest;
+import com.google.monitoring.v3.ListMetricDescriptorsRequest;
+import com.google.monitoring.v3.ListMetricDescriptorsResponse;
+import com.google.monitoring.v3.ListMonitoredResourceDescriptorsRequest;
+import com.google.monitoring.v3.ListMonitoredResourceDescriptorsResponse;
+import com.google.monitoring.v3.ListTimeSeriesRequest;
+import com.google.monitoring.v3.ListTimeSeriesResponse;
+import com.google.monitoring.v3.MetricDescriptorName;
+import com.google.monitoring.v3.MonitoredResourceDescriptorName;
+import com.google.monitoring.v3.OrganizationName;
+import com.google.monitoring.v3.ProjectName;
+import com.google.monitoring.v3.TimeInterval;
+import com.google.monitoring.v3.TimeSeries;
+import com.google.protobuf.Empty;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: Manages metric descriptors, monitored resource descriptors, and time series
+ * data.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+ *   MonitoredResourceDescriptorName name =
+ *       MonitoredResourceDescriptorName.ofProjectMonitoredResourceDescriptorName(
+ *           &quot;[PROJECT]&quot;, &quot;[MONITORED_RESOURCE_DESCRIPTOR]&quot;);
+ *   MonitoredResourceDescriptor response =
+ *       metricServiceClient.getMonitoredResourceDescriptor(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the MetricServiceClient object to clean up resources such
+ * as threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of MetricServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * MetricServiceSettings metricServiceSettings =
+ *     MetricServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * MetricServiceClient metricServiceClient = MetricServiceClient.create(metricServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * MetricServiceSettings metricServiceSettings =
+ *     MetricServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * MetricServiceClient metricServiceClient = MetricServiceClient.create(metricServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@Generated(&quot;by gapic-generator-java&quot;)
+public class MetricServiceClient implements BackgroundResource {
+  private final MetricServiceSettings settings;
+  private final MetricServiceStub stub;
+
+  /** Constructs an instance of MetricServiceClient with default settings. */
+  public static final MetricServiceClient create() throws IOException {
+<span class="nc" id="L134">    return create(MetricServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of MetricServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final MetricServiceClient create(MetricServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L143">    return new MetricServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of MetricServiceClient, using the given stub for making calls. This is
+   * for advanced usage - prefer using create(MetricServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final MetricServiceClient create(MetricServiceStub stub) {
+<span class="nc" id="L152">    return new MetricServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of MetricServiceClient, using the given settings. This is protected so
+   * that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L160">  protected MetricServiceClient(MetricServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L161">    this.settings = settings;</span>
+<span class="fc" id="L162">    this.stub = ((MetricServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L163">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L166">  protected MetricServiceClient(MetricServiceStub stub) {</span>
+<span class="nc" id="L167">    this.settings = null;</span>
+<span class="nc" id="L168">    this.stub = stub;</span>
+<span class="nc" id="L169">  }</span>
+
+  public final MetricServiceSettings getSettings() {
+<span class="nc" id="L172">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public MetricServiceStub getStub() {
+<span class="nc" id="L177">    return stub;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists monitored resource descriptors that match a filter. This method does not require a
+   * Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ResourceName name = ResourceName.of(&quot;[FOLDER]&quot;);
+   *   for (MonitoredResourceDescriptor element :
+   *       metricServiceClient.listMonitoredResourceDescriptors(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListMonitoredResourceDescriptorsPagedResponse listMonitoredResourceDescriptors(
+      ResourceName name) {
+    ListMonitoredResourceDescriptorsRequest request =
+<span class="fc" id="L207">        ListMonitoredResourceDescriptorsRequest.newBuilder()</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L209">            .build();</span>
+<span class="fc" id="L210">    return listMonitoredResourceDescriptors(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists monitored resource descriptors that match a filter. This method does not require a
+   * Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   OrganizationName name = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   for (MonitoredResourceDescriptor element :
+   *       metricServiceClient.listMonitoredResourceDescriptors(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListMonitoredResourceDescriptorsPagedResponse listMonitoredResourceDescriptors(
+      OrganizationName name) {
+    ListMonitoredResourceDescriptorsRequest request =
+<span class="fc" id="L240">        ListMonitoredResourceDescriptorsRequest.newBuilder()</span>
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L242">            .build();</span>
+<span class="fc" id="L243">    return listMonitoredResourceDescriptors(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists monitored resource descriptors that match a filter. This method does not require a
+   * Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ProjectName name = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (MonitoredResourceDescriptor element :
+   *       metricServiceClient.listMonitoredResourceDescriptors(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListMonitoredResourceDescriptorsPagedResponse listMonitoredResourceDescriptors(
+      ProjectName name) {
+    ListMonitoredResourceDescriptorsRequest request =
+<span class="fc" id="L273">        ListMonitoredResourceDescriptorsRequest.newBuilder()</span>
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L275">            .build();</span>
+<span class="fc" id="L276">    return listMonitoredResourceDescriptors(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists monitored resource descriptors that match a filter. This method does not require a
+   * Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   String name = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (MonitoredResourceDescriptor element :
+   *       metricServiceClient.listMonitoredResourceDescriptors(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListMonitoredResourceDescriptorsPagedResponse listMonitoredResourceDescriptors(
+      String name) {
+    ListMonitoredResourceDescriptorsRequest request =
+<span class="fc" id="L306">        ListMonitoredResourceDescriptorsRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L307">    return listMonitoredResourceDescriptors(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists monitored resource descriptors that match a filter. This method does not require a
+   * Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ListMonitoredResourceDescriptorsRequest request =
+   *       ListMonitoredResourceDescriptorsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (MonitoredResourceDescriptor element :
+   *       metricServiceClient.listMonitoredResourceDescriptors(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListMonitoredResourceDescriptorsPagedResponse listMonitoredResourceDescriptors(
+      ListMonitoredResourceDescriptorsRequest request) {
+<span class="fc" id="L340">    return listMonitoredResourceDescriptorsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists monitored resource descriptors that match a filter. This method does not require a
+   * Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ListMonitoredResourceDescriptorsRequest request =
+   *       ListMonitoredResourceDescriptorsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;MonitoredResourceDescriptor&gt; future =
+   *       metricServiceClient.listMonitoredResourceDescriptorsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (MonitoredResourceDescriptor element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          ListMonitoredResourceDescriptorsRequest, ListMonitoredResourceDescriptorsPagedResponse&gt;
+      listMonitoredResourceDescriptorsPagedCallable() {
+<span class="fc" id="L373">    return stub.listMonitoredResourceDescriptorsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists monitored resource descriptors that match a filter. This method does not require a
+   * Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ListMonitoredResourceDescriptorsRequest request =
+   *       ListMonitoredResourceDescriptorsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListMonitoredResourceDescriptorsResponse response =
+   *         metricServiceClient.listMonitoredResourceDescriptorsCallable().call(request);
+   *     for (MonitoredResourceDescriptor element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;
+          ListMonitoredResourceDescriptorsRequest, ListMonitoredResourceDescriptorsResponse&gt;
+      listMonitoredResourceDescriptorsCallable() {
+<span class="nc" id="L413">    return stub.listMonitoredResourceDescriptorsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single monitored resource descriptor. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   MonitoredResourceDescriptorName name =
+   *       MonitoredResourceDescriptorName.ofProjectMonitoredResourceDescriptorName(
+   *           &quot;[PROJECT]&quot;, &quot;[MONITORED_RESOURCE_DESCRIPTOR]&quot;);
+   *   MonitoredResourceDescriptor response =
+   *       metricServiceClient.getMonitoredResourceDescriptor(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The monitored resource descriptor to get. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/monitoredResourceDescriptors/[RESOURCE_TYPE]
+   *     &lt;p&gt;The `[RESOURCE_TYPE]` is a predefined type, such as `cloudsql_database`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final MonitoredResourceDescriptor getMonitoredResourceDescriptor(
+      MonitoredResourceDescriptorName name) {
+    GetMonitoredResourceDescriptorRequest request =
+<span class="fc" id="L442">        GetMonitoredResourceDescriptorRequest.newBuilder()</span>
+<span class="pc bpc" id="L443" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L444">            .build();</span>
+<span class="fc" id="L445">    return getMonitoredResourceDescriptor(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single monitored resource descriptor. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   String name =
+   *       MonitoredResourceDescriptorName.ofProjectMonitoredResourceDescriptorName(
+   *               &quot;[PROJECT]&quot;, &quot;[MONITORED_RESOURCE_DESCRIPTOR]&quot;)
+   *           .toString();
+   *   MonitoredResourceDescriptor response =
+   *       metricServiceClient.getMonitoredResourceDescriptor(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The monitored resource descriptor to get. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/monitoredResourceDescriptors/[RESOURCE_TYPE]
+   *     &lt;p&gt;The `[RESOURCE_TYPE]` is a predefined type, such as `cloudsql_database`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final MonitoredResourceDescriptor getMonitoredResourceDescriptor(String name) {
+    GetMonitoredResourceDescriptorRequest request =
+<span class="fc" id="L474">        GetMonitoredResourceDescriptorRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L475">    return getMonitoredResourceDescriptor(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single monitored resource descriptor. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   GetMonitoredResourceDescriptorRequest request =
+   *       GetMonitoredResourceDescriptorRequest.newBuilder()
+   *           .setName(
+   *               MonitoredResourceDescriptorName.ofProjectMonitoredResourceDescriptorName(
+   *                       &quot;[PROJECT]&quot;, &quot;[MONITORED_RESOURCE_DESCRIPTOR]&quot;)
+   *                   .toString())
+   *           .build();
+   *   MonitoredResourceDescriptor response =
+   *       metricServiceClient.getMonitoredResourceDescriptor(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final MonitoredResourceDescriptor getMonitoredResourceDescriptor(
+      GetMonitoredResourceDescriptorRequest request) {
+<span class="fc" id="L505">    return getMonitoredResourceDescriptorCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single monitored resource descriptor. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   GetMonitoredResourceDescriptorRequest request =
+   *       GetMonitoredResourceDescriptorRequest.newBuilder()
+   *           .setName(
+   *               MonitoredResourceDescriptorName.ofProjectMonitoredResourceDescriptorName(
+   *                       &quot;[PROJECT]&quot;, &quot;[MONITORED_RESOURCE_DESCRIPTOR]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;MonitoredResourceDescriptor&gt; future =
+   *       metricServiceClient.getMonitoredResourceDescriptorCallable().futureCall(request);
+   *   // Do something.
+   *   MonitoredResourceDescriptor response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetMonitoredResourceDescriptorRequest, MonitoredResourceDescriptor&gt;
+      getMonitoredResourceDescriptorCallable() {
+<span class="fc" id="L534">    return stub.getMonitoredResourceDescriptorCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists metric descriptors that match a filter. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ResourceName name = ResourceName.of(&quot;[FOLDER]&quot;);
+   *   for (MetricDescriptor element :
+   *       metricServiceClient.listMetricDescriptors(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListMetricDescriptorsPagedResponse listMetricDescriptors(ResourceName name) {
+    ListMetricDescriptorsRequest request =
+<span class="fc" id="L562">        ListMetricDescriptorsRequest.newBuilder()</span>
+<span class="pc bpc" id="L563" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L564">            .build();</span>
+<span class="fc" id="L565">    return listMetricDescriptors(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists metric descriptors that match a filter. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   OrganizationName name = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   for (MetricDescriptor element :
+   *       metricServiceClient.listMetricDescriptors(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListMetricDescriptorsPagedResponse listMetricDescriptors(OrganizationName name) {
+    ListMetricDescriptorsRequest request =
+<span class="fc" id="L593">        ListMetricDescriptorsRequest.newBuilder()</span>
+<span class="pc bpc" id="L594" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L595">            .build();</span>
+<span class="fc" id="L596">    return listMetricDescriptors(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists metric descriptors that match a filter. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ProjectName name = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   for (MetricDescriptor element :
+   *       metricServiceClient.listMetricDescriptors(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListMetricDescriptorsPagedResponse listMetricDescriptors(ProjectName name) {
+    ListMetricDescriptorsRequest request =
+<span class="fc" id="L624">        ListMetricDescriptorsRequest.newBuilder()</span>
+<span class="pc bpc" id="L625" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L626">            .build();</span>
+<span class="fc" id="L627">    return listMetricDescriptors(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists metric descriptors that match a filter. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   String name = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   for (MetricDescriptor element :
+   *       metricServiceClient.listMetricDescriptors(name).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListMetricDescriptorsPagedResponse listMetricDescriptors(String name) {
+    ListMetricDescriptorsRequest request =
+<span class="fc" id="L655">        ListMetricDescriptorsRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L656">    return listMetricDescriptors(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists metric descriptors that match a filter. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ListMetricDescriptorsRequest request =
+   *       ListMetricDescriptorsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (MetricDescriptor element :
+   *       metricServiceClient.listMetricDescriptors(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListMetricDescriptorsPagedResponse listMetricDescriptors(
+      ListMetricDescriptorsRequest request) {
+<span class="fc" id="L688">    return listMetricDescriptorsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists metric descriptors that match a filter. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ListMetricDescriptorsRequest request =
+   *       ListMetricDescriptorsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;MetricDescriptor&gt; future =
+   *       metricServiceClient.listMetricDescriptorsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (MetricDescriptor element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListMetricDescriptorsRequest, ListMetricDescriptorsPagedResponse&gt;
+      listMetricDescriptorsPagedCallable() {
+<span class="fc" id="L719">    return stub.listMetricDescriptorsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists metric descriptors that match a filter. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ListMetricDescriptorsRequest request =
+   *       ListMetricDescriptorsRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListMetricDescriptorsResponse response =
+   *         metricServiceClient.listMetricDescriptorsCallable().call(request);
+   *     for (MetricDescriptor element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListMetricDescriptorsRequest, ListMetricDescriptorsResponse&gt;
+      listMetricDescriptorsCallable() {
+<span class="nc" id="L757">    return stub.listMetricDescriptorsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single metric descriptor. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   MetricDescriptorName name =
+   *       MetricDescriptorName.ofProjectMetricDescriptorName(&quot;[PROJECT]&quot;, &quot;[METRIC_DESCRIPTOR]&quot;);
+   *   MetricDescriptor response = metricServiceClient.getMetricDescriptor(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The metric descriptor on which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/metricDescriptors/[METRIC_ID]
+   *     &lt;p&gt;An example value of `[METRIC_ID]` is
+   *     `&quot;compute.googleapis.com/instance/disk/read_bytes_count&quot;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final MetricDescriptor getMetricDescriptor(MetricDescriptorName name) {
+    GetMetricDescriptorRequest request =
+<span class="fc" id="L784">        GetMetricDescriptorRequest.newBuilder()</span>
+<span class="pc bpc" id="L785" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L786">            .build();</span>
+<span class="fc" id="L787">    return getMetricDescriptor(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single metric descriptor. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   String name =
+   *       MetricDescriptorName.ofProjectMetricDescriptorName(&quot;[PROJECT]&quot;, &quot;[METRIC_DESCRIPTOR]&quot;)
+   *           .toString();
+   *   MetricDescriptor response = metricServiceClient.getMetricDescriptor(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The metric descriptor on which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/metricDescriptors/[METRIC_ID]
+   *     &lt;p&gt;An example value of `[METRIC_ID]` is
+   *     `&quot;compute.googleapis.com/instance/disk/read_bytes_count&quot;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final MetricDescriptor getMetricDescriptor(String name) {
+    GetMetricDescriptorRequest request =
+<span class="fc" id="L815">        GetMetricDescriptorRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L816">    return getMetricDescriptor(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single metric descriptor. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   GetMetricDescriptorRequest request =
+   *       GetMetricDescriptorRequest.newBuilder()
+   *           .setName(
+   *               MetricDescriptorName.ofProjectMetricDescriptorName(
+   *                       &quot;[PROJECT]&quot;, &quot;[METRIC_DESCRIPTOR]&quot;)
+   *                   .toString())
+   *           .build();
+   *   MetricDescriptor response = metricServiceClient.getMetricDescriptor(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final MetricDescriptor getMetricDescriptor(GetMetricDescriptorRequest request) {
+<span class="fc" id="L844">    return getMetricDescriptorCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a single metric descriptor. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   GetMetricDescriptorRequest request =
+   *       GetMetricDescriptorRequest.newBuilder()
+   *           .setName(
+   *               MetricDescriptorName.ofProjectMetricDescriptorName(
+   *                       &quot;[PROJECT]&quot;, &quot;[METRIC_DESCRIPTOR]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;MetricDescriptor&gt; future =
+   *       metricServiceClient.getMetricDescriptorCallable().futureCall(request);
+   *   // Do something.
+   *   MetricDescriptor response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetMetricDescriptorRequest, MetricDescriptor&gt;
+      getMetricDescriptorCallable() {
+<span class="fc" id="L873">    return stub.getMetricDescriptorCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new metric descriptor. The creation is executed asynchronously and callers may check
+   * the returned operation to track its progress. User-created metric descriptors define [custom
+   * metrics](https://cloud.google.com/monitoring/custom-metrics).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ResourceName name = ResourceName.of(&quot;[FOLDER]&quot;);
+   *   MetricDescriptor metricDescriptor = MetricDescriptor.newBuilder().build();
+   *   MetricDescriptor response =
+   *       metricServiceClient.createMetricDescriptor(name, metricDescriptor);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is: 4 projects/[PROJECT_ID_OR_NUMBER]
+   * @param metricDescriptor Required. The new [custom
+   *     metric](https://cloud.google.com/monitoring/custom-metrics) descriptor.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final MetricDescriptor createMetricDescriptor(
+      ResourceName name, MetricDescriptor metricDescriptor) {
+    CreateMetricDescriptorRequest request =
+<span class="fc" id="L904">        CreateMetricDescriptorRequest.newBuilder()</span>
+<span class="pc bpc" id="L905" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L906">            .setMetricDescriptor(metricDescriptor)</span>
+<span class="fc" id="L907">            .build();</span>
+<span class="fc" id="L908">    return createMetricDescriptor(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new metric descriptor. The creation is executed asynchronously and callers may check
+   * the returned operation to track its progress. User-created metric descriptors define [custom
+   * metrics](https://cloud.google.com/monitoring/custom-metrics).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   OrganizationName name = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   MetricDescriptor metricDescriptor = MetricDescriptor.newBuilder().build();
+   *   MetricDescriptor response =
+   *       metricServiceClient.createMetricDescriptor(name, metricDescriptor);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is: 4 projects/[PROJECT_ID_OR_NUMBER]
+   * @param metricDescriptor Required. The new [custom
+   *     metric](https://cloud.google.com/monitoring/custom-metrics) descriptor.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final MetricDescriptor createMetricDescriptor(
+      OrganizationName name, MetricDescriptor metricDescriptor) {
+    CreateMetricDescriptorRequest request =
+<span class="fc" id="L939">        CreateMetricDescriptorRequest.newBuilder()</span>
+<span class="pc bpc" id="L940" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L941">            .setMetricDescriptor(metricDescriptor)</span>
+<span class="fc" id="L942">            .build();</span>
+<span class="fc" id="L943">    return createMetricDescriptor(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new metric descriptor. The creation is executed asynchronously and callers may check
+   * the returned operation to track its progress. User-created metric descriptors define [custom
+   * metrics](https://cloud.google.com/monitoring/custom-metrics).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ProjectName name = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   MetricDescriptor metricDescriptor = MetricDescriptor.newBuilder().build();
+   *   MetricDescriptor response =
+   *       metricServiceClient.createMetricDescriptor(name, metricDescriptor);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is: 4 projects/[PROJECT_ID_OR_NUMBER]
+   * @param metricDescriptor Required. The new [custom
+   *     metric](https://cloud.google.com/monitoring/custom-metrics) descriptor.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final MetricDescriptor createMetricDescriptor(
+      ProjectName name, MetricDescriptor metricDescriptor) {
+    CreateMetricDescriptorRequest request =
+<span class="fc" id="L974">        CreateMetricDescriptorRequest.newBuilder()</span>
+<span class="pc bpc" id="L975" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L976">            .setMetricDescriptor(metricDescriptor)</span>
+<span class="fc" id="L977">            .build();</span>
+<span class="fc" id="L978">    return createMetricDescriptor(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new metric descriptor. The creation is executed asynchronously and callers may check
+   * the returned operation to track its progress. User-created metric descriptors define [custom
+   * metrics](https://cloud.google.com/monitoring/custom-metrics).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   String name = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   MetricDescriptor metricDescriptor = MetricDescriptor.newBuilder().build();
+   *   MetricDescriptor response =
+   *       metricServiceClient.createMetricDescriptor(name, metricDescriptor);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is: 4 projects/[PROJECT_ID_OR_NUMBER]
+   * @param metricDescriptor Required. The new [custom
+   *     metric](https://cloud.google.com/monitoring/custom-metrics) descriptor.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final MetricDescriptor createMetricDescriptor(
+      String name, MetricDescriptor metricDescriptor) {
+    CreateMetricDescriptorRequest request =
+<span class="fc" id="L1009">        CreateMetricDescriptorRequest.newBuilder()</span>
+<span class="fc" id="L1010">            .setName(name)</span>
+<span class="fc" id="L1011">            .setMetricDescriptor(metricDescriptor)</span>
+<span class="fc" id="L1012">            .build();</span>
+<span class="fc" id="L1013">    return createMetricDescriptor(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new metric descriptor. The creation is executed asynchronously and callers may check
+   * the returned operation to track its progress. User-created metric descriptors define [custom
+   * metrics](https://cloud.google.com/monitoring/custom-metrics).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   CreateMetricDescriptorRequest request =
+   *       CreateMetricDescriptorRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setMetricDescriptor(MetricDescriptor.newBuilder().build())
+   *           .build();
+   *   MetricDescriptor response = metricServiceClient.createMetricDescriptor(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final MetricDescriptor createMetricDescriptor(CreateMetricDescriptorRequest request) {
+<span class="fc" id="L1041">    return createMetricDescriptorCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new metric descriptor. The creation is executed asynchronously and callers may check
+   * the returned operation to track its progress. User-created metric descriptors define [custom
+   * metrics](https://cloud.google.com/monitoring/custom-metrics).
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   CreateMetricDescriptorRequest request =
+   *       CreateMetricDescriptorRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setMetricDescriptor(MetricDescriptor.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;MetricDescriptor&gt; future =
+   *       metricServiceClient.createMetricDescriptorCallable().futureCall(request);
+   *   // Do something.
+   *   MetricDescriptor response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateMetricDescriptorRequest, MetricDescriptor&gt;
+      createMetricDescriptorCallable() {
+<span class="fc" id="L1070">    return stub.createMetricDescriptorCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a metric descriptor. Only user-created [custom
+   * metrics](https://cloud.google.com/monitoring/custom-metrics) can be deleted.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   MetricDescriptorName name =
+   *       MetricDescriptorName.ofProjectMetricDescriptorName(&quot;[PROJECT]&quot;, &quot;[METRIC_DESCRIPTOR]&quot;);
+   *   metricServiceClient.deleteMetricDescriptor(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The metric descriptor on which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/metricDescriptors/[METRIC_ID]
+   *     &lt;p&gt;An example of `[METRIC_ID]` is: `&quot;custom.googleapis.com/my_test_metric&quot;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteMetricDescriptor(MetricDescriptorName name) {
+    DeleteMetricDescriptorRequest request =
+<span class="fc" id="L1097">        DeleteMetricDescriptorRequest.newBuilder()</span>
+<span class="pc bpc" id="L1098" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1099">            .build();</span>
+<span class="fc" id="L1100">    deleteMetricDescriptor(request);</span>
+<span class="fc" id="L1101">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a metric descriptor. Only user-created [custom
+   * metrics](https://cloud.google.com/monitoring/custom-metrics) can be deleted.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   String name =
+   *       MetricDescriptorName.ofProjectMetricDescriptorName(&quot;[PROJECT]&quot;, &quot;[METRIC_DESCRIPTOR]&quot;)
+   *           .toString();
+   *   metricServiceClient.deleteMetricDescriptor(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The metric descriptor on which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]/metricDescriptors/[METRIC_ID]
+   *     &lt;p&gt;An example of `[METRIC_ID]` is: `&quot;custom.googleapis.com/my_test_metric&quot;`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteMetricDescriptor(String name) {
+    DeleteMetricDescriptorRequest request =
+<span class="fc" id="L1128">        DeleteMetricDescriptorRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1129">    deleteMetricDescriptor(request);</span>
+<span class="fc" id="L1130">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a metric descriptor. Only user-created [custom
+   * metrics](https://cloud.google.com/monitoring/custom-metrics) can be deleted.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   DeleteMetricDescriptorRequest request =
+   *       DeleteMetricDescriptorRequest.newBuilder()
+   *           .setName(
+   *               MetricDescriptorName.ofProjectMetricDescriptorName(
+   *                       &quot;[PROJECT]&quot;, &quot;[METRIC_DESCRIPTOR]&quot;)
+   *                   .toString())
+   *           .build();
+   *   metricServiceClient.deleteMetricDescriptor(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteMetricDescriptor(DeleteMetricDescriptorRequest request) {
+<span class="fc" id="L1158">    deleteMetricDescriptorCallable().call(request);</span>
+<span class="fc" id="L1159">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a metric descriptor. Only user-created [custom
+   * metrics](https://cloud.google.com/monitoring/custom-metrics) can be deleted.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   DeleteMetricDescriptorRequest request =
+   *       DeleteMetricDescriptorRequest.newBuilder()
+   *           .setName(
+   *               MetricDescriptorName.ofProjectMetricDescriptorName(
+   *                       &quot;[PROJECT]&quot;, &quot;[METRIC_DESCRIPTOR]&quot;)
+   *                   .toString())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       metricServiceClient.deleteMetricDescriptorCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteMetricDescriptorRequest, Empty&gt;
+      deleteMetricDescriptorCallable() {
+<span class="fc" id="L1188">    return stub.deleteMetricDescriptorCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists time series that match a filter. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ResourceName name = ResourceName.of(&quot;[FOLDER]&quot;);
+   *   String filter = &quot;filter-1274492040&quot;;
+   *   TimeInterval interval = TimeInterval.newBuilder().build();
+   *   ListTimeSeriesRequest.TimeSeriesView view = ListTimeSeriesRequest.TimeSeriesView.forNumber(0);
+   *   for (TimeSeries element :
+   *       metricServiceClient.listTimeSeries(name, filter, interval, view).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name),
+   *     organization or folder on which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER] organizations/[ORGANIZATION_ID] folders/[FOLDER_ID]
+   * @param filter Required. A [monitoring
+   *     filter](https://cloud.google.com/monitoring/api/v3/filters) that specifies which time
+   *     series should be returned. The filter must specify a single metric type, and can
+   *     additionally specify metric labels and other information. For example:
+   *     &lt;p&gt;metric.type = &quot;compute.googleapis.com/instance/cpu/usage_time&quot; AND
+   *     metric.labels.instance_name = &quot;my-instance-name&quot;
+   * @param interval Required. The time interval for which results should be returned. Only time
+   *     series that contain data points in the specified interval are included in the response.
+   * @param view Required. Specifies which information is returned about the time series.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTimeSeriesPagedResponse listTimeSeries(
+      ResourceName name,
+      String filter,
+      TimeInterval interval,
+      ListTimeSeriesRequest.TimeSeriesView view) {
+    ListTimeSeriesRequest request =
+<span class="fc" id="L1232">        ListTimeSeriesRequest.newBuilder()</span>
+<span class="pc bpc" id="L1233" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1234">            .setFilter(filter)</span>
+<span class="fc" id="L1235">            .setInterval(interval)</span>
+<span class="fc" id="L1236">            .setView(view)</span>
+<span class="fc" id="L1237">            .build();</span>
+<span class="fc" id="L1238">    return listTimeSeries(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists time series that match a filter. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   OrganizationName name = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   String filter = &quot;filter-1274492040&quot;;
+   *   TimeInterval interval = TimeInterval.newBuilder().build();
+   *   ListTimeSeriesRequest.TimeSeriesView view = ListTimeSeriesRequest.TimeSeriesView.forNumber(0);
+   *   for (TimeSeries element :
+   *       metricServiceClient.listTimeSeries(name, filter, interval, view).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name),
+   *     organization or folder on which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER] organizations/[ORGANIZATION_ID] folders/[FOLDER_ID]
+   * @param filter Required. A [monitoring
+   *     filter](https://cloud.google.com/monitoring/api/v3/filters) that specifies which time
+   *     series should be returned. The filter must specify a single metric type, and can
+   *     additionally specify metric labels and other information. For example:
+   *     &lt;p&gt;metric.type = &quot;compute.googleapis.com/instance/cpu/usage_time&quot; AND
+   *     metric.labels.instance_name = &quot;my-instance-name&quot;
+   * @param interval Required. The time interval for which results should be returned. Only time
+   *     series that contain data points in the specified interval are included in the response.
+   * @param view Required. Specifies which information is returned about the time series.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTimeSeriesPagedResponse listTimeSeries(
+      OrganizationName name,
+      String filter,
+      TimeInterval interval,
+      ListTimeSeriesRequest.TimeSeriesView view) {
+    ListTimeSeriesRequest request =
+<span class="fc" id="L1282">        ListTimeSeriesRequest.newBuilder()</span>
+<span class="pc bpc" id="L1283" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1284">            .setFilter(filter)</span>
+<span class="fc" id="L1285">            .setInterval(interval)</span>
+<span class="fc" id="L1286">            .setView(view)</span>
+<span class="fc" id="L1287">            .build();</span>
+<span class="fc" id="L1288">    return listTimeSeries(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists time series that match a filter. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ProjectName name = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   String filter = &quot;filter-1274492040&quot;;
+   *   TimeInterval interval = TimeInterval.newBuilder().build();
+   *   ListTimeSeriesRequest.TimeSeriesView view = ListTimeSeriesRequest.TimeSeriesView.forNumber(0);
+   *   for (TimeSeries element :
+   *       metricServiceClient.listTimeSeries(name, filter, interval, view).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name),
+   *     organization or folder on which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER] organizations/[ORGANIZATION_ID] folders/[FOLDER_ID]
+   * @param filter Required. A [monitoring
+   *     filter](https://cloud.google.com/monitoring/api/v3/filters) that specifies which time
+   *     series should be returned. The filter must specify a single metric type, and can
+   *     additionally specify metric labels and other information. For example:
+   *     &lt;p&gt;metric.type = &quot;compute.googleapis.com/instance/cpu/usage_time&quot; AND
+   *     metric.labels.instance_name = &quot;my-instance-name&quot;
+   * @param interval Required. The time interval for which results should be returned. Only time
+   *     series that contain data points in the specified interval are included in the response.
+   * @param view Required. Specifies which information is returned about the time series.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTimeSeriesPagedResponse listTimeSeries(
+      ProjectName name,
+      String filter,
+      TimeInterval interval,
+      ListTimeSeriesRequest.TimeSeriesView view) {
+    ListTimeSeriesRequest request =
+<span class="fc" id="L1332">        ListTimeSeriesRequest.newBuilder()</span>
+<span class="pc bpc" id="L1333" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1334">            .setFilter(filter)</span>
+<span class="fc" id="L1335">            .setInterval(interval)</span>
+<span class="fc" id="L1336">            .setView(view)</span>
+<span class="fc" id="L1337">            .build();</span>
+<span class="fc" id="L1338">    return listTimeSeries(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists time series that match a filter. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   String name = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   String filter = &quot;filter-1274492040&quot;;
+   *   TimeInterval interval = TimeInterval.newBuilder().build();
+   *   ListTimeSeriesRequest.TimeSeriesView view = ListTimeSeriesRequest.TimeSeriesView.forNumber(0);
+   *   for (TimeSeries element :
+   *       metricServiceClient.listTimeSeries(name, filter, interval, view).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name),
+   *     organization or folder on which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER] organizations/[ORGANIZATION_ID] folders/[FOLDER_ID]
+   * @param filter Required. A [monitoring
+   *     filter](https://cloud.google.com/monitoring/api/v3/filters) that specifies which time
+   *     series should be returned. The filter must specify a single metric type, and can
+   *     additionally specify metric labels and other information. For example:
+   *     &lt;p&gt;metric.type = &quot;compute.googleapis.com/instance/cpu/usage_time&quot; AND
+   *     metric.labels.instance_name = &quot;my-instance-name&quot;
+   * @param interval Required. The time interval for which results should be returned. Only time
+   *     series that contain data points in the specified interval are included in the response.
+   * @param view Required. Specifies which information is returned about the time series.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTimeSeriesPagedResponse listTimeSeries(
+      String name,
+      String filter,
+      TimeInterval interval,
+      ListTimeSeriesRequest.TimeSeriesView view) {
+    ListTimeSeriesRequest request =
+<span class="fc" id="L1382">        ListTimeSeriesRequest.newBuilder()</span>
+<span class="fc" id="L1383">            .setName(name)</span>
+<span class="fc" id="L1384">            .setFilter(filter)</span>
+<span class="fc" id="L1385">            .setInterval(interval)</span>
+<span class="fc" id="L1386">            .setView(view)</span>
+<span class="fc" id="L1387">            .build();</span>
+<span class="fc" id="L1388">    return listTimeSeries(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists time series that match a filter. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ListTimeSeriesRequest request =
+   *       ListTimeSeriesRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setInterval(TimeInterval.newBuilder().build())
+   *           .setAggregation(Aggregation.newBuilder().build())
+   *           .setSecondaryAggregation(Aggregation.newBuilder().build())
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   for (TimeSeries element : metricServiceClient.listTimeSeries(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListTimeSeriesPagedResponse listTimeSeries(ListTimeSeriesRequest request) {
+<span class="fc" id="L1422">    return listTimeSeriesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists time series that match a filter. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ListTimeSeriesRequest request =
+   *       ListTimeSeriesRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setInterval(TimeInterval.newBuilder().build())
+   *           .setAggregation(Aggregation.newBuilder().build())
+   *           .setSecondaryAggregation(Aggregation.newBuilder().build())
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   ApiFuture&lt;TimeSeries&gt; future =
+   *       metricServiceClient.listTimeSeriesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (TimeSeries element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTimeSeriesRequest, ListTimeSeriesPagedResponse&gt;
+      listTimeSeriesPagedCallable() {
+<span class="fc" id="L1457">    return stub.listTimeSeriesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists time series that match a filter. This method does not require a Workspace.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ListTimeSeriesRequest request =
+   *       ListTimeSeriesRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setInterval(TimeInterval.newBuilder().build())
+   *           .setAggregation(Aggregation.newBuilder().build())
+   *           .setSecondaryAggregation(Aggregation.newBuilder().build())
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListTimeSeriesResponse response =
+   *         metricServiceClient.listTimeSeriesCallable().call(request);
+   *     for (TimeSeries element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListTimeSeriesRequest, ListTimeSeriesResponse&gt;
+      listTimeSeriesCallable() {
+<span class="nc" id="L1499">    return stub.listTimeSeriesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates or adds data to one or more time series. The response is empty if all time series in
+   * the request were written. If any time series could not be written, a corresponding failure
+   * message is included in the error response.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ProjectName name = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   List&lt;TimeSeries&gt; timeSeries = new ArrayList&lt;&gt;();
+   *   metricServiceClient.createTimeSeries(name, timeSeries);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @param timeSeries Required. The new data to be added to a list of time series. Adds at most one
+   *     data point to each of several time series. The new data point must be more recent than any
+   *     other point in its time series. Each `TimeSeries` value must fully specify a unique time
+   *     series by supplying all label values for the metric and the monitored resource.
+   *     &lt;p&gt;The maximum number of `TimeSeries` objects per `Create` request is 200.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void createTimeSeries(ProjectName name, List&lt;TimeSeries&gt; timeSeries) {
+    CreateTimeSeriesRequest request =
+<span class="fc" id="L1532">        CreateTimeSeriesRequest.newBuilder()</span>
+<span class="pc bpc" id="L1533" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1534">            .addAllTimeSeries(timeSeries)</span>
+<span class="fc" id="L1535">            .build();</span>
+<span class="fc" id="L1536">    createTimeSeries(request);</span>
+<span class="fc" id="L1537">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates or adds data to one or more time series. The response is empty if all time series in
+   * the request were written. If any time series could not be written, a corresponding failure
+   * message is included in the error response.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   String name = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   List&lt;TimeSeries&gt; timeSeries = new ArrayList&lt;&gt;();
+   *   metricServiceClient.createTimeSeries(name, timeSeries);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @param timeSeries Required. The new data to be added to a list of time series. Adds at most one
+   *     data point to each of several time series. The new data point must be more recent than any
+   *     other point in its time series. Each `TimeSeries` value must fully specify a unique time
+   *     series by supplying all label values for the metric and the monitored resource.
+   *     &lt;p&gt;The maximum number of `TimeSeries` objects per `Create` request is 200.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void createTimeSeries(String name, List&lt;TimeSeries&gt; timeSeries) {
+    CreateTimeSeriesRequest request =
+<span class="fc" id="L1569">        CreateTimeSeriesRequest.newBuilder().setName(name).addAllTimeSeries(timeSeries).build();</span>
+<span class="fc" id="L1570">    createTimeSeries(request);</span>
+<span class="fc" id="L1571">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates or adds data to one or more time series. The response is empty if all time series in
+   * the request were written. If any time series could not be written, a corresponding failure
+   * message is included in the error response.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   CreateTimeSeriesRequest request =
+   *       CreateTimeSeriesRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .addAllTimeSeries(new ArrayList&lt;TimeSeries&gt;())
+   *           .build();
+   *   metricServiceClient.createTimeSeries(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void createTimeSeries(CreateTimeSeriesRequest request) {
+<span class="fc" id="L1598">    createTimeSeriesCallable().call(request);</span>
+<span class="fc" id="L1599">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates or adds data to one or more time series. The response is empty if all time series in
+   * the request were written. If any time series could not be written, a corresponding failure
+   * message is included in the error response.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   CreateTimeSeriesRequest request =
+   *       CreateTimeSeriesRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .addAllTimeSeries(new ArrayList&lt;TimeSeries&gt;())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future = metricServiceClient.createTimeSeriesCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateTimeSeriesRequest, Empty&gt; createTimeSeriesCallable() {
+<span class="fc" id="L1625">    return stub.createTimeSeriesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates or adds data to one or more service time series. A service time series is a time series
+   * for a metric from a Google Cloud service. The response is empty if all time series in the
+   * request were written. If any time series could not be written, a corresponding failure message
+   * is included in the error response. This endpoint rejects writes to user-defined metrics. This
+   * method is only for use by Google Cloud services. Use
+   * [projects.timeSeries.create][google.monitoring.v3.MetricService.CreateTimeSeries] instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   ProjectName name = ProjectName.of(&quot;[PROJECT]&quot;);
+   *   List&lt;TimeSeries&gt; timeSeries = new ArrayList&lt;&gt;();
+   *   metricServiceClient.createServiceTimeSeries(name, timeSeries);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @param timeSeries Required. The new data to be added to a list of time series. Adds at most one
+   *     data point to each of several time series. The new data point must be more recent than any
+   *     other point in its time series. Each `TimeSeries` value must fully specify a unique time
+   *     series by supplying all label values for the metric and the monitored resource.
+   *     &lt;p&gt;The maximum number of `TimeSeries` objects per `Create` request is 200.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void createServiceTimeSeries(ProjectName name, List&lt;TimeSeries&gt; timeSeries) {
+    CreateTimeSeriesRequest request =
+<span class="fc" id="L1661">        CreateTimeSeriesRequest.newBuilder()</span>
+<span class="pc bpc" id="L1662" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1663">            .addAllTimeSeries(timeSeries)</span>
+<span class="fc" id="L1664">            .build();</span>
+<span class="fc" id="L1665">    createServiceTimeSeries(request);</span>
+<span class="fc" id="L1666">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates or adds data to one or more service time series. A service time series is a time series
+   * for a metric from a Google Cloud service. The response is empty if all time series in the
+   * request were written. If any time series could not be written, a corresponding failure message
+   * is included in the error response. This endpoint rejects writes to user-defined metrics. This
+   * method is only for use by Google Cloud services. Use
+   * [projects.timeSeries.create][google.monitoring.v3.MetricService.CreateTimeSeries] instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   String name = ProjectName.of(&quot;[PROJECT]&quot;).toString();
+   *   List&lt;TimeSeries&gt; timeSeries = new ArrayList&lt;&gt;();
+   *   metricServiceClient.createServiceTimeSeries(name, timeSeries);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The [project](https://cloud.google.com/monitoring/api/v3#project_name) on
+   *     which to execute the request. The format is:
+   *     &lt;p&gt;projects/[PROJECT_ID_OR_NUMBER]
+   * @param timeSeries Required. The new data to be added to a list of time series. Adds at most one
+   *     data point to each of several time series. The new data point must be more recent than any
+   *     other point in its time series. Each `TimeSeries` value must fully specify a unique time
+   *     series by supplying all label values for the metric and the monitored resource.
+   *     &lt;p&gt;The maximum number of `TimeSeries` objects per `Create` request is 200.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void createServiceTimeSeries(String name, List&lt;TimeSeries&gt; timeSeries) {
+    CreateTimeSeriesRequest request =
+<span class="fc" id="L1701">        CreateTimeSeriesRequest.newBuilder().setName(name).addAllTimeSeries(timeSeries).build();</span>
+<span class="fc" id="L1702">    createServiceTimeSeries(request);</span>
+<span class="fc" id="L1703">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates or adds data to one or more service time series. A service time series is a time series
+   * for a metric from a Google Cloud service. The response is empty if all time series in the
+   * request were written. If any time series could not be written, a corresponding failure message
+   * is included in the error response. This endpoint rejects writes to user-defined metrics. This
+   * method is only for use by Google Cloud services. Use
+   * [projects.timeSeries.create][google.monitoring.v3.MetricService.CreateTimeSeries] instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   CreateTimeSeriesRequest request =
+   *       CreateTimeSeriesRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .addAllTimeSeries(new ArrayList&lt;TimeSeries&gt;())
+   *           .build();
+   *   metricServiceClient.createServiceTimeSeries(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void createServiceTimeSeries(CreateTimeSeriesRequest request) {
+<span class="fc" id="L1733">    createServiceTimeSeriesCallable().call(request);</span>
+<span class="fc" id="L1734">  }</span>
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates or adds data to one or more service time series. A service time series is a time series
+   * for a metric from a Google Cloud service. The response is empty if all time series in the
+   * request were written. If any time series could not be written, a corresponding failure message
+   * is included in the error response. This endpoint rejects writes to user-defined metrics. This
+   * method is only for use by Google Cloud services. Use
+   * [projects.timeSeries.create][google.monitoring.v3.MetricService.CreateTimeSeries] instead.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (MetricServiceClient metricServiceClient = MetricServiceClient.create()) {
+   *   CreateTimeSeriesRequest request =
+   *       CreateTimeSeriesRequest.newBuilder()
+   *           .setName(ProjectName.of(&quot;[PROJECT]&quot;).toString())
+   *           .addAllTimeSeries(new ArrayList&lt;TimeSeries&gt;())
+   *           .build();
+   *   ApiFuture&lt;Empty&gt; future =
+   *       metricServiceClient.createServiceTimeSeriesCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateTimeSeriesRequest, Empty&gt; createServiceTimeSeriesCallable() {
+<span class="fc" id="L1764">    return stub.createServiceTimeSeriesCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1769">    stub.close();</span>
+<span class="fc" id="L1770">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1774">    stub.shutdown();</span>
+<span class="nc" id="L1775">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1779">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1784">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1789">    stub.shutdownNow();</span>
+<span class="nc" id="L1790">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1794">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListMonitoredResourceDescriptorsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListMonitoredResourceDescriptorsRequest,
+          ListMonitoredResourceDescriptorsResponse,
+          MonitoredResourceDescriptor,
+          ListMonitoredResourceDescriptorsPage,
+          ListMonitoredResourceDescriptorsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListMonitoredResourceDescriptorsPagedResponse&gt; createAsync(
+        PageContext&lt;
+                ListMonitoredResourceDescriptorsRequest,
+                ListMonitoredResourceDescriptorsResponse,
+                MonitoredResourceDescriptor&gt;
+            context,
+        ApiFuture&lt;ListMonitoredResourceDescriptorsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListMonitoredResourceDescriptorsPage&gt; futurePage =
+<span class="fc" id="L1813">          ListMonitoredResourceDescriptorsPage.createEmptyPage()</span>
+<span class="fc" id="L1814">              .createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1815">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1817">          input -&gt; new ListMonitoredResourceDescriptorsPagedResponse(input),</span>
+<span class="fc" id="L1818">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListMonitoredResourceDescriptorsPagedResponse(
+        ListMonitoredResourceDescriptorsPage page) {
+<span class="fc" id="L1823">      super(page, ListMonitoredResourceDescriptorsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1824">    }</span>
+  }
+
+  public static class ListMonitoredResourceDescriptorsPage
+      extends AbstractPage&lt;
+          ListMonitoredResourceDescriptorsRequest,
+          ListMonitoredResourceDescriptorsResponse,
+          MonitoredResourceDescriptor,
+          ListMonitoredResourceDescriptorsPage&gt; {
+
+    private ListMonitoredResourceDescriptorsPage(
+        PageContext&lt;
+                ListMonitoredResourceDescriptorsRequest,
+                ListMonitoredResourceDescriptorsResponse,
+                MonitoredResourceDescriptor&gt;
+            context,
+        ListMonitoredResourceDescriptorsResponse response) {
+<span class="fc" id="L1841">      super(context, response);</span>
+<span class="fc" id="L1842">    }</span>
+
+    private static ListMonitoredResourceDescriptorsPage createEmptyPage() {
+<span class="fc" id="L1845">      return new ListMonitoredResourceDescriptorsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListMonitoredResourceDescriptorsPage createPage(
+        PageContext&lt;
+                ListMonitoredResourceDescriptorsRequest,
+                ListMonitoredResourceDescriptorsResponse,
+                MonitoredResourceDescriptor&gt;
+            context,
+        ListMonitoredResourceDescriptorsResponse response) {
+<span class="fc" id="L1856">      return new ListMonitoredResourceDescriptorsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListMonitoredResourceDescriptorsPage&gt; createPageAsync(
+        PageContext&lt;
+                ListMonitoredResourceDescriptorsRequest,
+                ListMonitoredResourceDescriptorsResponse,
+                MonitoredResourceDescriptor&gt;
+            context,
+        ApiFuture&lt;ListMonitoredResourceDescriptorsResponse&gt; futureResponse) {
+<span class="fc" id="L1867">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListMonitoredResourceDescriptorsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListMonitoredResourceDescriptorsRequest,
+          ListMonitoredResourceDescriptorsResponse,
+          MonitoredResourceDescriptor,
+          ListMonitoredResourceDescriptorsPage,
+          ListMonitoredResourceDescriptorsFixedSizeCollection&gt; {
+
+    private ListMonitoredResourceDescriptorsFixedSizeCollection(
+        List&lt;ListMonitoredResourceDescriptorsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1881">      super(pages, collectionSize);</span>
+<span class="fc" id="L1882">    }</span>
+
+    private static ListMonitoredResourceDescriptorsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1885">      return new ListMonitoredResourceDescriptorsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListMonitoredResourceDescriptorsFixedSizeCollection createCollection(
+        List&lt;ListMonitoredResourceDescriptorsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1891">      return new ListMonitoredResourceDescriptorsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListMetricDescriptorsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListMetricDescriptorsRequest,
+          ListMetricDescriptorsResponse,
+          MetricDescriptor,
+          ListMetricDescriptorsPage,
+          ListMetricDescriptorsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListMetricDescriptorsPagedResponse&gt; createAsync(
+        PageContext&lt;ListMetricDescriptorsRequest, ListMetricDescriptorsResponse, MetricDescriptor&gt;
+            context,
+        ApiFuture&lt;ListMetricDescriptorsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListMetricDescriptorsPage&gt; futurePage =
+<span class="fc" id="L1908">          ListMetricDescriptorsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1909">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1911">          input -&gt; new ListMetricDescriptorsPagedResponse(input),</span>
+<span class="fc" id="L1912">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListMetricDescriptorsPagedResponse(ListMetricDescriptorsPage page) {
+<span class="fc" id="L1916">      super(page, ListMetricDescriptorsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1917">    }</span>
+  }
+
+  public static class ListMetricDescriptorsPage
+      extends AbstractPage&lt;
+          ListMetricDescriptorsRequest,
+          ListMetricDescriptorsResponse,
+          MetricDescriptor,
+          ListMetricDescriptorsPage&gt; {
+
+    private ListMetricDescriptorsPage(
+        PageContext&lt;ListMetricDescriptorsRequest, ListMetricDescriptorsResponse, MetricDescriptor&gt;
+            context,
+        ListMetricDescriptorsResponse response) {
+<span class="fc" id="L1931">      super(context, response);</span>
+<span class="fc" id="L1932">    }</span>
+
+    private static ListMetricDescriptorsPage createEmptyPage() {
+<span class="fc" id="L1935">      return new ListMetricDescriptorsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListMetricDescriptorsPage createPage(
+        PageContext&lt;ListMetricDescriptorsRequest, ListMetricDescriptorsResponse, MetricDescriptor&gt;
+            context,
+        ListMetricDescriptorsResponse response) {
+<span class="fc" id="L1943">      return new ListMetricDescriptorsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListMetricDescriptorsPage&gt; createPageAsync(
+        PageContext&lt;ListMetricDescriptorsRequest, ListMetricDescriptorsResponse, MetricDescriptor&gt;
+            context,
+        ApiFuture&lt;ListMetricDescriptorsResponse&gt; futureResponse) {
+<span class="fc" id="L1951">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListMetricDescriptorsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListMetricDescriptorsRequest,
+          ListMetricDescriptorsResponse,
+          MetricDescriptor,
+          ListMetricDescriptorsPage,
+          ListMetricDescriptorsFixedSizeCollection&gt; {
+
+    private ListMetricDescriptorsFixedSizeCollection(
+        List&lt;ListMetricDescriptorsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1965">      super(pages, collectionSize);</span>
+<span class="fc" id="L1966">    }</span>
+
+    private static ListMetricDescriptorsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1969">      return new ListMetricDescriptorsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListMetricDescriptorsFixedSizeCollection createCollection(
+        List&lt;ListMetricDescriptorsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1975">      return new ListMetricDescriptorsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListTimeSeriesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListTimeSeriesRequest,
+          ListTimeSeriesResponse,
+          TimeSeries,
+          ListTimeSeriesPage,
+          ListTimeSeriesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListTimeSeriesPagedResponse&gt; createAsync(
+        PageContext&lt;ListTimeSeriesRequest, ListTimeSeriesResponse, TimeSeries&gt; context,
+        ApiFuture&lt;ListTimeSeriesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListTimeSeriesPage&gt; futurePage =
+<span class="fc" id="L1991">          ListTimeSeriesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1992">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1994">          input -&gt; new ListTimeSeriesPagedResponse(input),</span>
+<span class="fc" id="L1995">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListTimeSeriesPagedResponse(ListTimeSeriesPage page) {
+<span class="fc" id="L1999">      super(page, ListTimeSeriesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2000">    }</span>
+  }
+
+  public static class ListTimeSeriesPage
+      extends AbstractPage&lt;
+          ListTimeSeriesRequest, ListTimeSeriesResponse, TimeSeries, ListTimeSeriesPage&gt; {
+
+    private ListTimeSeriesPage(
+        PageContext&lt;ListTimeSeriesRequest, ListTimeSeriesResponse, TimeSeries&gt; context,
+        ListTimeSeriesResponse response) {
+<span class="fc" id="L2010">      super(context, response);</span>
+<span class="fc" id="L2011">    }</span>
+
+    private static ListTimeSeriesPage createEmptyPage() {
+<span class="fc" id="L2014">      return new ListTimeSeriesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListTimeSeriesPage createPage(
+        PageContext&lt;ListTimeSeriesRequest, ListTimeSeriesResponse, TimeSeries&gt; context,
+        ListTimeSeriesResponse response) {
+<span class="fc" id="L2021">      return new ListTimeSeriesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListTimeSeriesPage&gt; createPageAsync(
+        PageContext&lt;ListTimeSeriesRequest, ListTimeSeriesResponse, TimeSeries&gt; context,
+        ApiFuture&lt;ListTimeSeriesResponse&gt; futureResponse) {
+<span class="fc" id="L2028">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListTimeSeriesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListTimeSeriesRequest,
+          ListTimeSeriesResponse,
+          TimeSeries,
+          ListTimeSeriesPage,
+          ListTimeSeriesFixedSizeCollection&gt; {
+
+    private ListTimeSeriesFixedSizeCollection(List&lt;ListTimeSeriesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2041">      super(pages, collectionSize);</span>
+<span class="fc" id="L2042">    }</span>
+
+    private static ListTimeSeriesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2045">      return new ListTimeSeriesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListTimeSeriesFixedSizeCollection createCollection(
+        List&lt;ListTimeSeriesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2051">      return new ListTimeSeriesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

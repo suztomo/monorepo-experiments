@@ -1,0 +1,1645 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DatasetServiceClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-aiplatform</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.aiplatform.v1beta1</a> &gt; <span class="el_source">DatasetServiceClient.java</span></div><h1>DatasetServiceClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2021 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.aiplatform.v1beta1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.aiplatform.v1beta1.stub.DatasetServiceStub;
+import com.google.cloud.aiplatform.v1beta1.stub.DatasetServiceStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import com.google.protobuf.FieldMask;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: The service that handles the CRUD of Vertex AI Dataset and its child
+ * resources.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+ *   DatasetName name = DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;);
+ *   Dataset response = datasetServiceClient.getDataset(name);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the DatasetServiceClient object to clean up resources such
+ * as threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of DatasetServiceSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * DatasetServiceSettings datasetServiceSettings =
+ *     DatasetServiceSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * DatasetServiceClient datasetServiceClient = DatasetServiceClient.create(datasetServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * DatasetServiceSettings datasetServiceSettings =
+ *     DatasetServiceSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * DatasetServiceClient datasetServiceClient = DatasetServiceClient.create(datasetServiceSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@BetaApi
+@Generated(&quot;by gapic-generator-java&quot;)
+public class DatasetServiceClient implements BackgroundResource {
+  private final DatasetServiceSettings settings;
+  private final DatasetServiceStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of DatasetServiceClient with default settings. */
+  public static final DatasetServiceClient create() throws IOException {
+<span class="nc" id="L112">    return create(DatasetServiceSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of DatasetServiceClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final DatasetServiceClient create(DatasetServiceSettings settings)
+      throws IOException {
+<span class="fc" id="L121">    return new DatasetServiceClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of DatasetServiceClient, using the given stub for making calls. This is
+   * for advanced usage - prefer using create(DatasetServiceSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final DatasetServiceClient create(DatasetServiceStub stub) {
+<span class="nc" id="L130">    return new DatasetServiceClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of DatasetServiceClient, using the given settings. This is protected so
+   * that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L138">  protected DatasetServiceClient(DatasetServiceSettings settings) throws IOException {</span>
+<span class="fc" id="L139">    this.settings = settings;</span>
+<span class="fc" id="L140">    this.stub = ((DatasetServiceStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L141">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L142">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L145">  protected DatasetServiceClient(DatasetServiceStub stub) {</span>
+<span class="nc" id="L146">    this.settings = null;</span>
+<span class="nc" id="L147">    this.stub = stub;</span>
+<span class="nc" id="L148">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L149">  }</span>
+
+  public final DatasetServiceSettings getSettings() {
+<span class="nc" id="L152">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public DatasetServiceStub getStub() {
+<span class="nc" id="L157">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L165">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   Dataset dataset = Dataset.newBuilder().build();
+   *   Dataset response = datasetServiceClient.createDatasetAsync(parent, dataset).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Location to create the Dataset in. Format:
+   *     `projects/{project}/locations/{location}`
+   * @param dataset Required. The Dataset to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Dataset, CreateDatasetOperationMetadata&gt; createDatasetAsync(
+      LocationName parent, Dataset dataset) {
+    CreateDatasetRequest request =
+<span class="fc" id="L190">        CreateDatasetRequest.newBuilder()</span>
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L192">            .setDataset(dataset)</span>
+<span class="fc" id="L193">            .build();</span>
+<span class="fc" id="L194">    return createDatasetAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   Dataset dataset = Dataset.newBuilder().build();
+   *   Dataset response = datasetServiceClient.createDatasetAsync(parent, dataset).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Location to create the Dataset in. Format:
+   *     `projects/{project}/locations/{location}`
+   * @param dataset Required. The Dataset to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Dataset, CreateDatasetOperationMetadata&gt; createDatasetAsync(
+      String parent, Dataset dataset) {
+    CreateDatasetRequest request =
+<span class="fc" id="L219">        CreateDatasetRequest.newBuilder().setParent(parent).setDataset(dataset).build();</span>
+<span class="fc" id="L220">    return createDatasetAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   CreateDatasetRequest request =
+   *       CreateDatasetRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setDataset(Dataset.newBuilder().build())
+   *           .build();
+   *   Dataset response = datasetServiceClient.createDatasetAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Dataset, CreateDatasetOperationMetadata&gt; createDatasetAsync(
+      CreateDatasetRequest request) {
+<span class="fc" id="L245">    return createDatasetOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   CreateDatasetRequest request =
+   *       CreateDatasetRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setDataset(Dataset.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;Dataset, CreateDatasetOperationMetadata&gt; future =
+   *       datasetServiceClient.createDatasetOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Dataset response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;CreateDatasetRequest, Dataset, CreateDatasetOperationMetadata&gt;
+      createDatasetOperationCallable() {
+<span class="fc" id="L270">    return stub.createDatasetOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   CreateDatasetRequest request =
+   *       CreateDatasetRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setDataset(Dataset.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       datasetServiceClient.createDatasetCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateDatasetRequest, Operation&gt; createDatasetCallable() {
+<span class="nc" id="L294">    return stub.createDatasetCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   DatasetName name = DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;);
+   *   Dataset response = datasetServiceClient.getDataset(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Dataset resource.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Dataset getDataset(DatasetName name) {
+    GetDatasetRequest request =
+<span class="pc bpc" id="L315" title="1 of 2 branches missed.">        GetDatasetRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L316">    return getDataset(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   String name = DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString();
+   *   Dataset response = datasetServiceClient.getDataset(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Dataset resource.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Dataset getDataset(String name) {
+<span class="fc" id="L336">    GetDatasetRequest request = GetDatasetRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L337">    return getDataset(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   GetDatasetRequest request =
+   *       GetDatasetRequest.newBuilder()
+   *           .setName(DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString())
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Dataset response = datasetServiceClient.getDataset(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Dataset getDataset(GetDatasetRequest request) {
+<span class="fc" id="L361">    return getDatasetCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   GetDatasetRequest request =
+   *       GetDatasetRequest.newBuilder()
+   *           .setName(DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString())
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Dataset&gt; future = datasetServiceClient.getDatasetCallable().futureCall(request);
+   *   // Do something.
+   *   Dataset response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetDatasetRequest, Dataset&gt; getDatasetCallable() {
+<span class="fc" id="L384">    return stub.getDatasetCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   Dataset dataset = Dataset.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   Dataset response = datasetServiceClient.updateDataset(dataset, updateMask);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param dataset Required. The Dataset which replaces the resource on the server.
+   * @param updateMask Required. The update mask applies to the resource. For the `FieldMask`
+   *     definition, see [google.protobuf.FieldMask][google.protobuf.FieldMask]. Updatable fields:
+   *     &lt;p&gt;&amp;#42; `display_name` &amp;#42; `description` &amp;#42; `labels`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Dataset updateDataset(Dataset dataset, FieldMask updateMask) {
+    UpdateDatasetRequest request =
+<span class="fc" id="L409">        UpdateDatasetRequest.newBuilder().setDataset(dataset).setUpdateMask(updateMask).build();</span>
+<span class="fc" id="L410">    return updateDataset(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   UpdateDatasetRequest request =
+   *       UpdateDatasetRequest.newBuilder()
+   *           .setDataset(Dataset.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Dataset response = datasetServiceClient.updateDataset(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Dataset updateDataset(UpdateDatasetRequest request) {
+<span class="fc" id="L434">    return updateDatasetCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   UpdateDatasetRequest request =
+   *       UpdateDatasetRequest.newBuilder()
+   *           .setDataset(Dataset.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Dataset&gt; future = datasetServiceClient.updateDatasetCallable().futureCall(request);
+   *   // Do something.
+   *   Dataset response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateDatasetRequest, Dataset&gt; updateDatasetCallable() {
+<span class="fc" id="L457">    return stub.updateDatasetCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Datasets in a Location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   LocationName parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;);
+   *   for (Dataset element : datasetServiceClient.listDatasets(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the Dataset's parent resource. Format:
+   *     `projects/{project}/locations/{location}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDatasetsPagedResponse listDatasets(LocationName parent) {
+    ListDatasetsRequest request =
+<span class="fc" id="L481">        ListDatasetsRequest.newBuilder()</span>
+<span class="pc bpc" id="L482" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L483">            .build();</span>
+<span class="fc" id="L484">    return listDatasets(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Datasets in a Location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   String parent = LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString();
+   *   for (Dataset element : datasetServiceClient.listDatasets(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The name of the Dataset's parent resource. Format:
+   *     `projects/{project}/locations/{location}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDatasetsPagedResponse listDatasets(String parent) {
+<span class="fc" id="L507">    ListDatasetsRequest request = ListDatasetsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L508">    return listDatasets(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Datasets in a Location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ListDatasetsRequest request =
+   *       ListDatasetsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Dataset element : datasetServiceClient.listDatasets(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDatasetsPagedResponse listDatasets(ListDatasetsRequest request) {
+<span class="fc" id="L538">    return listDatasetsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Datasets in a Location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ListDatasetsRequest request =
+   *       ListDatasetsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Dataset&gt; future =
+   *       datasetServiceClient.listDatasetsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Dataset element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListDatasetsRequest, ListDatasetsPagedResponse&gt;
+      listDatasetsPagedCallable() {
+<span class="fc" id="L569">    return stub.listDatasetsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Datasets in a Location.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ListDatasetsRequest request =
+   *       ListDatasetsRequest.newBuilder()
+   *           .setParent(LocationName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListDatasetsResponse response = datasetServiceClient.listDatasetsCallable().call(request);
+   *     for (Dataset element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListDatasetsRequest, ListDatasetsResponse&gt; listDatasetsCallable() {
+<span class="nc" id="L605">    return stub.listDatasetsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   DatasetName name = DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;);
+   *   datasetServiceClient.deleteDatasetAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the Dataset to delete. Format:
+   *     `projects/{project}/locations/{location}/datasets/{dataset}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteOperationMetadata&gt; deleteDatasetAsync(
+      DatasetName name) {
+    DeleteDatasetRequest request =
+<span class="pc bpc" id="L628" title="1 of 2 branches missed.">        DeleteDatasetRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L629">    return deleteDatasetAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   String name = DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString();
+   *   datasetServiceClient.deleteDatasetAsync(name).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The resource name of the Dataset to delete. Format:
+   *     `projects/{project}/locations/{location}/datasets/{dataset}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteOperationMetadata&gt; deleteDatasetAsync(String name) {
+<span class="fc" id="L650">    DeleteDatasetRequest request = DeleteDatasetRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L651">    return deleteDatasetAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   DeleteDatasetRequest request =
+   *       DeleteDatasetRequest.newBuilder()
+   *           .setName(DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString())
+   *           .build();
+   *   datasetServiceClient.deleteDatasetAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, DeleteOperationMetadata&gt; deleteDatasetAsync(
+      DeleteDatasetRequest request) {
+<span class="fc" id="L675">    return deleteDatasetOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   DeleteDatasetRequest request =
+   *       DeleteDatasetRequest.newBuilder()
+   *           .setName(DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Empty, DeleteOperationMetadata&gt; future =
+   *       datasetServiceClient.deleteDatasetOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;DeleteDatasetRequest, Empty, DeleteOperationMetadata&gt;
+      deleteDatasetOperationCallable() {
+<span class="fc" id="L699">    return stub.deleteDatasetOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   DeleteDatasetRequest request =
+   *       DeleteDatasetRequest.newBuilder()
+   *           .setName(DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       datasetServiceClient.deleteDatasetCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;DeleteDatasetRequest, Operation&gt; deleteDatasetCallable() {
+<span class="nc" id="L722">    return stub.deleteDatasetCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Imports data into a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   DatasetName name = DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;);
+   *   List&lt;ImportDataConfig&gt; importConfigs = new ArrayList&lt;&gt;();
+   *   ImportDataResponse response = datasetServiceClient.importDataAsync(name, importConfigs).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Dataset resource. Format:
+   *     `projects/{project}/locations/{location}/datasets/{dataset}`
+   * @param importConfigs Required. The desired input locations. The contents of all input locations
+   *     will be imported in one batch.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ImportDataResponse, ImportDataOperationMetadata&gt; importDataAsync(
+      DatasetName name, List&lt;ImportDataConfig&gt; importConfigs) {
+    ImportDataRequest request =
+<span class="fc" id="L748">        ImportDataRequest.newBuilder()</span>
+<span class="pc bpc" id="L749" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L750">            .addAllImportConfigs(importConfigs)</span>
+<span class="fc" id="L751">            .build();</span>
+<span class="fc" id="L752">    return importDataAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Imports data into a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   String name = DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString();
+   *   List&lt;ImportDataConfig&gt; importConfigs = new ArrayList&lt;&gt;();
+   *   ImportDataResponse response = datasetServiceClient.importDataAsync(name, importConfigs).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Dataset resource. Format:
+   *     `projects/{project}/locations/{location}/datasets/{dataset}`
+   * @param importConfigs Required. The desired input locations. The contents of all input locations
+   *     will be imported in one batch.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ImportDataResponse, ImportDataOperationMetadata&gt; importDataAsync(
+      String name, List&lt;ImportDataConfig&gt; importConfigs) {
+    ImportDataRequest request =
+<span class="fc" id="L778">        ImportDataRequest.newBuilder().setName(name).addAllImportConfigs(importConfigs).build();</span>
+<span class="fc" id="L779">    return importDataAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Imports data into a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ImportDataRequest request =
+   *       ImportDataRequest.newBuilder()
+   *           .setName(DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString())
+   *           .addAllImportConfigs(new ArrayList&lt;ImportDataConfig&gt;())
+   *           .build();
+   *   ImportDataResponse response = datasetServiceClient.importDataAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ImportDataResponse, ImportDataOperationMetadata&gt; importDataAsync(
+      ImportDataRequest request) {
+<span class="fc" id="L804">    return importDataOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Imports data into a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ImportDataRequest request =
+   *       ImportDataRequest.newBuilder()
+   *           .setName(DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString())
+   *           .addAllImportConfigs(new ArrayList&lt;ImportDataConfig&gt;())
+   *           .build();
+   *   OperationFuture&lt;ImportDataResponse, ImportDataOperationMetadata&gt; future =
+   *       datasetServiceClient.importDataOperationCallable().futureCall(request);
+   *   // Do something.
+   *   ImportDataResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;ImportDataRequest, ImportDataResponse, ImportDataOperationMetadata&gt;
+      importDataOperationCallable() {
+<span class="fc" id="L829">    return stub.importDataOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Imports data into a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ImportDataRequest request =
+   *       ImportDataRequest.newBuilder()
+   *           .setName(DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString())
+   *           .addAllImportConfigs(new ArrayList&lt;ImportDataConfig&gt;())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = datasetServiceClient.importDataCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ImportDataRequest, Operation&gt; importDataCallable() {
+<span class="nc" id="L852">    return stub.importDataCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports data from a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   DatasetName name = DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;);
+   *   ExportDataConfig exportConfig = ExportDataConfig.newBuilder().build();
+   *   ExportDataResponse response = datasetServiceClient.exportDataAsync(name, exportConfig).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Dataset resource. Format:
+   *     `projects/{project}/locations/{location}/datasets/{dataset}`
+   * @param exportConfig Required. The desired output location.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ExportDataResponse, ExportDataOperationMetadata&gt; exportDataAsync(
+      DatasetName name, ExportDataConfig exportConfig) {
+    ExportDataRequest request =
+<span class="fc" id="L877">        ExportDataRequest.newBuilder()</span>
+<span class="pc bpc" id="L878" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L879">            .setExportConfig(exportConfig)</span>
+<span class="fc" id="L880">            .build();</span>
+<span class="fc" id="L881">    return exportDataAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports data from a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   String name = DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString();
+   *   ExportDataConfig exportConfig = ExportDataConfig.newBuilder().build();
+   *   ExportDataResponse response = datasetServiceClient.exportDataAsync(name, exportConfig).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the Dataset resource. Format:
+   *     `projects/{project}/locations/{location}/datasets/{dataset}`
+   * @param exportConfig Required. The desired output location.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ExportDataResponse, ExportDataOperationMetadata&gt; exportDataAsync(
+      String name, ExportDataConfig exportConfig) {
+    ExportDataRequest request =
+<span class="fc" id="L906">        ExportDataRequest.newBuilder().setName(name).setExportConfig(exportConfig).build();</span>
+<span class="fc" id="L907">    return exportDataAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports data from a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ExportDataRequest request =
+   *       ExportDataRequest.newBuilder()
+   *           .setName(DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString())
+   *           .setExportConfig(ExportDataConfig.newBuilder().build())
+   *           .build();
+   *   ExportDataResponse response = datasetServiceClient.exportDataAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;ExportDataResponse, ExportDataOperationMetadata&gt; exportDataAsync(
+      ExportDataRequest request) {
+<span class="fc" id="L932">    return exportDataOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports data from a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ExportDataRequest request =
+   *       ExportDataRequest.newBuilder()
+   *           .setName(DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString())
+   *           .setExportConfig(ExportDataConfig.newBuilder().build())
+   *           .build();
+   *   OperationFuture&lt;ExportDataResponse, ExportDataOperationMetadata&gt; future =
+   *       datasetServiceClient.exportDataOperationCallable().futureCall(request);
+   *   // Do something.
+   *   ExportDataResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;ExportDataRequest, ExportDataResponse, ExportDataOperationMetadata&gt;
+      exportDataOperationCallable() {
+<span class="fc" id="L957">    return stub.exportDataOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Exports data from a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ExportDataRequest request =
+   *       ExportDataRequest.newBuilder()
+   *           .setName(DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString())
+   *           .setExportConfig(ExportDataConfig.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future = datasetServiceClient.exportDataCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ExportDataRequest, Operation&gt; exportDataCallable() {
+<span class="nc" id="L980">    return stub.exportDataCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists DataItems in a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   DatasetName parent = DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;);
+   *   for (DataItem element : datasetServiceClient.listDataItems(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Dataset to list DataItems from. Format:
+   *     `projects/{project}/locations/{location}/datasets/{dataset}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDataItemsPagedResponse listDataItems(DatasetName parent) {
+    ListDataItemsRequest request =
+<span class="fc" id="L1004">        ListDataItemsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1005" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1006">            .build();</span>
+<span class="fc" id="L1007">    return listDataItems(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists DataItems in a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   String parent = DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString();
+   *   for (DataItem element : datasetServiceClient.listDataItems(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the Dataset to list DataItems from. Format:
+   *     `projects/{project}/locations/{location}/datasets/{dataset}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDataItemsPagedResponse listDataItems(String parent) {
+<span class="fc" id="L1030">    ListDataItemsRequest request = ListDataItemsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1031">    return listDataItems(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists DataItems in a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ListDataItemsRequest request =
+   *       ListDataItemsRequest.newBuilder()
+   *           .setParent(DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (DataItem element : datasetServiceClient.listDataItems(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListDataItemsPagedResponse listDataItems(ListDataItemsRequest request) {
+<span class="fc" id="L1061">    return listDataItemsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists DataItems in a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ListDataItemsRequest request =
+   *       ListDataItemsRequest.newBuilder()
+   *           .setParent(DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;DataItem&gt; future =
+   *       datasetServiceClient.listDataItemsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (DataItem element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListDataItemsRequest, ListDataItemsPagedResponse&gt;
+      listDataItemsPagedCallable() {
+<span class="fc" id="L1092">    return stub.listDataItemsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists DataItems in a Dataset.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ListDataItemsRequest request =
+   *       ListDataItemsRequest.newBuilder()
+   *           .setParent(DatasetName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListDataItemsResponse response = datasetServiceClient.listDataItemsCallable().call(request);
+   *     for (DataItem element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListDataItemsRequest, ListDataItemsResponse&gt; listDataItemsCallable() {
+<span class="nc" id="L1128">    return stub.listDataItemsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an AnnotationSpec.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   AnnotationSpecName name =
+   *       AnnotationSpecName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;, &quot;[ANNOTATION_SPEC]&quot;);
+   *   AnnotationSpec response = datasetServiceClient.getAnnotationSpec(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the AnnotationSpec resource. Format:
+   *     `projects/{project}/locations/{location}/datasets/{dataset}/annotationSpecs/{annotation_spec}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AnnotationSpec getAnnotationSpec(AnnotationSpecName name) {
+    GetAnnotationSpecRequest request =
+<span class="fc" id="L1151">        GetAnnotationSpecRequest.newBuilder()</span>
+<span class="pc bpc" id="L1152" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1153">            .build();</span>
+<span class="fc" id="L1154">    return getAnnotationSpec(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an AnnotationSpec.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   String name =
+   *       AnnotationSpecName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;, &quot;[ANNOTATION_SPEC]&quot;)
+   *           .toString();
+   *   AnnotationSpec response = datasetServiceClient.getAnnotationSpec(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The name of the AnnotationSpec resource. Format:
+   *     `projects/{project}/locations/{location}/datasets/{dataset}/annotationSpecs/{annotation_spec}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AnnotationSpec getAnnotationSpec(String name) {
+<span class="fc" id="L1177">    GetAnnotationSpecRequest request = GetAnnotationSpecRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L1178">    return getAnnotationSpec(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an AnnotationSpec.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   GetAnnotationSpecRequest request =
+   *       GetAnnotationSpecRequest.newBuilder()
+   *           .setName(
+   *               AnnotationSpecName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;, &quot;[ANNOTATION_SPEC]&quot;)
+   *                   .toString())
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   AnnotationSpec response = datasetServiceClient.getAnnotationSpec(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final AnnotationSpec getAnnotationSpec(GetAnnotationSpecRequest request) {
+<span class="fc" id="L1204">    return getAnnotationSpecCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets an AnnotationSpec.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   GetAnnotationSpecRequest request =
+   *       GetAnnotationSpecRequest.newBuilder()
+   *           .setName(
+   *               AnnotationSpecName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;, &quot;[ANNOTATION_SPEC]&quot;)
+   *                   .toString())
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;AnnotationSpec&gt; future =
+   *       datasetServiceClient.getAnnotationSpecCallable().futureCall(request);
+   *   // Do something.
+   *   AnnotationSpec response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetAnnotationSpecRequest, AnnotationSpec&gt; getAnnotationSpecCallable() {
+<span class="fc" id="L1230">    return stub.getAnnotationSpecCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Annotations belongs to a dataitem
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   DataItemName parent = DataItemName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;, &quot;[DATA_ITEM]&quot;);
+   *   for (Annotation element : datasetServiceClient.listAnnotations(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the DataItem to list Annotations from. Format:
+   *     `projects/{project}/locations/{location}/datasets/{dataset}/dataItems/{data_item}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAnnotationsPagedResponse listAnnotations(DataItemName parent) {
+    ListAnnotationsRequest request =
+<span class="fc" id="L1254">        ListAnnotationsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1255" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1256">            .build();</span>
+<span class="fc" id="L1257">    return listAnnotations(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Annotations belongs to a dataitem
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   String parent =
+   *       DataItemName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;, &quot;[DATA_ITEM]&quot;).toString();
+   *   for (Annotation element : datasetServiceClient.listAnnotations(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. The resource name of the DataItem to list Annotations from. Format:
+   *     `projects/{project}/locations/{location}/datasets/{dataset}/dataItems/{data_item}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAnnotationsPagedResponse listAnnotations(String parent) {
+<span class="fc" id="L1281">    ListAnnotationsRequest request = ListAnnotationsRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1282">    return listAnnotations(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Annotations belongs to a dataitem
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ListAnnotationsRequest request =
+   *       ListAnnotationsRequest.newBuilder()
+   *           .setParent(
+   *               DataItemName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;, &quot;[DATA_ITEM]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   for (Annotation element : datasetServiceClient.listAnnotations(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAnnotationsPagedResponse listAnnotations(ListAnnotationsRequest request) {
+<span class="fc" id="L1313">    return listAnnotationsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Annotations belongs to a dataitem
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ListAnnotationsRequest request =
+   *       ListAnnotationsRequest.newBuilder()
+   *           .setParent(
+   *               DataItemName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;, &quot;[DATA_ITEM]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   ApiFuture&lt;Annotation&gt; future =
+   *       datasetServiceClient.listAnnotationsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Annotation element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAnnotationsRequest, ListAnnotationsPagedResponse&gt;
+      listAnnotationsPagedCallable() {
+<span class="fc" id="L1345">    return stub.listAnnotationsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists Annotations belongs to a dataitem
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * try (DatasetServiceClient datasetServiceClient = DatasetServiceClient.create()) {
+   *   ListAnnotationsRequest request =
+   *       ListAnnotationsRequest.newBuilder()
+   *           .setParent(
+   *               DataItemName.of(&quot;[PROJECT]&quot;, &quot;[LOCATION]&quot;, &quot;[DATASET]&quot;, &quot;[DATA_ITEM]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setPageSize(883849137)
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setReadMask(FieldMask.newBuilder().build())
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .build();
+   *   while (true) {
+   *     ListAnnotationsResponse response =
+   *         datasetServiceClient.listAnnotationsCallable().call(request);
+   *     for (Annotation element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAnnotationsRequest, ListAnnotationsResponse&gt;
+      listAnnotationsCallable() {
+<span class="nc" id="L1384">    return stub.listAnnotationsCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L1389">    stub.close();</span>
+<span class="fc" id="L1390">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L1394">    stub.shutdown();</span>
+<span class="nc" id="L1395">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L1399">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L1404">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L1409">    stub.shutdownNow();</span>
+<span class="nc" id="L1410">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L1414">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class ListDatasetsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListDatasetsRequest,
+          ListDatasetsResponse,
+          Dataset,
+          ListDatasetsPage,
+          ListDatasetsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListDatasetsPagedResponse&gt; createAsync(
+        PageContext&lt;ListDatasetsRequest, ListDatasetsResponse, Dataset&gt; context,
+        ApiFuture&lt;ListDatasetsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListDatasetsPage&gt; futurePage =
+<span class="fc" id="L1429">          ListDatasetsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1430">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1432">          input -&gt; new ListDatasetsPagedResponse(input),</span>
+<span class="fc" id="L1433">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListDatasetsPagedResponse(ListDatasetsPage page) {
+<span class="fc" id="L1437">      super(page, ListDatasetsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1438">    }</span>
+  }
+
+  public static class ListDatasetsPage
+      extends AbstractPage&lt;ListDatasetsRequest, ListDatasetsResponse, Dataset, ListDatasetsPage&gt; {
+
+    private ListDatasetsPage(
+        PageContext&lt;ListDatasetsRequest, ListDatasetsResponse, Dataset&gt; context,
+        ListDatasetsResponse response) {
+<span class="fc" id="L1447">      super(context, response);</span>
+<span class="fc" id="L1448">    }</span>
+
+    private static ListDatasetsPage createEmptyPage() {
+<span class="fc" id="L1451">      return new ListDatasetsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListDatasetsPage createPage(
+        PageContext&lt;ListDatasetsRequest, ListDatasetsResponse, Dataset&gt; context,
+        ListDatasetsResponse response) {
+<span class="fc" id="L1458">      return new ListDatasetsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListDatasetsPage&gt; createPageAsync(
+        PageContext&lt;ListDatasetsRequest, ListDatasetsResponse, Dataset&gt; context,
+        ApiFuture&lt;ListDatasetsResponse&gt; futureResponse) {
+<span class="fc" id="L1465">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListDatasetsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListDatasetsRequest,
+          ListDatasetsResponse,
+          Dataset,
+          ListDatasetsPage,
+          ListDatasetsFixedSizeCollection&gt; {
+
+    private ListDatasetsFixedSizeCollection(List&lt;ListDatasetsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1478">      super(pages, collectionSize);</span>
+<span class="fc" id="L1479">    }</span>
+
+    private static ListDatasetsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1482">      return new ListDatasetsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListDatasetsFixedSizeCollection createCollection(
+        List&lt;ListDatasetsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1488">      return new ListDatasetsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListDataItemsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListDataItemsRequest,
+          ListDataItemsResponse,
+          DataItem,
+          ListDataItemsPage,
+          ListDataItemsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListDataItemsPagedResponse&gt; createAsync(
+        PageContext&lt;ListDataItemsRequest, ListDataItemsResponse, DataItem&gt; context,
+        ApiFuture&lt;ListDataItemsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListDataItemsPage&gt; futurePage =
+<span class="fc" id="L1504">          ListDataItemsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1505">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1507">          input -&gt; new ListDataItemsPagedResponse(input),</span>
+<span class="fc" id="L1508">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListDataItemsPagedResponse(ListDataItemsPage page) {
+<span class="fc" id="L1512">      super(page, ListDataItemsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1513">    }</span>
+  }
+
+  public static class ListDataItemsPage
+      extends AbstractPage&lt;
+          ListDataItemsRequest, ListDataItemsResponse, DataItem, ListDataItemsPage&gt; {
+
+    private ListDataItemsPage(
+        PageContext&lt;ListDataItemsRequest, ListDataItemsResponse, DataItem&gt; context,
+        ListDataItemsResponse response) {
+<span class="fc" id="L1523">      super(context, response);</span>
+<span class="fc" id="L1524">    }</span>
+
+    private static ListDataItemsPage createEmptyPage() {
+<span class="fc" id="L1527">      return new ListDataItemsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListDataItemsPage createPage(
+        PageContext&lt;ListDataItemsRequest, ListDataItemsResponse, DataItem&gt; context,
+        ListDataItemsResponse response) {
+<span class="fc" id="L1534">      return new ListDataItemsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListDataItemsPage&gt; createPageAsync(
+        PageContext&lt;ListDataItemsRequest, ListDataItemsResponse, DataItem&gt; context,
+        ApiFuture&lt;ListDataItemsResponse&gt; futureResponse) {
+<span class="fc" id="L1541">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListDataItemsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListDataItemsRequest,
+          ListDataItemsResponse,
+          DataItem,
+          ListDataItemsPage,
+          ListDataItemsFixedSizeCollection&gt; {
+
+    private ListDataItemsFixedSizeCollection(List&lt;ListDataItemsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1554">      super(pages, collectionSize);</span>
+<span class="fc" id="L1555">    }</span>
+
+    private static ListDataItemsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1558">      return new ListDataItemsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListDataItemsFixedSizeCollection createCollection(
+        List&lt;ListDataItemsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1564">      return new ListDataItemsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListAnnotationsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListAnnotationsRequest,
+          ListAnnotationsResponse,
+          Annotation,
+          ListAnnotationsPage,
+          ListAnnotationsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListAnnotationsPagedResponse&gt; createAsync(
+        PageContext&lt;ListAnnotationsRequest, ListAnnotationsResponse, Annotation&gt; context,
+        ApiFuture&lt;ListAnnotationsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListAnnotationsPage&gt; futurePage =
+<span class="fc" id="L1580">          ListAnnotationsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L1581">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L1583">          input -&gt; new ListAnnotationsPagedResponse(input),</span>
+<span class="fc" id="L1584">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListAnnotationsPagedResponse(ListAnnotationsPage page) {
+<span class="fc" id="L1588">      super(page, ListAnnotationsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L1589">    }</span>
+  }
+
+  public static class ListAnnotationsPage
+      extends AbstractPage&lt;
+          ListAnnotationsRequest, ListAnnotationsResponse, Annotation, ListAnnotationsPage&gt; {
+
+    private ListAnnotationsPage(
+        PageContext&lt;ListAnnotationsRequest, ListAnnotationsResponse, Annotation&gt; context,
+        ListAnnotationsResponse response) {
+<span class="fc" id="L1599">      super(context, response);</span>
+<span class="fc" id="L1600">    }</span>
+
+    private static ListAnnotationsPage createEmptyPage() {
+<span class="fc" id="L1603">      return new ListAnnotationsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListAnnotationsPage createPage(
+        PageContext&lt;ListAnnotationsRequest, ListAnnotationsResponse, Annotation&gt; context,
+        ListAnnotationsResponse response) {
+<span class="fc" id="L1610">      return new ListAnnotationsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListAnnotationsPage&gt; createPageAsync(
+        PageContext&lt;ListAnnotationsRequest, ListAnnotationsResponse, Annotation&gt; context,
+        ApiFuture&lt;ListAnnotationsResponse&gt; futureResponse) {
+<span class="fc" id="L1617">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListAnnotationsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListAnnotationsRequest,
+          ListAnnotationsResponse,
+          Annotation,
+          ListAnnotationsPage,
+          ListAnnotationsFixedSizeCollection&gt; {
+
+    private ListAnnotationsFixedSizeCollection(
+        List&lt;ListAnnotationsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L1631">      super(pages, collectionSize);</span>
+<span class="fc" id="L1632">    }</span>
+
+    private static ListAnnotationsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L1635">      return new ListAnnotationsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListAnnotationsFixedSizeCollection createCollection(
+        List&lt;ListAnnotationsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L1641">      return new ListAnnotationsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

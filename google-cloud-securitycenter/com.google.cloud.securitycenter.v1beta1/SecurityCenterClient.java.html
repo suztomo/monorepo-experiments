@@ -1,0 +1,2621 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>SecurityCenterClient.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-securitycenter</a> &gt; <a href="index.source.html" class="el_package">com.google.cloud.securitycenter.v1beta1</a> &gt; <span class="el_source">SecurityCenterClient.java</span></div><h1>SecurityCenterClient.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.securitycenter.v1beta1;
+
+import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
+import com.google.api.core.BetaApi;
+import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.api.gax.paging.AbstractFixedSizeCollection;
+import com.google.api.gax.paging.AbstractPage;
+import com.google.api.gax.paging.AbstractPagedListResponse;
+import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.PageContext;
+import com.google.api.gax.rpc.UnaryCallable;
+import com.google.api.resourcenames.ResourceName;
+import com.google.cloud.securitycenter.v1beta1.stub.SecurityCenterStub;
+import com.google.cloud.securitycenter.v1beta1.stub.SecurityCenterStubSettings;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.iam.v1.GetIamPolicyRequest;
+import com.google.iam.v1.Policy;
+import com.google.iam.v1.SetIamPolicyRequest;
+import com.google.iam.v1.TestIamPermissionsRequest;
+import com.google.iam.v1.TestIamPermissionsResponse;
+import com.google.longrunning.Operation;
+import com.google.longrunning.OperationsClient;
+import com.google.protobuf.Empty;
+import com.google.protobuf.Timestamp;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Generated;
+
+// AUTO-GENERATED DOCUMENTATION AND CLASS.
+/**
+ * Service Description: V1 Beta APIs for Security Center service.
+ *
+ * &lt;p&gt;This class provides the ability to make remote calls to the backing service through method
+ * calls that map to API methods. Sample code to get started:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+ *   OrganizationName parent = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+ *   Source source = Source.newBuilder().build();
+ *   Source response = securityCenterClient.createSource(parent, source);
+ * }
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Note: close() needs to be called on the SecurityCenterClient object to clean up resources such
+ * as threads. In the example above, try-with-resources is used, which automatically calls close().
+ *
+ * &lt;p&gt;The surface of this class includes several types of Java methods for each of the API's
+ * methods:
+ *
+ * &lt;ol&gt;
+ *   &lt;li&gt;A &quot;flattened&quot; method. With this type of method, the fields of the request type have been
+ *       converted into function parameters. It may be the case that not all fields are available as
+ *       parameters, and not every API method will have a flattened method entry point.
+ *   &lt;li&gt;A &quot;request object&quot; method. This type of method only takes one parameter, a request object,
+ *       which must be constructed before the call. Not every API method will have a request object
+ *       method.
+ *   &lt;li&gt;A &quot;callable&quot; method. This type of method takes no parameters and returns an immutable API
+ *       callable object, which can be used to initiate calls to the service.
+ * &lt;/ol&gt;
+ *
+ * &lt;p&gt;See the individual methods for example code.
+ *
+ * &lt;p&gt;Many parameters require resource names to be formatted in a particular way. To assist with
+ * these names, this class includes a format method for each type of name, and additionally a parse
+ * method to extract the individual identifiers contained within names that are returned.
+ *
+ * &lt;p&gt;This class can be customized by passing in a custom instance of SecurityCenterSettings to
+ * create(). For example:
+ *
+ * &lt;p&gt;To customize credentials:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * SecurityCenterSettings securityCenterSettings =
+ *     SecurityCenterSettings.newBuilder()
+ *         .setCredentialsProvider(FixedCredentialsProvider.create(myCredentials))
+ *         .build();
+ * SecurityCenterClient securityCenterClient = SecurityCenterClient.create(securityCenterSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;To customize the endpoint:
+ *
+ * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
+ * SecurityCenterSettings securityCenterSettings =
+ *     SecurityCenterSettings.newBuilder().setEndpoint(myEndpoint).build();
+ * SecurityCenterClient securityCenterClient = SecurityCenterClient.create(securityCenterSettings);
+ * }&lt;/pre&gt;
+ *
+ * &lt;p&gt;Please refer to the GitHub repository's samples for more quickstart code snippets.
+ */
+@BetaApi
+@Generated(&quot;by gapic-generator-java&quot;)
+public class SecurityCenterClient implements BackgroundResource {
+  private final SecurityCenterSettings settings;
+  private final SecurityCenterStub stub;
+  private final OperationsClient operationsClient;
+
+  /** Constructs an instance of SecurityCenterClient with default settings. */
+  public static final SecurityCenterClient create() throws IOException {
+<span class="nc" id="L124">    return create(SecurityCenterSettings.newBuilder().build());</span>
+  }
+
+  /**
+   * Constructs an instance of SecurityCenterClient, using the given settings. The channels are
+   * created based on the settings passed in, or defaults for any settings that are not set.
+   */
+  public static final SecurityCenterClient create(SecurityCenterSettings settings)
+      throws IOException {
+<span class="fc" id="L133">    return new SecurityCenterClient(settings);</span>
+  }
+
+  /**
+   * Constructs an instance of SecurityCenterClient, using the given stub for making calls. This is
+   * for advanced usage - prefer using create(SecurityCenterSettings).
+   */
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public static final SecurityCenterClient create(SecurityCenterStub stub) {
+<span class="nc" id="L142">    return new SecurityCenterClient(stub);</span>
+  }
+
+  /**
+   * Constructs an instance of SecurityCenterClient, using the given settings. This is protected so
+   * that it is easy to make a subclass, but otherwise, the static factory methods should be
+   * preferred.
+   */
+<span class="fc" id="L150">  protected SecurityCenterClient(SecurityCenterSettings settings) throws IOException {</span>
+<span class="fc" id="L151">    this.settings = settings;</span>
+<span class="fc" id="L152">    this.stub = ((SecurityCenterStubSettings) settings.getStubSettings()).createStub();</span>
+<span class="fc" id="L153">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="fc" id="L154">  }</span>
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+<span class="nc" id="L157">  protected SecurityCenterClient(SecurityCenterStub stub) {</span>
+<span class="nc" id="L158">    this.settings = null;</span>
+<span class="nc" id="L159">    this.stub = stub;</span>
+<span class="nc" id="L160">    this.operationsClient = OperationsClient.create(this.stub.getOperationsStub());</span>
+<span class="nc" id="L161">  }</span>
+
+  public final SecurityCenterSettings getSettings() {
+<span class="nc" id="L164">    return settings;</span>
+  }
+
+  @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
+  public SecurityCenterStub getStub() {
+<span class="nc" id="L169">    return stub;</span>
+  }
+
+  /**
+   * Returns the OperationsClient that can be used to query the status of a long-running operation
+   * returned by another API method call.
+   */
+  public final OperationsClient getOperationsClient() {
+<span class="nc" id="L177">    return operationsClient;</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   OrganizationName parent = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   Source source = Source.newBuilder().build();
+   *   Source response = securityCenterClient.createSource(parent, source);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the new source's parent. Its format should be
+   *     &quot;organizations/[organization_id]&quot;.
+   * @param source Required. The Source being created, only the display_name and description will be
+   *     used. All other fields will be ignored.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Source createSource(OrganizationName parent, Source source) {
+    CreateSourceRequest request =
+<span class="fc" id="L204">        CreateSourceRequest.newBuilder()</span>
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L206">            .setSource(source)</span>
+<span class="fc" id="L207">            .build();</span>
+<span class="fc" id="L208">    return createSource(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   String parent = OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString();
+   *   Source source = Source.newBuilder().build();
+   *   Source response = securityCenterClient.createSource(parent, source);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the new source's parent. Its format should be
+   *     &quot;organizations/[organization_id]&quot;.
+   * @param source Required. The Source being created, only the display_name and description will be
+   *     used. All other fields will be ignored.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Source createSource(String parent, Source source) {
+    CreateSourceRequest request =
+<span class="fc" id="L235">        CreateSourceRequest.newBuilder().setParent(parent).setSource(source).build();</span>
+<span class="fc" id="L236">    return createSource(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   CreateSourceRequest request =
+   *       CreateSourceRequest.newBuilder()
+   *           .setParent(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setSource(Source.newBuilder().build())
+   *           .build();
+   *   Source response = securityCenterClient.createSource(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Source createSource(CreateSourceRequest request) {
+<span class="fc" id="L262">    return createSourceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   CreateSourceRequest request =
+   *       CreateSourceRequest.newBuilder()
+   *           .setParent(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setSource(Source.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Source&gt; future = securityCenterClient.createSourceCallable().futureCall(request);
+   *   // Do something.
+   *   Source response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateSourceRequest, Source&gt; createSourceCallable() {
+<span class="fc" id="L287">    return stub.createSourceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a finding. The corresponding source must exist for finding creation to succeed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   SourceName parent = SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;);
+   *   String findingId = &quot;findingId439150212&quot;;
+   *   Finding finding = Finding.newBuilder().build();
+   *   Finding response = securityCenterClient.createFinding(parent, findingId, finding);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the new finding's parent. Its format should be
+   *     &quot;organizations/[organization_id]/sources/[source_id]&quot;.
+   * @param findingId Required. Unique identifier provided by the client within the parent scope. It
+   *     must be alphanumeric and less than or equal to 32 characters and greater than 0 characters
+   *     in length.
+   * @param finding Required. The Finding being created. The name and security_marks will be ignored
+   *     as they are both output only fields on this resource.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Finding createFinding(SourceName parent, String findingId, Finding finding) {
+    CreateFindingRequest request =
+<span class="fc" id="L318">        CreateFindingRequest.newBuilder()</span>
+<span class="pc bpc" id="L319" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L320">            .setFindingId(findingId)</span>
+<span class="fc" id="L321">            .setFinding(finding)</span>
+<span class="fc" id="L322">            .build();</span>
+<span class="fc" id="L323">    return createFinding(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a finding. The corresponding source must exist for finding creation to succeed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   String parent = SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;).toString();
+   *   String findingId = &quot;findingId439150212&quot;;
+   *   Finding finding = Finding.newBuilder().build();
+   *   Finding response = securityCenterClient.createFinding(parent, findingId, finding);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the new finding's parent. Its format should be
+   *     &quot;organizations/[organization_id]/sources/[source_id]&quot;.
+   * @param findingId Required. Unique identifier provided by the client within the parent scope. It
+   *     must be alphanumeric and less than or equal to 32 characters and greater than 0 characters
+   *     in length.
+   * @param finding Required. The Finding being created. The name and security_marks will be ignored
+   *     as they are both output only fields on this resource.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Finding createFinding(String parent, String findingId, Finding finding) {
+    CreateFindingRequest request =
+<span class="fc" id="L354">        CreateFindingRequest.newBuilder()</span>
+<span class="fc" id="L355">            .setParent(parent)</span>
+<span class="fc" id="L356">            .setFindingId(findingId)</span>
+<span class="fc" id="L357">            .setFinding(finding)</span>
+<span class="fc" id="L358">            .build();</span>
+<span class="fc" id="L359">    return createFinding(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a finding. The corresponding source must exist for finding creation to succeed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   CreateFindingRequest request =
+   *       CreateFindingRequest.newBuilder()
+   *           .setParent(SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;).toString())
+   *           .setFindingId(&quot;findingId439150212&quot;)
+   *           .setFinding(Finding.newBuilder().build())
+   *           .build();
+   *   Finding response = securityCenterClient.createFinding(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Finding createFinding(CreateFindingRequest request) {
+<span class="fc" id="L386">    return createFindingCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a finding. The corresponding source must exist for finding creation to succeed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   CreateFindingRequest request =
+   *       CreateFindingRequest.newBuilder()
+   *           .setParent(SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;).toString())
+   *           .setFindingId(&quot;findingId439150212&quot;)
+   *           .setFinding(Finding.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Finding&gt; future = securityCenterClient.createFindingCallable().futureCall(request);
+   *   // Do something.
+   *   Finding response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;CreateFindingRequest, Finding&gt; createFindingCallable() {
+<span class="fc" id="L412">    return stub.createFindingCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy on the specified Source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   ResourceName resource = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   Policy response = securityCenterClient.getIamPolicy(resource);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(ResourceName resource) {
+    GetIamPolicyRequest request =
+<span class="fc" id="L436">        GetIamPolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L437" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L438">            .build();</span>
+<span class="fc" id="L439">    return getIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy on the specified Source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   String resource = OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString();
+   *   Policy response = securityCenterClient.getIamPolicy(resource);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(String resource) {
+<span class="fc" id="L462">    GetIamPolicyRequest request = GetIamPolicyRequest.newBuilder().setResource(resource).build();</span>
+<span class="fc" id="L463">    return getIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy on the specified Source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   Policy response = securityCenterClient.getIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy getIamPolicy(GetIamPolicyRequest request) {
+<span class="fc" id="L489">    return getIamPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the access control policy on the specified Source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   GetIamPolicyRequest request =
+   *       GetIamPolicyRequest.newBuilder()
+   *           .setResource(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setOptions(GetPolicyOptions.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = securityCenterClient.getIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetIamPolicyRequest, Policy&gt; getIamPolicyCallable() {
+<span class="fc" id="L514">    return stub.getIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the settings for an organization.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   OrganizationSettingsName name = OrganizationSettingsName.of(&quot;[ORGANIZATION]&quot;);
+   *   OrganizationSettings response = securityCenterClient.getOrganizationSettings(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Name of the organization to get organization settings for. Its format is
+   *     &quot;organizations/[organization_id]/organizationSettings&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OrganizationSettings getOrganizationSettings(OrganizationSettingsName name) {
+    GetOrganizationSettingsRequest request =
+<span class="fc" id="L538">        GetOrganizationSettingsRequest.newBuilder()</span>
+<span class="pc bpc" id="L539" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L540">            .build();</span>
+<span class="fc" id="L541">    return getOrganizationSettings(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the settings for an organization.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   String name = OrganizationSettingsName.of(&quot;[ORGANIZATION]&quot;).toString();
+   *   OrganizationSettings response = securityCenterClient.getOrganizationSettings(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Name of the organization to get organization settings for. Its format is
+   *     &quot;organizations/[organization_id]/organizationSettings&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OrganizationSettings getOrganizationSettings(String name) {
+    GetOrganizationSettingsRequest request =
+<span class="fc" id="L565">        GetOrganizationSettingsRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L566">    return getOrganizationSettings(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the settings for an organization.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   GetOrganizationSettingsRequest request =
+   *       GetOrganizationSettingsRequest.newBuilder()
+   *           .setName(OrganizationSettingsName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .build();
+   *   OrganizationSettings response = securityCenterClient.getOrganizationSettings(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OrganizationSettings getOrganizationSettings(
+      GetOrganizationSettingsRequest request) {
+<span class="fc" id="L592">    return getOrganizationSettingsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets the settings for an organization.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   GetOrganizationSettingsRequest request =
+   *       GetOrganizationSettingsRequest.newBuilder()
+   *           .setName(OrganizationSettingsName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;OrganizationSettings&gt; future =
+   *       securityCenterClient.getOrganizationSettingsCallable().futureCall(request);
+   *   // Do something.
+   *   OrganizationSettings response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetOrganizationSettingsRequest, OrganizationSettings&gt;
+      getOrganizationSettingsCallable() {
+<span class="fc" id="L618">    return stub.getOrganizationSettingsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   SourceName name = SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;);
+   *   Source response = securityCenterClient.getSource(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Relative resource name of the source. Its format is
+   *     &quot;organizations/[organization_id]/source/[source_id]&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Source getSource(SourceName name) {
+    GetSourceRequest request =
+<span class="pc bpc" id="L642" title="1 of 2 branches missed.">        GetSourceRequest.newBuilder().setName(name == null ? null : name.toString()).build();</span>
+<span class="fc" id="L643">    return getSource(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   String name = SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;).toString();
+   *   Source response = securityCenterClient.getSource(name);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. Relative resource name of the source. Its format is
+   *     &quot;organizations/[organization_id]/source/[source_id]&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Source getSource(String name) {
+<span class="fc" id="L666">    GetSourceRequest request = GetSourceRequest.newBuilder().setName(name).build();</span>
+<span class="fc" id="L667">    return getSource(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   GetSourceRequest request =
+   *       GetSourceRequest.newBuilder()
+   *           .setName(SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;).toString())
+   *           .build();
+   *   Source response = securityCenterClient.getSource(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Source getSource(GetSourceRequest request) {
+<span class="fc" id="L692">    return getSourceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   GetSourceRequest request =
+   *       GetSourceRequest.newBuilder()
+   *           .setName(SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Source&gt; future = securityCenterClient.getSourceCallable().futureCall(request);
+   *   // Do something.
+   *   Source response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GetSourceRequest, Source&gt; getSourceCallable() {
+<span class="fc" id="L716">    return stub.getSourceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Filters an organization's assets and groups them by their specified properties.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   GroupAssetsRequest request =
+   *       GroupAssetsRequest.newBuilder()
+   *           .setParent(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setGroupBy(&quot;groupBy293428022&quot;)
+   *           .setCompareDuration(Duration.newBuilder().build())
+   *           .setReadTime(Timestamp.newBuilder().build())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   for (GroupResult element : securityCenterClient.groupAssets(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GroupAssetsPagedResponse groupAssets(GroupAssetsRequest request) {
+<span class="fc" id="L749">    return groupAssetsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Filters an organization's assets and groups them by their specified properties.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   GroupAssetsRequest request =
+   *       GroupAssetsRequest.newBuilder()
+   *           .setParent(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setGroupBy(&quot;groupBy293428022&quot;)
+   *           .setCompareDuration(Duration.newBuilder().build())
+   *           .setReadTime(Timestamp.newBuilder().build())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   ApiFuture&lt;GroupResult&gt; future =
+   *       securityCenterClient.groupAssetsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (GroupResult element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GroupAssetsRequest, GroupAssetsPagedResponse&gt;
+      groupAssetsPagedCallable() {
+<span class="fc" id="L783">    return stub.groupAssetsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Filters an organization's assets and groups them by their specified properties.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   GroupAssetsRequest request =
+   *       GroupAssetsRequest.newBuilder()
+   *           .setParent(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setGroupBy(&quot;groupBy293428022&quot;)
+   *           .setCompareDuration(Duration.newBuilder().build())
+   *           .setReadTime(Timestamp.newBuilder().build())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   while (true) {
+   *     GroupAssetsResponse response = securityCenterClient.groupAssetsCallable().call(request);
+   *     for (GroupResult element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GroupAssetsRequest, GroupAssetsResponse&gt; groupAssetsCallable() {
+<span class="nc" id="L822">    return stub.groupAssetsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Filters an organization or source's findings and groups them by their specified properties.
+   *
+   * &lt;p&gt;To group across all sources provide a `-` as the source id. Example:
+   * /v1beta1/organizations/{organization_id}/sources/-/findings
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   SourceName parent = SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;);
+   *   String groupBy = &quot;groupBy293428022&quot;;
+   *   for (GroupResult element : securityCenterClient.groupFindings(parent, groupBy).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Name of the source to groupBy. Its format is
+   *     &quot;organizations/[organization_id]/sources/[source_id]&quot;. To groupBy across all sources
+   *     provide a source_id of `-`. For example: organizations/{organization_id}/sources/-
+   * @param groupBy Required. Expression that defines what assets fields to use for grouping
+   *     (including `state`). The string value should follow SQL syntax: comma separated list of
+   *     fields. For example: &quot;parent,resource_name&quot;.
+   *     &lt;p&gt;The following fields are supported:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;resource_name
+   *       &lt;li&gt;category
+   *       &lt;li&gt;state
+   *       &lt;li&gt;parent
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GroupFindingsPagedResponse groupFindings(SourceName parent, String groupBy) {
+    GroupFindingsRequest request =
+<span class="fc" id="L864">        GroupFindingsRequest.newBuilder()</span>
+<span class="pc bpc" id="L865" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L866">            .setGroupBy(groupBy)</span>
+<span class="fc" id="L867">            .build();</span>
+<span class="fc" id="L868">    return groupFindings(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Filters an organization or source's findings and groups them by their specified properties.
+   *
+   * &lt;p&gt;To group across all sources provide a `-` as the source id. Example:
+   * /v1beta1/organizations/{organization_id}/sources/-/findings
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   String parent = SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;).toString();
+   *   String groupBy = &quot;groupBy293428022&quot;;
+   *   for (GroupResult element : securityCenterClient.groupFindings(parent, groupBy).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Name of the source to groupBy. Its format is
+   *     &quot;organizations/[organization_id]/sources/[source_id]&quot;. To groupBy across all sources
+   *     provide a source_id of `-`. For example: organizations/{organization_id}/sources/-
+   * @param groupBy Required. Expression that defines what assets fields to use for grouping
+   *     (including `state`). The string value should follow SQL syntax: comma separated list of
+   *     fields. For example: &quot;parent,resource_name&quot;.
+   *     &lt;p&gt;The following fields are supported:
+   *     &lt;ul&gt;
+   *       &lt;li&gt;resource_name
+   *       &lt;li&gt;category
+   *       &lt;li&gt;state
+   *       &lt;li&gt;parent
+   *     &lt;/ul&gt;
+   *
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GroupFindingsPagedResponse groupFindings(String parent, String groupBy) {
+    GroupFindingsRequest request =
+<span class="fc" id="L910">        GroupFindingsRequest.newBuilder().setParent(parent).setGroupBy(groupBy).build();</span>
+<span class="fc" id="L911">    return groupFindings(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Filters an organization or source's findings and groups them by their specified properties.
+   *
+   * &lt;p&gt;To group across all sources provide a `-` as the source id. Example:
+   * /v1beta1/organizations/{organization_id}/sources/-/findings
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   GroupFindingsRequest request =
+   *       GroupFindingsRequest.newBuilder()
+   *           .setParent(SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setGroupBy(&quot;groupBy293428022&quot;)
+   *           .setReadTime(Timestamp.newBuilder().build())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   for (GroupResult element : securityCenterClient.groupFindings(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final GroupFindingsPagedResponse groupFindings(GroupFindingsRequest request) {
+<span class="fc" id="L946">    return groupFindingsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Filters an organization or source's findings and groups them by their specified properties.
+   *
+   * &lt;p&gt;To group across all sources provide a `-` as the source id. Example:
+   * /v1beta1/organizations/{organization_id}/sources/-/findings
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   GroupFindingsRequest request =
+   *       GroupFindingsRequest.newBuilder()
+   *           .setParent(SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setGroupBy(&quot;groupBy293428022&quot;)
+   *           .setReadTime(Timestamp.newBuilder().build())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   ApiFuture&lt;GroupResult&gt; future =
+   *       securityCenterClient.groupFindingsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (GroupResult element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GroupFindingsRequest, GroupFindingsPagedResponse&gt;
+      groupFindingsPagedCallable() {
+<span class="fc" id="L982">    return stub.groupFindingsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Filters an organization or source's findings and groups them by their specified properties.
+   *
+   * &lt;p&gt;To group across all sources provide a `-` as the source id. Example:
+   * /v1beta1/organizations/{organization_id}/sources/-/findings
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   GroupFindingsRequest request =
+   *       GroupFindingsRequest.newBuilder()
+   *           .setParent(SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setGroupBy(&quot;groupBy293428022&quot;)
+   *           .setReadTime(Timestamp.newBuilder().build())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   while (true) {
+   *     GroupFindingsResponse response = securityCenterClient.groupFindingsCallable().call(request);
+   *     for (GroupResult element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;GroupFindingsRequest, GroupFindingsResponse&gt; groupFindingsCallable() {
+<span class="nc" id="L1023">    return stub.groupFindingsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists an organization's assets.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   ListAssetsRequest request =
+   *       ListAssetsRequest.newBuilder()
+   *           .setParent(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setReadTime(Timestamp.newBuilder().build())
+   *           .setCompareDuration(Duration.newBuilder().build())
+   *           .setFieldMask(FieldMask.newBuilder().build())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   for (ListAssetsResponse.ListAssetsResult element :
+   *       securityCenterClient.listAssets(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListAssetsPagedResponse listAssets(ListAssetsRequest request) {
+<span class="fc" id="L1058">    return listAssetsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists an organization's assets.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   ListAssetsRequest request =
+   *       ListAssetsRequest.newBuilder()
+   *           .setParent(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setReadTime(Timestamp.newBuilder().build())
+   *           .setCompareDuration(Duration.newBuilder().build())
+   *           .setFieldMask(FieldMask.newBuilder().build())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   ApiFuture&lt;ListAssetsResponse.ListAssetsResult&gt; future =
+   *       securityCenterClient.listAssetsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (ListAssetsResponse.ListAssetsResult element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAssetsRequest, ListAssetsPagedResponse&gt; listAssetsPagedCallable() {
+<span class="fc" id="L1092">    return stub.listAssetsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists an organization's assets.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   ListAssetsRequest request =
+   *       ListAssetsRequest.newBuilder()
+   *           .setParent(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setReadTime(Timestamp.newBuilder().build())
+   *           .setCompareDuration(Duration.newBuilder().build())
+   *           .setFieldMask(FieldMask.newBuilder().build())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   while (true) {
+   *     ListAssetsResponse response = securityCenterClient.listAssetsCallable().call(request);
+   *     for (ListAssetsResponse.ListAssetsResult element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListAssetsRequest, ListAssetsResponse&gt; listAssetsCallable() {
+<span class="nc" id="L1132">    return stub.listAssetsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists an organization or source's findings.
+   *
+   * &lt;p&gt;To list across all sources provide a `-` as the source id. Example:
+   * /v1beta1/organizations/{organization_id}/sources/-/findings
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   ListFindingsRequest request =
+   *       ListFindingsRequest.newBuilder()
+   *           .setParent(SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setReadTime(Timestamp.newBuilder().build())
+   *           .setFieldMask(FieldMask.newBuilder().build())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   for (Finding element : securityCenterClient.listFindings(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListFindingsPagedResponse listFindings(ListFindingsRequest request) {
+<span class="fc" id="L1168">    return listFindingsPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists an organization or source's findings.
+   *
+   * &lt;p&gt;To list across all sources provide a `-` as the source id. Example:
+   * /v1beta1/organizations/{organization_id}/sources/-/findings
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   ListFindingsRequest request =
+   *       ListFindingsRequest.newBuilder()
+   *           .setParent(SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setReadTime(Timestamp.newBuilder().build())
+   *           .setFieldMask(FieldMask.newBuilder().build())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   ApiFuture&lt;Finding&gt; future =
+   *       securityCenterClient.listFindingsPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Finding element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListFindingsRequest, ListFindingsPagedResponse&gt;
+      listFindingsPagedCallable() {
+<span class="fc" id="L1205">    return stub.listFindingsPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists an organization or source's findings.
+   *
+   * &lt;p&gt;To list across all sources provide a `-` as the source id. Example:
+   * /v1beta1/organizations/{organization_id}/sources/-/findings
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   ListFindingsRequest request =
+   *       ListFindingsRequest.newBuilder()
+   *           .setParent(SourceName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;).toString())
+   *           .setFilter(&quot;filter-1274492040&quot;)
+   *           .setOrderBy(&quot;orderBy-1207110587&quot;)
+   *           .setReadTime(Timestamp.newBuilder().build())
+   *           .setFieldMask(FieldMask.newBuilder().build())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   while (true) {
+   *     ListFindingsResponse response = securityCenterClient.listFindingsCallable().call(request);
+   *     for (Finding element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListFindingsRequest, ListFindingsResponse&gt; listFindingsCallable() {
+<span class="nc" id="L1247">    return stub.listFindingsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all sources belonging to an organization.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   OrganizationName parent = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   for (Source element : securityCenterClient.listSources(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the parent of sources to list. Its format should be
+   *     &quot;organizations/[organization_id]&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListSourcesPagedResponse listSources(OrganizationName parent) {
+    ListSourcesRequest request =
+<span class="fc" id="L1273">        ListSourcesRequest.newBuilder()</span>
+<span class="pc bpc" id="L1274" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1275">            .build();</span>
+<span class="fc" id="L1276">    return listSources(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all sources belonging to an organization.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   String parent = OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString();
+   *   for (Source element : securityCenterClient.listSources(parent).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Resource name of the parent of sources to list. Its format should be
+   *     &quot;organizations/[organization_id]&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListSourcesPagedResponse listSources(String parent) {
+<span class="fc" id="L1301">    ListSourcesRequest request = ListSourcesRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1302">    return listSources(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all sources belonging to an organization.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   ListSourcesRequest request =
+   *       ListSourcesRequest.newBuilder()
+   *           .setParent(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   for (Source element : securityCenterClient.listSources(request).iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListSourcesPagedResponse listSources(ListSourcesRequest request) {
+<span class="fc" id="L1331">    return listSourcesPagedCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all sources belonging to an organization.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   ListSourcesRequest request =
+   *       ListSourcesRequest.newBuilder()
+   *           .setParent(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   ApiFuture&lt;Source&gt; future =
+   *       securityCenterClient.listSourcesPagedCallable().futureCall(request);
+   *   // Do something.
+   *   for (Source element : future.get().iterateAll()) {
+   *     // doThingsWith(element);
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListSourcesRequest, ListSourcesPagedResponse&gt;
+      listSourcesPagedCallable() {
+<span class="fc" id="L1361">    return stub.listSourcesPagedCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all sources belonging to an organization.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   ListSourcesRequest request =
+   *       ListSourcesRequest.newBuilder()
+   *           .setParent(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setPageToken(&quot;pageToken873572522&quot;)
+   *           .setPageSize(883849137)
+   *           .build();
+   *   while (true) {
+   *     ListSourcesResponse response = securityCenterClient.listSourcesCallable().call(request);
+   *     for (Source element : response.getResponsesList()) {
+   *       // doThingsWith(element);
+   *     }
+   *     String nextPageToken = response.getNextPageToken();
+   *     if (!Strings.isNullOrEmpty(nextPageToken)) {
+   *       request = request.toBuilder().setPageToken(nextPageToken).build();
+   *     } else {
+   *       break;
+   *     }
+   *   }
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;ListSourcesRequest, ListSourcesResponse&gt; listSourcesCallable() {
+<span class="nc" id="L1396">    return stub.listSourcesCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Runs asset discovery. The discovery is tracked with a long-running operation.
+   *
+   * &lt;p&gt;This API can only be called with limited frequency for an organization. If it is called too
+   * frequently the caller will receive a TOO_MANY_REQUESTS error.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   OrganizationName parent = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   securityCenterClient.runAssetDiscoveryAsync(parent).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Name of the organization to run asset discovery for. Its format is
+   *     &quot;organizations/[organization_id]&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, Empty&gt; runAssetDiscoveryAsync(OrganizationName parent) {
+    RunAssetDiscoveryRequest request =
+<span class="fc" id="L1423">        RunAssetDiscoveryRequest.newBuilder()</span>
+<span class="pc bpc" id="L1424" title="1 of 2 branches missed.">            .setParent(parent == null ? null : parent.toString())</span>
+<span class="fc" id="L1425">            .build();</span>
+<span class="fc" id="L1426">    return runAssetDiscoveryAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Runs asset discovery. The discovery is tracked with a long-running operation.
+   *
+   * &lt;p&gt;This API can only be called with limited frequency for an organization. If it is called too
+   * frequently the caller will receive a TOO_MANY_REQUESTS error.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   String parent = OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString();
+   *   securityCenterClient.runAssetDiscoveryAsync(parent).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param parent Required. Name of the organization to run asset discovery for. Its format is
+   *     &quot;organizations/[organization_id]&quot;.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, Empty&gt; runAssetDiscoveryAsync(String parent) {
+    RunAssetDiscoveryRequest request =
+<span class="fc" id="L1453">        RunAssetDiscoveryRequest.newBuilder().setParent(parent).build();</span>
+<span class="fc" id="L1454">    return runAssetDiscoveryAsync(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Runs asset discovery. The discovery is tracked with a long-running operation.
+   *
+   * &lt;p&gt;This API can only be called with limited frequency for an organization. If it is called too
+   * frequently the caller will receive a TOO_MANY_REQUESTS error.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   RunAssetDiscoveryRequest request =
+   *       RunAssetDiscoveryRequest.newBuilder()
+   *           .setParent(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .build();
+   *   securityCenterClient.runAssetDiscoveryAsync(request).get();
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture&lt;Empty, Empty&gt; runAssetDiscoveryAsync(
+      RunAssetDiscoveryRequest request) {
+<span class="fc" id="L1483">    return runAssetDiscoveryOperationCallable().futureCall(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Runs asset discovery. The discovery is tracked with a long-running operation.
+   *
+   * &lt;p&gt;This API can only be called with limited frequency for an organization. If it is called too
+   * frequently the caller will receive a TOO_MANY_REQUESTS error.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   RunAssetDiscoveryRequest request =
+   *       RunAssetDiscoveryRequest.newBuilder()
+   *           .setParent(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .build();
+   *   OperationFuture&lt;Empty, Empty&gt; future =
+   *       securityCenterClient.runAssetDiscoveryOperationCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final OperationCallable&lt;RunAssetDiscoveryRequest, Empty, Empty&gt;
+      runAssetDiscoveryOperationCallable() {
+<span class="fc" id="L1512">    return stub.runAssetDiscoveryOperationCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Runs asset discovery. The discovery is tracked with a long-running operation.
+   *
+   * &lt;p&gt;This API can only be called with limited frequency for an organization. If it is called too
+   * frequently the caller will receive a TOO_MANY_REQUESTS error.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   RunAssetDiscoveryRequest request =
+   *       RunAssetDiscoveryRequest.newBuilder()
+   *           .setParent(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .build();
+   *   ApiFuture&lt;Operation&gt; future =
+   *       securityCenterClient.runAssetDiscoveryCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;RunAssetDiscoveryRequest, Operation&gt; runAssetDiscoveryCallable() {
+<span class="nc" id="L1540">    return stub.runAssetDiscoveryCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the state of a finding.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   FindingName name = FindingName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;, &quot;[FINDING]&quot;);
+   *   Finding.State state = Finding.State.forNumber(0);
+   *   Timestamp startTime = Timestamp.newBuilder().build();
+   *   Finding response = securityCenterClient.setFindingState(name, state, startTime);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The relative resource name of the finding. See:
+   *     https://cloud.google.com/apis/design/resource_names#relative_resource_name Example:
+   *     &quot;organizations/{organization_id}/sources/{source_id}/finding/{finding_id}&quot;.
+   * @param state Required. The desired State of the finding.
+   * @param startTime Required. The time at which the updated state takes effect.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Finding setFindingState(FindingName name, Finding.State state, Timestamp startTime) {
+    SetFindingStateRequest request =
+<span class="fc" id="L1569">        SetFindingStateRequest.newBuilder()</span>
+<span class="pc bpc" id="L1570" title="1 of 2 branches missed.">            .setName(name == null ? null : name.toString())</span>
+<span class="fc" id="L1571">            .setState(state)</span>
+<span class="fc" id="L1572">            .setStartTime(startTime)</span>
+<span class="fc" id="L1573">            .build();</span>
+<span class="fc" id="L1574">    return setFindingState(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the state of a finding.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   String name = FindingName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;, &quot;[FINDING]&quot;).toString();
+   *   Finding.State state = Finding.State.forNumber(0);
+   *   Timestamp startTime = Timestamp.newBuilder().build();
+   *   Finding response = securityCenterClient.setFindingState(name, state, startTime);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param name Required. The relative resource name of the finding. See:
+   *     https://cloud.google.com/apis/design/resource_names#relative_resource_name Example:
+   *     &quot;organizations/{organization_id}/sources/{source_id}/finding/{finding_id}&quot;.
+   * @param state Required. The desired State of the finding.
+   * @param startTime Required. The time at which the updated state takes effect.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Finding setFindingState(String name, Finding.State state, Timestamp startTime) {
+    SetFindingStateRequest request =
+<span class="fc" id="L1603">        SetFindingStateRequest.newBuilder()</span>
+<span class="fc" id="L1604">            .setName(name)</span>
+<span class="fc" id="L1605">            .setState(state)</span>
+<span class="fc" id="L1606">            .setStartTime(startTime)</span>
+<span class="fc" id="L1607">            .build();</span>
+<span class="fc" id="L1608">    return setFindingState(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the state of a finding.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   SetFindingStateRequest request =
+   *       SetFindingStateRequest.newBuilder()
+   *           .setName(FindingName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;, &quot;[FINDING]&quot;).toString())
+   *           .setStartTime(Timestamp.newBuilder().build())
+   *           .build();
+   *   Finding response = securityCenterClient.setFindingState(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Finding setFindingState(SetFindingStateRequest request) {
+<span class="fc" id="L1634">    return setFindingStateCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates the state of a finding.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   SetFindingStateRequest request =
+   *       SetFindingStateRequest.newBuilder()
+   *           .setName(FindingName.of(&quot;[ORGANIZATION]&quot;, &quot;[SOURCE]&quot;, &quot;[FINDING]&quot;).toString())
+   *           .setStartTime(Timestamp.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Finding&gt; future =
+   *       securityCenterClient.setFindingStateCallable().futureCall(request);
+   *   // Do something.
+   *   Finding response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetFindingStateRequest, Finding&gt; setFindingStateCallable() {
+<span class="fc" id="L1660">    return stub.setFindingStateCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy on the specified Source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   ResourceName resource = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = securityCenterClient.setIamPolicy(resource, policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being specified. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param policy REQUIRED: The complete policy to be applied to the `resource`. The size of the
+   *     policy is limited to a few 10s of KB. An empty policy is a valid policy but certain Cloud
+   *     Platform services (such as Projects) might reject them.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(ResourceName resource, Policy policy) {
+    SetIamPolicyRequest request =
+<span class="fc" id="L1688">        SetIamPolicyRequest.newBuilder()</span>
+<span class="pc bpc" id="L1689" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L1690">            .setPolicy(policy)</span>
+<span class="fc" id="L1691">            .build();</span>
+<span class="fc" id="L1692">    return setIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy on the specified Source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   String resource = OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString();
+   *   Policy policy = Policy.newBuilder().build();
+   *   Policy response = securityCenterClient.setIamPolicy(resource, policy);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy is being specified. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param policy REQUIRED: The complete policy to be applied to the `resource`. The size of the
+   *     policy is limited to a few 10s of KB. An empty policy is a valid policy but certain Cloud
+   *     Platform services (such as Projects) might reject them.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(String resource, Policy policy) {
+    SetIamPolicyRequest request =
+<span class="fc" id="L1720">        SetIamPolicyRequest.newBuilder().setResource(resource).setPolicy(policy).build();</span>
+<span class="fc" id="L1721">    return setIamPolicy(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy on the specified Source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Policy response = securityCenterClient.setIamPolicy(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Policy setIamPolicy(SetIamPolicyRequest request) {
+<span class="fc" id="L1748">    return setIamPolicyCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Sets the access control policy on the specified Source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   SetIamPolicyRequest request =
+   *       SetIamPolicyRequest.newBuilder()
+   *           .setResource(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .setPolicy(Policy.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Policy&gt; future = securityCenterClient.setIamPolicyCallable().futureCall(request);
+   *   // Do something.
+   *   Policy response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;SetIamPolicyRequest, Policy&gt; setIamPolicyCallable() {
+<span class="fc" id="L1774">    return stub.setIamPolicyCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the permissions that a caller has on the specified source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   ResourceName resource = OrganizationName.of(&quot;[ORGANIZATION]&quot;);
+   *   List&lt;String&gt; permissions = new ArrayList&lt;&gt;();
+   *   TestIamPermissionsResponse response =
+   *       securityCenterClient.testIamPermissions(resource, permissions);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy detail is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param permissions The set of permissions to check for the `resource`. Permissions with
+   *     wildcards (such as '&amp;#42;' or 'storage.&amp;#42;') are not allowed. For more information see
+   *     [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(
+      ResourceName resource, List&lt;String&gt; permissions) {
+    TestIamPermissionsRequest request =
+<span class="fc" id="L1804">        TestIamPermissionsRequest.newBuilder()</span>
+<span class="pc bpc" id="L1805" title="1 of 2 branches missed.">            .setResource(resource == null ? null : resource.toString())</span>
+<span class="fc" id="L1806">            .addAllPermissions(permissions)</span>
+<span class="fc" id="L1807">            .build();</span>
+<span class="fc" id="L1808">    return testIamPermissions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the permissions that a caller has on the specified source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   String resource = OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString();
+   *   List&lt;String&gt; permissions = new ArrayList&lt;&gt;();
+   *   TestIamPermissionsResponse response =
+   *       securityCenterClient.testIamPermissions(resource, permissions);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param resource REQUIRED: The resource for which the policy detail is being requested. See the
+   *     operation documentation for the appropriate value for this field.
+   * @param permissions The set of permissions to check for the `resource`. Permissions with
+   *     wildcards (such as '&amp;#42;' or 'storage.&amp;#42;') are not allowed. For more information see
+   *     [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(
+      String resource, List&lt;String&gt; permissions) {
+    TestIamPermissionsRequest request =
+<span class="fc" id="L1838">        TestIamPermissionsRequest.newBuilder()</span>
+<span class="fc" id="L1839">            .setResource(resource)</span>
+<span class="fc" id="L1840">            .addAllPermissions(permissions)</span>
+<span class="fc" id="L1841">            .build();</span>
+<span class="fc" id="L1842">    return testIamPermissions(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the permissions that a caller has on the specified source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   TestIamPermissionsResponse response = securityCenterClient.testIamPermissions(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final TestIamPermissionsResponse testIamPermissions(TestIamPermissionsRequest request) {
+<span class="fc" id="L1868">    return testIamPermissionsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Returns the permissions that a caller has on the specified source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   TestIamPermissionsRequest request =
+   *       TestIamPermissionsRequest.newBuilder()
+   *           .setResource(OrganizationName.of(&quot;[ORGANIZATION]&quot;).toString())
+   *           .addAllPermissions(new ArrayList&lt;String&gt;())
+   *           .build();
+   *   ApiFuture&lt;TestIamPermissionsResponse&gt; future =
+   *       securityCenterClient.testIamPermissionsCallable().futureCall(request);
+   *   // Do something.
+   *   TestIamPermissionsResponse response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+      testIamPermissionsCallable() {
+<span class="fc" id="L1895">    return stub.testIamPermissionsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates or updates a finding. The corresponding source must exist for a finding creation to
+   * succeed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   Finding finding = Finding.newBuilder().build();
+   *   Finding response = securityCenterClient.updateFinding(finding);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param finding Required. The finding resource to update or create if it does not already exist.
+   *     parent, security_marks, and update_time will be ignored.
+   *     &lt;p&gt;In the case of creation, the finding id portion of the name must alphanumeric and less
+   *     than or equal to 32 characters and greater than 0 characters in length.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Finding updateFinding(Finding finding) {
+<span class="fc" id="L1921">    UpdateFindingRequest request = UpdateFindingRequest.newBuilder().setFinding(finding).build();</span>
+<span class="fc" id="L1922">    return updateFinding(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates or updates a finding. The corresponding source must exist for a finding creation to
+   * succeed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   UpdateFindingRequest request =
+   *       UpdateFindingRequest.newBuilder()
+   *           .setFinding(Finding.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Finding response = securityCenterClient.updateFinding(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Finding updateFinding(UpdateFindingRequest request) {
+<span class="fc" id="L1949">    return updateFindingCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates or updates a finding. The corresponding source must exist for a finding creation to
+   * succeed.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   UpdateFindingRequest request =
+   *       UpdateFindingRequest.newBuilder()
+   *           .setFinding(Finding.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Finding&gt; future = securityCenterClient.updateFindingCallable().futureCall(request);
+   *   // Do something.
+   *   Finding response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateFindingRequest, Finding&gt; updateFindingCallable() {
+<span class="fc" id="L1975">    return stub.updateFindingCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an organization's settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   OrganizationSettings organizationSettings = OrganizationSettings.newBuilder().build();
+   *   OrganizationSettings response =
+   *       securityCenterClient.updateOrganizationSettings(organizationSettings);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param organizationSettings Required. The organization settings resource to update.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OrganizationSettings updateOrganizationSettings(
+      OrganizationSettings organizationSettings) {
+    UpdateOrganizationSettingsRequest request =
+<span class="fc" id="L2000">        UpdateOrganizationSettingsRequest.newBuilder()</span>
+<span class="fc" id="L2001">            .setOrganizationSettings(organizationSettings)</span>
+<span class="fc" id="L2002">            .build();</span>
+<span class="fc" id="L2003">    return updateOrganizationSettings(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an organization's settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   UpdateOrganizationSettingsRequest request =
+   *       UpdateOrganizationSettingsRequest.newBuilder()
+   *           .setOrganizationSettings(OrganizationSettings.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   OrganizationSettings response = securityCenterClient.updateOrganizationSettings(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OrganizationSettings updateOrganizationSettings(
+      UpdateOrganizationSettingsRequest request) {
+<span class="fc" id="L2030">    return updateOrganizationSettingsCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates an organization's settings.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   UpdateOrganizationSettingsRequest request =
+   *       UpdateOrganizationSettingsRequest.newBuilder()
+   *           .setOrganizationSettings(OrganizationSettings.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;OrganizationSettings&gt; future =
+   *       securityCenterClient.updateOrganizationSettingsCallable().futureCall(request);
+   *   // Do something.
+   *   OrganizationSettings response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateOrganizationSettingsRequest, OrganizationSettings&gt;
+      updateOrganizationSettingsCallable() {
+<span class="fc" id="L2057">    return stub.updateOrganizationSettingsCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   Source source = Source.newBuilder().build();
+   *   Source response = securityCenterClient.updateSource(source);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param source Required. The source resource to update.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Source updateSource(Source source) {
+<span class="fc" id="L2079">    UpdateSourceRequest request = UpdateSourceRequest.newBuilder().setSource(source).build();</span>
+<span class="fc" id="L2080">    return updateSource(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   UpdateSourceRequest request =
+   *       UpdateSourceRequest.newBuilder()
+   *           .setSource(Source.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   Source response = securityCenterClient.updateSource(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Source updateSource(UpdateSourceRequest request) {
+<span class="fc" id="L2106">    return updateSourceCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a source.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   UpdateSourceRequest request =
+   *       UpdateSourceRequest.newBuilder()
+   *           .setSource(Source.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;Source&gt; future = securityCenterClient.updateSourceCallable().futureCall(request);
+   *   // Do something.
+   *   Source response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateSourceRequest, Source&gt; updateSourceCallable() {
+<span class="fc" id="L2131">    return stub.updateSourceCallable();</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates security marks.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   SecurityMarks securityMarks = SecurityMarks.newBuilder().build();
+   *   SecurityMarks response = securityCenterClient.updateSecurityMarks(securityMarks);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param securityMarks Required. The security marks resource to update.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SecurityMarks updateSecurityMarks(SecurityMarks securityMarks) {
+    UpdateSecurityMarksRequest request =
+<span class="fc" id="L2154">        UpdateSecurityMarksRequest.newBuilder().setSecurityMarks(securityMarks).build();</span>
+<span class="fc" id="L2155">    return updateSecurityMarks(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates security marks.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   UpdateSecurityMarksRequest request =
+   *       UpdateSecurityMarksRequest.newBuilder()
+   *           .setSecurityMarks(SecurityMarks.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setStartTime(Timestamp.newBuilder().build())
+   *           .build();
+   *   SecurityMarks response = securityCenterClient.updateSecurityMarks(request);
+   * }
+   * }&lt;/pre&gt;
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final SecurityMarks updateSecurityMarks(UpdateSecurityMarksRequest request) {
+<span class="fc" id="L2182">    return updateSecurityMarksCallable().call(request);</span>
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates security marks.
+   *
+   * &lt;p&gt;Sample code:
+   *
+   * &lt;pre&gt;{@code
+   * // This snippet has been automatically generated for illustrative purposes only.
+   * // It may require modifications to work in your environment.
+   * try (SecurityCenterClient securityCenterClient = SecurityCenterClient.create()) {
+   *   UpdateSecurityMarksRequest request =
+   *       UpdateSecurityMarksRequest.newBuilder()
+   *           .setSecurityMarks(SecurityMarks.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .setStartTime(Timestamp.newBuilder().build())
+   *           .build();
+   *   ApiFuture&lt;SecurityMarks&gt; future =
+   *       securityCenterClient.updateSecurityMarksCallable().futureCall(request);
+   *   // Do something.
+   *   SecurityMarks response = future.get();
+   * }
+   * }&lt;/pre&gt;
+   */
+  public final UnaryCallable&lt;UpdateSecurityMarksRequest, SecurityMarks&gt;
+      updateSecurityMarksCallable() {
+<span class="fc" id="L2210">    return stub.updateSecurityMarksCallable();</span>
+  }
+
+  @Override
+  public final void close() {
+<span class="fc" id="L2215">    stub.close();</span>
+<span class="fc" id="L2216">  }</span>
+
+  @Override
+  public void shutdown() {
+<span class="nc" id="L2220">    stub.shutdown();</span>
+<span class="nc" id="L2221">  }</span>
+
+  @Override
+  public boolean isShutdown() {
+<span class="nc" id="L2225">    return stub.isShutdown();</span>
+  }
+
+  @Override
+  public boolean isTerminated() {
+<span class="nc" id="L2230">    return stub.isTerminated();</span>
+  }
+
+  @Override
+  public void shutdownNow() {
+<span class="nc" id="L2235">    stub.shutdownNow();</span>
+<span class="nc" id="L2236">  }</span>
+
+  @Override
+  public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
+<span class="nc" id="L2240">    return stub.awaitTermination(duration, unit);</span>
+  }
+
+  public static class GroupAssetsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          GroupAssetsRequest,
+          GroupAssetsResponse,
+          GroupResult,
+          GroupAssetsPage,
+          GroupAssetsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;GroupAssetsPagedResponse&gt; createAsync(
+        PageContext&lt;GroupAssetsRequest, GroupAssetsResponse, GroupResult&gt; context,
+        ApiFuture&lt;GroupAssetsResponse&gt; futureResponse) {
+      ApiFuture&lt;GroupAssetsPage&gt; futurePage =
+<span class="fc" id="L2255">          GroupAssetsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2256">      return ApiFutures.transform(</span>
+<span class="fc" id="L2257">          futurePage, input -&gt; new GroupAssetsPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private GroupAssetsPagedResponse(GroupAssetsPage page) {
+<span class="fc" id="L2261">      super(page, GroupAssetsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2262">    }</span>
+  }
+
+  public static class GroupAssetsPage
+      extends AbstractPage&lt;GroupAssetsRequest, GroupAssetsResponse, GroupResult, GroupAssetsPage&gt; {
+
+    private GroupAssetsPage(
+        PageContext&lt;GroupAssetsRequest, GroupAssetsResponse, GroupResult&gt; context,
+        GroupAssetsResponse response) {
+<span class="fc" id="L2271">      super(context, response);</span>
+<span class="fc" id="L2272">    }</span>
+
+    private static GroupAssetsPage createEmptyPage() {
+<span class="fc" id="L2275">      return new GroupAssetsPage(null, null);</span>
+    }
+
+    @Override
+    protected GroupAssetsPage createPage(
+        PageContext&lt;GroupAssetsRequest, GroupAssetsResponse, GroupResult&gt; context,
+        GroupAssetsResponse response) {
+<span class="fc" id="L2282">      return new GroupAssetsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;GroupAssetsPage&gt; createPageAsync(
+        PageContext&lt;GroupAssetsRequest, GroupAssetsResponse, GroupResult&gt; context,
+        ApiFuture&lt;GroupAssetsResponse&gt; futureResponse) {
+<span class="fc" id="L2289">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class GroupAssetsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          GroupAssetsRequest,
+          GroupAssetsResponse,
+          GroupResult,
+          GroupAssetsPage,
+          GroupAssetsFixedSizeCollection&gt; {
+
+    private GroupAssetsFixedSizeCollection(List&lt;GroupAssetsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2302">      super(pages, collectionSize);</span>
+<span class="fc" id="L2303">    }</span>
+
+    private static GroupAssetsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2306">      return new GroupAssetsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected GroupAssetsFixedSizeCollection createCollection(
+        List&lt;GroupAssetsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2312">      return new GroupAssetsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class GroupFindingsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          GroupFindingsRequest,
+          GroupFindingsResponse,
+          GroupResult,
+          GroupFindingsPage,
+          GroupFindingsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;GroupFindingsPagedResponse&gt; createAsync(
+        PageContext&lt;GroupFindingsRequest, GroupFindingsResponse, GroupResult&gt; context,
+        ApiFuture&lt;GroupFindingsResponse&gt; futureResponse) {
+      ApiFuture&lt;GroupFindingsPage&gt; futurePage =
+<span class="fc" id="L2328">          GroupFindingsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2329">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2331">          input -&gt; new GroupFindingsPagedResponse(input),</span>
+<span class="fc" id="L2332">          MoreExecutors.directExecutor());</span>
+    }
+
+    private GroupFindingsPagedResponse(GroupFindingsPage page) {
+<span class="fc" id="L2336">      super(page, GroupFindingsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2337">    }</span>
+  }
+
+  public static class GroupFindingsPage
+      extends AbstractPage&lt;
+          GroupFindingsRequest, GroupFindingsResponse, GroupResult, GroupFindingsPage&gt; {
+
+    private GroupFindingsPage(
+        PageContext&lt;GroupFindingsRequest, GroupFindingsResponse, GroupResult&gt; context,
+        GroupFindingsResponse response) {
+<span class="fc" id="L2347">      super(context, response);</span>
+<span class="fc" id="L2348">    }</span>
+
+    private static GroupFindingsPage createEmptyPage() {
+<span class="fc" id="L2351">      return new GroupFindingsPage(null, null);</span>
+    }
+
+    @Override
+    protected GroupFindingsPage createPage(
+        PageContext&lt;GroupFindingsRequest, GroupFindingsResponse, GroupResult&gt; context,
+        GroupFindingsResponse response) {
+<span class="fc" id="L2358">      return new GroupFindingsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;GroupFindingsPage&gt; createPageAsync(
+        PageContext&lt;GroupFindingsRequest, GroupFindingsResponse, GroupResult&gt; context,
+        ApiFuture&lt;GroupFindingsResponse&gt; futureResponse) {
+<span class="fc" id="L2365">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class GroupFindingsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          GroupFindingsRequest,
+          GroupFindingsResponse,
+          GroupResult,
+          GroupFindingsPage,
+          GroupFindingsFixedSizeCollection&gt; {
+
+    private GroupFindingsFixedSizeCollection(List&lt;GroupFindingsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2378">      super(pages, collectionSize);</span>
+<span class="fc" id="L2379">    }</span>
+
+    private static GroupFindingsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2382">      return new GroupFindingsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected GroupFindingsFixedSizeCollection createCollection(
+        List&lt;GroupFindingsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2388">      return new GroupFindingsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListAssetsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListAssetsRequest,
+          ListAssetsResponse,
+          ListAssetsResponse.ListAssetsResult,
+          ListAssetsPage,
+          ListAssetsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListAssetsPagedResponse&gt; createAsync(
+        PageContext&lt;ListAssetsRequest, ListAssetsResponse, ListAssetsResponse.ListAssetsResult&gt;
+            context,
+        ApiFuture&lt;ListAssetsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListAssetsPage&gt; futurePage =
+<span class="fc" id="L2405">          ListAssetsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2406">      return ApiFutures.transform(</span>
+<span class="fc" id="L2407">          futurePage, input -&gt; new ListAssetsPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListAssetsPagedResponse(ListAssetsPage page) {
+<span class="fc" id="L2411">      super(page, ListAssetsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2412">    }</span>
+  }
+
+  public static class ListAssetsPage
+      extends AbstractPage&lt;
+          ListAssetsRequest,
+          ListAssetsResponse,
+          ListAssetsResponse.ListAssetsResult,
+          ListAssetsPage&gt; {
+
+    private ListAssetsPage(
+        PageContext&lt;ListAssetsRequest, ListAssetsResponse, ListAssetsResponse.ListAssetsResult&gt;
+            context,
+        ListAssetsResponse response) {
+<span class="fc" id="L2426">      super(context, response);</span>
+<span class="fc" id="L2427">    }</span>
+
+    private static ListAssetsPage createEmptyPage() {
+<span class="fc" id="L2430">      return new ListAssetsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListAssetsPage createPage(
+        PageContext&lt;ListAssetsRequest, ListAssetsResponse, ListAssetsResponse.ListAssetsResult&gt;
+            context,
+        ListAssetsResponse response) {
+<span class="fc" id="L2438">      return new ListAssetsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListAssetsPage&gt; createPageAsync(
+        PageContext&lt;ListAssetsRequest, ListAssetsResponse, ListAssetsResponse.ListAssetsResult&gt;
+            context,
+        ApiFuture&lt;ListAssetsResponse&gt; futureResponse) {
+<span class="fc" id="L2446">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListAssetsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListAssetsRequest,
+          ListAssetsResponse,
+          ListAssetsResponse.ListAssetsResult,
+          ListAssetsPage,
+          ListAssetsFixedSizeCollection&gt; {
+
+    private ListAssetsFixedSizeCollection(List&lt;ListAssetsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2459">      super(pages, collectionSize);</span>
+<span class="fc" id="L2460">    }</span>
+
+    private static ListAssetsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2463">      return new ListAssetsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListAssetsFixedSizeCollection createCollection(
+        List&lt;ListAssetsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2469">      return new ListAssetsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListFindingsPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListFindingsRequest,
+          ListFindingsResponse,
+          Finding,
+          ListFindingsPage,
+          ListFindingsFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListFindingsPagedResponse&gt; createAsync(
+        PageContext&lt;ListFindingsRequest, ListFindingsResponse, Finding&gt; context,
+        ApiFuture&lt;ListFindingsResponse&gt; futureResponse) {
+      ApiFuture&lt;ListFindingsPage&gt; futurePage =
+<span class="fc" id="L2485">          ListFindingsPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2486">      return ApiFutures.transform(</span>
+          futurePage,
+<span class="fc" id="L2488">          input -&gt; new ListFindingsPagedResponse(input),</span>
+<span class="fc" id="L2489">          MoreExecutors.directExecutor());</span>
+    }
+
+    private ListFindingsPagedResponse(ListFindingsPage page) {
+<span class="fc" id="L2493">      super(page, ListFindingsFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2494">    }</span>
+  }
+
+  public static class ListFindingsPage
+      extends AbstractPage&lt;ListFindingsRequest, ListFindingsResponse, Finding, ListFindingsPage&gt; {
+
+    private ListFindingsPage(
+        PageContext&lt;ListFindingsRequest, ListFindingsResponse, Finding&gt; context,
+        ListFindingsResponse response) {
+<span class="fc" id="L2503">      super(context, response);</span>
+<span class="fc" id="L2504">    }</span>
+
+    private static ListFindingsPage createEmptyPage() {
+<span class="fc" id="L2507">      return new ListFindingsPage(null, null);</span>
+    }
+
+    @Override
+    protected ListFindingsPage createPage(
+        PageContext&lt;ListFindingsRequest, ListFindingsResponse, Finding&gt; context,
+        ListFindingsResponse response) {
+<span class="fc" id="L2514">      return new ListFindingsPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListFindingsPage&gt; createPageAsync(
+        PageContext&lt;ListFindingsRequest, ListFindingsResponse, Finding&gt; context,
+        ApiFuture&lt;ListFindingsResponse&gt; futureResponse) {
+<span class="fc" id="L2521">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListFindingsFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListFindingsRequest,
+          ListFindingsResponse,
+          Finding,
+          ListFindingsPage,
+          ListFindingsFixedSizeCollection&gt; {
+
+    private ListFindingsFixedSizeCollection(List&lt;ListFindingsPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2534">      super(pages, collectionSize);</span>
+<span class="fc" id="L2535">    }</span>
+
+    private static ListFindingsFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2538">      return new ListFindingsFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListFindingsFixedSizeCollection createCollection(
+        List&lt;ListFindingsPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2544">      return new ListFindingsFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+
+  public static class ListSourcesPagedResponse
+      extends AbstractPagedListResponse&lt;
+          ListSourcesRequest,
+          ListSourcesResponse,
+          Source,
+          ListSourcesPage,
+          ListSourcesFixedSizeCollection&gt; {
+
+    public static ApiFuture&lt;ListSourcesPagedResponse&gt; createAsync(
+        PageContext&lt;ListSourcesRequest, ListSourcesResponse, Source&gt; context,
+        ApiFuture&lt;ListSourcesResponse&gt; futureResponse) {
+      ApiFuture&lt;ListSourcesPage&gt; futurePage =
+<span class="fc" id="L2560">          ListSourcesPage.createEmptyPage().createPageAsync(context, futureResponse);</span>
+<span class="fc" id="L2561">      return ApiFutures.transform(</span>
+<span class="fc" id="L2562">          futurePage, input -&gt; new ListSourcesPagedResponse(input), MoreExecutors.directExecutor());</span>
+    }
+
+    private ListSourcesPagedResponse(ListSourcesPage page) {
+<span class="fc" id="L2566">      super(page, ListSourcesFixedSizeCollection.createEmptyCollection());</span>
+<span class="fc" id="L2567">    }</span>
+  }
+
+  public static class ListSourcesPage
+      extends AbstractPage&lt;ListSourcesRequest, ListSourcesResponse, Source, ListSourcesPage&gt; {
+
+    private ListSourcesPage(
+        PageContext&lt;ListSourcesRequest, ListSourcesResponse, Source&gt; context,
+        ListSourcesResponse response) {
+<span class="fc" id="L2576">      super(context, response);</span>
+<span class="fc" id="L2577">    }</span>
+
+    private static ListSourcesPage createEmptyPage() {
+<span class="fc" id="L2580">      return new ListSourcesPage(null, null);</span>
+    }
+
+    @Override
+    protected ListSourcesPage createPage(
+        PageContext&lt;ListSourcesRequest, ListSourcesResponse, Source&gt; context,
+        ListSourcesResponse response) {
+<span class="fc" id="L2587">      return new ListSourcesPage(context, response);</span>
+    }
+
+    @Override
+    public ApiFuture&lt;ListSourcesPage&gt; createPageAsync(
+        PageContext&lt;ListSourcesRequest, ListSourcesResponse, Source&gt; context,
+        ApiFuture&lt;ListSourcesResponse&gt; futureResponse) {
+<span class="fc" id="L2594">      return super.createPageAsync(context, futureResponse);</span>
+    }
+  }
+
+  public static class ListSourcesFixedSizeCollection
+      extends AbstractFixedSizeCollection&lt;
+          ListSourcesRequest,
+          ListSourcesResponse,
+          Source,
+          ListSourcesPage,
+          ListSourcesFixedSizeCollection&gt; {
+
+    private ListSourcesFixedSizeCollection(List&lt;ListSourcesPage&gt; pages, int collectionSize) {
+<span class="fc" id="L2607">      super(pages, collectionSize);</span>
+<span class="fc" id="L2608">    }</span>
+
+    private static ListSourcesFixedSizeCollection createEmptyCollection() {
+<span class="fc" id="L2611">      return new ListSourcesFixedSizeCollection(null, 0);</span>
+    }
+
+    @Override
+    protected ListSourcesFixedSizeCollection createCollection(
+        List&lt;ListSourcesPage&gt; pages, int collectionSize) {
+<span class="nc" id="L2617">      return new ListSourcesFixedSizeCollection(pages, collectionSize);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
