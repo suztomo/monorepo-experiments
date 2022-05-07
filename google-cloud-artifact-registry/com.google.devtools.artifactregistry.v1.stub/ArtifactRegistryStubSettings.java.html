@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ArtifactRegistryStubSettings.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-artifact-registry</a> &gt; <a href="index.source.html" class="el_package">com.google.devtools.artifactregistry.v1.stub</a> &gt; <span class="el_source">ArtifactRegistryStubSettings.java</span></div><h1>ArtifactRegistryStubSettings.java</h1><pre class="source lang-java linenums">/*
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,11 @@
 package com.google.devtools.artifactregistry.v1.stub;
 
 import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListDockerImagesPagedResponse;
+import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListFilesPagedResponse;
+import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListPackagesPagedResponse;
 import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListRepositoriesPagedResponse;
+import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListTagsPagedResponse;
+import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListVersionsPagedResponse;
 
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
@@ -28,10 +32,14 @@ import com.google.api.gax.core.InstantiatingExecutorProvider;
 import com.google.api.gax.grpc.GaxGrpcProperties;
 import com.google.api.gax.grpc.GrpcTransportChannel;
 import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider;
+import com.google.api.gax.grpc.ProtoOperationTransformers;
+import com.google.api.gax.longrunning.OperationSnapshot;
+import com.google.api.gax.longrunning.OperationTimedPollAlgorithm;
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiCallContext;
 import com.google.api.gax.rpc.ApiClientHeaderProvider;
 import com.google.api.gax.rpc.ClientContext;
+import com.google.api.gax.rpc.OperationCallSettings;
 import com.google.api.gax.rpc.PageContext;
 import com.google.api.gax.rpc.PagedCallSettings;
 import com.google.api.gax.rpc.PagedListDescriptor;
@@ -45,13 +53,55 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.devtools.artifactregistry.v1.CreateRepositoryRequest;
+import com.google.devtools.artifactregistry.v1.CreateTagRequest;
+import com.google.devtools.artifactregistry.v1.DeletePackageRequest;
+import com.google.devtools.artifactregistry.v1.DeleteRepositoryRequest;
+import com.google.devtools.artifactregistry.v1.DeleteTagRequest;
+import com.google.devtools.artifactregistry.v1.DeleteVersionRequest;
 import com.google.devtools.artifactregistry.v1.DockerImage;
+import com.google.devtools.artifactregistry.v1.File;
+import com.google.devtools.artifactregistry.v1.GetDockerImageRequest;
+import com.google.devtools.artifactregistry.v1.GetFileRequest;
+import com.google.devtools.artifactregistry.v1.GetPackageRequest;
+import com.google.devtools.artifactregistry.v1.GetProjectSettingsRequest;
 import com.google.devtools.artifactregistry.v1.GetRepositoryRequest;
+import com.google.devtools.artifactregistry.v1.GetTagRequest;
+import com.google.devtools.artifactregistry.v1.GetVersionRequest;
+import com.google.devtools.artifactregistry.v1.ImportAptArtifactsMetadata;
+import com.google.devtools.artifactregistry.v1.ImportAptArtifactsRequest;
+import com.google.devtools.artifactregistry.v1.ImportAptArtifactsResponse;
+import com.google.devtools.artifactregistry.v1.ImportYumArtifactsMetadata;
+import com.google.devtools.artifactregistry.v1.ImportYumArtifactsRequest;
+import com.google.devtools.artifactregistry.v1.ImportYumArtifactsResponse;
 import com.google.devtools.artifactregistry.v1.ListDockerImagesRequest;
 import com.google.devtools.artifactregistry.v1.ListDockerImagesResponse;
+import com.google.devtools.artifactregistry.v1.ListFilesRequest;
+import com.google.devtools.artifactregistry.v1.ListFilesResponse;
+import com.google.devtools.artifactregistry.v1.ListPackagesRequest;
+import com.google.devtools.artifactregistry.v1.ListPackagesResponse;
 import com.google.devtools.artifactregistry.v1.ListRepositoriesRequest;
 import com.google.devtools.artifactregistry.v1.ListRepositoriesResponse;
+import com.google.devtools.artifactregistry.v1.ListTagsRequest;
+import com.google.devtools.artifactregistry.v1.ListTagsResponse;
+import com.google.devtools.artifactregistry.v1.ListVersionsRequest;
+import com.google.devtools.artifactregistry.v1.ListVersionsResponse;
+import com.google.devtools.artifactregistry.v1.OperationMetadata;
+import com.google.devtools.artifactregistry.v1.Package;
+import com.google.devtools.artifactregistry.v1.ProjectSettings;
 import com.google.devtools.artifactregistry.v1.Repository;
+import com.google.devtools.artifactregistry.v1.Tag;
+import com.google.devtools.artifactregistry.v1.UpdateProjectSettingsRequest;
+import com.google.devtools.artifactregistry.v1.UpdateRepositoryRequest;
+import com.google.devtools.artifactregistry.v1.UpdateTagRequest;
+import com.google.devtools.artifactregistry.v1.Version;
+import com.google.iam.v1.GetIamPolicyRequest;
+import com.google.iam.v1.Policy;
+import com.google.iam.v1.SetIamPolicyRequest;
+import com.google.iam.v1.TestIamPermissionsRequest;
+import com.google.iam.v1.TestIamPermissionsResponse;
+import com.google.longrunning.Operation;
+import com.google.protobuf.Empty;
 import java.io.IOException;
 import java.util.List;
 import javax.annotation.Generated;
@@ -73,16 +123,18 @@ import org.threeten.bp.Duration;
  * &lt;p&gt;The builder of this class is recursive, so contained classes are themselves builders. When
  * build() is called, the tree of builders is called to create the complete settings object.
  *
- * &lt;p&gt;For example, to set the total timeout of getRepository to 30 seconds:
+ * &lt;p&gt;For example, to set the total timeout of getDockerImage to 30 seconds:
  *
  * &lt;pre&gt;{@code
+ * // This snippet has been automatically generated for illustrative purposes only.
+ * // It may require modifications to work in your environment.
  * ArtifactRegistryStubSettings.Builder artifactRegistrySettingsBuilder =
  *     ArtifactRegistryStubSettings.newBuilder();
  * artifactRegistrySettingsBuilder
- *     .getRepositorySettings()
+ *     .getDockerImageSettings()
  *     .setRetrySettings(
  *         artifactRegistrySettingsBuilder
- *             .getRepositorySettings()
+ *             .getDockerImageSettings()
  *             .getRetrySettings()
  *             .toBuilder()
  *             .setTotalTimeout(Duration.ofSeconds(30))
@@ -94,103 +146,294 @@ import org.threeten.bp.Duration;
 public class ArtifactRegistryStubSettings extends StubSettings&lt;ArtifactRegistryStubSettings&gt; {
   /** The default scopes of the service. */
   private static final ImmutableList&lt;String&gt; DEFAULT_SERVICE_SCOPES =
-<span class="fc" id="L97">      ImmutableList.&lt;String&gt;builder()</span>
-<span class="fc" id="L98">          .add(&quot;https://www.googleapis.com/auth/cloud-platform&quot;)</span>
-<span class="fc" id="L99">          .add(&quot;https://www.googleapis.com/auth/cloud-platform.read-only&quot;)</span>
-<span class="fc" id="L100">          .build();</span>
+<span class="fc" id="L149">      ImmutableList.&lt;String&gt;builder()</span>
+<span class="fc" id="L150">          .add(&quot;https://www.googleapis.com/auth/cloud-platform&quot;)</span>
+<span class="fc" id="L151">          .add(&quot;https://www.googleapis.com/auth/cloud-platform.read-only&quot;)</span>
+<span class="fc" id="L152">          .build();</span>
 
   private final PagedCallSettings&lt;
           ListDockerImagesRequest, ListDockerImagesResponse, ListDockerImagesPagedResponse&gt;
       listDockerImagesSettings;
+  private final UnaryCallSettings&lt;GetDockerImageRequest, DockerImage&gt; getDockerImageSettings;
+  private final UnaryCallSettings&lt;ImportAptArtifactsRequest, Operation&gt; importAptArtifactsSettings;
+  private final OperationCallSettings&lt;
+          ImportAptArtifactsRequest, ImportAptArtifactsResponse, ImportAptArtifactsMetadata&gt;
+      importAptArtifactsOperationSettings;
+  private final UnaryCallSettings&lt;ImportYumArtifactsRequest, Operation&gt; importYumArtifactsSettings;
+  private final OperationCallSettings&lt;
+          ImportYumArtifactsRequest, ImportYumArtifactsResponse, ImportYumArtifactsMetadata&gt;
+      importYumArtifactsOperationSettings;
   private final PagedCallSettings&lt;
           ListRepositoriesRequest, ListRepositoriesResponse, ListRepositoriesPagedResponse&gt;
       listRepositoriesSettings;
   private final UnaryCallSettings&lt;GetRepositoryRequest, Repository&gt; getRepositorySettings;
+  private final UnaryCallSettings&lt;CreateRepositoryRequest, Operation&gt; createRepositorySettings;
+  private final OperationCallSettings&lt;CreateRepositoryRequest, Repository, OperationMetadata&gt;
+      createRepositoryOperationSettings;
+  private final UnaryCallSettings&lt;UpdateRepositoryRequest, Repository&gt; updateRepositorySettings;
+  private final UnaryCallSettings&lt;DeleteRepositoryRequest, Operation&gt; deleteRepositorySettings;
+  private final OperationCallSettings&lt;DeleteRepositoryRequest, Empty, OperationMetadata&gt;
+      deleteRepositoryOperationSettings;
+  private final PagedCallSettings&lt;
+          ListPackagesRequest, ListPackagesResponse, ListPackagesPagedResponse&gt;
+      listPackagesSettings;
+  private final UnaryCallSettings&lt;GetPackageRequest, Package&gt; getPackageSettings;
+  private final UnaryCallSettings&lt;DeletePackageRequest, Operation&gt; deletePackageSettings;
+  private final OperationCallSettings&lt;DeletePackageRequest, Empty, OperationMetadata&gt;
+      deletePackageOperationSettings;
+  private final PagedCallSettings&lt;
+          ListVersionsRequest, ListVersionsResponse, ListVersionsPagedResponse&gt;
+      listVersionsSettings;
+  private final UnaryCallSettings&lt;GetVersionRequest, Version&gt; getVersionSettings;
+  private final UnaryCallSettings&lt;DeleteVersionRequest, Operation&gt; deleteVersionSettings;
+  private final OperationCallSettings&lt;DeleteVersionRequest, Empty, OperationMetadata&gt;
+      deleteVersionOperationSettings;
+  private final PagedCallSettings&lt;ListFilesRequest, ListFilesResponse, ListFilesPagedResponse&gt;
+      listFilesSettings;
+  private final UnaryCallSettings&lt;GetFileRequest, File&gt; getFileSettings;
+  private final PagedCallSettings&lt;ListTagsRequest, ListTagsResponse, ListTagsPagedResponse&gt;
+      listTagsSettings;
+  private final UnaryCallSettings&lt;GetTagRequest, Tag&gt; getTagSettings;
+  private final UnaryCallSettings&lt;CreateTagRequest, Tag&gt; createTagSettings;
+  private final UnaryCallSettings&lt;UpdateTagRequest, Tag&gt; updateTagSettings;
+  private final UnaryCallSettings&lt;DeleteTagRequest, Empty&gt; deleteTagSettings;
+  private final UnaryCallSettings&lt;SetIamPolicyRequest, Policy&gt; setIamPolicySettings;
+  private final UnaryCallSettings&lt;GetIamPolicyRequest, Policy&gt; getIamPolicySettings;
+  private final UnaryCallSettings&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+      testIamPermissionsSettings;
+  private final UnaryCallSettings&lt;GetProjectSettingsRequest, ProjectSettings&gt;
+      getProjectSettingsSettings;
+  private final UnaryCallSettings&lt;UpdateProjectSettingsRequest, ProjectSettings&gt;
+      updateProjectSettingsSettings;
 
   private static final PagedListDescriptor&lt;
           ListDockerImagesRequest, ListDockerImagesResponse, DockerImage&gt;
-<span class="fc" id="L112">      LIST_DOCKER_IMAGES_PAGE_STR_DESC =</span>
+<span class="fc" id="L211">      LIST_DOCKER_IMAGES_PAGE_STR_DESC =</span>
           new PagedListDescriptor&lt;
-<span class="fc" id="L114">              ListDockerImagesRequest, ListDockerImagesResponse, DockerImage&gt;() {</span>
+<span class="fc" id="L213">              ListDockerImagesRequest, ListDockerImagesResponse, DockerImage&gt;() {</span>
             @Override
             public String emptyToken() {
-<span class="fc" id="L117">              return &quot;&quot;;</span>
+<span class="fc" id="L216">              return &quot;&quot;;</span>
             }
 
             @Override
             public ListDockerImagesRequest injectToken(
                 ListDockerImagesRequest payload, String token) {
-<span class="nc" id="L123">              return ListDockerImagesRequest.newBuilder(payload).setPageToken(token).build();</span>
+<span class="nc" id="L222">              return ListDockerImagesRequest.newBuilder(payload).setPageToken(token).build();</span>
             }
 
             @Override
             public ListDockerImagesRequest injectPageSize(
                 ListDockerImagesRequest payload, int pageSize) {
-<span class="nc" id="L129">              return ListDockerImagesRequest.newBuilder(payload).setPageSize(pageSize).build();</span>
+<span class="nc" id="L228">              return ListDockerImagesRequest.newBuilder(payload).setPageSize(pageSize).build();</span>
             }
 
             @Override
             public Integer extractPageSize(ListDockerImagesRequest payload) {
-<span class="nc" id="L134">              return payload.getPageSize();</span>
+<span class="nc" id="L233">              return payload.getPageSize();</span>
             }
 
             @Override
             public String extractNextToken(ListDockerImagesResponse payload) {
-<span class="fc" id="L139">              return payload.getNextPageToken();</span>
+<span class="fc" id="L238">              return payload.getNextPageToken();</span>
             }
 
             @Override
             public Iterable&lt;DockerImage&gt; extractResources(ListDockerImagesResponse payload) {
-<span class="pc bpc" id="L144" title="1 of 2 branches missed.">              return payload.getDockerImagesList() == null</span>
-<span class="nc" id="L145">                  ? ImmutableList.&lt;DockerImage&gt;of()</span>
-<span class="fc" id="L146">                  : payload.getDockerImagesList();</span>
+<span class="pc bpc" id="L243" title="1 of 2 branches missed.">              return payload.getDockerImagesList() == null</span>
+<span class="nc" id="L244">                  ? ImmutableList.&lt;DockerImage&gt;of()</span>
+<span class="fc" id="L245">                  : payload.getDockerImagesList();</span>
             }
           };
 
   private static final PagedListDescriptor&lt;
           ListRepositoriesRequest, ListRepositoriesResponse, Repository&gt;
-<span class="fc" id="L152">      LIST_REPOSITORIES_PAGE_STR_DESC =</span>
-<span class="fc" id="L153">          new PagedListDescriptor&lt;ListRepositoriesRequest, ListRepositoriesResponse, Repository&gt;() {</span>
+<span class="fc" id="L251">      LIST_REPOSITORIES_PAGE_STR_DESC =</span>
+<span class="fc" id="L252">          new PagedListDescriptor&lt;ListRepositoriesRequest, ListRepositoriesResponse, Repository&gt;() {</span>
             @Override
             public String emptyToken() {
-<span class="fc" id="L156">              return &quot;&quot;;</span>
+<span class="fc" id="L255">              return &quot;&quot;;</span>
             }
 
             @Override
             public ListRepositoriesRequest injectToken(
                 ListRepositoriesRequest payload, String token) {
-<span class="nc" id="L162">              return ListRepositoriesRequest.newBuilder(payload).setPageToken(token).build();</span>
+<span class="nc" id="L261">              return ListRepositoriesRequest.newBuilder(payload).setPageToken(token).build();</span>
             }
 
             @Override
             public ListRepositoriesRequest injectPageSize(
                 ListRepositoriesRequest payload, int pageSize) {
-<span class="nc" id="L168">              return ListRepositoriesRequest.newBuilder(payload).setPageSize(pageSize).build();</span>
+<span class="nc" id="L267">              return ListRepositoriesRequest.newBuilder(payload).setPageSize(pageSize).build();</span>
             }
 
             @Override
             public Integer extractPageSize(ListRepositoriesRequest payload) {
-<span class="nc" id="L173">              return payload.getPageSize();</span>
+<span class="nc" id="L272">              return payload.getPageSize();</span>
             }
 
             @Override
             public String extractNextToken(ListRepositoriesResponse payload) {
-<span class="fc" id="L178">              return payload.getNextPageToken();</span>
+<span class="fc" id="L277">              return payload.getNextPageToken();</span>
             }
 
             @Override
             public Iterable&lt;Repository&gt; extractResources(ListRepositoriesResponse payload) {
-<span class="pc bpc" id="L183" title="1 of 2 branches missed.">              return payload.getRepositoriesList() == null</span>
-<span class="nc" id="L184">                  ? ImmutableList.&lt;Repository&gt;of()</span>
-<span class="fc" id="L185">                  : payload.getRepositoriesList();</span>
+<span class="pc bpc" id="L282" title="1 of 2 branches missed.">              return payload.getRepositoriesList() == null</span>
+<span class="nc" id="L283">                  ? ImmutableList.&lt;Repository&gt;of()</span>
+<span class="fc" id="L284">                  : payload.getRepositoriesList();</span>
+            }
+          };
+
+  private static final PagedListDescriptor&lt;ListPackagesRequest, ListPackagesResponse, Package&gt;
+<span class="fc" id="L289">      LIST_PACKAGES_PAGE_STR_DESC =</span>
+<span class="fc" id="L290">          new PagedListDescriptor&lt;ListPackagesRequest, ListPackagesResponse, Package&gt;() {</span>
+            @Override
+            public String emptyToken() {
+<span class="fc" id="L293">              return &quot;&quot;;</span>
+            }
+
+            @Override
+            public ListPackagesRequest injectToken(ListPackagesRequest payload, String token) {
+<span class="nc" id="L298">              return ListPackagesRequest.newBuilder(payload).setPageToken(token).build();</span>
+            }
+
+            @Override
+            public ListPackagesRequest injectPageSize(ListPackagesRequest payload, int pageSize) {
+<span class="nc" id="L303">              return ListPackagesRequest.newBuilder(payload).setPageSize(pageSize).build();</span>
+            }
+
+            @Override
+            public Integer extractPageSize(ListPackagesRequest payload) {
+<span class="nc" id="L308">              return payload.getPageSize();</span>
+            }
+
+            @Override
+            public String extractNextToken(ListPackagesResponse payload) {
+<span class="fc" id="L313">              return payload.getNextPageToken();</span>
+            }
+
+            @Override
+            public Iterable&lt;Package&gt; extractResources(ListPackagesResponse payload) {
+<span class="pc bpc" id="L318" title="1 of 2 branches missed.">              return payload.getPackagesList() == null</span>
+<span class="nc" id="L319">                  ? ImmutableList.&lt;Package&gt;of()</span>
+<span class="fc" id="L320">                  : payload.getPackagesList();</span>
+            }
+          };
+
+  private static final PagedListDescriptor&lt;ListVersionsRequest, ListVersionsResponse, Version&gt;
+<span class="fc" id="L325">      LIST_VERSIONS_PAGE_STR_DESC =</span>
+<span class="fc" id="L326">          new PagedListDescriptor&lt;ListVersionsRequest, ListVersionsResponse, Version&gt;() {</span>
+            @Override
+            public String emptyToken() {
+<span class="fc" id="L329">              return &quot;&quot;;</span>
+            }
+
+            @Override
+            public ListVersionsRequest injectToken(ListVersionsRequest payload, String token) {
+<span class="nc" id="L334">              return ListVersionsRequest.newBuilder(payload).setPageToken(token).build();</span>
+            }
+
+            @Override
+            public ListVersionsRequest injectPageSize(ListVersionsRequest payload, int pageSize) {
+<span class="nc" id="L339">              return ListVersionsRequest.newBuilder(payload).setPageSize(pageSize).build();</span>
+            }
+
+            @Override
+            public Integer extractPageSize(ListVersionsRequest payload) {
+<span class="nc" id="L344">              return payload.getPageSize();</span>
+            }
+
+            @Override
+            public String extractNextToken(ListVersionsResponse payload) {
+<span class="fc" id="L349">              return payload.getNextPageToken();</span>
+            }
+
+            @Override
+            public Iterable&lt;Version&gt; extractResources(ListVersionsResponse payload) {
+<span class="pc bpc" id="L354" title="1 of 2 branches missed.">              return payload.getVersionsList() == null</span>
+<span class="nc" id="L355">                  ? ImmutableList.&lt;Version&gt;of()</span>
+<span class="fc" id="L356">                  : payload.getVersionsList();</span>
+            }
+          };
+
+  private static final PagedListDescriptor&lt;ListFilesRequest, ListFilesResponse, File&gt;
+<span class="fc" id="L361">      LIST_FILES_PAGE_STR_DESC =</span>
+<span class="fc" id="L362">          new PagedListDescriptor&lt;ListFilesRequest, ListFilesResponse, File&gt;() {</span>
+            @Override
+            public String emptyToken() {
+<span class="fc" id="L365">              return &quot;&quot;;</span>
+            }
+
+            @Override
+            public ListFilesRequest injectToken(ListFilesRequest payload, String token) {
+<span class="nc" id="L370">              return ListFilesRequest.newBuilder(payload).setPageToken(token).build();</span>
+            }
+
+            @Override
+            public ListFilesRequest injectPageSize(ListFilesRequest payload, int pageSize) {
+<span class="nc" id="L375">              return ListFilesRequest.newBuilder(payload).setPageSize(pageSize).build();</span>
+            }
+
+            @Override
+            public Integer extractPageSize(ListFilesRequest payload) {
+<span class="nc" id="L380">              return payload.getPageSize();</span>
+            }
+
+            @Override
+            public String extractNextToken(ListFilesResponse payload) {
+<span class="fc" id="L385">              return payload.getNextPageToken();</span>
+            }
+
+            @Override
+            public Iterable&lt;File&gt; extractResources(ListFilesResponse payload) {
+<span class="pc bpc" id="L390" title="1 of 2 branches missed.">              return payload.getFilesList() == null</span>
+<span class="nc" id="L391">                  ? ImmutableList.&lt;File&gt;of()</span>
+<span class="fc" id="L392">                  : payload.getFilesList();</span>
+            }
+          };
+
+  private static final PagedListDescriptor&lt;ListTagsRequest, ListTagsResponse, Tag&gt;
+<span class="fc" id="L397">      LIST_TAGS_PAGE_STR_DESC =</span>
+<span class="fc" id="L398">          new PagedListDescriptor&lt;ListTagsRequest, ListTagsResponse, Tag&gt;() {</span>
+            @Override
+            public String emptyToken() {
+<span class="fc" id="L401">              return &quot;&quot;;</span>
+            }
+
+            @Override
+            public ListTagsRequest injectToken(ListTagsRequest payload, String token) {
+<span class="nc" id="L406">              return ListTagsRequest.newBuilder(payload).setPageToken(token).build();</span>
+            }
+
+            @Override
+            public ListTagsRequest injectPageSize(ListTagsRequest payload, int pageSize) {
+<span class="nc" id="L411">              return ListTagsRequest.newBuilder(payload).setPageSize(pageSize).build();</span>
+            }
+
+            @Override
+            public Integer extractPageSize(ListTagsRequest payload) {
+<span class="nc" id="L416">              return payload.getPageSize();</span>
+            }
+
+            @Override
+            public String extractNextToken(ListTagsResponse payload) {
+<span class="fc" id="L421">              return payload.getNextPageToken();</span>
+            }
+
+            @Override
+            public Iterable&lt;Tag&gt; extractResources(ListTagsResponse payload) {
+<span class="pc bpc" id="L426" title="1 of 2 branches missed.">              return payload.getTagsList() == null</span>
+<span class="nc" id="L427">                  ? ImmutableList.&lt;Tag&gt;of()</span>
+<span class="fc" id="L428">                  : payload.getTagsList();</span>
             }
           };
 
   private static final PagedListResponseFactory&lt;
           ListDockerImagesRequest, ListDockerImagesResponse, ListDockerImagesPagedResponse&gt;
-<span class="fc" id="L191">      LIST_DOCKER_IMAGES_PAGE_STR_FACT =</span>
+<span class="fc" id="L434">      LIST_DOCKER_IMAGES_PAGE_STR_FACT =</span>
           new PagedListResponseFactory&lt;
-<span class="fc" id="L193">              ListDockerImagesRequest, ListDockerImagesResponse, ListDockerImagesPagedResponse&gt;() {</span>
+<span class="fc" id="L436">              ListDockerImagesRequest, ListDockerImagesResponse, ListDockerImagesPagedResponse&gt;() {</span>
             @Override
             public ApiFuture&lt;ListDockerImagesPagedResponse&gt; getFuturePagedResponse(
                 UnaryCallable&lt;ListDockerImagesRequest, ListDockerImagesResponse&gt; callable,
@@ -198,18 +441,18 @@ public class ArtifactRegistryStubSettings extends StubSettings&lt;ArtifactRegist
                 ApiCallContext context,
                 ApiFuture&lt;ListDockerImagesResponse&gt; futureResponse) {
               PageContext&lt;ListDockerImagesRequest, ListDockerImagesResponse, DockerImage&gt;
-<span class="fc" id="L201">                  pageContext =</span>
-<span class="fc" id="L202">                      PageContext.create(</span>
-<span class="fc" id="L203">                          callable, LIST_DOCKER_IMAGES_PAGE_STR_DESC, request, context);</span>
-<span class="fc" id="L204">              return ListDockerImagesPagedResponse.createAsync(pageContext, futureResponse);</span>
+<span class="fc" id="L444">                  pageContext =</span>
+<span class="fc" id="L445">                      PageContext.create(</span>
+<span class="fc" id="L446">                          callable, LIST_DOCKER_IMAGES_PAGE_STR_DESC, request, context);</span>
+<span class="fc" id="L447">              return ListDockerImagesPagedResponse.createAsync(pageContext, futureResponse);</span>
             }
           };
 
   private static final PagedListResponseFactory&lt;
           ListRepositoriesRequest, ListRepositoriesResponse, ListRepositoriesPagedResponse&gt;
-<span class="fc" id="L210">      LIST_REPOSITORIES_PAGE_STR_FACT =</span>
+<span class="fc" id="L453">      LIST_REPOSITORIES_PAGE_STR_FACT =</span>
           new PagedListResponseFactory&lt;
-<span class="fc" id="L212">              ListRepositoriesRequest, ListRepositoriesResponse, ListRepositoriesPagedResponse&gt;() {</span>
+<span class="fc" id="L455">              ListRepositoriesRequest, ListRepositoriesResponse, ListRepositoriesPagedResponse&gt;() {</span>
             @Override
             public ApiFuture&lt;ListRepositoriesPagedResponse&gt; getFuturePagedResponse(
                 UnaryCallable&lt;ListRepositoriesRequest, ListRepositoriesResponse&gt; callable,
@@ -217,10 +460,77 @@ public class ArtifactRegistryStubSettings extends StubSettings&lt;ArtifactRegist
                 ApiCallContext context,
                 ApiFuture&lt;ListRepositoriesResponse&gt; futureResponse) {
               PageContext&lt;ListRepositoriesRequest, ListRepositoriesResponse, Repository&gt;
-<span class="fc" id="L220">                  pageContext =</span>
-<span class="fc" id="L221">                      PageContext.create(</span>
-<span class="fc" id="L222">                          callable, LIST_REPOSITORIES_PAGE_STR_DESC, request, context);</span>
-<span class="fc" id="L223">              return ListRepositoriesPagedResponse.createAsync(pageContext, futureResponse);</span>
+<span class="fc" id="L463">                  pageContext =</span>
+<span class="fc" id="L464">                      PageContext.create(</span>
+<span class="fc" id="L465">                          callable, LIST_REPOSITORIES_PAGE_STR_DESC, request, context);</span>
+<span class="fc" id="L466">              return ListRepositoriesPagedResponse.createAsync(pageContext, futureResponse);</span>
+            }
+          };
+
+  private static final PagedListResponseFactory&lt;
+          ListPackagesRequest, ListPackagesResponse, ListPackagesPagedResponse&gt;
+<span class="fc" id="L472">      LIST_PACKAGES_PAGE_STR_FACT =</span>
+          new PagedListResponseFactory&lt;
+<span class="fc" id="L474">              ListPackagesRequest, ListPackagesResponse, ListPackagesPagedResponse&gt;() {</span>
+            @Override
+            public ApiFuture&lt;ListPackagesPagedResponse&gt; getFuturePagedResponse(
+                UnaryCallable&lt;ListPackagesRequest, ListPackagesResponse&gt; callable,
+                ListPackagesRequest request,
+                ApiCallContext context,
+                ApiFuture&lt;ListPackagesResponse&gt; futureResponse) {
+<span class="fc" id="L481">              PageContext&lt;ListPackagesRequest, ListPackagesResponse, Package&gt; pageContext =</span>
+<span class="fc" id="L482">                  PageContext.create(callable, LIST_PACKAGES_PAGE_STR_DESC, request, context);</span>
+<span class="fc" id="L483">              return ListPackagesPagedResponse.createAsync(pageContext, futureResponse);</span>
+            }
+          };
+
+  private static final PagedListResponseFactory&lt;
+          ListVersionsRequest, ListVersionsResponse, ListVersionsPagedResponse&gt;
+<span class="fc" id="L489">      LIST_VERSIONS_PAGE_STR_FACT =</span>
+          new PagedListResponseFactory&lt;
+<span class="fc" id="L491">              ListVersionsRequest, ListVersionsResponse, ListVersionsPagedResponse&gt;() {</span>
+            @Override
+            public ApiFuture&lt;ListVersionsPagedResponse&gt; getFuturePagedResponse(
+                UnaryCallable&lt;ListVersionsRequest, ListVersionsResponse&gt; callable,
+                ListVersionsRequest request,
+                ApiCallContext context,
+                ApiFuture&lt;ListVersionsResponse&gt; futureResponse) {
+<span class="fc" id="L498">              PageContext&lt;ListVersionsRequest, ListVersionsResponse, Version&gt; pageContext =</span>
+<span class="fc" id="L499">                  PageContext.create(callable, LIST_VERSIONS_PAGE_STR_DESC, request, context);</span>
+<span class="fc" id="L500">              return ListVersionsPagedResponse.createAsync(pageContext, futureResponse);</span>
+            }
+          };
+
+  private static final PagedListResponseFactory&lt;
+          ListFilesRequest, ListFilesResponse, ListFilesPagedResponse&gt;
+<span class="fc" id="L506">      LIST_FILES_PAGE_STR_FACT =</span>
+          new PagedListResponseFactory&lt;
+<span class="fc" id="L508">              ListFilesRequest, ListFilesResponse, ListFilesPagedResponse&gt;() {</span>
+            @Override
+            public ApiFuture&lt;ListFilesPagedResponse&gt; getFuturePagedResponse(
+                UnaryCallable&lt;ListFilesRequest, ListFilesResponse&gt; callable,
+                ListFilesRequest request,
+                ApiCallContext context,
+                ApiFuture&lt;ListFilesResponse&gt; futureResponse) {
+<span class="fc" id="L515">              PageContext&lt;ListFilesRequest, ListFilesResponse, File&gt; pageContext =</span>
+<span class="fc" id="L516">                  PageContext.create(callable, LIST_FILES_PAGE_STR_DESC, request, context);</span>
+<span class="fc" id="L517">              return ListFilesPagedResponse.createAsync(pageContext, futureResponse);</span>
+            }
+          };
+
+  private static final PagedListResponseFactory&lt;
+          ListTagsRequest, ListTagsResponse, ListTagsPagedResponse&gt;
+<span class="fc" id="L523">      LIST_TAGS_PAGE_STR_FACT =</span>
+<span class="fc" id="L524">          new PagedListResponseFactory&lt;ListTagsRequest, ListTagsResponse, ListTagsPagedResponse&gt;() {</span>
+            @Override
+            public ApiFuture&lt;ListTagsPagedResponse&gt; getFuturePagedResponse(
+                UnaryCallable&lt;ListTagsRequest, ListTagsResponse&gt; callable,
+                ListTagsRequest request,
+                ApiCallContext context,
+                ApiFuture&lt;ListTagsResponse&gt; futureResponse) {
+<span class="fc" id="L531">              PageContext&lt;ListTagsRequest, ListTagsResponse, Tag&gt; pageContext =</span>
+<span class="fc" id="L532">                  PageContext.create(callable, LIST_TAGS_PAGE_STR_DESC, request, context);</span>
+<span class="fc" id="L533">              return ListTagsPagedResponse.createAsync(pageContext, futureResponse);</span>
             }
           };
 
@@ -228,101 +538,298 @@ public class ArtifactRegistryStubSettings extends StubSettings&lt;ArtifactRegist
   public PagedCallSettings&lt;
           ListDockerImagesRequest, ListDockerImagesResponse, ListDockerImagesPagedResponse&gt;
       listDockerImagesSettings() {
-<span class="fc" id="L231">    return listDockerImagesSettings;</span>
+<span class="fc" id="L541">    return listDockerImagesSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to getDockerImage. */
+  public UnaryCallSettings&lt;GetDockerImageRequest, DockerImage&gt; getDockerImageSettings() {
+<span class="fc" id="L546">    return getDockerImageSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to importAptArtifacts. */
+  public UnaryCallSettings&lt;ImportAptArtifactsRequest, Operation&gt; importAptArtifactsSettings() {
+<span class="fc" id="L551">    return importAptArtifactsSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to importAptArtifacts. */
+  public OperationCallSettings&lt;
+          ImportAptArtifactsRequest, ImportAptArtifactsResponse, ImportAptArtifactsMetadata&gt;
+      importAptArtifactsOperationSettings() {
+<span class="fc" id="L558">    return importAptArtifactsOperationSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to importYumArtifacts. */
+  public UnaryCallSettings&lt;ImportYumArtifactsRequest, Operation&gt; importYumArtifactsSettings() {
+<span class="fc" id="L563">    return importYumArtifactsSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to importYumArtifacts. */
+  public OperationCallSettings&lt;
+          ImportYumArtifactsRequest, ImportYumArtifactsResponse, ImportYumArtifactsMetadata&gt;
+      importYumArtifactsOperationSettings() {
+<span class="fc" id="L570">    return importYumArtifactsOperationSettings;</span>
   }
 
   /** Returns the object with the settings used for calls to listRepositories. */
   public PagedCallSettings&lt;
           ListRepositoriesRequest, ListRepositoriesResponse, ListRepositoriesPagedResponse&gt;
       listRepositoriesSettings() {
-<span class="fc" id="L238">    return listRepositoriesSettings;</span>
+<span class="fc" id="L577">    return listRepositoriesSettings;</span>
   }
 
   /** Returns the object with the settings used for calls to getRepository. */
   public UnaryCallSettings&lt;GetRepositoryRequest, Repository&gt; getRepositorySettings() {
-<span class="fc" id="L243">    return getRepositorySettings;</span>
+<span class="fc" id="L582">    return getRepositorySettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to createRepository. */
+  public UnaryCallSettings&lt;CreateRepositoryRequest, Operation&gt; createRepositorySettings() {
+<span class="fc" id="L587">    return createRepositorySettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to createRepository. */
+  public OperationCallSettings&lt;CreateRepositoryRequest, Repository, OperationMetadata&gt;
+      createRepositoryOperationSettings() {
+<span class="fc" id="L593">    return createRepositoryOperationSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to updateRepository. */
+  public UnaryCallSettings&lt;UpdateRepositoryRequest, Repository&gt; updateRepositorySettings() {
+<span class="fc" id="L598">    return updateRepositorySettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to deleteRepository. */
+  public UnaryCallSettings&lt;DeleteRepositoryRequest, Operation&gt; deleteRepositorySettings() {
+<span class="fc" id="L603">    return deleteRepositorySettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to deleteRepository. */
+  public OperationCallSettings&lt;DeleteRepositoryRequest, Empty, OperationMetadata&gt;
+      deleteRepositoryOperationSettings() {
+<span class="fc" id="L609">    return deleteRepositoryOperationSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to listPackages. */
+  public PagedCallSettings&lt;ListPackagesRequest, ListPackagesResponse, ListPackagesPagedResponse&gt;
+      listPackagesSettings() {
+<span class="fc" id="L615">    return listPackagesSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to getPackage. */
+  public UnaryCallSettings&lt;GetPackageRequest, Package&gt; getPackageSettings() {
+<span class="fc" id="L620">    return getPackageSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to deletePackage. */
+  public UnaryCallSettings&lt;DeletePackageRequest, Operation&gt; deletePackageSettings() {
+<span class="fc" id="L625">    return deletePackageSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to deletePackage. */
+  public OperationCallSettings&lt;DeletePackageRequest, Empty, OperationMetadata&gt;
+      deletePackageOperationSettings() {
+<span class="fc" id="L631">    return deletePackageOperationSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to listVersions. */
+  public PagedCallSettings&lt;ListVersionsRequest, ListVersionsResponse, ListVersionsPagedResponse&gt;
+      listVersionsSettings() {
+<span class="fc" id="L637">    return listVersionsSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to getVersion. */
+  public UnaryCallSettings&lt;GetVersionRequest, Version&gt; getVersionSettings() {
+<span class="fc" id="L642">    return getVersionSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to deleteVersion. */
+  public UnaryCallSettings&lt;DeleteVersionRequest, Operation&gt; deleteVersionSettings() {
+<span class="fc" id="L647">    return deleteVersionSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to deleteVersion. */
+  public OperationCallSettings&lt;DeleteVersionRequest, Empty, OperationMetadata&gt;
+      deleteVersionOperationSettings() {
+<span class="fc" id="L653">    return deleteVersionOperationSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to listFiles. */
+  public PagedCallSettings&lt;ListFilesRequest, ListFilesResponse, ListFilesPagedResponse&gt;
+      listFilesSettings() {
+<span class="fc" id="L659">    return listFilesSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to getFile. */
+  public UnaryCallSettings&lt;GetFileRequest, File&gt; getFileSettings() {
+<span class="fc" id="L664">    return getFileSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to listTags. */
+  public PagedCallSettings&lt;ListTagsRequest, ListTagsResponse, ListTagsPagedResponse&gt;
+      listTagsSettings() {
+<span class="fc" id="L670">    return listTagsSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to getTag. */
+  public UnaryCallSettings&lt;GetTagRequest, Tag&gt; getTagSettings() {
+<span class="fc" id="L675">    return getTagSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to createTag. */
+  public UnaryCallSettings&lt;CreateTagRequest, Tag&gt; createTagSettings() {
+<span class="fc" id="L680">    return createTagSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to updateTag. */
+  public UnaryCallSettings&lt;UpdateTagRequest, Tag&gt; updateTagSettings() {
+<span class="fc" id="L685">    return updateTagSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to deleteTag. */
+  public UnaryCallSettings&lt;DeleteTagRequest, Empty&gt; deleteTagSettings() {
+<span class="fc" id="L690">    return deleteTagSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to setIamPolicy. */
+  public UnaryCallSettings&lt;SetIamPolicyRequest, Policy&gt; setIamPolicySettings() {
+<span class="fc" id="L695">    return setIamPolicySettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to getIamPolicy. */
+  public UnaryCallSettings&lt;GetIamPolicyRequest, Policy&gt; getIamPolicySettings() {
+<span class="fc" id="L700">    return getIamPolicySettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to testIamPermissions. */
+  public UnaryCallSettings&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+      testIamPermissionsSettings() {
+<span class="fc" id="L706">    return testIamPermissionsSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to getProjectSettings. */
+  public UnaryCallSettings&lt;GetProjectSettingsRequest, ProjectSettings&gt;
+      getProjectSettingsSettings() {
+<span class="fc" id="L712">    return getProjectSettingsSettings;</span>
+  }
+
+  /** Returns the object with the settings used for calls to updateProjectSettings. */
+  public UnaryCallSettings&lt;UpdateProjectSettingsRequest, ProjectSettings&gt;
+      updateProjectSettingsSettings() {
+<span class="fc" id="L718">    return updateProjectSettingsSettings;</span>
   }
 
   @BetaApi(&quot;A restructuring of stub classes is planned, so this may break in the future&quot;)
   public ArtifactRegistryStub createStub() throws IOException {
-<span class="fc" id="L248">    if (getTransportChannelProvider()</span>
-<span class="fc" id="L249">        .getTransportName()</span>
-<span class="pc bpc" id="L250" title="1 of 2 branches missed.">        .equals(GrpcTransportChannel.getGrpcTransportName())) {</span>
-<span class="fc" id="L251">      return GrpcArtifactRegistryStub.create(this);</span>
+<span class="fc" id="L723">    if (getTransportChannelProvider()</span>
+<span class="fc" id="L724">        .getTransportName()</span>
+<span class="pc bpc" id="L725" title="1 of 2 branches missed.">        .equals(GrpcTransportChannel.getGrpcTransportName())) {</span>
+<span class="fc" id="L726">      return GrpcArtifactRegistryStub.create(this);</span>
     }
-<span class="nc" id="L253">    throw new UnsupportedOperationException(</span>
-<span class="nc" id="L254">        String.format(</span>
-<span class="nc" id="L255">            &quot;Transport not supported: %s&quot;, getTransportChannelProvider().getTransportName()));</span>
+<span class="nc" id="L728">    throw new UnsupportedOperationException(</span>
+<span class="nc" id="L729">        String.format(</span>
+<span class="nc" id="L730">            &quot;Transport not supported: %s&quot;, getTransportChannelProvider().getTransportName()));</span>
   }
 
   /** Returns a builder for the default ExecutorProvider for this service. */
   public static InstantiatingExecutorProvider.Builder defaultExecutorProviderBuilder() {
-<span class="nc" id="L260">    return InstantiatingExecutorProvider.newBuilder();</span>
+<span class="nc" id="L735">    return InstantiatingExecutorProvider.newBuilder();</span>
   }
 
   /** Returns the default service endpoint. */
   public static String getDefaultEndpoint() {
-<span class="fc" id="L265">    return &quot;artifactregistry.googleapis.com:443&quot;;</span>
+<span class="fc" id="L740">    return &quot;artifactregistry.googleapis.com:443&quot;;</span>
   }
 
   /** Returns the default mTLS service endpoint. */
   public static String getDefaultMtlsEndpoint() {
-<span class="fc" id="L270">    return &quot;artifactregistry.mtls.googleapis.com:443&quot;;</span>
+<span class="fc" id="L745">    return &quot;artifactregistry.mtls.googleapis.com:443&quot;;</span>
   }
 
   /** Returns the default service scopes. */
   public static List&lt;String&gt; getDefaultServiceScopes() {
-<span class="nc" id="L275">    return DEFAULT_SERVICE_SCOPES;</span>
+<span class="nc" id="L750">    return DEFAULT_SERVICE_SCOPES;</span>
   }
 
   /** Returns a builder for the default credentials for this service. */
   public static GoogleCredentialsProvider.Builder defaultCredentialsProviderBuilder() {
-<span class="fc" id="L280">    return GoogleCredentialsProvider.newBuilder()</span>
-<span class="fc" id="L281">        .setScopesToApply(DEFAULT_SERVICE_SCOPES)</span>
-<span class="fc" id="L282">        .setUseJwtAccessWithScope(true);</span>
+<span class="fc" id="L755">    return GoogleCredentialsProvider.newBuilder()</span>
+<span class="fc" id="L756">        .setScopesToApply(DEFAULT_SERVICE_SCOPES)</span>
+<span class="fc" id="L757">        .setUseJwtAccessWithScope(true);</span>
   }
 
   /** Returns a builder for the default ChannelProvider for this service. */
   public static InstantiatingGrpcChannelProvider.Builder defaultGrpcTransportProviderBuilder() {
-<span class="fc" id="L287">    return InstantiatingGrpcChannelProvider.newBuilder()</span>
-<span class="fc" id="L288">        .setMaxInboundMessageSize(Integer.MAX_VALUE);</span>
+<span class="fc" id="L762">    return InstantiatingGrpcChannelProvider.newBuilder()</span>
+<span class="fc" id="L763">        .setMaxInboundMessageSize(Integer.MAX_VALUE);</span>
   }
 
   public static TransportChannelProvider defaultTransportChannelProvider() {
-<span class="fc" id="L292">    return defaultGrpcTransportProviderBuilder().build();</span>
+<span class="fc" id="L767">    return defaultGrpcTransportProviderBuilder().build();</span>
   }
 
   @BetaApi(&quot;The surface for customizing headers is not stable yet and may change in the future.&quot;)
   public static ApiClientHeaderProvider.Builder defaultApiClientHeaderProviderBuilder() {
-<span class="fc" id="L297">    return ApiClientHeaderProvider.newBuilder()</span>
-<span class="fc" id="L298">        .setGeneratedLibToken(</span>
-<span class="fc" id="L299">            &quot;gapic&quot;, GaxProperties.getLibraryVersion(ArtifactRegistryStubSettings.class))</span>
-<span class="fc" id="L300">        .setTransportToken(</span>
-<span class="fc" id="L301">            GaxGrpcProperties.getGrpcTokenName(), GaxGrpcProperties.getGrpcVersion());</span>
+<span class="fc" id="L772">    return ApiClientHeaderProvider.newBuilder()</span>
+<span class="fc" id="L773">        .setGeneratedLibToken(</span>
+<span class="fc" id="L774">            &quot;gapic&quot;, GaxProperties.getLibraryVersion(ArtifactRegistryStubSettings.class))</span>
+<span class="fc" id="L775">        .setTransportToken(</span>
+<span class="fc" id="L776">            GaxGrpcProperties.getGrpcTokenName(), GaxGrpcProperties.getGrpcVersion());</span>
   }
 
   /** Returns a new builder for this class. */
   public static Builder newBuilder() {
-<span class="fc" id="L306">    return Builder.createDefault();</span>
+<span class="fc" id="L781">    return Builder.createDefault();</span>
   }
 
   /** Returns a new builder for this class. */
   public static Builder newBuilder(ClientContext clientContext) {
-<span class="nc" id="L311">    return new Builder(clientContext);</span>
+<span class="nc" id="L786">    return new Builder(clientContext);</span>
   }
 
   /** Returns a builder containing all the values of this settings class. */
   public Builder toBuilder() {
-<span class="nc" id="L316">    return new Builder(this);</span>
+<span class="nc" id="L791">    return new Builder(this);</span>
   }
 
   protected ArtifactRegistryStubSettings(Builder settingsBuilder) throws IOException {
-<span class="fc" id="L320">    super(settingsBuilder);</span>
+<span class="fc" id="L795">    super(settingsBuilder);</span>
 
-<span class="fc" id="L322">    listDockerImagesSettings = settingsBuilder.listDockerImagesSettings().build();</span>
-<span class="fc" id="L323">    listRepositoriesSettings = settingsBuilder.listRepositoriesSettings().build();</span>
-<span class="fc" id="L324">    getRepositorySettings = settingsBuilder.getRepositorySettings().build();</span>
-<span class="fc" id="L325">  }</span>
+<span class="fc" id="L797">    listDockerImagesSettings = settingsBuilder.listDockerImagesSettings().build();</span>
+<span class="fc" id="L798">    getDockerImageSettings = settingsBuilder.getDockerImageSettings().build();</span>
+<span class="fc" id="L799">    importAptArtifactsSettings = settingsBuilder.importAptArtifactsSettings().build();</span>
+<span class="fc" id="L800">    importAptArtifactsOperationSettings =</span>
+<span class="fc" id="L801">        settingsBuilder.importAptArtifactsOperationSettings().build();</span>
+<span class="fc" id="L802">    importYumArtifactsSettings = settingsBuilder.importYumArtifactsSettings().build();</span>
+<span class="fc" id="L803">    importYumArtifactsOperationSettings =</span>
+<span class="fc" id="L804">        settingsBuilder.importYumArtifactsOperationSettings().build();</span>
+<span class="fc" id="L805">    listRepositoriesSettings = settingsBuilder.listRepositoriesSettings().build();</span>
+<span class="fc" id="L806">    getRepositorySettings = settingsBuilder.getRepositorySettings().build();</span>
+<span class="fc" id="L807">    createRepositorySettings = settingsBuilder.createRepositorySettings().build();</span>
+<span class="fc" id="L808">    createRepositoryOperationSettings = settingsBuilder.createRepositoryOperationSettings().build();</span>
+<span class="fc" id="L809">    updateRepositorySettings = settingsBuilder.updateRepositorySettings().build();</span>
+<span class="fc" id="L810">    deleteRepositorySettings = settingsBuilder.deleteRepositorySettings().build();</span>
+<span class="fc" id="L811">    deleteRepositoryOperationSettings = settingsBuilder.deleteRepositoryOperationSettings().build();</span>
+<span class="fc" id="L812">    listPackagesSettings = settingsBuilder.listPackagesSettings().build();</span>
+<span class="fc" id="L813">    getPackageSettings = settingsBuilder.getPackageSettings().build();</span>
+<span class="fc" id="L814">    deletePackageSettings = settingsBuilder.deletePackageSettings().build();</span>
+<span class="fc" id="L815">    deletePackageOperationSettings = settingsBuilder.deletePackageOperationSettings().build();</span>
+<span class="fc" id="L816">    listVersionsSettings = settingsBuilder.listVersionsSettings().build();</span>
+<span class="fc" id="L817">    getVersionSettings = settingsBuilder.getVersionSettings().build();</span>
+<span class="fc" id="L818">    deleteVersionSettings = settingsBuilder.deleteVersionSettings().build();</span>
+<span class="fc" id="L819">    deleteVersionOperationSettings = settingsBuilder.deleteVersionOperationSettings().build();</span>
+<span class="fc" id="L820">    listFilesSettings = settingsBuilder.listFilesSettings().build();</span>
+<span class="fc" id="L821">    getFileSettings = settingsBuilder.getFileSettings().build();</span>
+<span class="fc" id="L822">    listTagsSettings = settingsBuilder.listTagsSettings().build();</span>
+<span class="fc" id="L823">    getTagSettings = settingsBuilder.getTagSettings().build();</span>
+<span class="fc" id="L824">    createTagSettings = settingsBuilder.createTagSettings().build();</span>
+<span class="fc" id="L825">    updateTagSettings = settingsBuilder.updateTagSettings().build();</span>
+<span class="fc" id="L826">    deleteTagSettings = settingsBuilder.deleteTagSettings().build();</span>
+<span class="fc" id="L827">    setIamPolicySettings = settingsBuilder.setIamPolicySettings().build();</span>
+<span class="fc" id="L828">    getIamPolicySettings = settingsBuilder.getIamPolicySettings().build();</span>
+<span class="fc" id="L829">    testIamPermissionsSettings = settingsBuilder.testIamPermissionsSettings().build();</span>
+<span class="fc" id="L830">    getProjectSettingsSettings = settingsBuilder.getProjectSettingsSettings().build();</span>
+<span class="fc" id="L831">    updateProjectSettingsSettings = settingsBuilder.updateProjectSettingsSettings().build();</span>
+<span class="fc" id="L832">  }</span>
 
   /** Builder for ArtifactRegistryStubSettings. */
   public static class Builder extends StubSettings.Builder&lt;ArtifactRegistryStubSettings, Builder&gt; {
@@ -330,96 +837,534 @@ public class ArtifactRegistryStubSettings extends StubSettings&lt;ArtifactRegist
     private final PagedCallSettings.Builder&lt;
             ListDockerImagesRequest, ListDockerImagesResponse, ListDockerImagesPagedResponse&gt;
         listDockerImagesSettings;
+    private final UnaryCallSettings.Builder&lt;GetDockerImageRequest, DockerImage&gt;
+        getDockerImageSettings;
+    private final UnaryCallSettings.Builder&lt;ImportAptArtifactsRequest, Operation&gt;
+        importAptArtifactsSettings;
+    private final OperationCallSettings.Builder&lt;
+            ImportAptArtifactsRequest, ImportAptArtifactsResponse, ImportAptArtifactsMetadata&gt;
+        importAptArtifactsOperationSettings;
+    private final UnaryCallSettings.Builder&lt;ImportYumArtifactsRequest, Operation&gt;
+        importYumArtifactsSettings;
+    private final OperationCallSettings.Builder&lt;
+            ImportYumArtifactsRequest, ImportYumArtifactsResponse, ImportYumArtifactsMetadata&gt;
+        importYumArtifactsOperationSettings;
     private final PagedCallSettings.Builder&lt;
             ListRepositoriesRequest, ListRepositoriesResponse, ListRepositoriesPagedResponse&gt;
         listRepositoriesSettings;
     private final UnaryCallSettings.Builder&lt;GetRepositoryRequest, Repository&gt; getRepositorySettings;
+    private final UnaryCallSettings.Builder&lt;CreateRepositoryRequest, Operation&gt;
+        createRepositorySettings;
+    private final OperationCallSettings.Builder&lt;
+            CreateRepositoryRequest, Repository, OperationMetadata&gt;
+        createRepositoryOperationSettings;
+    private final UnaryCallSettings.Builder&lt;UpdateRepositoryRequest, Repository&gt;
+        updateRepositorySettings;
+    private final UnaryCallSettings.Builder&lt;DeleteRepositoryRequest, Operation&gt;
+        deleteRepositorySettings;
+    private final OperationCallSettings.Builder&lt;DeleteRepositoryRequest, Empty, OperationMetadata&gt;
+        deleteRepositoryOperationSettings;
+    private final PagedCallSettings.Builder&lt;
+            ListPackagesRequest, ListPackagesResponse, ListPackagesPagedResponse&gt;
+        listPackagesSettings;
+    private final UnaryCallSettings.Builder&lt;GetPackageRequest, Package&gt; getPackageSettings;
+    private final UnaryCallSettings.Builder&lt;DeletePackageRequest, Operation&gt; deletePackageSettings;
+    private final OperationCallSettings.Builder&lt;DeletePackageRequest, Empty, OperationMetadata&gt;
+        deletePackageOperationSettings;
+    private final PagedCallSettings.Builder&lt;
+            ListVersionsRequest, ListVersionsResponse, ListVersionsPagedResponse&gt;
+        listVersionsSettings;
+    private final UnaryCallSettings.Builder&lt;GetVersionRequest, Version&gt; getVersionSettings;
+    private final UnaryCallSettings.Builder&lt;DeleteVersionRequest, Operation&gt; deleteVersionSettings;
+    private final OperationCallSettings.Builder&lt;DeleteVersionRequest, Empty, OperationMetadata&gt;
+        deleteVersionOperationSettings;
+    private final PagedCallSettings.Builder&lt;
+            ListFilesRequest, ListFilesResponse, ListFilesPagedResponse&gt;
+        listFilesSettings;
+    private final UnaryCallSettings.Builder&lt;GetFileRequest, File&gt; getFileSettings;
+    private final PagedCallSettings.Builder&lt;
+            ListTagsRequest, ListTagsResponse, ListTagsPagedResponse&gt;
+        listTagsSettings;
+    private final UnaryCallSettings.Builder&lt;GetTagRequest, Tag&gt; getTagSettings;
+    private final UnaryCallSettings.Builder&lt;CreateTagRequest, Tag&gt; createTagSettings;
+    private final UnaryCallSettings.Builder&lt;UpdateTagRequest, Tag&gt; updateTagSettings;
+    private final UnaryCallSettings.Builder&lt;DeleteTagRequest, Empty&gt; deleteTagSettings;
+    private final UnaryCallSettings.Builder&lt;SetIamPolicyRequest, Policy&gt; setIamPolicySettings;
+    private final UnaryCallSettings.Builder&lt;GetIamPolicyRequest, Policy&gt; getIamPolicySettings;
+    private final UnaryCallSettings.Builder&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+        testIamPermissionsSettings;
+    private final UnaryCallSettings.Builder&lt;GetProjectSettingsRequest, ProjectSettings&gt;
+        getProjectSettingsSettings;
+    private final UnaryCallSettings.Builder&lt;UpdateProjectSettingsRequest, ProjectSettings&gt;
+        updateProjectSettingsSettings;
     private static final ImmutableMap&lt;String, ImmutableSet&lt;StatusCode.Code&gt;&gt;
         RETRYABLE_CODE_DEFINITIONS;
 
     static {
       ImmutableMap.Builder&lt;String, ImmutableSet&lt;StatusCode.Code&gt;&gt; definitions =
-<span class="fc" id="L342">          ImmutableMap.builder();</span>
-<span class="fc" id="L343">      definitions.put(</span>
-<span class="fc" id="L344">          &quot;no_retry_0_codes&quot;, ImmutableSet.copyOf(Lists.&lt;StatusCode.Code&gt;newArrayList()));</span>
-<span class="fc" id="L345">      RETRYABLE_CODE_DEFINITIONS = definitions.build();</span>
+<span class="fc" id="L905">          ImmutableMap.builder();</span>
+<span class="fc" id="L906">      definitions.put(</span>
+<span class="fc" id="L907">          &quot;no_retry_0_codes&quot;, ImmutableSet.copyOf(Lists.&lt;StatusCode.Code&gt;newArrayList()));</span>
+<span class="fc" id="L908">      RETRYABLE_CODE_DEFINITIONS = definitions.build();</span>
     }
 
     private static final ImmutableMap&lt;String, RetrySettings&gt; RETRY_PARAM_DEFINITIONS;
 
     static {
-<span class="fc" id="L351">      ImmutableMap.Builder&lt;String, RetrySettings&gt; definitions = ImmutableMap.builder();</span>
-<span class="fc" id="L352">      RetrySettings settings = null;</span>
+<span class="fc" id="L914">      ImmutableMap.Builder&lt;String, RetrySettings&gt; definitions = ImmutableMap.builder();</span>
+<span class="fc" id="L915">      RetrySettings settings = null;</span>
       settings =
-<span class="fc" id="L354">          RetrySettings.newBuilder()</span>
-<span class="fc" id="L355">              .setInitialRpcTimeout(Duration.ofMillis(60000L))</span>
-<span class="fc" id="L356">              .setRpcTimeoutMultiplier(1.0)</span>
-<span class="fc" id="L357">              .setMaxRpcTimeout(Duration.ofMillis(60000L))</span>
-<span class="fc" id="L358">              .setTotalTimeout(Duration.ofMillis(60000L))</span>
-<span class="fc" id="L359">              .build();</span>
-<span class="fc" id="L360">      definitions.put(&quot;no_retry_0_params&quot;, settings);</span>
-<span class="fc" id="L361">      RETRY_PARAM_DEFINITIONS = definitions.build();</span>
-<span class="fc" id="L362">    }</span>
+<span class="fc" id="L917">          RetrySettings.newBuilder()</span>
+<span class="fc" id="L918">              .setInitialRpcTimeout(Duration.ofMillis(60000L))</span>
+<span class="fc" id="L919">              .setRpcTimeoutMultiplier(1.0)</span>
+<span class="fc" id="L920">              .setMaxRpcTimeout(Duration.ofMillis(60000L))</span>
+<span class="fc" id="L921">              .setTotalTimeout(Duration.ofMillis(60000L))</span>
+<span class="fc" id="L922">              .build();</span>
+<span class="fc" id="L923">      definitions.put(&quot;no_retry_0_params&quot;, settings);</span>
+<span class="fc" id="L924">      RETRY_PARAM_DEFINITIONS = definitions.build();</span>
+<span class="fc" id="L925">    }</span>
 
     protected Builder() {
-<span class="nc" id="L365">      this(((ClientContext) null));</span>
-<span class="nc" id="L366">    }</span>
+<span class="nc" id="L928">      this(((ClientContext) null));</span>
+<span class="nc" id="L929">    }</span>
 
     protected Builder(ClientContext clientContext) {
-<span class="fc" id="L369">      super(clientContext);</span>
+<span class="fc" id="L932">      super(clientContext);</span>
 
-<span class="fc" id="L371">      listDockerImagesSettings = PagedCallSettings.newBuilder(LIST_DOCKER_IMAGES_PAGE_STR_FACT);</span>
-<span class="fc" id="L372">      listRepositoriesSettings = PagedCallSettings.newBuilder(LIST_REPOSITORIES_PAGE_STR_FACT);</span>
-<span class="fc" id="L373">      getRepositorySettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L934">      listDockerImagesSettings = PagedCallSettings.newBuilder(LIST_DOCKER_IMAGES_PAGE_STR_FACT);</span>
+<span class="fc" id="L935">      getDockerImageSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L936">      importAptArtifactsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L937">      importAptArtifactsOperationSettings = OperationCallSettings.newBuilder();</span>
+<span class="fc" id="L938">      importYumArtifactsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L939">      importYumArtifactsOperationSettings = OperationCallSettings.newBuilder();</span>
+<span class="fc" id="L940">      listRepositoriesSettings = PagedCallSettings.newBuilder(LIST_REPOSITORIES_PAGE_STR_FACT);</span>
+<span class="fc" id="L941">      getRepositorySettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L942">      createRepositorySettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L943">      createRepositoryOperationSettings = OperationCallSettings.newBuilder();</span>
+<span class="fc" id="L944">      updateRepositorySettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L945">      deleteRepositorySettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L946">      deleteRepositoryOperationSettings = OperationCallSettings.newBuilder();</span>
+<span class="fc" id="L947">      listPackagesSettings = PagedCallSettings.newBuilder(LIST_PACKAGES_PAGE_STR_FACT);</span>
+<span class="fc" id="L948">      getPackageSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L949">      deletePackageSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L950">      deletePackageOperationSettings = OperationCallSettings.newBuilder();</span>
+<span class="fc" id="L951">      listVersionsSettings = PagedCallSettings.newBuilder(LIST_VERSIONS_PAGE_STR_FACT);</span>
+<span class="fc" id="L952">      getVersionSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L953">      deleteVersionSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L954">      deleteVersionOperationSettings = OperationCallSettings.newBuilder();</span>
+<span class="fc" id="L955">      listFilesSettings = PagedCallSettings.newBuilder(LIST_FILES_PAGE_STR_FACT);</span>
+<span class="fc" id="L956">      getFileSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L957">      listTagsSettings = PagedCallSettings.newBuilder(LIST_TAGS_PAGE_STR_FACT);</span>
+<span class="fc" id="L958">      getTagSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L959">      createTagSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L960">      updateTagSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L961">      deleteTagSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L962">      setIamPolicySettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L963">      getIamPolicySettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L964">      testIamPermissionsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L965">      getProjectSettingsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
+<span class="fc" id="L966">      updateProjectSettingsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();</span>
 
-<span class="fc" id="L375">      unaryMethodSettingsBuilders =</span>
-<span class="fc" id="L376">          ImmutableList.&lt;UnaryCallSettings.Builder&lt;?, ?&gt;&gt;of(</span>
-              listDockerImagesSettings, listRepositoriesSettings, getRepositorySettings);
-<span class="fc" id="L378">      initDefaults(this);</span>
-<span class="fc" id="L379">    }</span>
+<span class="fc" id="L968">      unaryMethodSettingsBuilders =</span>
+<span class="fc" id="L969">          ImmutableList.&lt;UnaryCallSettings.Builder&lt;?, ?&gt;&gt;of(</span>
+              listDockerImagesSettings,
+              getDockerImageSettings,
+              importAptArtifactsSettings,
+              importYumArtifactsSettings,
+              listRepositoriesSettings,
+              getRepositorySettings,
+              createRepositorySettings,
+              updateRepositorySettings,
+              deleteRepositorySettings,
+              listPackagesSettings,
+              getPackageSettings,
+              deletePackageSettings,
+              listVersionsSettings,
+              getVersionSettings,
+              deleteVersionSettings,
+              listFilesSettings,
+              getFileSettings,
+              listTagsSettings,
+              getTagSettings,
+              createTagSettings,
+              updateTagSettings,
+              deleteTagSettings,
+              setIamPolicySettings,
+              getIamPolicySettings,
+              testIamPermissionsSettings,
+              getProjectSettingsSettings,
+              updateProjectSettingsSettings);
+<span class="fc" id="L997">      initDefaults(this);</span>
+<span class="fc" id="L998">    }</span>
 
     protected Builder(ArtifactRegistryStubSettings settings) {
-<span class="nc" id="L382">      super(settings);</span>
+<span class="nc" id="L1001">      super(settings);</span>
 
-<span class="nc" id="L384">      listDockerImagesSettings = settings.listDockerImagesSettings.toBuilder();</span>
-<span class="nc" id="L385">      listRepositoriesSettings = settings.listRepositoriesSettings.toBuilder();</span>
-<span class="nc" id="L386">      getRepositorySettings = settings.getRepositorySettings.toBuilder();</span>
+<span class="nc" id="L1003">      listDockerImagesSettings = settings.listDockerImagesSettings.toBuilder();</span>
+<span class="nc" id="L1004">      getDockerImageSettings = settings.getDockerImageSettings.toBuilder();</span>
+<span class="nc" id="L1005">      importAptArtifactsSettings = settings.importAptArtifactsSettings.toBuilder();</span>
+<span class="nc" id="L1006">      importAptArtifactsOperationSettings =</span>
+<span class="nc" id="L1007">          settings.importAptArtifactsOperationSettings.toBuilder();</span>
+<span class="nc" id="L1008">      importYumArtifactsSettings = settings.importYumArtifactsSettings.toBuilder();</span>
+<span class="nc" id="L1009">      importYumArtifactsOperationSettings =</span>
+<span class="nc" id="L1010">          settings.importYumArtifactsOperationSettings.toBuilder();</span>
+<span class="nc" id="L1011">      listRepositoriesSettings = settings.listRepositoriesSettings.toBuilder();</span>
+<span class="nc" id="L1012">      getRepositorySettings = settings.getRepositorySettings.toBuilder();</span>
+<span class="nc" id="L1013">      createRepositorySettings = settings.createRepositorySettings.toBuilder();</span>
+<span class="nc" id="L1014">      createRepositoryOperationSettings = settings.createRepositoryOperationSettings.toBuilder();</span>
+<span class="nc" id="L1015">      updateRepositorySettings = settings.updateRepositorySettings.toBuilder();</span>
+<span class="nc" id="L1016">      deleteRepositorySettings = settings.deleteRepositorySettings.toBuilder();</span>
+<span class="nc" id="L1017">      deleteRepositoryOperationSettings = settings.deleteRepositoryOperationSettings.toBuilder();</span>
+<span class="nc" id="L1018">      listPackagesSettings = settings.listPackagesSettings.toBuilder();</span>
+<span class="nc" id="L1019">      getPackageSettings = settings.getPackageSettings.toBuilder();</span>
+<span class="nc" id="L1020">      deletePackageSettings = settings.deletePackageSettings.toBuilder();</span>
+<span class="nc" id="L1021">      deletePackageOperationSettings = settings.deletePackageOperationSettings.toBuilder();</span>
+<span class="nc" id="L1022">      listVersionsSettings = settings.listVersionsSettings.toBuilder();</span>
+<span class="nc" id="L1023">      getVersionSettings = settings.getVersionSettings.toBuilder();</span>
+<span class="nc" id="L1024">      deleteVersionSettings = settings.deleteVersionSettings.toBuilder();</span>
+<span class="nc" id="L1025">      deleteVersionOperationSettings = settings.deleteVersionOperationSettings.toBuilder();</span>
+<span class="nc" id="L1026">      listFilesSettings = settings.listFilesSettings.toBuilder();</span>
+<span class="nc" id="L1027">      getFileSettings = settings.getFileSettings.toBuilder();</span>
+<span class="nc" id="L1028">      listTagsSettings = settings.listTagsSettings.toBuilder();</span>
+<span class="nc" id="L1029">      getTagSettings = settings.getTagSettings.toBuilder();</span>
+<span class="nc" id="L1030">      createTagSettings = settings.createTagSettings.toBuilder();</span>
+<span class="nc" id="L1031">      updateTagSettings = settings.updateTagSettings.toBuilder();</span>
+<span class="nc" id="L1032">      deleteTagSettings = settings.deleteTagSettings.toBuilder();</span>
+<span class="nc" id="L1033">      setIamPolicySettings = settings.setIamPolicySettings.toBuilder();</span>
+<span class="nc" id="L1034">      getIamPolicySettings = settings.getIamPolicySettings.toBuilder();</span>
+<span class="nc" id="L1035">      testIamPermissionsSettings = settings.testIamPermissionsSettings.toBuilder();</span>
+<span class="nc" id="L1036">      getProjectSettingsSettings = settings.getProjectSettingsSettings.toBuilder();</span>
+<span class="nc" id="L1037">      updateProjectSettingsSettings = settings.updateProjectSettingsSettings.toBuilder();</span>
 
-<span class="nc" id="L388">      unaryMethodSettingsBuilders =</span>
-<span class="nc" id="L389">          ImmutableList.&lt;UnaryCallSettings.Builder&lt;?, ?&gt;&gt;of(</span>
-              listDockerImagesSettings, listRepositoriesSettings, getRepositorySettings);
-<span class="nc" id="L391">    }</span>
+<span class="nc" id="L1039">      unaryMethodSettingsBuilders =</span>
+<span class="nc" id="L1040">          ImmutableList.&lt;UnaryCallSettings.Builder&lt;?, ?&gt;&gt;of(</span>
+              listDockerImagesSettings,
+              getDockerImageSettings,
+              importAptArtifactsSettings,
+              importYumArtifactsSettings,
+              listRepositoriesSettings,
+              getRepositorySettings,
+              createRepositorySettings,
+              updateRepositorySettings,
+              deleteRepositorySettings,
+              listPackagesSettings,
+              getPackageSettings,
+              deletePackageSettings,
+              listVersionsSettings,
+              getVersionSettings,
+              deleteVersionSettings,
+              listFilesSettings,
+              getFileSettings,
+              listTagsSettings,
+              getTagSettings,
+              createTagSettings,
+              updateTagSettings,
+              deleteTagSettings,
+              setIamPolicySettings,
+              getIamPolicySettings,
+              testIamPermissionsSettings,
+              getProjectSettingsSettings,
+              updateProjectSettingsSettings);
+<span class="nc" id="L1068">    }</span>
 
     private static Builder createDefault() {
-<span class="fc" id="L394">      Builder builder = new Builder(((ClientContext) null));</span>
+<span class="fc" id="L1071">      Builder builder = new Builder(((ClientContext) null));</span>
 
-<span class="fc" id="L396">      builder.setTransportChannelProvider(defaultTransportChannelProvider());</span>
-<span class="fc" id="L397">      builder.setCredentialsProvider(defaultCredentialsProviderBuilder().build());</span>
-<span class="fc" id="L398">      builder.setInternalHeaderProvider(defaultApiClientHeaderProviderBuilder().build());</span>
-<span class="fc" id="L399">      builder.setEndpoint(getDefaultEndpoint());</span>
-<span class="fc" id="L400">      builder.setMtlsEndpoint(getDefaultMtlsEndpoint());</span>
-<span class="fc" id="L401">      builder.setSwitchToMtlsEndpointAllowed(true);</span>
+<span class="fc" id="L1073">      builder.setTransportChannelProvider(defaultTransportChannelProvider());</span>
+<span class="fc" id="L1074">      builder.setCredentialsProvider(defaultCredentialsProviderBuilder().build());</span>
+<span class="fc" id="L1075">      builder.setInternalHeaderProvider(defaultApiClientHeaderProviderBuilder().build());</span>
+<span class="fc" id="L1076">      builder.setEndpoint(getDefaultEndpoint());</span>
+<span class="fc" id="L1077">      builder.setMtlsEndpoint(getDefaultMtlsEndpoint());</span>
+<span class="fc" id="L1078">      builder.setSwitchToMtlsEndpointAllowed(true);</span>
 
-<span class="fc" id="L403">      return initDefaults(builder);</span>
+<span class="fc" id="L1080">      return initDefaults(builder);</span>
     }
 
     private static Builder initDefaults(Builder builder) {
-<span class="fc" id="L407">      builder</span>
-<span class="fc" id="L408">          .listDockerImagesSettings()</span>
-<span class="fc" id="L409">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
-<span class="fc" id="L410">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+<span class="fc" id="L1084">      builder</span>
+<span class="fc" id="L1085">          .listDockerImagesSettings()</span>
+<span class="fc" id="L1086">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1087">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
 
-<span class="fc" id="L412">      builder</span>
-<span class="fc" id="L413">          .listRepositoriesSettings()</span>
-<span class="fc" id="L414">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
-<span class="fc" id="L415">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+<span class="fc" id="L1089">      builder</span>
+<span class="fc" id="L1090">          .getDockerImageSettings()</span>
+<span class="fc" id="L1091">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1092">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
 
-<span class="fc" id="L417">      builder</span>
-<span class="fc" id="L418">          .getRepositorySettings()</span>
-<span class="fc" id="L419">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
-<span class="fc" id="L420">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+<span class="fc" id="L1094">      builder</span>
+<span class="fc" id="L1095">          .importAptArtifactsSettings()</span>
+<span class="fc" id="L1096">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1097">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
 
-<span class="fc" id="L422">      return builder;</span>
+<span class="fc" id="L1099">      builder</span>
+<span class="fc" id="L1100">          .importYumArtifactsSettings()</span>
+<span class="fc" id="L1101">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1102">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1104">      builder</span>
+<span class="fc" id="L1105">          .listRepositoriesSettings()</span>
+<span class="fc" id="L1106">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1107">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1109">      builder</span>
+<span class="fc" id="L1110">          .getRepositorySettings()</span>
+<span class="fc" id="L1111">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1112">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1114">      builder</span>
+<span class="fc" id="L1115">          .createRepositorySettings()</span>
+<span class="fc" id="L1116">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1117">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1119">      builder</span>
+<span class="fc" id="L1120">          .updateRepositorySettings()</span>
+<span class="fc" id="L1121">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1122">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1124">      builder</span>
+<span class="fc" id="L1125">          .deleteRepositorySettings()</span>
+<span class="fc" id="L1126">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1127">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1129">      builder</span>
+<span class="fc" id="L1130">          .listPackagesSettings()</span>
+<span class="fc" id="L1131">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1132">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1134">      builder</span>
+<span class="fc" id="L1135">          .getPackageSettings()</span>
+<span class="fc" id="L1136">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1137">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1139">      builder</span>
+<span class="fc" id="L1140">          .deletePackageSettings()</span>
+<span class="fc" id="L1141">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1142">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1144">      builder</span>
+<span class="fc" id="L1145">          .listVersionsSettings()</span>
+<span class="fc" id="L1146">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1147">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1149">      builder</span>
+<span class="fc" id="L1150">          .getVersionSettings()</span>
+<span class="fc" id="L1151">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1152">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1154">      builder</span>
+<span class="fc" id="L1155">          .deleteVersionSettings()</span>
+<span class="fc" id="L1156">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1157">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1159">      builder</span>
+<span class="fc" id="L1160">          .listFilesSettings()</span>
+<span class="fc" id="L1161">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1162">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1164">      builder</span>
+<span class="fc" id="L1165">          .getFileSettings()</span>
+<span class="fc" id="L1166">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1167">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1169">      builder</span>
+<span class="fc" id="L1170">          .listTagsSettings()</span>
+<span class="fc" id="L1171">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1172">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1174">      builder</span>
+<span class="fc" id="L1175">          .getTagSettings()</span>
+<span class="fc" id="L1176">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1177">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1179">      builder</span>
+<span class="fc" id="L1180">          .createTagSettings()</span>
+<span class="fc" id="L1181">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1182">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1184">      builder</span>
+<span class="fc" id="L1185">          .updateTagSettings()</span>
+<span class="fc" id="L1186">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1187">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1189">      builder</span>
+<span class="fc" id="L1190">          .deleteTagSettings()</span>
+<span class="fc" id="L1191">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1192">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1194">      builder</span>
+<span class="fc" id="L1195">          .setIamPolicySettings()</span>
+<span class="fc" id="L1196">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1197">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1199">      builder</span>
+<span class="fc" id="L1200">          .getIamPolicySettings()</span>
+<span class="fc" id="L1201">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1202">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1204">      builder</span>
+<span class="fc" id="L1205">          .testIamPermissionsSettings()</span>
+<span class="fc" id="L1206">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1207">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1209">      builder</span>
+<span class="fc" id="L1210">          .getProjectSettingsSettings()</span>
+<span class="fc" id="L1211">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1212">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1214">      builder</span>
+<span class="fc" id="L1215">          .updateProjectSettingsSettings()</span>
+<span class="fc" id="L1216">          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1217">          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;));</span>
+
+<span class="fc" id="L1219">      builder</span>
+<span class="fc" id="L1220">          .importAptArtifactsOperationSettings()</span>
+<span class="fc" id="L1221">          .setInitialCallSettings(</span>
+              UnaryCallSettings
+<span class="fc" id="L1223">                  .&lt;ImportAptArtifactsRequest, OperationSnapshot&gt;newUnaryCallSettingsBuilder()</span>
+<span class="fc" id="L1224">                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1225">                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;))</span>
+<span class="fc" id="L1226">                  .build())</span>
+<span class="fc" id="L1227">          .setResponseTransformer(</span>
+<span class="fc" id="L1228">              ProtoOperationTransformers.ResponseTransformer.create(</span>
+                  ImportAptArtifactsResponse.class))
+<span class="fc" id="L1230">          .setMetadataTransformer(</span>
+<span class="fc" id="L1231">              ProtoOperationTransformers.MetadataTransformer.create(</span>
+                  ImportAptArtifactsMetadata.class))
+<span class="fc" id="L1233">          .setPollingAlgorithm(</span>
+<span class="fc" id="L1234">              OperationTimedPollAlgorithm.create(</span>
+<span class="fc" id="L1235">                  RetrySettings.newBuilder()</span>
+<span class="fc" id="L1236">                      .setInitialRetryDelay(Duration.ofMillis(5000L))</span>
+<span class="fc" id="L1237">                      .setRetryDelayMultiplier(1.5)</span>
+<span class="fc" id="L1238">                      .setMaxRetryDelay(Duration.ofMillis(45000L))</span>
+<span class="fc" id="L1239">                      .setInitialRpcTimeout(Duration.ZERO)</span>
+<span class="fc" id="L1240">                      .setRpcTimeoutMultiplier(1.0)</span>
+<span class="fc" id="L1241">                      .setMaxRpcTimeout(Duration.ZERO)</span>
+<span class="fc" id="L1242">                      .setTotalTimeout(Duration.ofMillis(300000L))</span>
+<span class="fc" id="L1243">                      .build()));</span>
+
+<span class="fc" id="L1245">      builder</span>
+<span class="fc" id="L1246">          .importYumArtifactsOperationSettings()</span>
+<span class="fc" id="L1247">          .setInitialCallSettings(</span>
+              UnaryCallSettings
+<span class="fc" id="L1249">                  .&lt;ImportYumArtifactsRequest, OperationSnapshot&gt;newUnaryCallSettingsBuilder()</span>
+<span class="fc" id="L1250">                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1251">                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;))</span>
+<span class="fc" id="L1252">                  .build())</span>
+<span class="fc" id="L1253">          .setResponseTransformer(</span>
+<span class="fc" id="L1254">              ProtoOperationTransformers.ResponseTransformer.create(</span>
+                  ImportYumArtifactsResponse.class))
+<span class="fc" id="L1256">          .setMetadataTransformer(</span>
+<span class="fc" id="L1257">              ProtoOperationTransformers.MetadataTransformer.create(</span>
+                  ImportYumArtifactsMetadata.class))
+<span class="fc" id="L1259">          .setPollingAlgorithm(</span>
+<span class="fc" id="L1260">              OperationTimedPollAlgorithm.create(</span>
+<span class="fc" id="L1261">                  RetrySettings.newBuilder()</span>
+<span class="fc" id="L1262">                      .setInitialRetryDelay(Duration.ofMillis(5000L))</span>
+<span class="fc" id="L1263">                      .setRetryDelayMultiplier(1.5)</span>
+<span class="fc" id="L1264">                      .setMaxRetryDelay(Duration.ofMillis(45000L))</span>
+<span class="fc" id="L1265">                      .setInitialRpcTimeout(Duration.ZERO)</span>
+<span class="fc" id="L1266">                      .setRpcTimeoutMultiplier(1.0)</span>
+<span class="fc" id="L1267">                      .setMaxRpcTimeout(Duration.ZERO)</span>
+<span class="fc" id="L1268">                      .setTotalTimeout(Duration.ofMillis(300000L))</span>
+<span class="fc" id="L1269">                      .build()));</span>
+
+<span class="fc" id="L1271">      builder</span>
+<span class="fc" id="L1272">          .createRepositoryOperationSettings()</span>
+<span class="fc" id="L1273">          .setInitialCallSettings(</span>
+              UnaryCallSettings
+<span class="fc" id="L1275">                  .&lt;CreateRepositoryRequest, OperationSnapshot&gt;newUnaryCallSettingsBuilder()</span>
+<span class="fc" id="L1276">                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1277">                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;))</span>
+<span class="fc" id="L1278">                  .build())</span>
+<span class="fc" id="L1279">          .setResponseTransformer(</span>
+<span class="fc" id="L1280">              ProtoOperationTransformers.ResponseTransformer.create(Repository.class))</span>
+<span class="fc" id="L1281">          .setMetadataTransformer(</span>
+<span class="fc" id="L1282">              ProtoOperationTransformers.MetadataTransformer.create(OperationMetadata.class))</span>
+<span class="fc" id="L1283">          .setPollingAlgorithm(</span>
+<span class="fc" id="L1284">              OperationTimedPollAlgorithm.create(</span>
+<span class="fc" id="L1285">                  RetrySettings.newBuilder()</span>
+<span class="fc" id="L1286">                      .setInitialRetryDelay(Duration.ofMillis(5000L))</span>
+<span class="fc" id="L1287">                      .setRetryDelayMultiplier(1.5)</span>
+<span class="fc" id="L1288">                      .setMaxRetryDelay(Duration.ofMillis(45000L))</span>
+<span class="fc" id="L1289">                      .setInitialRpcTimeout(Duration.ZERO)</span>
+<span class="fc" id="L1290">                      .setRpcTimeoutMultiplier(1.0)</span>
+<span class="fc" id="L1291">                      .setMaxRpcTimeout(Duration.ZERO)</span>
+<span class="fc" id="L1292">                      .setTotalTimeout(Duration.ofMillis(300000L))</span>
+<span class="fc" id="L1293">                      .build()));</span>
+
+<span class="fc" id="L1295">      builder</span>
+<span class="fc" id="L1296">          .deleteRepositoryOperationSettings()</span>
+<span class="fc" id="L1297">          .setInitialCallSettings(</span>
+              UnaryCallSettings
+<span class="fc" id="L1299">                  .&lt;DeleteRepositoryRequest, OperationSnapshot&gt;newUnaryCallSettingsBuilder()</span>
+<span class="fc" id="L1300">                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1301">                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;))</span>
+<span class="fc" id="L1302">                  .build())</span>
+<span class="fc" id="L1303">          .setResponseTransformer(</span>
+<span class="fc" id="L1304">              ProtoOperationTransformers.ResponseTransformer.create(Empty.class))</span>
+<span class="fc" id="L1305">          .setMetadataTransformer(</span>
+<span class="fc" id="L1306">              ProtoOperationTransformers.MetadataTransformer.create(OperationMetadata.class))</span>
+<span class="fc" id="L1307">          .setPollingAlgorithm(</span>
+<span class="fc" id="L1308">              OperationTimedPollAlgorithm.create(</span>
+<span class="fc" id="L1309">                  RetrySettings.newBuilder()</span>
+<span class="fc" id="L1310">                      .setInitialRetryDelay(Duration.ofMillis(5000L))</span>
+<span class="fc" id="L1311">                      .setRetryDelayMultiplier(1.5)</span>
+<span class="fc" id="L1312">                      .setMaxRetryDelay(Duration.ofMillis(45000L))</span>
+<span class="fc" id="L1313">                      .setInitialRpcTimeout(Duration.ZERO)</span>
+<span class="fc" id="L1314">                      .setRpcTimeoutMultiplier(1.0)</span>
+<span class="fc" id="L1315">                      .setMaxRpcTimeout(Duration.ZERO)</span>
+<span class="fc" id="L1316">                      .setTotalTimeout(Duration.ofMillis(300000L))</span>
+<span class="fc" id="L1317">                      .build()));</span>
+
+<span class="fc" id="L1319">      builder</span>
+<span class="fc" id="L1320">          .deletePackageOperationSettings()</span>
+<span class="fc" id="L1321">          .setInitialCallSettings(</span>
+              UnaryCallSettings
+<span class="fc" id="L1323">                  .&lt;DeletePackageRequest, OperationSnapshot&gt;newUnaryCallSettingsBuilder()</span>
+<span class="fc" id="L1324">                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1325">                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;))</span>
+<span class="fc" id="L1326">                  .build())</span>
+<span class="fc" id="L1327">          .setResponseTransformer(</span>
+<span class="fc" id="L1328">              ProtoOperationTransformers.ResponseTransformer.create(Empty.class))</span>
+<span class="fc" id="L1329">          .setMetadataTransformer(</span>
+<span class="fc" id="L1330">              ProtoOperationTransformers.MetadataTransformer.create(OperationMetadata.class))</span>
+<span class="fc" id="L1331">          .setPollingAlgorithm(</span>
+<span class="fc" id="L1332">              OperationTimedPollAlgorithm.create(</span>
+<span class="fc" id="L1333">                  RetrySettings.newBuilder()</span>
+<span class="fc" id="L1334">                      .setInitialRetryDelay(Duration.ofMillis(5000L))</span>
+<span class="fc" id="L1335">                      .setRetryDelayMultiplier(1.5)</span>
+<span class="fc" id="L1336">                      .setMaxRetryDelay(Duration.ofMillis(45000L))</span>
+<span class="fc" id="L1337">                      .setInitialRpcTimeout(Duration.ZERO)</span>
+<span class="fc" id="L1338">                      .setRpcTimeoutMultiplier(1.0)</span>
+<span class="fc" id="L1339">                      .setMaxRpcTimeout(Duration.ZERO)</span>
+<span class="fc" id="L1340">                      .setTotalTimeout(Duration.ofMillis(300000L))</span>
+<span class="fc" id="L1341">                      .build()));</span>
+
+<span class="fc" id="L1343">      builder</span>
+<span class="fc" id="L1344">          .deleteVersionOperationSettings()</span>
+<span class="fc" id="L1345">          .setInitialCallSettings(</span>
+              UnaryCallSettings
+<span class="fc" id="L1347">                  .&lt;DeleteVersionRequest, OperationSnapshot&gt;newUnaryCallSettingsBuilder()</span>
+<span class="fc" id="L1348">                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get(&quot;no_retry_0_codes&quot;))</span>
+<span class="fc" id="L1349">                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get(&quot;no_retry_0_params&quot;))</span>
+<span class="fc" id="L1350">                  .build())</span>
+<span class="fc" id="L1351">          .setResponseTransformer(</span>
+<span class="fc" id="L1352">              ProtoOperationTransformers.ResponseTransformer.create(Empty.class))</span>
+<span class="fc" id="L1353">          .setMetadataTransformer(</span>
+<span class="fc" id="L1354">              ProtoOperationTransformers.MetadataTransformer.create(OperationMetadata.class))</span>
+<span class="fc" id="L1355">          .setPollingAlgorithm(</span>
+<span class="fc" id="L1356">              OperationTimedPollAlgorithm.create(</span>
+<span class="fc" id="L1357">                  RetrySettings.newBuilder()</span>
+<span class="fc" id="L1358">                      .setInitialRetryDelay(Duration.ofMillis(5000L))</span>
+<span class="fc" id="L1359">                      .setRetryDelayMultiplier(1.5)</span>
+<span class="fc" id="L1360">                      .setMaxRetryDelay(Duration.ofMillis(45000L))</span>
+<span class="fc" id="L1361">                      .setInitialRpcTimeout(Duration.ZERO)</span>
+<span class="fc" id="L1362">                      .setRpcTimeoutMultiplier(1.0)</span>
+<span class="fc" id="L1363">                      .setMaxRpcTimeout(Duration.ZERO)</span>
+<span class="fc" id="L1364">                      .setTotalTimeout(Duration.ofMillis(300000L))</span>
+<span class="fc" id="L1365">                      .build()));</span>
+
+<span class="fc" id="L1367">      return builder;</span>
     }
 
     /**
@@ -429,36 +1374,220 @@ public class ArtifactRegistryStubSettings extends StubSettings&lt;ArtifactRegist
      */
     public Builder applyToAllUnaryMethods(
         ApiFunction&lt;UnaryCallSettings.Builder&lt;?, ?&gt;, Void&gt; settingsUpdater) {
-<span class="nc" id="L432">      super.applyToAllUnaryMethods(unaryMethodSettingsBuilders, settingsUpdater);</span>
-<span class="nc" id="L433">      return this;</span>
+<span class="nc" id="L1377">      super.applyToAllUnaryMethods(unaryMethodSettingsBuilders, settingsUpdater);</span>
+<span class="nc" id="L1378">      return this;</span>
     }
 
     public ImmutableList&lt;UnaryCallSettings.Builder&lt;?, ?&gt;&gt; unaryMethodSettingsBuilders() {
-<span class="nc" id="L437">      return unaryMethodSettingsBuilders;</span>
+<span class="nc" id="L1382">      return unaryMethodSettingsBuilders;</span>
     }
 
     /** Returns the builder for the settings used for calls to listDockerImages. */
     public PagedCallSettings.Builder&lt;
             ListDockerImagesRequest, ListDockerImagesResponse, ListDockerImagesPagedResponse&gt;
         listDockerImagesSettings() {
-<span class="fc" id="L444">      return listDockerImagesSettings;</span>
+<span class="fc" id="L1389">      return listDockerImagesSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to getDockerImage. */
+    public UnaryCallSettings.Builder&lt;GetDockerImageRequest, DockerImage&gt; getDockerImageSettings() {
+<span class="fc" id="L1394">      return getDockerImageSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to importAptArtifacts. */
+    public UnaryCallSettings.Builder&lt;ImportAptArtifactsRequest, Operation&gt;
+        importAptArtifactsSettings() {
+<span class="fc" id="L1400">      return importAptArtifactsSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to importAptArtifacts. */
+    @BetaApi(
+        &quot;The surface for use by generated code is not stable yet and may change in the future.&quot;)
+    public OperationCallSettings.Builder&lt;
+            ImportAptArtifactsRequest, ImportAptArtifactsResponse, ImportAptArtifactsMetadata&gt;
+        importAptArtifactsOperationSettings() {
+<span class="fc" id="L1409">      return importAptArtifactsOperationSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to importYumArtifacts. */
+    public UnaryCallSettings.Builder&lt;ImportYumArtifactsRequest, Operation&gt;
+        importYumArtifactsSettings() {
+<span class="fc" id="L1415">      return importYumArtifactsSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to importYumArtifacts. */
+    @BetaApi(
+        &quot;The surface for use by generated code is not stable yet and may change in the future.&quot;)
+    public OperationCallSettings.Builder&lt;
+            ImportYumArtifactsRequest, ImportYumArtifactsResponse, ImportYumArtifactsMetadata&gt;
+        importYumArtifactsOperationSettings() {
+<span class="fc" id="L1424">      return importYumArtifactsOperationSettings;</span>
     }
 
     /** Returns the builder for the settings used for calls to listRepositories. */
     public PagedCallSettings.Builder&lt;
             ListRepositoriesRequest, ListRepositoriesResponse, ListRepositoriesPagedResponse&gt;
         listRepositoriesSettings() {
-<span class="fc" id="L451">      return listRepositoriesSettings;</span>
+<span class="fc" id="L1431">      return listRepositoriesSettings;</span>
     }
 
     /** Returns the builder for the settings used for calls to getRepository. */
     public UnaryCallSettings.Builder&lt;GetRepositoryRequest, Repository&gt; getRepositorySettings() {
-<span class="fc" id="L456">      return getRepositorySettings;</span>
+<span class="fc" id="L1436">      return getRepositorySettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to createRepository. */
+    public UnaryCallSettings.Builder&lt;CreateRepositoryRequest, Operation&gt;
+        createRepositorySettings() {
+<span class="fc" id="L1442">      return createRepositorySettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to createRepository. */
+    @BetaApi(
+        &quot;The surface for use by generated code is not stable yet and may change in the future.&quot;)
+    public OperationCallSettings.Builder&lt;CreateRepositoryRequest, Repository, OperationMetadata&gt;
+        createRepositoryOperationSettings() {
+<span class="fc" id="L1450">      return createRepositoryOperationSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to updateRepository. */
+    public UnaryCallSettings.Builder&lt;UpdateRepositoryRequest, Repository&gt;
+        updateRepositorySettings() {
+<span class="fc" id="L1456">      return updateRepositorySettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to deleteRepository. */
+    public UnaryCallSettings.Builder&lt;DeleteRepositoryRequest, Operation&gt;
+        deleteRepositorySettings() {
+<span class="fc" id="L1462">      return deleteRepositorySettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to deleteRepository. */
+    @BetaApi(
+        &quot;The surface for use by generated code is not stable yet and may change in the future.&quot;)
+    public OperationCallSettings.Builder&lt;DeleteRepositoryRequest, Empty, OperationMetadata&gt;
+        deleteRepositoryOperationSettings() {
+<span class="fc" id="L1470">      return deleteRepositoryOperationSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to listPackages. */
+    public PagedCallSettings.Builder&lt;
+            ListPackagesRequest, ListPackagesResponse, ListPackagesPagedResponse&gt;
+        listPackagesSettings() {
+<span class="fc" id="L1477">      return listPackagesSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to getPackage. */
+    public UnaryCallSettings.Builder&lt;GetPackageRequest, Package&gt; getPackageSettings() {
+<span class="fc" id="L1482">      return getPackageSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to deletePackage. */
+    public UnaryCallSettings.Builder&lt;DeletePackageRequest, Operation&gt; deletePackageSettings() {
+<span class="fc" id="L1487">      return deletePackageSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to deletePackage. */
+    @BetaApi(
+        &quot;The surface for use by generated code is not stable yet and may change in the future.&quot;)
+    public OperationCallSettings.Builder&lt;DeletePackageRequest, Empty, OperationMetadata&gt;
+        deletePackageOperationSettings() {
+<span class="fc" id="L1495">      return deletePackageOperationSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to listVersions. */
+    public PagedCallSettings.Builder&lt;
+            ListVersionsRequest, ListVersionsResponse, ListVersionsPagedResponse&gt;
+        listVersionsSettings() {
+<span class="fc" id="L1502">      return listVersionsSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to getVersion. */
+    public UnaryCallSettings.Builder&lt;GetVersionRequest, Version&gt; getVersionSettings() {
+<span class="fc" id="L1507">      return getVersionSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to deleteVersion. */
+    public UnaryCallSettings.Builder&lt;DeleteVersionRequest, Operation&gt; deleteVersionSettings() {
+<span class="fc" id="L1512">      return deleteVersionSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to deleteVersion. */
+    @BetaApi(
+        &quot;The surface for use by generated code is not stable yet and may change in the future.&quot;)
+    public OperationCallSettings.Builder&lt;DeleteVersionRequest, Empty, OperationMetadata&gt;
+        deleteVersionOperationSettings() {
+<span class="fc" id="L1520">      return deleteVersionOperationSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to listFiles. */
+    public PagedCallSettings.Builder&lt;ListFilesRequest, ListFilesResponse, ListFilesPagedResponse&gt;
+        listFilesSettings() {
+<span class="fc" id="L1526">      return listFilesSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to getFile. */
+    public UnaryCallSettings.Builder&lt;GetFileRequest, File&gt; getFileSettings() {
+<span class="fc" id="L1531">      return getFileSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to listTags. */
+    public PagedCallSettings.Builder&lt;ListTagsRequest, ListTagsResponse, ListTagsPagedResponse&gt;
+        listTagsSettings() {
+<span class="fc" id="L1537">      return listTagsSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to getTag. */
+    public UnaryCallSettings.Builder&lt;GetTagRequest, Tag&gt; getTagSettings() {
+<span class="fc" id="L1542">      return getTagSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to createTag. */
+    public UnaryCallSettings.Builder&lt;CreateTagRequest, Tag&gt; createTagSettings() {
+<span class="fc" id="L1547">      return createTagSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to updateTag. */
+    public UnaryCallSettings.Builder&lt;UpdateTagRequest, Tag&gt; updateTagSettings() {
+<span class="fc" id="L1552">      return updateTagSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to deleteTag. */
+    public UnaryCallSettings.Builder&lt;DeleteTagRequest, Empty&gt; deleteTagSettings() {
+<span class="fc" id="L1557">      return deleteTagSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to setIamPolicy. */
+    public UnaryCallSettings.Builder&lt;SetIamPolicyRequest, Policy&gt; setIamPolicySettings() {
+<span class="fc" id="L1562">      return setIamPolicySettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to getIamPolicy. */
+    public UnaryCallSettings.Builder&lt;GetIamPolicyRequest, Policy&gt; getIamPolicySettings() {
+<span class="fc" id="L1567">      return getIamPolicySettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to testIamPermissions. */
+    public UnaryCallSettings.Builder&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+        testIamPermissionsSettings() {
+<span class="fc" id="L1573">      return testIamPermissionsSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to getProjectSettings. */
+    public UnaryCallSettings.Builder&lt;GetProjectSettingsRequest, ProjectSettings&gt;
+        getProjectSettingsSettings() {
+<span class="fc" id="L1579">      return getProjectSettingsSettings;</span>
+    }
+
+    /** Returns the builder for the settings used for calls to updateProjectSettings. */
+    public UnaryCallSettings.Builder&lt;UpdateProjectSettingsRequest, ProjectSettings&gt;
+        updateProjectSettingsSettings() {
+<span class="fc" id="L1585">      return updateProjectSettingsSettings;</span>
     }
 
     @Override
     public ArtifactRegistryStubSettings build() throws IOException {
-<span class="fc" id="L461">      return new ArtifactRegistryStubSettings(this);</span>
+<span class="fc" id="L1590">      return new ArtifactRegistryStubSettings(this);</span>
     }
   }
 }

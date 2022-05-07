@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>GrpcArtifactRegistryStub.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-artifact-registry</a> &gt; <a href="index.source.html" class="el_package">com.google.devtools.artifactregistry.v1.stub</a> &gt; <span class="el_source">GrpcArtifactRegistryStub.java</span></div><h1>GrpcArtifactRegistryStub.java</h1><pre class="source lang-java linenums">/*
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,70 @@
 package com.google.devtools.artifactregistry.v1.stub;
 
 import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListDockerImagesPagedResponse;
+import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListFilesPagedResponse;
+import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListPackagesPagedResponse;
 import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListRepositoriesPagedResponse;
+import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListTagsPagedResponse;
+import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListVersionsPagedResponse;
 
 import com.google.api.gax.core.BackgroundResource;
 import com.google.api.gax.core.BackgroundResourceAggregation;
 import com.google.api.gax.grpc.GrpcCallSettings;
 import com.google.api.gax.grpc.GrpcStubCallableFactory;
 import com.google.api.gax.rpc.ClientContext;
+import com.google.api.gax.rpc.OperationCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.common.collect.ImmutableMap;
+import com.google.devtools.artifactregistry.v1.CreateRepositoryRequest;
+import com.google.devtools.artifactregistry.v1.CreateTagRequest;
+import com.google.devtools.artifactregistry.v1.DeletePackageRequest;
+import com.google.devtools.artifactregistry.v1.DeleteRepositoryRequest;
+import com.google.devtools.artifactregistry.v1.DeleteTagRequest;
+import com.google.devtools.artifactregistry.v1.DeleteVersionRequest;
+import com.google.devtools.artifactregistry.v1.DockerImage;
+import com.google.devtools.artifactregistry.v1.File;
+import com.google.devtools.artifactregistry.v1.GetDockerImageRequest;
+import com.google.devtools.artifactregistry.v1.GetFileRequest;
+import com.google.devtools.artifactregistry.v1.GetPackageRequest;
+import com.google.devtools.artifactregistry.v1.GetProjectSettingsRequest;
 import com.google.devtools.artifactregistry.v1.GetRepositoryRequest;
+import com.google.devtools.artifactregistry.v1.GetTagRequest;
+import com.google.devtools.artifactregistry.v1.GetVersionRequest;
+import com.google.devtools.artifactregistry.v1.ImportAptArtifactsMetadata;
+import com.google.devtools.artifactregistry.v1.ImportAptArtifactsRequest;
+import com.google.devtools.artifactregistry.v1.ImportAptArtifactsResponse;
+import com.google.devtools.artifactregistry.v1.ImportYumArtifactsMetadata;
+import com.google.devtools.artifactregistry.v1.ImportYumArtifactsRequest;
+import com.google.devtools.artifactregistry.v1.ImportYumArtifactsResponse;
 import com.google.devtools.artifactregistry.v1.ListDockerImagesRequest;
 import com.google.devtools.artifactregistry.v1.ListDockerImagesResponse;
+import com.google.devtools.artifactregistry.v1.ListFilesRequest;
+import com.google.devtools.artifactregistry.v1.ListFilesResponse;
+import com.google.devtools.artifactregistry.v1.ListPackagesRequest;
+import com.google.devtools.artifactregistry.v1.ListPackagesResponse;
 import com.google.devtools.artifactregistry.v1.ListRepositoriesRequest;
 import com.google.devtools.artifactregistry.v1.ListRepositoriesResponse;
+import com.google.devtools.artifactregistry.v1.ListTagsRequest;
+import com.google.devtools.artifactregistry.v1.ListTagsResponse;
+import com.google.devtools.artifactregistry.v1.ListVersionsRequest;
+import com.google.devtools.artifactregistry.v1.ListVersionsResponse;
+import com.google.devtools.artifactregistry.v1.OperationMetadata;
+import com.google.devtools.artifactregistry.v1.Package;
+import com.google.devtools.artifactregistry.v1.ProjectSettings;
 import com.google.devtools.artifactregistry.v1.Repository;
+import com.google.devtools.artifactregistry.v1.Tag;
+import com.google.devtools.artifactregistry.v1.UpdateProjectSettingsRequest;
+import com.google.devtools.artifactregistry.v1.UpdateRepositoryRequest;
+import com.google.devtools.artifactregistry.v1.UpdateTagRequest;
+import com.google.devtools.artifactregistry.v1.Version;
+import com.google.iam.v1.GetIamPolicyRequest;
+import com.google.iam.v1.Policy;
+import com.google.iam.v1.SetIamPolicyRequest;
+import com.google.iam.v1.TestIamPermissionsRequest;
+import com.google.iam.v1.TestIamPermissionsResponse;
+import com.google.longrunning.Operation;
 import com.google.longrunning.stub.GrpcOperationsStub;
+import com.google.protobuf.Empty;
 import io.grpc.MethodDescriptor;
 import io.grpc.protobuf.ProtoUtils;
 import java.io.IOException;
@@ -49,48 +97,329 @@ import javax.annotation.Generated;
 public class GrpcArtifactRegistryStub extends ArtifactRegistryStub {
   private static final MethodDescriptor&lt;ListDockerImagesRequest, ListDockerImagesResponse&gt;
       listDockerImagesMethodDescriptor =
-<span class="fc" id="L52">          MethodDescriptor.&lt;ListDockerImagesRequest, ListDockerImagesResponse&gt;newBuilder()</span>
-<span class="fc" id="L53">              .setType(MethodDescriptor.MethodType.UNARY)</span>
-<span class="fc" id="L54">              .setFullMethodName(</span>
+<span class="fc" id="L100">          MethodDescriptor.&lt;ListDockerImagesRequest, ListDockerImagesResponse&gt;newBuilder()</span>
+<span class="fc" id="L101">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L102">              .setFullMethodName(</span>
                   &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/ListDockerImages&quot;)
-<span class="fc" id="L56">              .setRequestMarshaller(</span>
-<span class="fc" id="L57">                  ProtoUtils.marshaller(ListDockerImagesRequest.getDefaultInstance()))</span>
-<span class="fc" id="L58">              .setResponseMarshaller(</span>
-<span class="fc" id="L59">                  ProtoUtils.marshaller(ListDockerImagesResponse.getDefaultInstance()))</span>
-<span class="fc" id="L60">              .build();</span>
+<span class="fc" id="L104">              .setRequestMarshaller(</span>
+<span class="fc" id="L105">                  ProtoUtils.marshaller(ListDockerImagesRequest.getDefaultInstance()))</span>
+<span class="fc" id="L106">              .setResponseMarshaller(</span>
+<span class="fc" id="L107">                  ProtoUtils.marshaller(ListDockerImagesResponse.getDefaultInstance()))</span>
+<span class="fc" id="L108">              .build();</span>
+
+  private static final MethodDescriptor&lt;GetDockerImageRequest, DockerImage&gt;
+      getDockerImageMethodDescriptor =
+<span class="fc" id="L112">          MethodDescriptor.&lt;GetDockerImageRequest, DockerImage&gt;newBuilder()</span>
+<span class="fc" id="L113">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L114">              .setFullMethodName(</span>
+                  &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/GetDockerImage&quot;)
+<span class="fc" id="L116">              .setRequestMarshaller(</span>
+<span class="fc" id="L117">                  ProtoUtils.marshaller(GetDockerImageRequest.getDefaultInstance()))</span>
+<span class="fc" id="L118">              .setResponseMarshaller(ProtoUtils.marshaller(DockerImage.getDefaultInstance()))</span>
+<span class="fc" id="L119">              .build();</span>
+
+  private static final MethodDescriptor&lt;ImportAptArtifactsRequest, Operation&gt;
+      importAptArtifactsMethodDescriptor =
+<span class="fc" id="L123">          MethodDescriptor.&lt;ImportAptArtifactsRequest, Operation&gt;newBuilder()</span>
+<span class="fc" id="L124">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L125">              .setFullMethodName(</span>
+                  &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/ImportAptArtifacts&quot;)
+<span class="fc" id="L127">              .setRequestMarshaller(</span>
+<span class="fc" id="L128">                  ProtoUtils.marshaller(ImportAptArtifactsRequest.getDefaultInstance()))</span>
+<span class="fc" id="L129">              .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))</span>
+<span class="fc" id="L130">              .build();</span>
+
+  private static final MethodDescriptor&lt;ImportYumArtifactsRequest, Operation&gt;
+      importYumArtifactsMethodDescriptor =
+<span class="fc" id="L134">          MethodDescriptor.&lt;ImportYumArtifactsRequest, Operation&gt;newBuilder()</span>
+<span class="fc" id="L135">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L136">              .setFullMethodName(</span>
+                  &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/ImportYumArtifacts&quot;)
+<span class="fc" id="L138">              .setRequestMarshaller(</span>
+<span class="fc" id="L139">                  ProtoUtils.marshaller(ImportYumArtifactsRequest.getDefaultInstance()))</span>
+<span class="fc" id="L140">              .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))</span>
+<span class="fc" id="L141">              .build();</span>
 
   private static final MethodDescriptor&lt;ListRepositoriesRequest, ListRepositoriesResponse&gt;
       listRepositoriesMethodDescriptor =
-<span class="fc" id="L64">          MethodDescriptor.&lt;ListRepositoriesRequest, ListRepositoriesResponse&gt;newBuilder()</span>
-<span class="fc" id="L65">              .setType(MethodDescriptor.MethodType.UNARY)</span>
-<span class="fc" id="L66">              .setFullMethodName(</span>
+<span class="fc" id="L145">          MethodDescriptor.&lt;ListRepositoriesRequest, ListRepositoriesResponse&gt;newBuilder()</span>
+<span class="fc" id="L146">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L147">              .setFullMethodName(</span>
                   &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/ListRepositories&quot;)
-<span class="fc" id="L68">              .setRequestMarshaller(</span>
-<span class="fc" id="L69">                  ProtoUtils.marshaller(ListRepositoriesRequest.getDefaultInstance()))</span>
-<span class="fc" id="L70">              .setResponseMarshaller(</span>
-<span class="fc" id="L71">                  ProtoUtils.marshaller(ListRepositoriesResponse.getDefaultInstance()))</span>
-<span class="fc" id="L72">              .build();</span>
+<span class="fc" id="L149">              .setRequestMarshaller(</span>
+<span class="fc" id="L150">                  ProtoUtils.marshaller(ListRepositoriesRequest.getDefaultInstance()))</span>
+<span class="fc" id="L151">              .setResponseMarshaller(</span>
+<span class="fc" id="L152">                  ProtoUtils.marshaller(ListRepositoriesResponse.getDefaultInstance()))</span>
+<span class="fc" id="L153">              .build();</span>
 
   private static final MethodDescriptor&lt;GetRepositoryRequest, Repository&gt;
-<span class="fc" id="L75">      getRepositoryMethodDescriptor =</span>
-<span class="fc" id="L76">          MethodDescriptor.&lt;GetRepositoryRequest, Repository&gt;newBuilder()</span>
-<span class="fc" id="L77">              .setType(MethodDescriptor.MethodType.UNARY)</span>
-<span class="fc" id="L78">              .setFullMethodName(</span>
+      getRepositoryMethodDescriptor =
+<span class="fc" id="L157">          MethodDescriptor.&lt;GetRepositoryRequest, Repository&gt;newBuilder()</span>
+<span class="fc" id="L158">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L159">              .setFullMethodName(</span>
                   &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/GetRepository&quot;)
-<span class="fc" id="L80">              .setRequestMarshaller(</span>
-<span class="fc" id="L81">                  ProtoUtils.marshaller(GetRepositoryRequest.getDefaultInstance()))</span>
-<span class="fc" id="L82">              .setResponseMarshaller(ProtoUtils.marshaller(Repository.getDefaultInstance()))</span>
-<span class="fc" id="L83">              .build();</span>
+<span class="fc" id="L161">              .setRequestMarshaller(</span>
+<span class="fc" id="L162">                  ProtoUtils.marshaller(GetRepositoryRequest.getDefaultInstance()))</span>
+<span class="fc" id="L163">              .setResponseMarshaller(ProtoUtils.marshaller(Repository.getDefaultInstance()))</span>
+<span class="fc" id="L164">              .build();</span>
+
+  private static final MethodDescriptor&lt;CreateRepositoryRequest, Operation&gt;
+      createRepositoryMethodDescriptor =
+<span class="fc" id="L168">          MethodDescriptor.&lt;CreateRepositoryRequest, Operation&gt;newBuilder()</span>
+<span class="fc" id="L169">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L170">              .setFullMethodName(</span>
+                  &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/CreateRepository&quot;)
+<span class="fc" id="L172">              .setRequestMarshaller(</span>
+<span class="fc" id="L173">                  ProtoUtils.marshaller(CreateRepositoryRequest.getDefaultInstance()))</span>
+<span class="fc" id="L174">              .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))</span>
+<span class="fc" id="L175">              .build();</span>
+
+  private static final MethodDescriptor&lt;UpdateRepositoryRequest, Repository&gt;
+      updateRepositoryMethodDescriptor =
+<span class="fc" id="L179">          MethodDescriptor.&lt;UpdateRepositoryRequest, Repository&gt;newBuilder()</span>
+<span class="fc" id="L180">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L181">              .setFullMethodName(</span>
+                  &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/UpdateRepository&quot;)
+<span class="fc" id="L183">              .setRequestMarshaller(</span>
+<span class="fc" id="L184">                  ProtoUtils.marshaller(UpdateRepositoryRequest.getDefaultInstance()))</span>
+<span class="fc" id="L185">              .setResponseMarshaller(ProtoUtils.marshaller(Repository.getDefaultInstance()))</span>
+<span class="fc" id="L186">              .build();</span>
+
+  private static final MethodDescriptor&lt;DeleteRepositoryRequest, Operation&gt;
+      deleteRepositoryMethodDescriptor =
+<span class="fc" id="L190">          MethodDescriptor.&lt;DeleteRepositoryRequest, Operation&gt;newBuilder()</span>
+<span class="fc" id="L191">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L192">              .setFullMethodName(</span>
+                  &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/DeleteRepository&quot;)
+<span class="fc" id="L194">              .setRequestMarshaller(</span>
+<span class="fc" id="L195">                  ProtoUtils.marshaller(DeleteRepositoryRequest.getDefaultInstance()))</span>
+<span class="fc" id="L196">              .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))</span>
+<span class="fc" id="L197">              .build();</span>
+
+  private static final MethodDescriptor&lt;ListPackagesRequest, ListPackagesResponse&gt;
+      listPackagesMethodDescriptor =
+<span class="fc" id="L201">          MethodDescriptor.&lt;ListPackagesRequest, ListPackagesResponse&gt;newBuilder()</span>
+<span class="fc" id="L202">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L203">              .setFullMethodName(</span>
+                  &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/ListPackages&quot;)
+<span class="fc" id="L205">              .setRequestMarshaller(ProtoUtils.marshaller(ListPackagesRequest.getDefaultInstance()))</span>
+<span class="fc" id="L206">              .setResponseMarshaller(</span>
+<span class="fc" id="L207">                  ProtoUtils.marshaller(ListPackagesResponse.getDefaultInstance()))</span>
+<span class="fc" id="L208">              .build();</span>
+
+  private static final MethodDescriptor&lt;GetPackageRequest, Package&gt; getPackageMethodDescriptor =
+<span class="fc" id="L211">      MethodDescriptor.&lt;GetPackageRequest, Package&gt;newBuilder()</span>
+<span class="fc" id="L212">          .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L213">          .setFullMethodName(&quot;google.devtools.artifactregistry.v1.ArtifactRegistry/GetPackage&quot;)</span>
+<span class="fc" id="L214">          .setRequestMarshaller(ProtoUtils.marshaller(GetPackageRequest.getDefaultInstance()))</span>
+<span class="fc" id="L215">          .setResponseMarshaller(ProtoUtils.marshaller(Package.getDefaultInstance()))</span>
+<span class="fc" id="L216">          .build();</span>
+
+  private static final MethodDescriptor&lt;DeletePackageRequest, Operation&gt;
+      deletePackageMethodDescriptor =
+<span class="fc" id="L220">          MethodDescriptor.&lt;DeletePackageRequest, Operation&gt;newBuilder()</span>
+<span class="fc" id="L221">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L222">              .setFullMethodName(</span>
+                  &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/DeletePackage&quot;)
+<span class="fc" id="L224">              .setRequestMarshaller(</span>
+<span class="fc" id="L225">                  ProtoUtils.marshaller(DeletePackageRequest.getDefaultInstance()))</span>
+<span class="fc" id="L226">              .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))</span>
+<span class="fc" id="L227">              .build();</span>
+
+  private static final MethodDescriptor&lt;ListVersionsRequest, ListVersionsResponse&gt;
+      listVersionsMethodDescriptor =
+<span class="fc" id="L231">          MethodDescriptor.&lt;ListVersionsRequest, ListVersionsResponse&gt;newBuilder()</span>
+<span class="fc" id="L232">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L233">              .setFullMethodName(</span>
+                  &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/ListVersions&quot;)
+<span class="fc" id="L235">              .setRequestMarshaller(ProtoUtils.marshaller(ListVersionsRequest.getDefaultInstance()))</span>
+<span class="fc" id="L236">              .setResponseMarshaller(</span>
+<span class="fc" id="L237">                  ProtoUtils.marshaller(ListVersionsResponse.getDefaultInstance()))</span>
+<span class="fc" id="L238">              .build();</span>
+
+  private static final MethodDescriptor&lt;GetVersionRequest, Version&gt; getVersionMethodDescriptor =
+<span class="fc" id="L241">      MethodDescriptor.&lt;GetVersionRequest, Version&gt;newBuilder()</span>
+<span class="fc" id="L242">          .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L243">          .setFullMethodName(&quot;google.devtools.artifactregistry.v1.ArtifactRegistry/GetVersion&quot;)</span>
+<span class="fc" id="L244">          .setRequestMarshaller(ProtoUtils.marshaller(GetVersionRequest.getDefaultInstance()))</span>
+<span class="fc" id="L245">          .setResponseMarshaller(ProtoUtils.marshaller(Version.getDefaultInstance()))</span>
+<span class="fc" id="L246">          .build();</span>
+
+  private static final MethodDescriptor&lt;DeleteVersionRequest, Operation&gt;
+      deleteVersionMethodDescriptor =
+<span class="fc" id="L250">          MethodDescriptor.&lt;DeleteVersionRequest, Operation&gt;newBuilder()</span>
+<span class="fc" id="L251">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L252">              .setFullMethodName(</span>
+                  &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/DeleteVersion&quot;)
+<span class="fc" id="L254">              .setRequestMarshaller(</span>
+<span class="fc" id="L255">                  ProtoUtils.marshaller(DeleteVersionRequest.getDefaultInstance()))</span>
+<span class="fc" id="L256">              .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))</span>
+<span class="fc" id="L257">              .build();</span>
+
+  private static final MethodDescriptor&lt;ListFilesRequest, ListFilesResponse&gt;
+      listFilesMethodDescriptor =
+<span class="fc" id="L261">          MethodDescriptor.&lt;ListFilesRequest, ListFilesResponse&gt;newBuilder()</span>
+<span class="fc" id="L262">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L263">              .setFullMethodName(&quot;google.devtools.artifactregistry.v1.ArtifactRegistry/ListFiles&quot;)</span>
+<span class="fc" id="L264">              .setRequestMarshaller(ProtoUtils.marshaller(ListFilesRequest.getDefaultInstance()))</span>
+<span class="fc" id="L265">              .setResponseMarshaller(ProtoUtils.marshaller(ListFilesResponse.getDefaultInstance()))</span>
+<span class="fc" id="L266">              .build();</span>
+
+  private static final MethodDescriptor&lt;GetFileRequest, File&gt; getFileMethodDescriptor =
+<span class="fc" id="L269">      MethodDescriptor.&lt;GetFileRequest, File&gt;newBuilder()</span>
+<span class="fc" id="L270">          .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L271">          .setFullMethodName(&quot;google.devtools.artifactregistry.v1.ArtifactRegistry/GetFile&quot;)</span>
+<span class="fc" id="L272">          .setRequestMarshaller(ProtoUtils.marshaller(GetFileRequest.getDefaultInstance()))</span>
+<span class="fc" id="L273">          .setResponseMarshaller(ProtoUtils.marshaller(File.getDefaultInstance()))</span>
+<span class="fc" id="L274">          .build();</span>
+
+  private static final MethodDescriptor&lt;ListTagsRequest, ListTagsResponse&gt;
+      listTagsMethodDescriptor =
+<span class="fc" id="L278">          MethodDescriptor.&lt;ListTagsRequest, ListTagsResponse&gt;newBuilder()</span>
+<span class="fc" id="L279">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L280">              .setFullMethodName(&quot;google.devtools.artifactregistry.v1.ArtifactRegistry/ListTags&quot;)</span>
+<span class="fc" id="L281">              .setRequestMarshaller(ProtoUtils.marshaller(ListTagsRequest.getDefaultInstance()))</span>
+<span class="fc" id="L282">              .setResponseMarshaller(ProtoUtils.marshaller(ListTagsResponse.getDefaultInstance()))</span>
+<span class="fc" id="L283">              .build();</span>
+
+  private static final MethodDescriptor&lt;GetTagRequest, Tag&gt; getTagMethodDescriptor =
+<span class="fc" id="L286">      MethodDescriptor.&lt;GetTagRequest, Tag&gt;newBuilder()</span>
+<span class="fc" id="L287">          .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L288">          .setFullMethodName(&quot;google.devtools.artifactregistry.v1.ArtifactRegistry/GetTag&quot;)</span>
+<span class="fc" id="L289">          .setRequestMarshaller(ProtoUtils.marshaller(GetTagRequest.getDefaultInstance()))</span>
+<span class="fc" id="L290">          .setResponseMarshaller(ProtoUtils.marshaller(Tag.getDefaultInstance()))</span>
+<span class="fc" id="L291">          .build();</span>
+
+  private static final MethodDescriptor&lt;CreateTagRequest, Tag&gt; createTagMethodDescriptor =
+<span class="fc" id="L294">      MethodDescriptor.&lt;CreateTagRequest, Tag&gt;newBuilder()</span>
+<span class="fc" id="L295">          .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L296">          .setFullMethodName(&quot;google.devtools.artifactregistry.v1.ArtifactRegistry/CreateTag&quot;)</span>
+<span class="fc" id="L297">          .setRequestMarshaller(ProtoUtils.marshaller(CreateTagRequest.getDefaultInstance()))</span>
+<span class="fc" id="L298">          .setResponseMarshaller(ProtoUtils.marshaller(Tag.getDefaultInstance()))</span>
+<span class="fc" id="L299">          .build();</span>
+
+  private static final MethodDescriptor&lt;UpdateTagRequest, Tag&gt; updateTagMethodDescriptor =
+<span class="fc" id="L302">      MethodDescriptor.&lt;UpdateTagRequest, Tag&gt;newBuilder()</span>
+<span class="fc" id="L303">          .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L304">          .setFullMethodName(&quot;google.devtools.artifactregistry.v1.ArtifactRegistry/UpdateTag&quot;)</span>
+<span class="fc" id="L305">          .setRequestMarshaller(ProtoUtils.marshaller(UpdateTagRequest.getDefaultInstance()))</span>
+<span class="fc" id="L306">          .setResponseMarshaller(ProtoUtils.marshaller(Tag.getDefaultInstance()))</span>
+<span class="fc" id="L307">          .build();</span>
+
+  private static final MethodDescriptor&lt;DeleteTagRequest, Empty&gt; deleteTagMethodDescriptor =
+<span class="fc" id="L310">      MethodDescriptor.&lt;DeleteTagRequest, Empty&gt;newBuilder()</span>
+<span class="fc" id="L311">          .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L312">          .setFullMethodName(&quot;google.devtools.artifactregistry.v1.ArtifactRegistry/DeleteTag&quot;)</span>
+<span class="fc" id="L313">          .setRequestMarshaller(ProtoUtils.marshaller(DeleteTagRequest.getDefaultInstance()))</span>
+<span class="fc" id="L314">          .setResponseMarshaller(ProtoUtils.marshaller(Empty.getDefaultInstance()))</span>
+<span class="fc" id="L315">          .build();</span>
+
+  private static final MethodDescriptor&lt;SetIamPolicyRequest, Policy&gt; setIamPolicyMethodDescriptor =
+<span class="fc" id="L318">      MethodDescriptor.&lt;SetIamPolicyRequest, Policy&gt;newBuilder()</span>
+<span class="fc" id="L319">          .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L320">          .setFullMethodName(&quot;google.devtools.artifactregistry.v1.ArtifactRegistry/SetIamPolicy&quot;)</span>
+<span class="fc" id="L321">          .setRequestMarshaller(ProtoUtils.marshaller(SetIamPolicyRequest.getDefaultInstance()))</span>
+<span class="fc" id="L322">          .setResponseMarshaller(ProtoUtils.marshaller(Policy.getDefaultInstance()))</span>
+<span class="fc" id="L323">          .build();</span>
+
+  private static final MethodDescriptor&lt;GetIamPolicyRequest, Policy&gt; getIamPolicyMethodDescriptor =
+<span class="fc" id="L326">      MethodDescriptor.&lt;GetIamPolicyRequest, Policy&gt;newBuilder()</span>
+<span class="fc" id="L327">          .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L328">          .setFullMethodName(&quot;google.devtools.artifactregistry.v1.ArtifactRegistry/GetIamPolicy&quot;)</span>
+<span class="fc" id="L329">          .setRequestMarshaller(ProtoUtils.marshaller(GetIamPolicyRequest.getDefaultInstance()))</span>
+<span class="fc" id="L330">          .setResponseMarshaller(ProtoUtils.marshaller(Policy.getDefaultInstance()))</span>
+<span class="fc" id="L331">          .build();</span>
+
+  private static final MethodDescriptor&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+      testIamPermissionsMethodDescriptor =
+<span class="fc" id="L335">          MethodDescriptor.&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;newBuilder()</span>
+<span class="fc" id="L336">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L337">              .setFullMethodName(</span>
+                  &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/TestIamPermissions&quot;)
+<span class="fc" id="L339">              .setRequestMarshaller(</span>
+<span class="fc" id="L340">                  ProtoUtils.marshaller(TestIamPermissionsRequest.getDefaultInstance()))</span>
+<span class="fc" id="L341">              .setResponseMarshaller(</span>
+<span class="fc" id="L342">                  ProtoUtils.marshaller(TestIamPermissionsResponse.getDefaultInstance()))</span>
+<span class="fc" id="L343">              .build();</span>
+
+  private static final MethodDescriptor&lt;GetProjectSettingsRequest, ProjectSettings&gt;
+      getProjectSettingsMethodDescriptor =
+<span class="fc" id="L347">          MethodDescriptor.&lt;GetProjectSettingsRequest, ProjectSettings&gt;newBuilder()</span>
+<span class="fc" id="L348">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L349">              .setFullMethodName(</span>
+                  &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/GetProjectSettings&quot;)
+<span class="fc" id="L351">              .setRequestMarshaller(</span>
+<span class="fc" id="L352">                  ProtoUtils.marshaller(GetProjectSettingsRequest.getDefaultInstance()))</span>
+<span class="fc" id="L353">              .setResponseMarshaller(ProtoUtils.marshaller(ProjectSettings.getDefaultInstance()))</span>
+<span class="fc" id="L354">              .build();</span>
+
+  private static final MethodDescriptor&lt;UpdateProjectSettingsRequest, ProjectSettings&gt;
+<span class="fc" id="L357">      updateProjectSettingsMethodDescriptor =</span>
+<span class="fc" id="L358">          MethodDescriptor.&lt;UpdateProjectSettingsRequest, ProjectSettings&gt;newBuilder()</span>
+<span class="fc" id="L359">              .setType(MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L360">              .setFullMethodName(</span>
+                  &quot;google.devtools.artifactregistry.v1.ArtifactRegistry/UpdateProjectSettings&quot;)
+<span class="fc" id="L362">              .setRequestMarshaller(</span>
+<span class="fc" id="L363">                  ProtoUtils.marshaller(UpdateProjectSettingsRequest.getDefaultInstance()))</span>
+<span class="fc" id="L364">              .setResponseMarshaller(ProtoUtils.marshaller(ProjectSettings.getDefaultInstance()))</span>
+<span class="fc" id="L365">              .build();</span>
 
   private final UnaryCallable&lt;ListDockerImagesRequest, ListDockerImagesResponse&gt;
       listDockerImagesCallable;
   private final UnaryCallable&lt;ListDockerImagesRequest, ListDockerImagesPagedResponse&gt;
       listDockerImagesPagedCallable;
+  private final UnaryCallable&lt;GetDockerImageRequest, DockerImage&gt; getDockerImageCallable;
+  private final UnaryCallable&lt;ImportAptArtifactsRequest, Operation&gt; importAptArtifactsCallable;
+  private final OperationCallable&lt;
+          ImportAptArtifactsRequest, ImportAptArtifactsResponse, ImportAptArtifactsMetadata&gt;
+      importAptArtifactsOperationCallable;
+  private final UnaryCallable&lt;ImportYumArtifactsRequest, Operation&gt; importYumArtifactsCallable;
+  private final OperationCallable&lt;
+          ImportYumArtifactsRequest, ImportYumArtifactsResponse, ImportYumArtifactsMetadata&gt;
+      importYumArtifactsOperationCallable;
   private final UnaryCallable&lt;ListRepositoriesRequest, ListRepositoriesResponse&gt;
       listRepositoriesCallable;
   private final UnaryCallable&lt;ListRepositoriesRequest, ListRepositoriesPagedResponse&gt;
       listRepositoriesPagedCallable;
   private final UnaryCallable&lt;GetRepositoryRequest, Repository&gt; getRepositoryCallable;
+  private final UnaryCallable&lt;CreateRepositoryRequest, Operation&gt; createRepositoryCallable;
+  private final OperationCallable&lt;CreateRepositoryRequest, Repository, OperationMetadata&gt;
+      createRepositoryOperationCallable;
+  private final UnaryCallable&lt;UpdateRepositoryRequest, Repository&gt; updateRepositoryCallable;
+  private final UnaryCallable&lt;DeleteRepositoryRequest, Operation&gt; deleteRepositoryCallable;
+  private final OperationCallable&lt;DeleteRepositoryRequest, Empty, OperationMetadata&gt;
+      deleteRepositoryOperationCallable;
+  private final UnaryCallable&lt;ListPackagesRequest, ListPackagesResponse&gt; listPackagesCallable;
+  private final UnaryCallable&lt;ListPackagesRequest, ListPackagesPagedResponse&gt;
+      listPackagesPagedCallable;
+  private final UnaryCallable&lt;GetPackageRequest, Package&gt; getPackageCallable;
+  private final UnaryCallable&lt;DeletePackageRequest, Operation&gt; deletePackageCallable;
+  private final OperationCallable&lt;DeletePackageRequest, Empty, OperationMetadata&gt;
+      deletePackageOperationCallable;
+  private final UnaryCallable&lt;ListVersionsRequest, ListVersionsResponse&gt; listVersionsCallable;
+  private final UnaryCallable&lt;ListVersionsRequest, ListVersionsPagedResponse&gt;
+      listVersionsPagedCallable;
+  private final UnaryCallable&lt;GetVersionRequest, Version&gt; getVersionCallable;
+  private final UnaryCallable&lt;DeleteVersionRequest, Operation&gt; deleteVersionCallable;
+  private final OperationCallable&lt;DeleteVersionRequest, Empty, OperationMetadata&gt;
+      deleteVersionOperationCallable;
+  private final UnaryCallable&lt;ListFilesRequest, ListFilesResponse&gt; listFilesCallable;
+  private final UnaryCallable&lt;ListFilesRequest, ListFilesPagedResponse&gt; listFilesPagedCallable;
+  private final UnaryCallable&lt;GetFileRequest, File&gt; getFileCallable;
+  private final UnaryCallable&lt;ListTagsRequest, ListTagsResponse&gt; listTagsCallable;
+  private final UnaryCallable&lt;ListTagsRequest, ListTagsPagedResponse&gt; listTagsPagedCallable;
+  private final UnaryCallable&lt;GetTagRequest, Tag&gt; getTagCallable;
+  private final UnaryCallable&lt;CreateTagRequest, Tag&gt; createTagCallable;
+  private final UnaryCallable&lt;UpdateTagRequest, Tag&gt; updateTagCallable;
+  private final UnaryCallable&lt;DeleteTagRequest, Empty&gt; deleteTagCallable;
+  private final UnaryCallable&lt;SetIamPolicyRequest, Policy&gt; setIamPolicyCallable;
+  private final UnaryCallable&lt;GetIamPolicyRequest, Policy&gt; getIamPolicyCallable;
+  private final UnaryCallable&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+      testIamPermissionsCallable;
+  private final UnaryCallable&lt;GetProjectSettingsRequest, ProjectSettings&gt;
+      getProjectSettingsCallable;
+  private final UnaryCallable&lt;UpdateProjectSettingsRequest, ProjectSettings&gt;
+      updateProjectSettingsCallable;
 
   private final BackgroundResource backgroundResources;
   private final GrpcOperationsStub operationsStub;
@@ -98,19 +427,19 @@ public class GrpcArtifactRegistryStub extends ArtifactRegistryStub {
 
   public static final GrpcArtifactRegistryStub create(ArtifactRegistryStubSettings settings)
       throws IOException {
-<span class="fc" id="L101">    return new GrpcArtifactRegistryStub(settings, ClientContext.create(settings));</span>
+<span class="fc" id="L430">    return new GrpcArtifactRegistryStub(settings, ClientContext.create(settings));</span>
   }
 
   public static final GrpcArtifactRegistryStub create(ClientContext clientContext)
       throws IOException {
-<span class="nc" id="L106">    return new GrpcArtifactRegistryStub(</span>
-<span class="nc" id="L107">        ArtifactRegistryStubSettings.newBuilder().build(), clientContext);</span>
+<span class="nc" id="L435">    return new GrpcArtifactRegistryStub(</span>
+<span class="nc" id="L436">        ArtifactRegistryStubSettings.newBuilder().build(), clientContext);</span>
   }
 
   public static final GrpcArtifactRegistryStub create(
       ClientContext clientContext, GrpcStubCallableFactory callableFactory) throws IOException {
-<span class="nc" id="L112">    return new GrpcArtifactRegistryStub(</span>
-<span class="nc" id="L113">        ArtifactRegistryStubSettings.newBuilder().build(), clientContext, callableFactory);</span>
+<span class="nc" id="L441">    return new GrpcArtifactRegistryStub(</span>
+<span class="nc" id="L442">        ArtifactRegistryStubSettings.newBuilder().build(), clientContext, callableFactory);</span>
   }
 
   /**
@@ -120,8 +449,8 @@ public class GrpcArtifactRegistryStub extends ArtifactRegistryStub {
    */
   protected GrpcArtifactRegistryStub(
       ArtifactRegistryStubSettings settings, ClientContext clientContext) throws IOException {
-<span class="fc" id="L123">    this(settings, clientContext, new GrpcArtifactRegistryCallableFactory());</span>
-<span class="fc" id="L124">  }</span>
+<span class="fc" id="L452">    this(settings, clientContext, new GrpcArtifactRegistryCallableFactory());</span>
+<span class="fc" id="L453">  }</span>
 
   /**
    * Constructs an instance of GrpcArtifactRegistryStub, using the given settings. This is protected
@@ -132,130 +461,685 @@ public class GrpcArtifactRegistryStub extends ArtifactRegistryStub {
       ArtifactRegistryStubSettings settings,
       ClientContext clientContext,
       GrpcStubCallableFactory callableFactory)
-<span class="fc" id="L135">      throws IOException {</span>
-<span class="fc" id="L136">    this.callableFactory = callableFactory;</span>
-<span class="fc" id="L137">    this.operationsStub = GrpcOperationsStub.create(clientContext, callableFactory);</span>
+<span class="fc" id="L464">      throws IOException {</span>
+<span class="fc" id="L465">    this.callableFactory = callableFactory;</span>
+<span class="fc" id="L466">    this.operationsStub = GrpcOperationsStub.create(clientContext, callableFactory);</span>
 
     GrpcCallSettings&lt;ListDockerImagesRequest, ListDockerImagesResponse&gt;
         listDockerImagesTransportSettings =
-<span class="fc" id="L141">            GrpcCallSettings.&lt;ListDockerImagesRequest, ListDockerImagesResponse&gt;newBuilder()</span>
-<span class="fc" id="L142">                .setMethodDescriptor(listDockerImagesMethodDescriptor)</span>
-<span class="fc" id="L143">                .setParamsExtractor(</span>
+<span class="fc" id="L470">            GrpcCallSettings.&lt;ListDockerImagesRequest, ListDockerImagesResponse&gt;newBuilder()</span>
+<span class="fc" id="L471">                .setMethodDescriptor(listDockerImagesMethodDescriptor)</span>
+<span class="fc" id="L472">                .setParamsExtractor(</span>
                     request -&gt; {
-<span class="fc" id="L145">                      ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
-<span class="fc" id="L146">                      params.put(&quot;parent&quot;, String.valueOf(request.getParent()));</span>
-<span class="fc" id="L147">                      return params.build();</span>
+<span class="fc" id="L474">                      ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L475">                      params.put(&quot;parent&quot;, String.valueOf(request.getParent()));</span>
+<span class="fc" id="L476">                      return params.build();</span>
                     })
-<span class="fc" id="L149">                .build();</span>
+<span class="fc" id="L478">                .build();</span>
+    GrpcCallSettings&lt;GetDockerImageRequest, DockerImage&gt; getDockerImageTransportSettings =
+<span class="fc" id="L480">        GrpcCallSettings.&lt;GetDockerImageRequest, DockerImage&gt;newBuilder()</span>
+<span class="fc" id="L481">            .setMethodDescriptor(getDockerImageMethodDescriptor)</span>
+<span class="fc" id="L482">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L484">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L485">                  params.put(&quot;name&quot;, String.valueOf(request.getName()));</span>
+<span class="fc" id="L486">                  return params.build();</span>
+                })
+<span class="fc" id="L488">            .build();</span>
+    GrpcCallSettings&lt;ImportAptArtifactsRequest, Operation&gt; importAptArtifactsTransportSettings =
+<span class="fc" id="L490">        GrpcCallSettings.&lt;ImportAptArtifactsRequest, Operation&gt;newBuilder()</span>
+<span class="fc" id="L491">            .setMethodDescriptor(importAptArtifactsMethodDescriptor)</span>
+<span class="fc" id="L492">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L494">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L495">                  params.put(&quot;parent&quot;, String.valueOf(request.getParent()));</span>
+<span class="fc" id="L496">                  return params.build();</span>
+                })
+<span class="fc" id="L498">            .build();</span>
+    GrpcCallSettings&lt;ImportYumArtifactsRequest, Operation&gt; importYumArtifactsTransportSettings =
+<span class="fc" id="L500">        GrpcCallSettings.&lt;ImportYumArtifactsRequest, Operation&gt;newBuilder()</span>
+<span class="fc" id="L501">            .setMethodDescriptor(importYumArtifactsMethodDescriptor)</span>
+<span class="fc" id="L502">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L504">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L505">                  params.put(&quot;parent&quot;, String.valueOf(request.getParent()));</span>
+<span class="fc" id="L506">                  return params.build();</span>
+                })
+<span class="fc" id="L508">            .build();</span>
     GrpcCallSettings&lt;ListRepositoriesRequest, ListRepositoriesResponse&gt;
         listRepositoriesTransportSettings =
-<span class="fc" id="L152">            GrpcCallSettings.&lt;ListRepositoriesRequest, ListRepositoriesResponse&gt;newBuilder()</span>
-<span class="fc" id="L153">                .setMethodDescriptor(listRepositoriesMethodDescriptor)</span>
-<span class="fc" id="L154">                .setParamsExtractor(</span>
+<span class="fc" id="L511">            GrpcCallSettings.&lt;ListRepositoriesRequest, ListRepositoriesResponse&gt;newBuilder()</span>
+<span class="fc" id="L512">                .setMethodDescriptor(listRepositoriesMethodDescriptor)</span>
+<span class="fc" id="L513">                .setParamsExtractor(</span>
                     request -&gt; {
-<span class="fc" id="L156">                      ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
-<span class="fc" id="L157">                      params.put(&quot;parent&quot;, String.valueOf(request.getParent()));</span>
-<span class="fc" id="L158">                      return params.build();</span>
+<span class="fc" id="L515">                      ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L516">                      params.put(&quot;parent&quot;, String.valueOf(request.getParent()));</span>
+<span class="fc" id="L517">                      return params.build();</span>
                     })
-<span class="fc" id="L160">                .build();</span>
+<span class="fc" id="L519">                .build();</span>
     GrpcCallSettings&lt;GetRepositoryRequest, Repository&gt; getRepositoryTransportSettings =
-<span class="fc" id="L162">        GrpcCallSettings.&lt;GetRepositoryRequest, Repository&gt;newBuilder()</span>
-<span class="fc" id="L163">            .setMethodDescriptor(getRepositoryMethodDescriptor)</span>
-<span class="fc" id="L164">            .setParamsExtractor(</span>
+<span class="fc" id="L521">        GrpcCallSettings.&lt;GetRepositoryRequest, Repository&gt;newBuilder()</span>
+<span class="fc" id="L522">            .setMethodDescriptor(getRepositoryMethodDescriptor)</span>
+<span class="fc" id="L523">            .setParamsExtractor(</span>
                 request -&gt; {
-<span class="fc" id="L166">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
-<span class="fc" id="L167">                  params.put(&quot;name&quot;, String.valueOf(request.getName()));</span>
-<span class="fc" id="L168">                  return params.build();</span>
+<span class="fc" id="L525">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L526">                  params.put(&quot;name&quot;, String.valueOf(request.getName()));</span>
+<span class="fc" id="L527">                  return params.build();</span>
                 })
-<span class="fc" id="L170">            .build();</span>
+<span class="fc" id="L529">            .build();</span>
+    GrpcCallSettings&lt;CreateRepositoryRequest, Operation&gt; createRepositoryTransportSettings =
+<span class="fc" id="L531">        GrpcCallSettings.&lt;CreateRepositoryRequest, Operation&gt;newBuilder()</span>
+<span class="fc" id="L532">            .setMethodDescriptor(createRepositoryMethodDescriptor)</span>
+<span class="fc" id="L533">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L535">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L536">                  params.put(&quot;parent&quot;, String.valueOf(request.getParent()));</span>
+<span class="fc" id="L537">                  return params.build();</span>
+                })
+<span class="fc" id="L539">            .build();</span>
+    GrpcCallSettings&lt;UpdateRepositoryRequest, Repository&gt; updateRepositoryTransportSettings =
+<span class="fc" id="L541">        GrpcCallSettings.&lt;UpdateRepositoryRequest, Repository&gt;newBuilder()</span>
+<span class="fc" id="L542">            .setMethodDescriptor(updateRepositoryMethodDescriptor)</span>
+<span class="fc" id="L543">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L545">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L546">                  params.put(&quot;repository.name&quot;, String.valueOf(request.getRepository().getName()));</span>
+<span class="fc" id="L547">                  return params.build();</span>
+                })
+<span class="fc" id="L549">            .build();</span>
+    GrpcCallSettings&lt;DeleteRepositoryRequest, Operation&gt; deleteRepositoryTransportSettings =
+<span class="fc" id="L551">        GrpcCallSettings.&lt;DeleteRepositoryRequest, Operation&gt;newBuilder()</span>
+<span class="fc" id="L552">            .setMethodDescriptor(deleteRepositoryMethodDescriptor)</span>
+<span class="fc" id="L553">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L555">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L556">                  params.put(&quot;name&quot;, String.valueOf(request.getName()));</span>
+<span class="fc" id="L557">                  return params.build();</span>
+                })
+<span class="fc" id="L559">            .build();</span>
+    GrpcCallSettings&lt;ListPackagesRequest, ListPackagesResponse&gt; listPackagesTransportSettings =
+<span class="fc" id="L561">        GrpcCallSettings.&lt;ListPackagesRequest, ListPackagesResponse&gt;newBuilder()</span>
+<span class="fc" id="L562">            .setMethodDescriptor(listPackagesMethodDescriptor)</span>
+<span class="fc" id="L563">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L565">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L566">                  params.put(&quot;parent&quot;, String.valueOf(request.getParent()));</span>
+<span class="fc" id="L567">                  return params.build();</span>
+                })
+<span class="fc" id="L569">            .build();</span>
+    GrpcCallSettings&lt;GetPackageRequest, Package&gt; getPackageTransportSettings =
+<span class="fc" id="L571">        GrpcCallSettings.&lt;GetPackageRequest, Package&gt;newBuilder()</span>
+<span class="fc" id="L572">            .setMethodDescriptor(getPackageMethodDescriptor)</span>
+<span class="fc" id="L573">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L575">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L576">                  params.put(&quot;name&quot;, String.valueOf(request.getName()));</span>
+<span class="fc" id="L577">                  return params.build();</span>
+                })
+<span class="fc" id="L579">            .build();</span>
+    GrpcCallSettings&lt;DeletePackageRequest, Operation&gt; deletePackageTransportSettings =
+<span class="fc" id="L581">        GrpcCallSettings.&lt;DeletePackageRequest, Operation&gt;newBuilder()</span>
+<span class="fc" id="L582">            .setMethodDescriptor(deletePackageMethodDescriptor)</span>
+<span class="fc" id="L583">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L585">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L586">                  params.put(&quot;name&quot;, String.valueOf(request.getName()));</span>
+<span class="fc" id="L587">                  return params.build();</span>
+                })
+<span class="fc" id="L589">            .build();</span>
+    GrpcCallSettings&lt;ListVersionsRequest, ListVersionsResponse&gt; listVersionsTransportSettings =
+<span class="fc" id="L591">        GrpcCallSettings.&lt;ListVersionsRequest, ListVersionsResponse&gt;newBuilder()</span>
+<span class="fc" id="L592">            .setMethodDescriptor(listVersionsMethodDescriptor)</span>
+<span class="fc" id="L593">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L595">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L596">                  params.put(&quot;parent&quot;, String.valueOf(request.getParent()));</span>
+<span class="fc" id="L597">                  return params.build();</span>
+                })
+<span class="fc" id="L599">            .build();</span>
+    GrpcCallSettings&lt;GetVersionRequest, Version&gt; getVersionTransportSettings =
+<span class="fc" id="L601">        GrpcCallSettings.&lt;GetVersionRequest, Version&gt;newBuilder()</span>
+<span class="fc" id="L602">            .setMethodDescriptor(getVersionMethodDescriptor)</span>
+<span class="fc" id="L603">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L605">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L606">                  params.put(&quot;name&quot;, String.valueOf(request.getName()));</span>
+<span class="fc" id="L607">                  return params.build();</span>
+                })
+<span class="fc" id="L609">            .build();</span>
+    GrpcCallSettings&lt;DeleteVersionRequest, Operation&gt; deleteVersionTransportSettings =
+<span class="fc" id="L611">        GrpcCallSettings.&lt;DeleteVersionRequest, Operation&gt;newBuilder()</span>
+<span class="fc" id="L612">            .setMethodDescriptor(deleteVersionMethodDescriptor)</span>
+<span class="fc" id="L613">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L615">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L616">                  params.put(&quot;name&quot;, String.valueOf(request.getName()));</span>
+<span class="fc" id="L617">                  return params.build();</span>
+                })
+<span class="fc" id="L619">            .build();</span>
+    GrpcCallSettings&lt;ListFilesRequest, ListFilesResponse&gt; listFilesTransportSettings =
+<span class="fc" id="L621">        GrpcCallSettings.&lt;ListFilesRequest, ListFilesResponse&gt;newBuilder()</span>
+<span class="fc" id="L622">            .setMethodDescriptor(listFilesMethodDescriptor)</span>
+<span class="fc" id="L623">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L625">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L626">                  params.put(&quot;parent&quot;, String.valueOf(request.getParent()));</span>
+<span class="fc" id="L627">                  return params.build();</span>
+                })
+<span class="fc" id="L629">            .build();</span>
+    GrpcCallSettings&lt;GetFileRequest, File&gt; getFileTransportSettings =
+<span class="fc" id="L631">        GrpcCallSettings.&lt;GetFileRequest, File&gt;newBuilder()</span>
+<span class="fc" id="L632">            .setMethodDescriptor(getFileMethodDescriptor)</span>
+<span class="fc" id="L633">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L635">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L636">                  params.put(&quot;name&quot;, String.valueOf(request.getName()));</span>
+<span class="fc" id="L637">                  return params.build();</span>
+                })
+<span class="fc" id="L639">            .build();</span>
+    GrpcCallSettings&lt;ListTagsRequest, ListTagsResponse&gt; listTagsTransportSettings =
+<span class="fc" id="L641">        GrpcCallSettings.&lt;ListTagsRequest, ListTagsResponse&gt;newBuilder()</span>
+<span class="fc" id="L642">            .setMethodDescriptor(listTagsMethodDescriptor)</span>
+<span class="fc" id="L643">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L645">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L646">                  params.put(&quot;parent&quot;, String.valueOf(request.getParent()));</span>
+<span class="fc" id="L647">                  return params.build();</span>
+                })
+<span class="fc" id="L649">            .build();</span>
+    GrpcCallSettings&lt;GetTagRequest, Tag&gt; getTagTransportSettings =
+<span class="fc" id="L651">        GrpcCallSettings.&lt;GetTagRequest, Tag&gt;newBuilder()</span>
+<span class="fc" id="L652">            .setMethodDescriptor(getTagMethodDescriptor)</span>
+<span class="fc" id="L653">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L655">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L656">                  params.put(&quot;name&quot;, String.valueOf(request.getName()));</span>
+<span class="fc" id="L657">                  return params.build();</span>
+                })
+<span class="fc" id="L659">            .build();</span>
+    GrpcCallSettings&lt;CreateTagRequest, Tag&gt; createTagTransportSettings =
+<span class="fc" id="L661">        GrpcCallSettings.&lt;CreateTagRequest, Tag&gt;newBuilder()</span>
+<span class="fc" id="L662">            .setMethodDescriptor(createTagMethodDescriptor)</span>
+<span class="fc" id="L663">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L665">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L666">                  params.put(&quot;parent&quot;, String.valueOf(request.getParent()));</span>
+<span class="fc" id="L667">                  return params.build();</span>
+                })
+<span class="fc" id="L669">            .build();</span>
+    GrpcCallSettings&lt;UpdateTagRequest, Tag&gt; updateTagTransportSettings =
+<span class="fc" id="L671">        GrpcCallSettings.&lt;UpdateTagRequest, Tag&gt;newBuilder()</span>
+<span class="fc" id="L672">            .setMethodDescriptor(updateTagMethodDescriptor)</span>
+<span class="fc" id="L673">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L675">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L676">                  params.put(&quot;tag.name&quot;, String.valueOf(request.getTag().getName()));</span>
+<span class="fc" id="L677">                  return params.build();</span>
+                })
+<span class="fc" id="L679">            .build();</span>
+    GrpcCallSettings&lt;DeleteTagRequest, Empty&gt; deleteTagTransportSettings =
+<span class="fc" id="L681">        GrpcCallSettings.&lt;DeleteTagRequest, Empty&gt;newBuilder()</span>
+<span class="fc" id="L682">            .setMethodDescriptor(deleteTagMethodDescriptor)</span>
+<span class="fc" id="L683">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L685">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L686">                  params.put(&quot;name&quot;, String.valueOf(request.getName()));</span>
+<span class="fc" id="L687">                  return params.build();</span>
+                })
+<span class="fc" id="L689">            .build();</span>
+    GrpcCallSettings&lt;SetIamPolicyRequest, Policy&gt; setIamPolicyTransportSettings =
+<span class="fc" id="L691">        GrpcCallSettings.&lt;SetIamPolicyRequest, Policy&gt;newBuilder()</span>
+<span class="fc" id="L692">            .setMethodDescriptor(setIamPolicyMethodDescriptor)</span>
+<span class="fc" id="L693">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L695">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L696">                  params.put(&quot;resource&quot;, String.valueOf(request.getResource()));</span>
+<span class="fc" id="L697">                  return params.build();</span>
+                })
+<span class="fc" id="L699">            .build();</span>
+    GrpcCallSettings&lt;GetIamPolicyRequest, Policy&gt; getIamPolicyTransportSettings =
+<span class="fc" id="L701">        GrpcCallSettings.&lt;GetIamPolicyRequest, Policy&gt;newBuilder()</span>
+<span class="fc" id="L702">            .setMethodDescriptor(getIamPolicyMethodDescriptor)</span>
+<span class="fc" id="L703">            .setParamsExtractor(</span>
+                request -&gt; {
+<span class="fc" id="L705">                  ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L706">                  params.put(&quot;resource&quot;, String.valueOf(request.getResource()));</span>
+<span class="fc" id="L707">                  return params.build();</span>
+                })
+<span class="fc" id="L709">            .build();</span>
+    GrpcCallSettings&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+        testIamPermissionsTransportSettings =
+<span class="fc" id="L712">            GrpcCallSettings.&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;newBuilder()</span>
+<span class="fc" id="L713">                .setMethodDescriptor(testIamPermissionsMethodDescriptor)</span>
+<span class="fc" id="L714">                .setParamsExtractor(</span>
+                    request -&gt; {
+<span class="fc" id="L716">                      ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L717">                      params.put(&quot;resource&quot;, String.valueOf(request.getResource()));</span>
+<span class="fc" id="L718">                      return params.build();</span>
+                    })
+<span class="fc" id="L720">                .build();</span>
+    GrpcCallSettings&lt;GetProjectSettingsRequest, ProjectSettings&gt;
+        getProjectSettingsTransportSettings =
+<span class="fc" id="L723">            GrpcCallSettings.&lt;GetProjectSettingsRequest, ProjectSettings&gt;newBuilder()</span>
+<span class="fc" id="L724">                .setMethodDescriptor(getProjectSettingsMethodDescriptor)</span>
+<span class="fc" id="L725">                .setParamsExtractor(</span>
+                    request -&gt; {
+<span class="fc" id="L727">                      ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L728">                      params.put(&quot;name&quot;, String.valueOf(request.getName()));</span>
+<span class="fc" id="L729">                      return params.build();</span>
+                    })
+<span class="fc" id="L731">                .build();</span>
+    GrpcCallSettings&lt;UpdateProjectSettingsRequest, ProjectSettings&gt;
+        updateProjectSettingsTransportSettings =
+<span class="fc" id="L734">            GrpcCallSettings.&lt;UpdateProjectSettingsRequest, ProjectSettings&gt;newBuilder()</span>
+<span class="fc" id="L735">                .setMethodDescriptor(updateProjectSettingsMethodDescriptor)</span>
+<span class="fc" id="L736">                .setParamsExtractor(</span>
+                    request -&gt; {
+<span class="fc" id="L738">                      ImmutableMap.Builder&lt;String, String&gt; params = ImmutableMap.builder();</span>
+<span class="fc" id="L739">                      params.put(</span>
+                          &quot;project_settings.name&quot;,
+<span class="fc" id="L741">                          String.valueOf(request.getProjectSettings().getName()));</span>
+<span class="fc" id="L742">                      return params.build();</span>
+                    })
+<span class="fc" id="L744">                .build();</span>
 
-<span class="fc" id="L172">    this.listDockerImagesCallable =</span>
-<span class="fc" id="L173">        callableFactory.createUnaryCallable(</span>
-<span class="fc" id="L174">            listDockerImagesTransportSettings, settings.listDockerImagesSettings(), clientContext);</span>
-<span class="fc" id="L175">    this.listDockerImagesPagedCallable =</span>
-<span class="fc" id="L176">        callableFactory.createPagedCallable(</span>
-<span class="fc" id="L177">            listDockerImagesTransportSettings, settings.listDockerImagesSettings(), clientContext);</span>
-<span class="fc" id="L178">    this.listRepositoriesCallable =</span>
-<span class="fc" id="L179">        callableFactory.createUnaryCallable(</span>
-<span class="fc" id="L180">            listRepositoriesTransportSettings, settings.listRepositoriesSettings(), clientContext);</span>
-<span class="fc" id="L181">    this.listRepositoriesPagedCallable =</span>
-<span class="fc" id="L182">        callableFactory.createPagedCallable(</span>
-<span class="fc" id="L183">            listRepositoriesTransportSettings, settings.listRepositoriesSettings(), clientContext);</span>
-<span class="fc" id="L184">    this.getRepositoryCallable =</span>
-<span class="fc" id="L185">        callableFactory.createUnaryCallable(</span>
-<span class="fc" id="L186">            getRepositoryTransportSettings, settings.getRepositorySettings(), clientContext);</span>
+<span class="fc" id="L746">    this.listDockerImagesCallable =</span>
+<span class="fc" id="L747">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L748">            listDockerImagesTransportSettings, settings.listDockerImagesSettings(), clientContext);</span>
+<span class="fc" id="L749">    this.listDockerImagesPagedCallable =</span>
+<span class="fc" id="L750">        callableFactory.createPagedCallable(</span>
+<span class="fc" id="L751">            listDockerImagesTransportSettings, settings.listDockerImagesSettings(), clientContext);</span>
+<span class="fc" id="L752">    this.getDockerImageCallable =</span>
+<span class="fc" id="L753">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L754">            getDockerImageTransportSettings, settings.getDockerImageSettings(), clientContext);</span>
+<span class="fc" id="L755">    this.importAptArtifactsCallable =</span>
+<span class="fc" id="L756">        callableFactory.createUnaryCallable(</span>
+            importAptArtifactsTransportSettings,
+<span class="fc" id="L758">            settings.importAptArtifactsSettings(),</span>
+            clientContext);
+<span class="fc" id="L760">    this.importAptArtifactsOperationCallable =</span>
+<span class="fc" id="L761">        callableFactory.createOperationCallable(</span>
+            importAptArtifactsTransportSettings,
+<span class="fc" id="L763">            settings.importAptArtifactsOperationSettings(),</span>
+            clientContext,
+            operationsStub);
+<span class="fc" id="L766">    this.importYumArtifactsCallable =</span>
+<span class="fc" id="L767">        callableFactory.createUnaryCallable(</span>
+            importYumArtifactsTransportSettings,
+<span class="fc" id="L769">            settings.importYumArtifactsSettings(),</span>
+            clientContext);
+<span class="fc" id="L771">    this.importYumArtifactsOperationCallable =</span>
+<span class="fc" id="L772">        callableFactory.createOperationCallable(</span>
+            importYumArtifactsTransportSettings,
+<span class="fc" id="L774">            settings.importYumArtifactsOperationSettings(),</span>
+            clientContext,
+            operationsStub);
+<span class="fc" id="L777">    this.listRepositoriesCallable =</span>
+<span class="fc" id="L778">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L779">            listRepositoriesTransportSettings, settings.listRepositoriesSettings(), clientContext);</span>
+<span class="fc" id="L780">    this.listRepositoriesPagedCallable =</span>
+<span class="fc" id="L781">        callableFactory.createPagedCallable(</span>
+<span class="fc" id="L782">            listRepositoriesTransportSettings, settings.listRepositoriesSettings(), clientContext);</span>
+<span class="fc" id="L783">    this.getRepositoryCallable =</span>
+<span class="fc" id="L784">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L785">            getRepositoryTransportSettings, settings.getRepositorySettings(), clientContext);</span>
+<span class="fc" id="L786">    this.createRepositoryCallable =</span>
+<span class="fc" id="L787">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L788">            createRepositoryTransportSettings, settings.createRepositorySettings(), clientContext);</span>
+<span class="fc" id="L789">    this.createRepositoryOperationCallable =</span>
+<span class="fc" id="L790">        callableFactory.createOperationCallable(</span>
+            createRepositoryTransportSettings,
+<span class="fc" id="L792">            settings.createRepositoryOperationSettings(),</span>
+            clientContext,
+            operationsStub);
+<span class="fc" id="L795">    this.updateRepositoryCallable =</span>
+<span class="fc" id="L796">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L797">            updateRepositoryTransportSettings, settings.updateRepositorySettings(), clientContext);</span>
+<span class="fc" id="L798">    this.deleteRepositoryCallable =</span>
+<span class="fc" id="L799">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L800">            deleteRepositoryTransportSettings, settings.deleteRepositorySettings(), clientContext);</span>
+<span class="fc" id="L801">    this.deleteRepositoryOperationCallable =</span>
+<span class="fc" id="L802">        callableFactory.createOperationCallable(</span>
+            deleteRepositoryTransportSettings,
+<span class="fc" id="L804">            settings.deleteRepositoryOperationSettings(),</span>
+            clientContext,
+            operationsStub);
+<span class="fc" id="L807">    this.listPackagesCallable =</span>
+<span class="fc" id="L808">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L809">            listPackagesTransportSettings, settings.listPackagesSettings(), clientContext);</span>
+<span class="fc" id="L810">    this.listPackagesPagedCallable =</span>
+<span class="fc" id="L811">        callableFactory.createPagedCallable(</span>
+<span class="fc" id="L812">            listPackagesTransportSettings, settings.listPackagesSettings(), clientContext);</span>
+<span class="fc" id="L813">    this.getPackageCallable =</span>
+<span class="fc" id="L814">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L815">            getPackageTransportSettings, settings.getPackageSettings(), clientContext);</span>
+<span class="fc" id="L816">    this.deletePackageCallable =</span>
+<span class="fc" id="L817">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L818">            deletePackageTransportSettings, settings.deletePackageSettings(), clientContext);</span>
+<span class="fc" id="L819">    this.deletePackageOperationCallable =</span>
+<span class="fc" id="L820">        callableFactory.createOperationCallable(</span>
+            deletePackageTransportSettings,
+<span class="fc" id="L822">            settings.deletePackageOperationSettings(),</span>
+            clientContext,
+            operationsStub);
+<span class="fc" id="L825">    this.listVersionsCallable =</span>
+<span class="fc" id="L826">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L827">            listVersionsTransportSettings, settings.listVersionsSettings(), clientContext);</span>
+<span class="fc" id="L828">    this.listVersionsPagedCallable =</span>
+<span class="fc" id="L829">        callableFactory.createPagedCallable(</span>
+<span class="fc" id="L830">            listVersionsTransportSettings, settings.listVersionsSettings(), clientContext);</span>
+<span class="fc" id="L831">    this.getVersionCallable =</span>
+<span class="fc" id="L832">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L833">            getVersionTransportSettings, settings.getVersionSettings(), clientContext);</span>
+<span class="fc" id="L834">    this.deleteVersionCallable =</span>
+<span class="fc" id="L835">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L836">            deleteVersionTransportSettings, settings.deleteVersionSettings(), clientContext);</span>
+<span class="fc" id="L837">    this.deleteVersionOperationCallable =</span>
+<span class="fc" id="L838">        callableFactory.createOperationCallable(</span>
+            deleteVersionTransportSettings,
+<span class="fc" id="L840">            settings.deleteVersionOperationSettings(),</span>
+            clientContext,
+            operationsStub);
+<span class="fc" id="L843">    this.listFilesCallable =</span>
+<span class="fc" id="L844">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L845">            listFilesTransportSettings, settings.listFilesSettings(), clientContext);</span>
+<span class="fc" id="L846">    this.listFilesPagedCallable =</span>
+<span class="fc" id="L847">        callableFactory.createPagedCallable(</span>
+<span class="fc" id="L848">            listFilesTransportSettings, settings.listFilesSettings(), clientContext);</span>
+<span class="fc" id="L849">    this.getFileCallable =</span>
+<span class="fc" id="L850">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L851">            getFileTransportSettings, settings.getFileSettings(), clientContext);</span>
+<span class="fc" id="L852">    this.listTagsCallable =</span>
+<span class="fc" id="L853">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L854">            listTagsTransportSettings, settings.listTagsSettings(), clientContext);</span>
+<span class="fc" id="L855">    this.listTagsPagedCallable =</span>
+<span class="fc" id="L856">        callableFactory.createPagedCallable(</span>
+<span class="fc" id="L857">            listTagsTransportSettings, settings.listTagsSettings(), clientContext);</span>
+<span class="fc" id="L858">    this.getTagCallable =</span>
+<span class="fc" id="L859">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L860">            getTagTransportSettings, settings.getTagSettings(), clientContext);</span>
+<span class="fc" id="L861">    this.createTagCallable =</span>
+<span class="fc" id="L862">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L863">            createTagTransportSettings, settings.createTagSettings(), clientContext);</span>
+<span class="fc" id="L864">    this.updateTagCallable =</span>
+<span class="fc" id="L865">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L866">            updateTagTransportSettings, settings.updateTagSettings(), clientContext);</span>
+<span class="fc" id="L867">    this.deleteTagCallable =</span>
+<span class="fc" id="L868">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L869">            deleteTagTransportSettings, settings.deleteTagSettings(), clientContext);</span>
+<span class="fc" id="L870">    this.setIamPolicyCallable =</span>
+<span class="fc" id="L871">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L872">            setIamPolicyTransportSettings, settings.setIamPolicySettings(), clientContext);</span>
+<span class="fc" id="L873">    this.getIamPolicyCallable =</span>
+<span class="fc" id="L874">        callableFactory.createUnaryCallable(</span>
+<span class="fc" id="L875">            getIamPolicyTransportSettings, settings.getIamPolicySettings(), clientContext);</span>
+<span class="fc" id="L876">    this.testIamPermissionsCallable =</span>
+<span class="fc" id="L877">        callableFactory.createUnaryCallable(</span>
+            testIamPermissionsTransportSettings,
+<span class="fc" id="L879">            settings.testIamPermissionsSettings(),</span>
+            clientContext);
+<span class="fc" id="L881">    this.getProjectSettingsCallable =</span>
+<span class="fc" id="L882">        callableFactory.createUnaryCallable(</span>
+            getProjectSettingsTransportSettings,
+<span class="fc" id="L884">            settings.getProjectSettingsSettings(),</span>
+            clientContext);
+<span class="fc" id="L886">    this.updateProjectSettingsCallable =</span>
+<span class="fc" id="L887">        callableFactory.createUnaryCallable(</span>
+            updateProjectSettingsTransportSettings,
+<span class="fc" id="L889">            settings.updateProjectSettingsSettings(),</span>
+            clientContext);
 
-<span class="fc" id="L188">    this.backgroundResources =</span>
-<span class="fc" id="L189">        new BackgroundResourceAggregation(clientContext.getBackgroundResources());</span>
-<span class="fc" id="L190">  }</span>
+<span class="fc" id="L892">    this.backgroundResources =</span>
+<span class="fc" id="L893">        new BackgroundResourceAggregation(clientContext.getBackgroundResources());</span>
+<span class="fc" id="L894">  }</span>
 
   public GrpcOperationsStub getOperationsStub() {
-<span class="nc" id="L193">    return operationsStub;</span>
+<span class="fc" id="L897">    return operationsStub;</span>
   }
 
   @Override
   public UnaryCallable&lt;ListDockerImagesRequest, ListDockerImagesResponse&gt;
       listDockerImagesCallable() {
-<span class="nc" id="L199">    return listDockerImagesCallable;</span>
+<span class="nc" id="L903">    return listDockerImagesCallable;</span>
   }
 
   @Override
   public UnaryCallable&lt;ListDockerImagesRequest, ListDockerImagesPagedResponse&gt;
       listDockerImagesPagedCallable() {
-<span class="fc" id="L205">    return listDockerImagesPagedCallable;</span>
+<span class="fc" id="L909">    return listDockerImagesPagedCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;GetDockerImageRequest, DockerImage&gt; getDockerImageCallable() {
+<span class="fc" id="L914">    return getDockerImageCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;ImportAptArtifactsRequest, Operation&gt; importAptArtifactsCallable() {
+<span class="nc" id="L919">    return importAptArtifactsCallable;</span>
+  }
+
+  @Override
+  public OperationCallable&lt;
+          ImportAptArtifactsRequest, ImportAptArtifactsResponse, ImportAptArtifactsMetadata&gt;
+      importAptArtifactsOperationCallable() {
+<span class="fc" id="L926">    return importAptArtifactsOperationCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;ImportYumArtifactsRequest, Operation&gt; importYumArtifactsCallable() {
+<span class="nc" id="L931">    return importYumArtifactsCallable;</span>
+  }
+
+  @Override
+  public OperationCallable&lt;
+          ImportYumArtifactsRequest, ImportYumArtifactsResponse, ImportYumArtifactsMetadata&gt;
+      importYumArtifactsOperationCallable() {
+<span class="fc" id="L938">    return importYumArtifactsOperationCallable;</span>
   }
 
   @Override
   public UnaryCallable&lt;ListRepositoriesRequest, ListRepositoriesResponse&gt;
       listRepositoriesCallable() {
-<span class="nc" id="L211">    return listRepositoriesCallable;</span>
+<span class="nc" id="L944">    return listRepositoriesCallable;</span>
   }
 
   @Override
   public UnaryCallable&lt;ListRepositoriesRequest, ListRepositoriesPagedResponse&gt;
       listRepositoriesPagedCallable() {
-<span class="fc" id="L217">    return listRepositoriesPagedCallable;</span>
+<span class="fc" id="L950">    return listRepositoriesPagedCallable;</span>
   }
 
   @Override
   public UnaryCallable&lt;GetRepositoryRequest, Repository&gt; getRepositoryCallable() {
-<span class="fc" id="L222">    return getRepositoryCallable;</span>
+<span class="fc" id="L955">    return getRepositoryCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;CreateRepositoryRequest, Operation&gt; createRepositoryCallable() {
+<span class="nc" id="L960">    return createRepositoryCallable;</span>
+  }
+
+  @Override
+  public OperationCallable&lt;CreateRepositoryRequest, Repository, OperationMetadata&gt;
+      createRepositoryOperationCallable() {
+<span class="fc" id="L966">    return createRepositoryOperationCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;UpdateRepositoryRequest, Repository&gt; updateRepositoryCallable() {
+<span class="fc" id="L971">    return updateRepositoryCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;DeleteRepositoryRequest, Operation&gt; deleteRepositoryCallable() {
+<span class="nc" id="L976">    return deleteRepositoryCallable;</span>
+  }
+
+  @Override
+  public OperationCallable&lt;DeleteRepositoryRequest, Empty, OperationMetadata&gt;
+      deleteRepositoryOperationCallable() {
+<span class="fc" id="L982">    return deleteRepositoryOperationCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;ListPackagesRequest, ListPackagesResponse&gt; listPackagesCallable() {
+<span class="nc" id="L987">    return listPackagesCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;ListPackagesRequest, ListPackagesPagedResponse&gt; listPackagesPagedCallable() {
+<span class="fc" id="L992">    return listPackagesPagedCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;GetPackageRequest, Package&gt; getPackageCallable() {
+<span class="fc" id="L997">    return getPackageCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;DeletePackageRequest, Operation&gt; deletePackageCallable() {
+<span class="nc" id="L1002">    return deletePackageCallable;</span>
+  }
+
+  @Override
+  public OperationCallable&lt;DeletePackageRequest, Empty, OperationMetadata&gt;
+      deletePackageOperationCallable() {
+<span class="fc" id="L1008">    return deletePackageOperationCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;ListVersionsRequest, ListVersionsResponse&gt; listVersionsCallable() {
+<span class="nc" id="L1013">    return listVersionsCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;ListVersionsRequest, ListVersionsPagedResponse&gt; listVersionsPagedCallable() {
+<span class="fc" id="L1018">    return listVersionsPagedCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;GetVersionRequest, Version&gt; getVersionCallable() {
+<span class="fc" id="L1023">    return getVersionCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;DeleteVersionRequest, Operation&gt; deleteVersionCallable() {
+<span class="nc" id="L1028">    return deleteVersionCallable;</span>
+  }
+
+  @Override
+  public OperationCallable&lt;DeleteVersionRequest, Empty, OperationMetadata&gt;
+      deleteVersionOperationCallable() {
+<span class="fc" id="L1034">    return deleteVersionOperationCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;ListFilesRequest, ListFilesResponse&gt; listFilesCallable() {
+<span class="nc" id="L1039">    return listFilesCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;ListFilesRequest, ListFilesPagedResponse&gt; listFilesPagedCallable() {
+<span class="fc" id="L1044">    return listFilesPagedCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;GetFileRequest, File&gt; getFileCallable() {
+<span class="fc" id="L1049">    return getFileCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;ListTagsRequest, ListTagsResponse&gt; listTagsCallable() {
+<span class="nc" id="L1054">    return listTagsCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;ListTagsRequest, ListTagsPagedResponse&gt; listTagsPagedCallable() {
+<span class="fc" id="L1059">    return listTagsPagedCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;GetTagRequest, Tag&gt; getTagCallable() {
+<span class="fc" id="L1064">    return getTagCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;CreateTagRequest, Tag&gt; createTagCallable() {
+<span class="fc" id="L1069">    return createTagCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;UpdateTagRequest, Tag&gt; updateTagCallable() {
+<span class="fc" id="L1074">    return updateTagCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;DeleteTagRequest, Empty&gt; deleteTagCallable() {
+<span class="fc" id="L1079">    return deleteTagCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;SetIamPolicyRequest, Policy&gt; setIamPolicyCallable() {
+<span class="fc" id="L1084">    return setIamPolicyCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;GetIamPolicyRequest, Policy&gt; getIamPolicyCallable() {
+<span class="fc" id="L1089">    return getIamPolicyCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+      testIamPermissionsCallable() {
+<span class="fc" id="L1095">    return testIamPermissionsCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;GetProjectSettingsRequest, ProjectSettings&gt; getProjectSettingsCallable() {
+<span class="fc" id="L1100">    return getProjectSettingsCallable;</span>
+  }
+
+  @Override
+  public UnaryCallable&lt;UpdateProjectSettingsRequest, ProjectSettings&gt;
+      updateProjectSettingsCallable() {
+<span class="fc" id="L1106">    return updateProjectSettingsCallable;</span>
   }
 
   @Override
   public final void close() {
     try {
-<span class="fc" id="L228">      backgroundResources.close();</span>
-<span class="nc" id="L229">    } catch (RuntimeException e) {</span>
-<span class="nc" id="L230">      throw e;</span>
-<span class="nc" id="L231">    } catch (Exception e) {</span>
-<span class="nc" id="L232">      throw new IllegalStateException(&quot;Failed to close resource&quot;, e);</span>
-<span class="fc" id="L233">    }</span>
-<span class="fc" id="L234">  }</span>
+<span class="fc" id="L1112">      backgroundResources.close();</span>
+<span class="nc" id="L1113">    } catch (RuntimeException e) {</span>
+<span class="nc" id="L1114">      throw e;</span>
+<span class="nc" id="L1115">    } catch (Exception e) {</span>
+<span class="nc" id="L1116">      throw new IllegalStateException(&quot;Failed to close resource&quot;, e);</span>
+<span class="fc" id="L1117">    }</span>
+<span class="fc" id="L1118">  }</span>
 
   @Override
   public void shutdown() {
-<span class="nc" id="L238">    backgroundResources.shutdown();</span>
-<span class="nc" id="L239">  }</span>
+<span class="nc" id="L1122">    backgroundResources.shutdown();</span>
+<span class="nc" id="L1123">  }</span>
 
   @Override
   public boolean isShutdown() {
-<span class="nc" id="L243">    return backgroundResources.isShutdown();</span>
+<span class="nc" id="L1127">    return backgroundResources.isShutdown();</span>
   }
 
   @Override
   public boolean isTerminated() {
-<span class="nc" id="L248">    return backgroundResources.isTerminated();</span>
+<span class="nc" id="L1132">    return backgroundResources.isTerminated();</span>
   }
 
   @Override
   public void shutdownNow() {
-<span class="nc" id="L253">    backgroundResources.shutdownNow();</span>
-<span class="nc" id="L254">  }</span>
+<span class="nc" id="L1137">    backgroundResources.shutdownNow();</span>
+<span class="nc" id="L1138">  }</span>
 
   @Override
   public boolean awaitTermination(long duration, TimeUnit unit) throws InterruptedException {
-<span class="nc" id="L258">    return backgroundResources.awaitTermination(duration, unit);</span>
+<span class="nc" id="L1142">    return backgroundResources.awaitTermination(duration, unit);</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

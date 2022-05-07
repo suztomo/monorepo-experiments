@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ArtifactRegistryStub.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">CoverageAggregator</a> &gt; <a href="../index.html" class="el_bundle">google-cloud-artifact-registry</a> &gt; <a href="index.source.html" class="el_package">com.google.devtools.artifactregistry.v1.stub</a> &gt; <span class="el_source">ArtifactRegistryStub.java</span></div><h1>ArtifactRegistryStub.java</h1><pre class="source lang-java linenums">/*
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,65 @@
 package com.google.devtools.artifactregistry.v1.stub;
 
 import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListDockerImagesPagedResponse;
+import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListFilesPagedResponse;
+import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListPackagesPagedResponse;
 import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListRepositoriesPagedResponse;
+import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListTagsPagedResponse;
+import static com.google.devtools.artifactregistry.v1.ArtifactRegistryClient.ListVersionsPagedResponse;
 
 import com.google.api.gax.core.BackgroundResource;
+import com.google.api.gax.rpc.OperationCallable;
 import com.google.api.gax.rpc.UnaryCallable;
+import com.google.devtools.artifactregistry.v1.CreateRepositoryRequest;
+import com.google.devtools.artifactregistry.v1.CreateTagRequest;
+import com.google.devtools.artifactregistry.v1.DeletePackageRequest;
+import com.google.devtools.artifactregistry.v1.DeleteRepositoryRequest;
+import com.google.devtools.artifactregistry.v1.DeleteTagRequest;
+import com.google.devtools.artifactregistry.v1.DeleteVersionRequest;
+import com.google.devtools.artifactregistry.v1.DockerImage;
+import com.google.devtools.artifactregistry.v1.File;
+import com.google.devtools.artifactregistry.v1.GetDockerImageRequest;
+import com.google.devtools.artifactregistry.v1.GetFileRequest;
+import com.google.devtools.artifactregistry.v1.GetPackageRequest;
+import com.google.devtools.artifactregistry.v1.GetProjectSettingsRequest;
 import com.google.devtools.artifactregistry.v1.GetRepositoryRequest;
+import com.google.devtools.artifactregistry.v1.GetTagRequest;
+import com.google.devtools.artifactregistry.v1.GetVersionRequest;
+import com.google.devtools.artifactregistry.v1.ImportAptArtifactsMetadata;
+import com.google.devtools.artifactregistry.v1.ImportAptArtifactsRequest;
+import com.google.devtools.artifactregistry.v1.ImportAptArtifactsResponse;
+import com.google.devtools.artifactregistry.v1.ImportYumArtifactsMetadata;
+import com.google.devtools.artifactregistry.v1.ImportYumArtifactsRequest;
+import com.google.devtools.artifactregistry.v1.ImportYumArtifactsResponse;
 import com.google.devtools.artifactregistry.v1.ListDockerImagesRequest;
 import com.google.devtools.artifactregistry.v1.ListDockerImagesResponse;
+import com.google.devtools.artifactregistry.v1.ListFilesRequest;
+import com.google.devtools.artifactregistry.v1.ListFilesResponse;
+import com.google.devtools.artifactregistry.v1.ListPackagesRequest;
+import com.google.devtools.artifactregistry.v1.ListPackagesResponse;
 import com.google.devtools.artifactregistry.v1.ListRepositoriesRequest;
 import com.google.devtools.artifactregistry.v1.ListRepositoriesResponse;
+import com.google.devtools.artifactregistry.v1.ListTagsRequest;
+import com.google.devtools.artifactregistry.v1.ListTagsResponse;
+import com.google.devtools.artifactregistry.v1.ListVersionsRequest;
+import com.google.devtools.artifactregistry.v1.ListVersionsResponse;
+import com.google.devtools.artifactregistry.v1.OperationMetadata;
+import com.google.devtools.artifactregistry.v1.Package;
+import com.google.devtools.artifactregistry.v1.ProjectSettings;
 import com.google.devtools.artifactregistry.v1.Repository;
+import com.google.devtools.artifactregistry.v1.Tag;
+import com.google.devtools.artifactregistry.v1.UpdateProjectSettingsRequest;
+import com.google.devtools.artifactregistry.v1.UpdateRepositoryRequest;
+import com.google.devtools.artifactregistry.v1.UpdateTagRequest;
+import com.google.devtools.artifactregistry.v1.Version;
+import com.google.iam.v1.GetIamPolicyRequest;
+import com.google.iam.v1.Policy;
+import com.google.iam.v1.SetIamPolicyRequest;
+import com.google.iam.v1.TestIamPermissionsRequest;
+import com.google.iam.v1.TestIamPermissionsResponse;
+import com.google.longrunning.Operation;
+import com.google.longrunning.stub.OperationsStub;
+import com.google.protobuf.Empty;
 import javax.annotation.Generated;
 
 // AUTO-GENERATED DOCUMENTATION AND CLASS.
@@ -36,30 +85,182 @@ import javax.annotation.Generated;
  * &lt;p&gt;This class is for advanced usage and reflects the underlying API directly.
  */
 @Generated(&quot;by gapic-generator-java&quot;)
-<span class="fc" id="L39">public abstract class ArtifactRegistryStub implements BackgroundResource {</span>
+<span class="fc" id="L88">public abstract class ArtifactRegistryStub implements BackgroundResource {</span>
+
+  public OperationsStub getOperationsStub() {
+<span class="nc" id="L91">    throw new UnsupportedOperationException(&quot;Not implemented: getOperationsStub()&quot;);</span>
+  }
 
   public UnaryCallable&lt;ListDockerImagesRequest, ListDockerImagesPagedResponse&gt;
       listDockerImagesPagedCallable() {
-<span class="nc" id="L43">    throw new UnsupportedOperationException(&quot;Not implemented: listDockerImagesPagedCallable()&quot;);</span>
+<span class="nc" id="L96">    throw new UnsupportedOperationException(&quot;Not implemented: listDockerImagesPagedCallable()&quot;);</span>
   }
 
   public UnaryCallable&lt;ListDockerImagesRequest, ListDockerImagesResponse&gt;
       listDockerImagesCallable() {
-<span class="nc" id="L48">    throw new UnsupportedOperationException(&quot;Not implemented: listDockerImagesCallable()&quot;);</span>
+<span class="nc" id="L101">    throw new UnsupportedOperationException(&quot;Not implemented: listDockerImagesCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;GetDockerImageRequest, DockerImage&gt; getDockerImageCallable() {
+<span class="nc" id="L105">    throw new UnsupportedOperationException(&quot;Not implemented: getDockerImageCallable()&quot;);</span>
+  }
+
+  public OperationCallable&lt;
+          ImportAptArtifactsRequest, ImportAptArtifactsResponse, ImportAptArtifactsMetadata&gt;
+      importAptArtifactsOperationCallable() {
+<span class="nc" id="L111">    throw new UnsupportedOperationException(</span>
+        &quot;Not implemented: importAptArtifactsOperationCallable()&quot;);
+  }
+
+  public UnaryCallable&lt;ImportAptArtifactsRequest, Operation&gt; importAptArtifactsCallable() {
+<span class="nc" id="L116">    throw new UnsupportedOperationException(&quot;Not implemented: importAptArtifactsCallable()&quot;);</span>
+  }
+
+  public OperationCallable&lt;
+          ImportYumArtifactsRequest, ImportYumArtifactsResponse, ImportYumArtifactsMetadata&gt;
+      importYumArtifactsOperationCallable() {
+<span class="nc" id="L122">    throw new UnsupportedOperationException(</span>
+        &quot;Not implemented: importYumArtifactsOperationCallable()&quot;);
+  }
+
+  public UnaryCallable&lt;ImportYumArtifactsRequest, Operation&gt; importYumArtifactsCallable() {
+<span class="nc" id="L127">    throw new UnsupportedOperationException(&quot;Not implemented: importYumArtifactsCallable()&quot;);</span>
   }
 
   public UnaryCallable&lt;ListRepositoriesRequest, ListRepositoriesPagedResponse&gt;
       listRepositoriesPagedCallable() {
-<span class="nc" id="L53">    throw new UnsupportedOperationException(&quot;Not implemented: listRepositoriesPagedCallable()&quot;);</span>
+<span class="nc" id="L132">    throw new UnsupportedOperationException(&quot;Not implemented: listRepositoriesPagedCallable()&quot;);</span>
   }
 
   public UnaryCallable&lt;ListRepositoriesRequest, ListRepositoriesResponse&gt;
       listRepositoriesCallable() {
-<span class="nc" id="L58">    throw new UnsupportedOperationException(&quot;Not implemented: listRepositoriesCallable()&quot;);</span>
+<span class="nc" id="L137">    throw new UnsupportedOperationException(&quot;Not implemented: listRepositoriesCallable()&quot;);</span>
   }
 
   public UnaryCallable&lt;GetRepositoryRequest, Repository&gt; getRepositoryCallable() {
-<span class="nc" id="L62">    throw new UnsupportedOperationException(&quot;Not implemented: getRepositoryCallable()&quot;);</span>
+<span class="nc" id="L141">    throw new UnsupportedOperationException(&quot;Not implemented: getRepositoryCallable()&quot;);</span>
+  }
+
+  public OperationCallable&lt;CreateRepositoryRequest, Repository, OperationMetadata&gt;
+      createRepositoryOperationCallable() {
+<span class="nc" id="L146">    throw new UnsupportedOperationException(&quot;Not implemented: createRepositoryOperationCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;CreateRepositoryRequest, Operation&gt; createRepositoryCallable() {
+<span class="nc" id="L150">    throw new UnsupportedOperationException(&quot;Not implemented: createRepositoryCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;UpdateRepositoryRequest, Repository&gt; updateRepositoryCallable() {
+<span class="nc" id="L154">    throw new UnsupportedOperationException(&quot;Not implemented: updateRepositoryCallable()&quot;);</span>
+  }
+
+  public OperationCallable&lt;DeleteRepositoryRequest, Empty, OperationMetadata&gt;
+      deleteRepositoryOperationCallable() {
+<span class="nc" id="L159">    throw new UnsupportedOperationException(&quot;Not implemented: deleteRepositoryOperationCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;DeleteRepositoryRequest, Operation&gt; deleteRepositoryCallable() {
+<span class="nc" id="L163">    throw new UnsupportedOperationException(&quot;Not implemented: deleteRepositoryCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;ListPackagesRequest, ListPackagesPagedResponse&gt; listPackagesPagedCallable() {
+<span class="nc" id="L167">    throw new UnsupportedOperationException(&quot;Not implemented: listPackagesPagedCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;ListPackagesRequest, ListPackagesResponse&gt; listPackagesCallable() {
+<span class="nc" id="L171">    throw new UnsupportedOperationException(&quot;Not implemented: listPackagesCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;GetPackageRequest, Package&gt; getPackageCallable() {
+<span class="nc" id="L175">    throw new UnsupportedOperationException(&quot;Not implemented: getPackageCallable()&quot;);</span>
+  }
+
+  public OperationCallable&lt;DeletePackageRequest, Empty, OperationMetadata&gt;
+      deletePackageOperationCallable() {
+<span class="nc" id="L180">    throw new UnsupportedOperationException(&quot;Not implemented: deletePackageOperationCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;DeletePackageRequest, Operation&gt; deletePackageCallable() {
+<span class="nc" id="L184">    throw new UnsupportedOperationException(&quot;Not implemented: deletePackageCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;ListVersionsRequest, ListVersionsPagedResponse&gt; listVersionsPagedCallable() {
+<span class="nc" id="L188">    throw new UnsupportedOperationException(&quot;Not implemented: listVersionsPagedCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;ListVersionsRequest, ListVersionsResponse&gt; listVersionsCallable() {
+<span class="nc" id="L192">    throw new UnsupportedOperationException(&quot;Not implemented: listVersionsCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;GetVersionRequest, Version&gt; getVersionCallable() {
+<span class="nc" id="L196">    throw new UnsupportedOperationException(&quot;Not implemented: getVersionCallable()&quot;);</span>
+  }
+
+  public OperationCallable&lt;DeleteVersionRequest, Empty, OperationMetadata&gt;
+      deleteVersionOperationCallable() {
+<span class="nc" id="L201">    throw new UnsupportedOperationException(&quot;Not implemented: deleteVersionOperationCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;DeleteVersionRequest, Operation&gt; deleteVersionCallable() {
+<span class="nc" id="L205">    throw new UnsupportedOperationException(&quot;Not implemented: deleteVersionCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;ListFilesRequest, ListFilesPagedResponse&gt; listFilesPagedCallable() {
+<span class="nc" id="L209">    throw new UnsupportedOperationException(&quot;Not implemented: listFilesPagedCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;ListFilesRequest, ListFilesResponse&gt; listFilesCallable() {
+<span class="nc" id="L213">    throw new UnsupportedOperationException(&quot;Not implemented: listFilesCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;GetFileRequest, File&gt; getFileCallable() {
+<span class="nc" id="L217">    throw new UnsupportedOperationException(&quot;Not implemented: getFileCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;ListTagsRequest, ListTagsPagedResponse&gt; listTagsPagedCallable() {
+<span class="nc" id="L221">    throw new UnsupportedOperationException(&quot;Not implemented: listTagsPagedCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;ListTagsRequest, ListTagsResponse&gt; listTagsCallable() {
+<span class="nc" id="L225">    throw new UnsupportedOperationException(&quot;Not implemented: listTagsCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;GetTagRequest, Tag&gt; getTagCallable() {
+<span class="nc" id="L229">    throw new UnsupportedOperationException(&quot;Not implemented: getTagCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;CreateTagRequest, Tag&gt; createTagCallable() {
+<span class="nc" id="L233">    throw new UnsupportedOperationException(&quot;Not implemented: createTagCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;UpdateTagRequest, Tag&gt; updateTagCallable() {
+<span class="nc" id="L237">    throw new UnsupportedOperationException(&quot;Not implemented: updateTagCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;DeleteTagRequest, Empty&gt; deleteTagCallable() {
+<span class="nc" id="L241">    throw new UnsupportedOperationException(&quot;Not implemented: deleteTagCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;SetIamPolicyRequest, Policy&gt; setIamPolicyCallable() {
+<span class="nc" id="L245">    throw new UnsupportedOperationException(&quot;Not implemented: setIamPolicyCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;GetIamPolicyRequest, Policy&gt; getIamPolicyCallable() {
+<span class="nc" id="L249">    throw new UnsupportedOperationException(&quot;Not implemented: getIamPolicyCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;TestIamPermissionsRequest, TestIamPermissionsResponse&gt;
+      testIamPermissionsCallable() {
+<span class="nc" id="L254">    throw new UnsupportedOperationException(&quot;Not implemented: testIamPermissionsCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;GetProjectSettingsRequest, ProjectSettings&gt; getProjectSettingsCallable() {
+<span class="nc" id="L258">    throw new UnsupportedOperationException(&quot;Not implemented: getProjectSettingsCallable()&quot;);</span>
+  }
+
+  public UnaryCallable&lt;UpdateProjectSettingsRequest, ProjectSettings&gt;
+      updateProjectSettingsCallable() {
+<span class="nc" id="L263">    throw new UnsupportedOperationException(&quot;Not implemented: updateProjectSettingsCallable()&quot;);</span>
   }
 
   @Override
